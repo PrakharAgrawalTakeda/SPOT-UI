@@ -89,7 +89,7 @@ export class LinkProjectComponent implements OnInit {
                     }
                     this.budget = resultSets.budget
                     if (!this.isStrategicInitiative) {
-                        resultSets = resultSets.projectData?.filter(x => x.problemType != "Strategic Initiative / Program");
+                        resultSets.projectData = resultSets.projectData?.filter(x => x.problemType != "Strategic Initiative / Program");
                         console.log(this.isStrategicInitiative, resultSets)
                     }
                     if (!this.isConfidential) {
@@ -108,8 +108,9 @@ export class LinkProjectComponent implements OnInit {
                             });
                         }
                     }
+                    console.log("HEY?", this.resultSets)
                     this.search.next(resultSets);
-                    if (this.resultSets.length <= 5) {
+                    if (this.resultSets?.length <= 5) {
                         this.resultSets.forEach(x => {
                             this.apiService.isParent(x.problemUniqueId).then((res: any) => {
                                 x.isParent = res;
@@ -251,7 +252,7 @@ export class LinkProjectComponent implements OnInit {
         let returnValue = "";
         if (value) {
             const selectedValue = this.resultSets.find(_ => _.problemUniqueId === value);
-            returnValue = (selectedValue.isParent ? "[PGM] " : "") + selectedValue.problemId + " - " + this.budgetfind(selectedValue.problemUniqueId) + selectedValue.problemTitle;
+            returnValue = (selectedValue.isParent ? "[PGM] " : "") + selectedValue.problemId + " - " + (this.budgetfind(selectedValue.problemUniqueId) ? this.budgetfind(selectedValue.problemUniqueId) : "") + selectedValue.problemTitle;
         }
         return returnValue;
     }

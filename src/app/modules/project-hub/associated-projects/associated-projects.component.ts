@@ -113,7 +113,7 @@ export class AssociatedProjectsComponent implements OnInit {
         return percentTickFormatting(value);
     }
     getPortfolioName(id:string){
-        return this.filterCriteria?.portfolioOwner?.find(x=>x.portfolioOwnerId == id).portfolioOwner
+        return this.filterCriteria?.portfolioOwner?.find(x=>x.portfolioOwnerId == id)?.portfolioOwner
     }
     getCellClass(): any {
         return 'first-column-datatable';
