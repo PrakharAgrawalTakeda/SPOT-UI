@@ -32,38 +32,50 @@ export class NewMetricsComponent {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getmetricRepo(this.id).then((vc: any) => {
       this.apiService.getproject(this.id).then((pc: any) => {
+        this.apiService.singleEditMetricProjectData(this.id, this.projecthubservice.itemid).then((res: any) => {
+          this.auth.lookupMaster().then((lookup: any) => {
+            // Split execution scope into an array of IDs
+            const executionScopeIds = pc.executionScope ? pc.executionScope.split(',').map(id => id.trim()) : '';
+            // Combine portfolioOwnerId and executionScopeIds
+            const portfolioOwnerId = pc.portfolioOwnerId ? pc.portfolioOwnerId : '';
+            const relevantIds = [portfolioOwnerId, ...executionScopeIds];
+            // If res exists and has metricData, filter out already existing metrics
+            if (res && res.length > 0) {
+              // Create a Set of existing metric IDs for efficient lookup
+              const existingMetricIDsSet = new Set(res.map(item => item.metricData.metricID));
+            
+              // Filter out metrics from vc that are not in the existingMetricIDsSet
+              this.metricName = vc.filter(metric => !existingMetricIDsSet.has(metric.metricID));
+            }
+            console.log(this.metricName)
+
+            // Further filter metrics based on the metric type ID and relevant IDs
+            this.metricName = this.metricName.filter(metric =>
+              metric.metricTypeID == 'e7a9e055-1319-4a4f-b929-cd7777599e39' ||
+              relevantIds.some(id => id == metric.metricPortfolioID)
+            );
 
 
-      this.auth.lookupMaster().then((lookup: any) => {
-        console.log(vc)
+            console.log(this.metricName)
+            console.log(res)
+            // Ensure unique metrics
+            this.metricName = this.metricName.filter((value, index, self) =>
+              self.findIndex(m => m.metricID == value.metricID) == index
+            );
 
-        this.metric = vc.find(projectMetric => projectMetric.metricID);
+            this.newMetricForm.controls.metricName.patchValue('');
+            this.projecthubservice.isFormChanged = false;
+            this.newMetricForm.valueChanges.subscribe(() => {
+              this.projecthubservice.isFormChanged = true;
+            });
 
-        if (this.metric) {
-          this.metricName = vc
-            .filter(x => x.metricTypeID === 'e7a9e055-1319-4a4f-b929-cd7777599e39'
-              && x.metricID !== this.metric.metricID
-              || x.metricPortfolioID === pc.portfolioOwnerId)
-            .filter((value, index, self) => self.findIndex(m => m.metricID === value.metricID) === index);
-        } else {
-          this.metricName = vc
-            .filter(x => x.metricTypeID === 'e7a9e055-1319-4a4f-b929-cd7777599e39'
-              || x.metricPortfolioID === pc.portfolioOwnerId)
-            .filter((value, index, self) => self.findIndex(m => m.metricID === value.metricID) === index);
-        }
-
-
-        this.newMetricForm.controls.metricName.patchValue('')
-       // this.viewContent = true
-        this.projecthubservice.isFormChanged = false
-        this.newMetricForm.valueChanges.subscribe(res => {
-          this.projecthubservice.isFormChanged = true
-        })
-        console.log(this.metricName)
-      })
-    })
-  })
+            console.log(this.metricName);
+          });
+        });
+      });
+    });
   }
+
 
   submitnewmetric() {
     this.projecthubservice.isFormChanged = false
@@ -72,14 +84,14 @@ export class NewMetricsComponent {
 
     // Find the corresponding metric object from the metricName arr
     //const selectedMetric = this.metricName.find(metric => metric.metricName == selectedMetricName);
-console.log(selectedMetricName.metricID)
+    console.log(selectedMetricName.metricID)
     // Check if we found a metric and it has a metricUID
     if (selectedMetricName) {
       this.apiService.addNewMetric(this.id, selectedMetricName.metricID).then(secondRes => {
         this.projecthubservice.isNavChanged.next(true)
-            this.projecthubservice.submitbutton.next(true)
-            this.projecthubservice.successSave.next(true)
-            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        this.projecthubservice.submitbutton.next(true)
+        this.projecthubservice.successSave.next(true)
+        this.projecthubservice.toggleDrawerOpen('', '', [], '')
       })
     }
   }
