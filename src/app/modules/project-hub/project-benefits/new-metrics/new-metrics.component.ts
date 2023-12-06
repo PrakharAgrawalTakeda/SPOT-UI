@@ -48,7 +48,8 @@ export class NewMetricsComponent {
               this.metricName = vc.filter(metric => !existingMetricIDsSet.has(metric.metricID));
             }
             console.log(this.metricName)
-
+if(this.metricName)
+{
             // Further filter metrics based on the metric type ID and relevant IDs
             this.metricName = this.metricName.filter(metric =>
               metric.metricTypeID == 'e7a9e055-1319-4a4f-b929-cd7777599e39' ||
@@ -62,6 +63,8 @@ export class NewMetricsComponent {
             this.metricName = this.metricName.filter((value, index, self) =>
               self.findIndex(m => m.metricID == value.metricID) == index
             );
+}
+
 
             this.newMetricForm.controls.metricName.patchValue('');
             this.projecthubservice.isFormChanged = false;
