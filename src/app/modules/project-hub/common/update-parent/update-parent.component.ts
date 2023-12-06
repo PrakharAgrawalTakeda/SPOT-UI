@@ -156,7 +156,9 @@ export class UpdateParentComponent implements OnInit {
             if (this.budget.length > 0) {
                 var temp = this.budget.find(x => x.projectId == projectid)
                 if (temp != null) {
-                    return temp.capitalBudgetId
+                    if( temp.capitalBudgetId != null && temp.capitalBudgetId != "" && temp.capitalBudgetId != undefined){
+                        return temp.capitalBudgetId + " - "
+                    }
                 }
             }
         }
