@@ -34,6 +34,8 @@ export class NewMetricsComponent {
       this.apiService.getproject(this.id).then((pc: any) => {
         this.apiService.singleEditMetricProjectData(this.id, this.projecthubservice.itemid).then((res: any) => {
           this.auth.lookupMaster().then((lookup: any) => {
+            console.log(vc)
+            console.log(res)
             // Split execution scope into an array of IDs
             const executionScopeIds = pc.executionScope ? pc.executionScope.split(',').map(id => id.trim()) : '';
             // Combine portfolioOwnerId and executionScopeIds
@@ -47,8 +49,11 @@ export class NewMetricsComponent {
               // Filter out metrics from vc that are not in the existingMetricIDsSet
               this.metricName = vc.filter(metric => !existingMetricIDsSet.has(metric.metricID));
             }
+            else{
+              this.metricName = vc.filter(metric => (metric.metricID));
+            }
             console.log(this.metricName)
-if(this.metricName)
+if(this.metricName && relevantIds)
 {
             // Further filter metrics based on the metric type ID and relevant IDs
             this.metricName = this.metricName.filter(metric =>
