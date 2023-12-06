@@ -23,6 +23,9 @@ export class MetricRepositoryAddEditViewComponent {
         this.metricRepositoryForm.controls.category.valueChanges.subscribe(res => {
             this.categoryChanged = true;
         })
+        this.metricRepositoryForm.valueChanges.subscribe(res => {
+            this.myPreferenceService.isFormChanged = true
+        })
     }
 
     metricRepositoryForm = new FormGroup({
