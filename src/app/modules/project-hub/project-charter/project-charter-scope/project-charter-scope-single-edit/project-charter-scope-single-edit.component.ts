@@ -52,9 +52,11 @@ export class ProjectCharterScopeSingleEditComponent implements OnInit {
   }
 
   submitScope() {
+    console.log(this.projectHubService.projectid)
     this.projectHubService.isFormChanged = false
     var formValue = this.scopeForm.getRawValue()
     var mainObj = this.outcomeInfo
+    console.log(this.outcomeInfo)
     var charterObj = this.outcomeInfoCharter
     mainObj.emissionPortfolioId = mainObj.emissionPortfolioId == null ? "" : mainObj.emissionPortfolioId
     mainObj.projectDescription = formValue.projectDescription
@@ -63,10 +65,12 @@ export class ProjectCharterScopeSingleEditComponent implements OnInit {
     charterObj.proposalStatement = formValue.proposalStatement
     charterObj.inScope = formValue.inScope
     charterObj.outOfScope = formValue.outOfScope
-    mainObj.projectId = this.projectHubService.projectid
-    console.log(formValue.proposalStatement)
+    charterObj.projectId = this.projectHubService.projectid
+    mainObj.projectId = mainObj.projectId
+    console.log(mainObj)
+    console.log(charterObj)
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
-      this.apiService.BulkEditProjectCharter(this.projectHubService.projectid, charterObj).then(res1 => {
+      this.apiService.BulkEditProjectCharter(charterObj, this.projectHubService.projectid).then(res1 => {
         this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)
