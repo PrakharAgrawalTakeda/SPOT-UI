@@ -187,8 +187,8 @@
                         <form [formGroup]="milestoneForm.controls[rowIndex]"
                             *ngIf="milestoneTableEditStack.includes(rowIndex)">
                             <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false"
-                                           [showHint]="true" [hintPostion]="'mat-hint'"
-                                           [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
+                            [showHint]="true" [hintPostion]="'mat-hint'"
+                                [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
                                 <!-- [placeholder]="'Milestone Name'" -->
                             </spot-textarea>
                         </form>
@@ -577,7 +577,7 @@
             Cancel
         </button>
 
-        <button class="min-w-26 submit-button" mat-flat-button [color]="'primary'" type="button" (click)="processAfterFocus()">
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="submitschedulecharter()">
             Submit
         </button>
 

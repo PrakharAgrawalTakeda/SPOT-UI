@@ -643,7 +643,7 @@ getFiscalYearFromDate = (dateString: string): number => {
 
   getRowClass(financialType: string): string {
     // If the value capture level is 'Capture', disable editing for 'Baseline Plan' row
-    if (this.captureLevel && financialType === 'Baseline Plan') {
+    if (this.captureLevel && financialType == 'Baseline Plan') {
       return 'non-editable-row';
     }
     // When value capture level is not 'Capture', disable editing for 'Baseline Plan', 'Current Plan', and 'Actual'

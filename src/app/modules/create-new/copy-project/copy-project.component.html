@@ -1,8 +1,8 @@
 
-<div class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10" *ngIf="viewContent">
-    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12" style="min-height: auto;">
-        <div class="xl:col-span-2 flex flex-col flex-auto overflow-y-scroll bg-card shadow rounded-2xl">
-            <div class="flex flex-col flex-auto overflow-y-scroll p-6">
+<div class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10 overflow-auto" *ngIf="viewContent" style="height: 90vh;">
+    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12">
+        <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl">
+            <div class="flex flex-col flex-auto p-6">
                 <div class="flex items-start justify-between bg-primary sidepanel-header">
                     <div class="text-on-primary" style="padding-top: 6px">Copy Project Selection</div>
                     <div style="padding-top: 2px"><a (click)="callCreateProject()"
@@ -23,8 +23,8 @@
                 <label style="margin-bottom: 15px;" class="font-bold text-primary text-2xl">{{projectname}}</label>
                 <p class="tag">The below data will be copied to your new project when you hit Copy Project. You can
                     update/edit this data after project creation.</p>
-                <form class="pl-3 w-full overflow-y-scroll" [formGroup]="CopyProjectForm"
-                    (ngSubmit)="SubmitCopyProject($event)" style="overflow-y: scroll; display: block;">
+                <form class="pl-3 w-full overflow-auto" [formGroup]="CopyProjectForm"
+                    (ngSubmit)="SubmitCopyProject($event)">
                     <div class="flex justify-between items-center mt-6 mb-6">
                         <mat-slide-toggle formControlName="projectTitle">{{lookupTemplate[0].lookUpName}}</mat-slide-toggle>
                     </div>
