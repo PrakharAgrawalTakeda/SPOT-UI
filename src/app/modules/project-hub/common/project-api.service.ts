@@ -692,7 +692,7 @@ async updateBusinessCaseFunding(body, projectId, optionid){
   const response = await lastValueFrom(abc$)
   return response
 }
-  async BulkEditProjectCharter(projectid: string, data) {
+  async BulkEditProjectCharter(data, projectid: string) {
     var url = GlobalVariables.apiurl + "ProjectCharter/" + projectid
     const abc$ = this.http.put(url, data)
     const response = await lastValueFrom(abc$)
