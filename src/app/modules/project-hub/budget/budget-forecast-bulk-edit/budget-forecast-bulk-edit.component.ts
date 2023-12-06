@@ -546,6 +546,7 @@ export class BudgetForecastBulkEditComponent {
         const isOpenEntry = this.forecastsForm.controls.find(control => control.get('isopen').value === true);
         const newTotal =
             (isNaN(isOpenEntry.value.annualTotal) ? 0 : isOpenEntry.value.annualTotal) +
+            (isNaN(isOpenEntry.value.historical) ? 0 : isOpenEntry.value.historical) +
             (isNaN(isOpenEntry.value.y1) ? 0 : isOpenEntry.value.y1) +
             (isNaN(isOpenEntry.value.y2) ? 0 : isOpenEntry.value.y2) +
             (isNaN(isOpenEntry.value.y3) ? 0 : isOpenEntry.value.y3) +
