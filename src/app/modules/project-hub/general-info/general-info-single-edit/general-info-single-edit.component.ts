@@ -41,6 +41,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   projectNameLabel: string = "Project Name"
   owningOrganizationValues = []
   changeExecutionScope: boolean = false
+  isConfidetialAlertShowAgain: boolean = true
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
     projectsingle: new FormControl(''),
@@ -220,10 +221,42 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         }
       })
     this.generalInfoForm.controls.isConfidential.valueChanges.subscribe(res => {
-      if (this.viewContent) {
-        this.generalInfoForm.patchValue({
-          projectsingleid: '',
-          projectsingle: ''
+      if (this.viewContent && this.isConfidetialAlertShowAgain) {
+        //Warning message
+        var comfirmConfigIsConfidential: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "Changing a project's confidentiality will remove any links to associated parent and children project records please confirm to continue",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alertIsConfidential = this.fuseAlert.open(comfirmConfigIsConfidential)
+        alertIsConfidential.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.generalInfoForm.patchValue({
+              projectsingleid: '',
+              projectsingle: ''
+            })
+          }
+          else{
+            this.isConfidetialAlertShowAgain = false
+            this.generalInfoForm.controls.isConfidential.patchValue(!res)
+            this.isConfidetialAlertShowAgain = true
+          }
         })
       }
     })
