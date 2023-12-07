@@ -60,6 +60,7 @@ export class CloseOutValueCreationComponent implements OnInit {
         this.projectApiService.getfilterlist().then(filterres => {
           this.auth.KPIMaster().then((kpi: any) => {
             this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
+              console.log("Metric Data : " + res)
             this.kpi = kpi
           this.lookupData = resp
           this.filterData = filterres
@@ -237,7 +238,7 @@ export class CloseOutValueCreationComponent implements OnInit {
       }
     }
     else{
-      return ''
+      return 'Local'
     }
   }
   getFrozenHeaderClassID(): any {
