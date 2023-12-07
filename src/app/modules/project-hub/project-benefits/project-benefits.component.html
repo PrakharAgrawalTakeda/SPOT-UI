@@ -69,7 +69,7 @@
         </div>
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
             columnMode="force" class="datatable-VC-80 pr-6 material font-medium text-sm text-default whitespace-nowrap"
-            [rows]="valuecreationngxdata" #valuecreationTable [sorts]="[{ prop: 'metricName', dir: 'asc' }]" [rowClass]="getRowClass" class="custom-ngx-table">
+            [rows]="valuecreationngxdata" #valuecreationTable [sorts]="[{prop: 'PO', dir: 'desc'}, { prop: 'metricName', dir: 'asc' }, { prop: 'sortOrder', dir: 'asc'}]" [rowClass]="getRowClass" class="custom-ngx-table">
             <ngx-datatable-column [resizeable]="false" [sortable]="false" [width]="30" [frozenLeft]="true">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <div style="height: 92px !important;">
