@@ -30,6 +30,7 @@ export class ProjectBenefitsComponent implements OnInit {
   kpi= []
   columnYear = []
   viewHisOpPerformance: boolean = false;
+  isStrategicInitiative = false
   bulkEditType: string = 'OperationalPerformanceBulkEdit';
   baselinePlan: string = 'BaselinePlan';
     @ViewChild('valuecreationTable') table: any;
@@ -103,6 +104,8 @@ console.log(problemCapture)
             primaryValueDriver: this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi).lookUpName : null,
             valueCommentary: problemCapture.valueCommentary
       })
+      this.isStrategicInitiative = problemCapture.problemType == 'Strategic Initiative / Program' ? true : false
+          
           console.log(this.ValueCaptureForm.getRawValue())
           var year = []
           var yearList=[]

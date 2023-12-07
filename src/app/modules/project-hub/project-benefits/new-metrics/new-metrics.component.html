@@ -8,11 +8,14 @@
 </div>
 <form class="w-full p-[20px]" [formGroup]="newMetricForm">
     <div class=" h-[84vh] overflow-hidden">
-    <spot-singleselect-autocomplete formControlName="metricName" class="w-full" name="metricName"
-        [label]="'Choose an Existing Metric'" [placeholder]="'Metric Name'" [valuePointer]="'metricName'"
+
+        <spot-singleselect-autocomplete formControlName="metricName" class="w-full" name="metricName"
+        [label]="'Choose an Existing Metric'" [placeholder]="'Metric Name'" [valuePointer]="'displayMetricName'"
         [dropDownArray]="metricName" [showHint]="true"
         [hint]="'Use an already existing metric local to your portfolio. Inclusive of default global metrics (i.e. FTE Hrs, Operational Cost Savings, etc.).'">
     </spot-singleselect-autocomplete>
+    
+
 
     <button class="min-w-26 ml-4 text-primary bg-gray-200 " mat-flat-button [color]="'primary-200'" (click)="OpenMetricRepo()"
     [matTooltip]="'Create a new metric to capture value (Once created, metrics will be saved to local metric repository for future use).'">

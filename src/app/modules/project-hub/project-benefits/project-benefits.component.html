@@ -109,7 +109,10 @@
             <ngx-datatable-column name="Metric Name" prop="metricName" [width]="160" [frozenLeft]="true"
                 [headerClass]="getFrozenClass" [resizeable]="false" [sortable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p style="margin-bottom: 72px;"><mat-icon *ngIf="row.parentProjectId != null" style="top: 7px;position: relative;" svgIcon="heroicons_outline:link" [matTooltip]=row.parentName></mat-icon><mat-icon *ngIf="value!= ''" class="pe" style="font-size: 17px;top: 3px;position: relative;"
+                    <p style="margin-bottom: 72px;"><mat-icon *ngIf="row.parentProjectId != null" 
+                        style="top: 7px;position: relative;" svgIcon="heroicons_outline:link" 
+                        [matTooltip]=row.parentName></mat-icon><mat-icon *ngIf="value!= '' && row.helpText && row.helpText != ''" 
+                        class="pe" style="font-size: 17px;top: 3px;position: relative;"
                         [matTooltip]=row.helpText>help</mat-icon>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
@@ -133,30 +136,49 @@
             </ngx-datatable-column>
             <ngx-datatable-column [width]="180" [frozenLeft]="true" [resizeable]="false" [sortable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p *ngIf="row.metricFormat != 'Currency (local)'">{{ row.FianncialType1 }} <br>
+                    <p *ngIf="row.metricFormat != 'Currency (local)' && isStrategicInitiative">{{ row.FianncialType1 }} <br>
                         {{row.FianncialType2}} <br> {{row.FianncialType3}} <br> {{row.FianncialType4}}</p>
-                    <p *ngIf="row.metricFormat == 'Currency (local)'">{{ row.FianncialType1 }} ({{localCurrency}}) <br>
+                    <p *ngIf="row.metricFormat == 'Currency (local)' && isStrategicInitiative">{{ row.FianncialType1 }} ({{localCurrency}}) <br>
                         {{row.FianncialType2}} ({{localCurrency}}) <br> {{row.FianncialType3}} ({{localCurrency}}) <br>
                         {{row.FianncialType4}} ({{localCurrency}})</p>
+                        <p style="margin-bottom: 26px;" *ngIf="row.metricFormat != 'Currency (local)' && !isStrategicInitiative">
+                            {{row.FianncialType2}} <br> {{row.FianncialType3}} <br> {{row.FianncialType4}}</p>
+                        <p style="margin-bottom: 26px;" *ngIf="row.metricFormat == 'Currency (local)' && !isStrategicInitiative">
+                            {{row.FianncialType2}} ({{localCurrency}}) <br> {{row.FianncialType3}} ({{localCurrency}}) <br>
+                            {{row.FianncialType4}} ({{localCurrency}})</p>
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column *ngFor="let col of columnYear; let i = index" [name]=col.year [prop]=col.year
                 [width]="190" [resizeable]="false" [sortable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <ng-template ngFor let-obj [ngForOf]="value">
-                        <p *ngIf="row.metricFormat == 'Time (HH:MM)' || row.metricFormat == ''">{{ obj.target }} <br>
+                        <p style="margin-bottom: -27px;" *ngIf="(row.metricFormat == 'Time (HH:MM)' || row.metricFormat == '') && isStrategicInitiative">{{ obj.target }} <br>
                             {{ obj.baseline }}<br>
                             {{ obj.current }}<br>
                             {{ obj.actual }}</p>
-                        <p *ngIf="row.metricFormat == 'Whole Number' || row.metricFormat == 'Currency (local)'">{{
+                        <p style="margin-bottom: -27px;" *ngIf="(row.metricFormat == 'Whole Number' || row.metricFormat == 'Currency (local)') && isStrategicInitiative">{{
                             obj.target | number:'1.0-0' }} <br> {{obj.baseline | number:'1.0-0' }} <br> {{obj.current |
                             number:'1.0-0' }} <br> {{obj.actual | number:'1.0-0' }}</p>
-                        <p *ngIf="row.metricFormat == 'Decimal (1 decimal)'">{{ obj.target | number:'1.0-1' }} <br>
+                        <p style="margin-bottom: -27px;" *ngIf="(row.metricFormat == 'Decimal (1 decimal)') && isStrategicInitiative">{{ obj.target | number:'1.0-1' }} <br>
                             {{obj.baseline | number:'1.0-1' }} <br> {{obj.current | number:'1.0-1' }} <br> {{obj.actual
                             | number:'1.0-1' }}</p>
-                        <p
-                            *ngIf="row.metricFormat == 'Percentage (2 decimal)' || row.metricFormat == 'Decimal (2 decimals)' || row.metricFormat == 'Number (2 decimal)'">
+                        <p style="margin-bottom: -27px;"
+                            *ngIf="(row.metricFormat == 'Percentage (2 decimal)' || row.metricFormat == 'Decimal (2 decimals)' || row.metricFormat == 'Number (2 decimal)') && isStrategicInitiative">
                             {{ obj.target | number:'1.0-2' }} <br> {{obj.baseline | number:'1.0-2' }} <br> {{obj.current
+                            | number:'1.0-2' }} <br> {{obj.actual | number:'1.0-2' }}</p>
+                        <br />
+                        <p style="margin-bottom: 22px;" *ngIf="(row.metricFormat == 'Time (HH:MM)' || row.metricFormat == '') && !isStrategicInitiative">
+                            {{ obj.baseline }}<br>
+                            {{ obj.current }}<br>
+                            {{ obj.actual }}</p>
+                        <p style="margin-bottom: 22px;" *ngIf="(row.metricFormat == 'Whole Number' || row.metricFormat == 'Currency (local)') && !isStrategicInitiative"> {{obj.baseline | number:'1.0-0' }} <br> {{obj.current |
+                            number:'1.0-0' }} <br> {{obj.actual | number:'1.0-0' }}</p>
+                        <p style="margin-bottom: 22px;" *ngIf="(row.metricFormat == 'Decimal (1 decimal)') && !isStrategicInitiative">
+                            {{obj.baseline | number:'1.0-1' }} <br> {{obj.current | number:'1.0-1' }} <br> {{obj.actual
+                            | number:'1.0-1' }}</p>
+                        <p style="margin-bottom: 22px;"
+                            *ngIf="(row.metricFormat == 'Percentage (2 decimal)' || row.metricFormat == 'Decimal (2 decimals)' || row.metricFormat == 'Number (2 decimal)') && !isStrategicInitiative">
+                            {{obj.baseline | number:'1.0-2' }} <br> {{obj.current
                             | number:'1.0-2' }} <br> {{obj.actual | number:'1.0-2' }}</p>
                         <br />
                     </ng-template>
@@ -165,18 +187,30 @@
             <ngx-datatable-column name="Total" prop="strategicTarget" [width]="150" [resizeable]="false"
                 [sortable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p *ngIf="row.metricFormat == 'Time (HH:MM)' || row.metricFormat == ''">{{ value }} <br>
+                    <p style="margin-bottom: 25px;" *ngIf="(row.metricFormat == 'Time (HH:MM)' || row.metricFormat == '') && isStrategicInitiative">{{ value }} <br>
                         {{row.strategicBaseline }} <br> {{row.strategicCurrent }} <br> {{row.strategicActual }}</p>
-                    <p *ngIf="row.metricFormat == 'Whole Number' || row.metricFormat == 'Currency (local)'">{{ value |
+                    <p style="margin-bottom: 25px;" *ngIf="(row.metricFormat == 'Whole Number' || row.metricFormat == 'Currency (local)') && isStrategicInitiative">{{ value |
                         number:'1.0-0' }} <br> {{row.strategicBaseline | number:'1.0-0' }} <br> {{row.strategicCurrent |
                         number:'1.0-0' }} <br> {{row.strategicActual | number:'1.0-0' }}</p>
-                    <p *ngIf="row.metricFormat == 'Decimal (1 decimal)'">{{ value | number:'1.0-1' }} <br>
+                    <p style="margin-bottom: 25px;" *ngIf="(row.metricFormat == 'Decimal (1 decimal)') && isStrategicInitiative">{{ value | number:'1.0-1' }} <br>
                         {{row.strategicBaseline | number:'1.0-1' }} <br> {{row.strategicCurrent | number:'1.0-1' }} <br>
                         {{row.strategicActual | number:'1.0-1' }}</p>
-                    <p
-                        *ngIf="row.metricFormat == 'Percentage (2 decimal)' || row.metricFormat == 'Decimal (2 decimals)' || row.metricFormat == 'Number (2 decimal)'">
+                    <p style="margin-bottom: 25px;"
+                        *ngIf="(row.metricFormat == 'Percentage (2 decimal)' || row.metricFormat == 'Decimal (2 decimals)' || row.metricFormat == 'Number (2 decimal)') && isStrategicInitiative">
                         {{ value | number:'1.0-2' }} <br> {{row.strategicBaseline | number:'1.0-2' }} <br>
                         {{row.strategicCurrent | number:'1.0-2' }} <br> {{row.strategicActual | number:'1.0-2' }}</p>
+
+                        <p style="margin-bottom: 21px;" *ngIf="(row.metricFormat == 'Time (HH:MM)' || row.metricFormat == '') && !isStrategicInitiative">
+                            {{row.strategicBaseline }} <br> {{row.strategicCurrent }} <br> {{row.strategicActual }}</p>
+                        <p style="margin-bottom: 21px;" *ngIf="(row.metricFormat == 'Whole Number' || row.metricFormat == 'Currency (local)') && !isStrategicInitiative"> {{row.strategicBaseline | number:'1.0-0' }} <br> {{row.strategicCurrent |
+                            number:'1.0-0' }} <br> {{row.strategicActual | number:'1.0-0' }}</p>
+                        <p style="margin-bottom: 21px;" *ngIf="(row.metricFormat == 'Decimal (1 decimal)') && !isStrategicInitiative">
+                            {{row.strategicBaseline | number:'1.0-1' }} <br> {{row.strategicCurrent | number:'1.0-1' }} <br>
+                            {{row.strategicActual | number:'1.0-1' }}</p>
+                        <p style="margin-bottom: 21px;"
+                            *ngIf="(row.metricFormat == 'Percentage (2 decimal)' || row.metricFormat == 'Decimal (2 decimals)' || row.metricFormat == 'Number (2 decimal)') && !isStrategicInitiative">
+                             {{row.strategicBaseline | number:'1.0-2' }} <br>
+                            {{row.strategicCurrent | number:'1.0-2' }} <br> {{row.strategicActual | number:'1.0-2' }}</p>
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column [width]="30" [resizeable]="false" [sortable]="false" 

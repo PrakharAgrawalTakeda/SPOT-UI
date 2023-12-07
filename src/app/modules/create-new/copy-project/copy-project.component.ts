@@ -32,7 +32,7 @@ export class CopyProjectComponent implements OnInit {
   viewContent: boolean = false
   CopyProjectForm = new FormGroup({
     projectTitle: new FormControl({ value: true, disabled: true }),
-    projectType: new FormControl({ value: true, disabled: true }),
+    // projectType: new FormControl({ value: false, disabled: true }),
     problemDescription: new FormControl(true),
     proposedStatement: new FormControl(true),
     keySuccess: new FormControl(true),
@@ -167,7 +167,7 @@ export class CopyProjectComponent implements OnInit {
       }
       var copyProjectParameter = {
         projectTitle: true,
-        projectType: true,
+        // projectType: true,
         problemDescription: true,
         proposedStatement: true,
         keySuccessCriteria: true,
