@@ -71,7 +71,7 @@ export class PortfolioCenterComponent implements OnInit {
   data: any
   totalproject = 0;
   owningOrg = []
-  projectType = [{ name: 'Standard Project / Program' }, { name: 'Simple Project' }, { name: 'Strategic Initiative / Program' }]
+  projectType = [{ name: 'Standard Project / Program' }, { name: 'SimpleProject' }, { name: 'Strategic Initiative / Program' }]
   CAPSDropDrownValues = ["Yes", "No"]
   totalCAPEX = []
   AgileWorkstream = []
@@ -81,6 +81,7 @@ export class PortfolioCenterComponent implements OnInit {
   sorting: any = { name: "", dir: "" }
   viewBaseline = false
   projectOverview: any = []
+  count:number = 0
   filtersnew: any = {
     "PortfolioOwner": [],
     "ProjectTeamMember": [],
@@ -2166,8 +2167,10 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].FORECAST = this.projectOverview[i].localForecastLbecapEx
         this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
         this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-        this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].calculatedEmissionsImpact;
-        this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits ? this.projectNames[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].waterImpactUnits;
+        this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact
+        this.projectOverview[i].calculatedEmissionsImpact1 = this.projectNames[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].calculatedEmissionsImpact;
+        this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits
+        this.projectOverview[i].waterImpactUnits1 = this.projectNames[i].waterImpactUnits ? this.projectNames[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].waterImpactUnits;
         this.projectOverview[i].problemId = this.projectNames[i].problemId;
         this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
         this.projectOverview[i].nextMilestoneFinishDate = this.projects.data[i].nextMilestoneFinishDate ? new Date(this.projects.data[i].nextMilestoneFinishDate) : this.projects.data[i].nextMilestoneFinishDate;
@@ -2282,8 +2285,10 @@ export class PortfolioCenterComponent implements OnInit {
             this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
 
             this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-            this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? res.projectDetails[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
-            this.projectOverview[i].waterImpactUnits = res.projectDetails[i].waterImpactUnits ? res.projectDetails[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].waterImpactUnits;
+            this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact
+            this.projectOverview[i].calculatedEmissionsImpact1 = res.projectDetails[i].calculatedEmissionsImpact ? res.projectDetails[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
+            this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits
+            this.projectOverview[i].waterImpactUnits1 = res.projectDetails[i].waterImpactUnits ? res.projectDetails[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].waterImpactUnits;
             this.projectOverview[i].problemId = res.projectDetails[i].problemId;
             this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
             this.projectOverview[i].nextMilestoneFinishDate = this.projects.data[i].nextMilestoneFinishDate ? new Date(this.projects.data[i].nextMilestoneFinishDate) : this.projects.data[i].nextMilestoneFinishDate;
@@ -2892,7 +2897,19 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   tootlipFormatter(value, series) {
-    return value.toString();
+    this.count = this.count == undefined ? 0 : this.count
+    if(this.count == 0){
+      this.count++
+      return value.toString();
+    }
+    else if(this.count == 1){
+      this.count++
+      return '<div style="color: #775DD0;">'+value.toString()+'</div>';
+    }
+    else{
+      this.count = 0
+      return '<div style="color: rgba(0,143,251,0.85);">'+value.toString()+'</div>';
+    }
   }
 
   sort(event) {

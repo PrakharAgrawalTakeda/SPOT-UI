@@ -29,6 +29,7 @@ export class CloseOutValueCreationComponent implements OnInit {
   columnYear = []
   yearData = []
   projectsMetricsData = []
+  isStrategicInitiative = false
   @ViewChild('valuecreationTable') table: any;
   constructor(public projectApiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService,public indicator: SpotlightIndicatorsService,
     private portApiService: PortfolioApiService){
@@ -59,44 +60,17 @@ export class CloseOutValueCreationComponent implements OnInit {
         this.projectApiService.getfilterlist().then(filterres => {
           this.auth.KPIMaster().then((kpi: any) => {
             this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
+              console.log("Metric Data : " + res)
             this.kpi = kpi
           this.lookupData = resp
           this.filterData = filterres
           console.log(res.projectsMetricsData)
           this.localCurrency = currency.localCurrencyAbbreviation
-          // res.projectsMetricsData.forEach((element)=>{
-          //       element.metricCategoryId = null
-          //       element.metricName = ""
-          //       element.helpText = ""
-          //       element.metricPortfolioID = null
-          //       element.metricUnit = ""
-          //       element.metricTypeID = null
-          //       element.metricFormat = ""
-          //       element.FianncialType1 = "Target"
-          //       element.FianncialType2 = "Baseline Plan"
-          //       element.FianncialType3 = "Current Plan"
-          //       element.FianncialType4 = "Actual"
-          //   res.allMetrics.forEach((el)=>{
-          //     if(element.metricId == el.metricID){
-          //       var format = el.metricFormatID ? this.lookupData.find(x => x.lookUpId == el.metricFormatID).lookUpName : ''
-          //       element.metricCategoryId = el.metricCategoryID
-          //       element.metricName = el.metricName
-          //       element.helpText = el.helpText
-          //       element.metricPortfolioID = el.metricPortfolioID
-          //       element.metricUnit = el.metricUnit
-          //       element.metricTypeID = el.metricTypeID
-          //       element.metricFormat = format
-          //       element.strategicTarget = element.strategicTarget ? element.strategicTarget : '0'
-          //       element.strategicBaseline = element.strategicBaseline ? element.strategicBaseline : '0'
-          //       element.strategicCurrent = element.strategicCurrent ? element.strategicCurrent : '0'
-          //       element.strategicActual =element.strategicActual ? element.strategicActual : '0'
-          //     }
-          //   })
-          // })
 
           res.forEach((element)=>{
             var format = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID).lookUpName : ''
             var order = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID).lookUpOrder : ''
+            element.metricData.PO = element.metricData.metricPortfolioID ? 0 : 1
             element.metricData.metricFormat = format
             element.metricData.sortOrder = order
             element.metricData.FianncialType1 = "Target"
@@ -113,6 +87,7 @@ export class CloseOutValueCreationComponent implements OnInit {
             problemCapture.primaryKpi ? this.kpi.find(x => x.kpiid == problemCapture.primaryKpi).kpiname : '',
             valueCommentary: problemCapture.valueCommentary
           })
+          this.isStrategicInitiative = problemCapture.problemType == 'Strategic Initiative / Program' ? true : false
           var year = []
           var yearList=[]
           
@@ -196,6 +171,14 @@ export class CloseOutValueCreationComponent implements OnInit {
         }
           this.compare(this.columnYear)
           this.valuecreationngxdata = this.projectsMetricsData
+          if (!res.projectsMetricsDataYearly || res.projectsMetricsDataYearly.length === 0) {
+            const fiscalYear = this.getFiscalYearFromDate(problemCapture.financialRealizationStartDate);
+            this.initializeFinancialDataForYear(fiscalYear, this.projectsMetricsData);
+            // Push this year to columnYear if not already present
+            if (!this.columnYear.some(yearObj => yearObj.year === fiscalYear)) {
+              this.columnYear.push({ year: fiscalYear });
+            }
+          }
           this.ValueCaptureForm.disable()
           this.viewContent = true
       })
@@ -205,6 +188,31 @@ export class CloseOutValueCreationComponent implements OnInit {
   })
   })
 // })
+  }
+
+  private initializeFinancialDataForYear(fiscalYear: string, metricsData: any[]): void {
+    metricsData.forEach(metric => {
+      // Initialize year structure if not exist
+      if (!metric[fiscalYear]) {
+        metric[fiscalYear] = [{
+          target: "0",
+          baseline: "0",
+          actual: "0",
+          current: "0"
+        }];
+      }
+    });
+  }
+  
+  
+
+  private getFiscalYearFromDate(dateString: string): string {
+    const date = new Date(dateString);
+    let year = date.getFullYear();
+    if (date.getMonth() < 3) { // January, February, March
+      year--; // Fiscal year is the previous year
+    }
+    return `FY ${year}`;
   }
 
   getLookup(id: any){
@@ -231,7 +239,7 @@ export class CloseOutValueCreationComponent implements OnInit {
       }
     }
     else{
-      return ''
+      return 'Local'
     }
   }
   getFrozenHeaderClassID(): any {

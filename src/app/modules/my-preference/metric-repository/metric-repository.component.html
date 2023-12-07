@@ -18,9 +18,9 @@
                 </div>
             </div>
             <div class="overflow-x-auto">
-                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'"  columnMode="flex"
+                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'"  columnMode="flex" [sorts]="[{ prop: 'metricTypeID', dir: 'desc' },{ prop: 'metricPortfolioID', dir: 'desc' },{ prop: 'metricCategoryID', dir: 'desc' },{ prop: 'metricName', dir: 'desc' }]"
                                class="ml-3 datatable-sms material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="metricRepositoryData">
-                    <ngx-datatable-column name="Global/Local" prop="metricTypeID" [flexGrow]="1">
+                    <ngx-datatable-column name="Global/Local" prop="metricTypeID" [flexGrow]="1" >
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <p>{{getGlobalLocal(value)}}</p>
                         </ng-template>
@@ -40,11 +40,13 @@
                             <p>{{value}}</p>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Metric Name" prop="metricName" [flexGrow]="1" [resizeable]="false" [draggable]="false">
+
+                    <!-- Duplicate -->
+                    <!-- <ngx-datatable-column name="Metric Name" prop="metricName" [flexGrow]="1" [resizeable]="false" [draggable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <p>{{value}}</p>
                         </ng-template>
-                    </ngx-datatable-column>
+                    </ngx-datatable-column> -->
                     <ngx-datatable-column name="Unit" prop="metricUnit" [flexGrow]="1" [resizeable]="false" [draggable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <p>{{value}}</p>

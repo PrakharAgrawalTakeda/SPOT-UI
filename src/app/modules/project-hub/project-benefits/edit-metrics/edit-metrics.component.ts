@@ -225,7 +225,16 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                 };
 
                 const updateGlobalYearRange = (listString: string) => {
-                  if (!listString) return;
+                  console.log(listString)
+                  if (!listString)
+                  {
+                    if (pc.financialRealizationStartDate) {
+                      const fiscalYear = this.getFiscalYearFromDate(pc.financialRealizationStartDate);
+                      this.globalMinYear = fiscalYear;
+                      this.globalMaxYear = fiscalYear;
+                    }
+                   return;
+                }
 
                   listString.split(',').forEach(item => {
                     // Adjusted regex to match "FY" followed by two digits
@@ -320,6 +329,16 @@ export class EditMetricsComponent implements OnInit, OnChanges {
     })
 
   }
+
+                  // Helper function to calculate fiscal year from a date
+getFiscalYearFromDate = (dateString: string): number => {
+  const date = new Date(dateString);
+  let year = date.getFullYear();
+  if (date.getMonth() < 3) { // If month is before April
+    year--; // Fiscal year starts in the previous calendar year
+  }
+  return year;
+};
 
   getFrozenHeaderClassID(): any {
     return ' frozen-header-classID';
@@ -624,7 +643,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
 
   getRowClass(financialType: string): string {
     // If the value capture level is 'Capture', disable editing for 'Baseline Plan' row
-    if (this.captureLevel && financialType === 'Baseline Plan') {
+    if (this.captureLevel && financialType == 'Baseline Plan') {
       return 'non-editable-row';
     }
     // When value capture level is not 'Capture', disable editing for 'Baseline Plan', 'Current Plan', and 'Actual'
@@ -850,13 +869,13 @@ export class EditMetricsComponent implements OnInit, OnChanges {
     // Construct the metricData object from the form values
     const metricData = this.metricData
 
-
+console.log(this.capexAvoidanceForm.get('metricLevelId').value)
     const projectsMetricsData = {
       // Other existing fields from projectsMetricsData
       projectId: this.projectData.projectId,
       metricId: this.projectData.metricId,
-      statusId: this.lookupData.find(x => x.lookUpName == this.capexAvoidanceForm.get('statusId').value).lookUpId,
-      metricLevelId: this.lookupData.find(x => x.lookUpName == this.capexAvoidanceForm.get('metricLevelId').value).lookUpId,
+      statusId: this.capexAvoidanceForm.get('statusId').value ? this.lookupData.find(x => x.lookUpName == this.capexAvoidanceForm.get('statusId').value).lookUpId : '',
+      metricLevelId: this.capexAvoidanceForm.get('metricLevelId').value ? this.lookupData.find(x => x.lookUpName == this.capexAvoidanceForm.get('metricLevelId').value).lookUpId : '',
       temporaryImpact: this.tempImpactForm.get('temporaryImpact').value,
 
       // Calculated values and lists

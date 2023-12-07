@@ -7,7 +7,7 @@
         </a>
         </div>
     </div>
-    <form class="m-2 overflow-auto" style="height: calc(100vh - 120px)" [formGroup]="costForm" *ngIf="mode=='Project-Charter'">
+    <form class="m-2 overflow-auto" style="height: calc(100vh - 135px)" [formGroup]="costForm" *ngIf="mode=='Project-Charter'">
         <!--Enter Element here-->
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                        class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="costData"
@@ -63,7 +63,7 @@
         </ngx-datatable>
     </form>
 
-    <form class="m-2 overflow-auto" [formGroup]="costForm" style="height: calc(100vh - 120px)"
+    <form class="m-2 overflow-auto" [formGroup]="costForm" style="height: calc(100vh - 135px)"
           *ngIf="mode!='Project-Charter' && optionType=='recommended-option'">
         <div class="h-[84vh]">
             <!--Enter Element here-->
@@ -105,12 +105,16 @@
                                     [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
                                     [callLocation]="'cost'">
                         </spot-input>
+                        <div class="datatable-body-cell-label" style="margin-left: 95px;">
                         <spot-toggle class="w-full" *ngIf="row.category.includes('Project Spend Start')"
                                      formControlName="isProjectSpentNa" [label]="'N/A'">
                         </spot-toggle>
+                    </div>
+                    <div class="datatable-body-cell-label" style="margin-left: 95px;">
                         <spot-toggle class="w-full" *ngIf="row.category.includes('Asset in Service')"
                                      formControlName="assetInServiceNa" [label]="'N/A'">
                         </spot-toggle>
+                    </div>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Current Year Planned Spend" prop="curryearSpend" [resizeable]="false"
@@ -138,7 +142,7 @@
         </div>
     </form>
 
-    <form class="m-2 overflow-auto" [formGroup]="costForm" style="height: calc(100vh - 120px)"
+    <form class="m-2 overflow-auto" [formGroup]="costForm" style="height: calc(100vh - 135px)"
           *ngIf="mode!='Project-Charter' && (optionType=='option-2' || optionType=='option-3')">
         <div class="h-[84vh]">
             <div class="w-full mt-4 mb-6">
@@ -182,12 +186,16 @@
                                         *ngIf="row.category.includes('Total CAPEX')" [autoAddDecimal]="false"
                                         [inputType]="'Number'" [decimalCount]="0" [callLocation]="'cost'">
                             </spot-input>
+                            <div class="datatable-body-cell-label" style="margin-left: 95px;">
                             <spot-toggle class="w-full" *ngIf="row.category.includes('Project Spend Start')"
                                          formControlName="isProjectSpentNa" [label]="'N/A'">
                             </spot-toggle>
+                        </div>
+                            <div class="datatable-body-cell-label" style="margin-left: 95px;">
                             <spot-toggle class="w-full" *ngIf="row.category.includes('Asset in Service')"
                                          formControlName="assetInServiceNa" [label]="'N/A'">
                             </spot-toggle>
+                        </div>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Current Year Planned Spend" prop="curryearSpend" [resizeable]="false"

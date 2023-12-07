@@ -46,19 +46,19 @@ export class MyPreferenceApiService {
         return response
     }
     async getMetricRepository() {
-        var link = GlobalVariables.apiurl + "StrategicMetricRepository"
+        var link = GlobalVariables.apiurl + "MetricRepository"
         const abc$ = this.http.get(link)
         const response = await lastValueFrom(abc$)
         return response
     }
     async addMetricRepository(body){
-        var link = GlobalVariables.apiurl+"StrategicMetricRepository"
+        var link = GlobalVariables.apiurl+"MetricRepository"
         const abc$ = this.http.post(link,body)
         const response = await lastValueFrom(abc$)
         return response
     }
     async editMetricRepository(projectId: string,body){
-        var link = GlobalVariables.apiurl+"StrategicMetricRepository/"+projectId+"/"
+        var link = GlobalVariables.apiurl+"MetricRepository/"+projectId+"/"
         var abc$ = this.http.put(link,body)
         const response = await lastValueFrom(abc$)
         return response
@@ -111,7 +111,7 @@ export class MyPreferenceApiService {
         return response
     }
     async deleteMetricRepository(id) {
-        var link = GlobalVariables.apiurl + "StrategicMetricRepository/" + id
+        var link = GlobalVariables.apiurl + "MetricRepository/" + id
         const abc$ = this.http.delete(link)
         const response = await lastValueFrom(abc$)
         return response

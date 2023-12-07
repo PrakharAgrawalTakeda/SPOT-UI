@@ -35,12 +35,13 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   lookupdata: any = [];
   localCurrencyList: any = [];
   local: any = [];
-  projectTypeDropDrownValues1 = ["Standard Project / Program", "Simple Project"]
-  projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project", 'Strategic Initiative / Program']
+  projectTypeDropDrownValues1 = ["Standard Project / Program", "SimpleProject"]
+  projectTypeDropDrownValues = ["Standard Project / Program", "SimpleProject", 'Strategic Initiative / Program']
   isStrategicInitiative: boolean = false
   projectNameLabel: string = "Project Name"
   owningOrganizationValues = []
   changeExecutionScope: boolean = false
+  isConfidetialAlertShowAgain: boolean = true
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
     projectsingle: new FormControl(''),
@@ -135,10 +136,10 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           //IF CONDITIONS NOT MET ALERT
           //SwITCH BACK TO OG PROJECT TYPE
           //ELSE MET CONFIRMATION ALERT
-          //UPDATE PARENT 
+          //UPDATE PARENT
           //
 
-          
+
         }
       }
     })
@@ -174,11 +175,11 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         if (res != 'Strategic Initiative / Program') {
           if (res == 'Standard Project / Program') {
             if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
-              this.generalInfoForm.controls.portfolioOwner.disable()
+              this.generalInfoForm.controls.portfolioOwner.disable({emitEvent : false})
             }
           }
           else {
-            this.generalInfoForm.controls.portfolioOwner.enable()
+            this.generalInfoForm.controls.portfolioOwner.enable({emitEvent : false})
           }
         }
       }
@@ -220,10 +221,42 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         }
       })
     this.generalInfoForm.controls.isConfidential.valueChanges.subscribe(res => {
-      if (this.viewContent) {
-        this.generalInfoForm.patchValue({
-          projectsingleid: '',
-          projectsingle: ''
+      if (this.viewContent && this.isConfidetialAlertShowAgain) {
+        //Warning message
+        var comfirmConfigIsConfidential: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "Changing a project's confidentiality will remove any links to associated parent and children project records please confirm to continue",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alertIsConfidential = this.fuseAlert.open(comfirmConfigIsConfidential)
+        alertIsConfidential.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.generalInfoForm.patchValue({
+              projectsingleid: '',
+              projectsingle: ''
+            })
+          }
+          else{
+            this.isConfidetialAlertShowAgain = false
+            this.generalInfoForm.controls.isConfidential.patchValue(!res)
+            this.isConfidetialAlertShowAgain = true
+          }
         })
       }
     })
@@ -297,8 +330,8 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           }
         });
         this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
-        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.problemType.enable() : this.generalInfoForm.controls.problemType.disable()
+        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'SimpleProject' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
+        //this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.problemType.enable() : this.generalInfoForm.controls.problemType.disable()
         if (this.isStrategicInitiative) {
           this.projectNameLabel = "Initiaitive Name"
           if (['ProjectCharter', 'CloseOut', 'BusinessCase'].includes(this.subCallLocation)) {

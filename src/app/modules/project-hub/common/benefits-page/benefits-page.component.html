@@ -32,12 +32,12 @@
                     <div class="text-primary pt-6 pb-3 text-xl">NPV Net Present Value</div>
                     <div class="flex gap-x-6 gap-y-0 w-full">
                         <spot-input formControlName="npvBaseCase"  [label]="'Base Case (' + this.localCurrency.localCurrencyAbbreviation + ')'"
-                                    [showHint]="true" [hint]="'Provide net present value calculation if applicable (base case)'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'business-case'"
-                                    class="w-64 read-only" >
+                                    [showHint]="true" [hint]="'Provide net present value calculation if applicable (base case)'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'Edit'"
+                                    class="w-64 read-only text-right" >
                         </spot-input>
-                        <spot-input formControlName="npvHighCase"  [label]="'High Case (' + this.localCurrency.localCurrencyAbbreviation + ')'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'business-case'"
+                        <spot-input formControlName="npvHighCase"  [label]="'High Case (' + this.localCurrency.localCurrencyAbbreviation + ')'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'Edit'"
                                     [showHint]="true" [hint]="'Provide net present value calculation if applicable (high case)'"
-                                    class="w-64 read-only" >
+                                    class="w-64 read-only text-right" >
                         </spot-input>
                     </div>
                     <spot-textarea class="w-full read-only" formControlName="npvRationale" [showLabel]="true" [label]="'Net Present Value Basis of Calculation'"

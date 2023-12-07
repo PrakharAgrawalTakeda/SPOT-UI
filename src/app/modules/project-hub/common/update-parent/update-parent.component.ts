@@ -156,7 +156,9 @@ export class UpdateParentComponent implements OnInit {
             if (this.budget.length > 0) {
                 var temp = this.budget.find(x => x.projectId == projectid)
                 if (temp != null) {
-                    return temp.capitalBudgetId
+                    if( temp.capitalBudgetId != null && temp.capitalBudgetId != "" && temp.capitalBudgetId != undefined){
+                        return temp.capitalBudgetId + " - "
+                    }
                 }
             }
         }
@@ -171,7 +173,7 @@ export class UpdateParentComponent implements OnInit {
         let returnValue = "";
         if (value && this.resultSets) {
             const selectedValue = this.resultSets.find(_ => _.problemUniqueId === value);
-            returnValue = selectedValue.problemId + " - " + this.budgetfind(selectedValue.problemUniqueId) + selectedValue.problemTitle;
+            returnValue = selectedValue.problemId + " - " + (this.budgetfind(selectedValue.problemUniqueId) ? this.budgetfind(selectedValue.problemUniqueId) : "") + selectedValue.problemTitle;
         }
         return returnValue;
     }
@@ -246,15 +248,17 @@ export class UpdateParentComponent implements OnInit {
         deleteAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
                 this.apiService.DeleteLink(this.id).then((res: any) => {
+
+                    const objWithIdIndex = this.projecthubservice.projectChildren.findIndex((obj) => obj.problemUniqueId === this.id);
+                    const index = this.projecthubservice.removedIds.indexOf(parentId);
+                    this.projecthubservice.removedIds.splice(index, 1);
+                    this.searchControl.setValue('');
+                    this.selectedValueExists.setValue(true)
+                    this.rows.splice(objWithIdIndex, 1);
+                    this.rows = [...this.rows];
+                    this.detailsHaveBeenChanged.setValue(true);
+                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
                 });
-                const objWithIdIndex = this.projecthubservice.projectChildren.findIndex((obj) => obj.problemUniqueId === this.id);
-                const index = this.projecthubservice.removedIds.indexOf(parentId);
-                this.projecthubservice.removedIds.splice(index, 1);
-                this.searchControl.setValue('');
-                this.selectedValueExists.setValue(true)
-                this.rows.splice(objWithIdIndex, 1);
-                this.rows = [...this.rows];
-                this.detailsHaveBeenChanged.setValue(true);
             }
         })
     }

@@ -5,6 +5,7 @@ import { ProjectHubService } from '../../project-hub.service';
 import { ActivatedRoute } from '@angular/router';
 import moment from 'moment';
 import { AuthService } from 'app/core/auth/auth.service';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
   selector: 'app-primary-kpi-single-edit',
@@ -24,7 +25,8 @@ export class PrimaryKpiSingleEditComponent implements OnInit {
   lookupMasters = []
   pc: any;
 
-  constructor(public projecthubservice: ProjectHubService, public apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService) {
+  constructor(public projecthubservice: ProjectHubService, public apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService,
+    public fuseAlert: FuseConfirmationService) {
     this.primaryKPIForm.controls.primaryKpi.valueChanges.subscribe(res => {
       if (this.viewContent) {
         this.projecthubservice.isFormChanged = true
@@ -59,36 +61,64 @@ export class PrimaryKpiSingleEditComponent implements OnInit {
   submitpkpi() {
     this.projecthubservice.isFormChanged = false;
 
-    // Extract the selected primaryKpi value from the form
-    const selectedPrimaryKpiValue = this.primaryKPIForm.get('primaryKpi').value;
-    console.log(selectedPrimaryKpiValue)
+    if ((this.primaryKPIForm.value.vcdate == "" || this.primaryKPIForm.value.vcdate == null)) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Please enter a value for Value Capture Start Date.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else{
+// Extract the selected primaryKpi value from the form
+const selectedPrimaryKpiValue = this.primaryKPIForm.get('primaryKpi').value;
+console.log(selectedPrimaryKpiValue)
 
-    // Find the corresponding lookUpId from primaryKPI array
-    const selectedPrimaryKpiObject = this.lookupMasters.find(x => x.lookUpName == selectedPrimaryKpiValue.lookUpName);
+// Find the corresponding lookUpId from primaryKPI array
+const selectedPrimaryKpiObject = selectedPrimaryKpiValue ? this.lookupMasters.find(x => x.lookUpName == selectedPrimaryKpiValue.lookUpName) : '';
 
-    // Initialize the mainObj
-    var mainObj: any = {};
-console.log(selectedPrimaryKpiObject)
-    var date = this.primaryKPIForm.get('vcdate').value
-    // Assign other properties to mainObj if needed
-    mainObj.problemType = this.pc.problemType
-    mainObj.problemTitle = this.pc.problemTitle
-    mainObj.problemOwnerId = this.pc.problemOwnerId
-    mainObj.problemUniqueId = this.pc.problemUniqueId
-    mainObj.portfolioOwnerId = this.pc.portfolioOwnerId
-    mainObj.financialRealizationStartDate = date? moment(date).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
-    mainObj.valueCommentary = this.primaryKPIForm.get('valueCommentary').value;
-    mainObj.primaryKpi = selectedPrimaryKpiObject.lookUpId;
+// Initialize the mainObj
+var mainObj: any = {};
+console.log(this.pc)
+var date = this.primaryKPIForm.get('vcdate').value
+// Assign other properties to mainObj if needed
+mainObj.problemType = this.pc.problemType ? this.pc.problemType : ''
+mainObj.problemTitle = this.pc.problemTitle ? this.pc.problemTitle : ''
+mainObj.problemOwnerId = this.pc.problemOwnerId ? this.pc.problemOwnerId : ''
+mainObj.problemUniqueId = this.pc.problemUniqueId
+mainObj.portfolioOwnerId = this.pc.portfolioOwnerId ? this.pc.portfolioOwnerId : ''
+mainObj.financialRealizationStartDate = date? moment(date).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
+mainObj.valueCommentary = this.primaryKPIForm.get('valueCommentary').value;
+mainObj.primaryKpi = selectedPrimaryKpiObject ? selectedPrimaryKpiObject.lookUpId : '';
 
-    console.log(mainObj)
-    this.apiService.putProjectData(mainObj,this.id).then(res => {
+console.log(mainObj)
+this.apiService.putProjectData(mainObj,this.id).then(res => {
+
+  this.projecthubservice.isNavChanged.next(true)
+        this.projecthubservice.submitbutton.next(true)
+        this.projecthubservice.successSave.next(true)
+        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+
+});
+    }
+
     
-      this.projecthubservice.isNavChanged.next(true)
-            this.projecthubservice.submitbutton.next(true)
-            this.projecthubservice.successSave.next(true)
-            this.projecthubservice.toggleDrawerOpen('', '', [], '')
-
-    });
   }
 
 }

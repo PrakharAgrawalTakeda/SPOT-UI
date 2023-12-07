@@ -44,6 +44,7 @@ export class LinkProjectComponent implements OnInit {
     id: string = '';
     isParent: boolean = false;
     isConfidential: boolean = false;
+    isStrategicInitiative: boolean = false
     ngOnInit(): void {
         this.rows = this.projecthubservice.projectChildren;
         this.dataloader();
@@ -86,7 +87,11 @@ export class LinkProjectComponent implements OnInit {
                             i--;
                         }
                     }
-                   this.budget = resultSets.budget
+                    this.budget = resultSets.budget
+                    if (!this.isStrategicInitiative) {
+                        resultSets.projectData = resultSets.projectData?.filter(x => x.problemType != "Strategic Initiative / Program");
+                        console.log(this.isStrategicInitiative, resultSets)
+                    }
                     if (!this.isConfidential) {
                         this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential && !x.parentProgramId);
                     }
@@ -103,8 +108,9 @@ export class LinkProjectComponent implements OnInit {
                             });
                         }
                     }
+                    console.log("HEY?", this.resultSets)
                     this.search.next(resultSets);
-                    if (this.resultSets.length <= 5) {
+                    if (this.resultSets?.length <= 5) {
                         this.resultSets.forEach(x => {
                             this.apiService.isParent(x.problemUniqueId).then((res: any) => {
                                 x.isParent = res;
@@ -119,6 +125,7 @@ export class LinkProjectComponent implements OnInit {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         this.apiService.getproject(this.projecthubservice.projectid).then((res: any) => {
             this.isConfidential = res.isConfidential
+            this.isStrategicInitiative = res.problemType == "Strategic Initiative / Program"
             this.viewContent = true;
         })
 
@@ -245,7 +252,7 @@ export class LinkProjectComponent implements OnInit {
         let returnValue = "";
         if (value) {
             const selectedValue = this.resultSets.find(_ => _.problemUniqueId === value);
-            returnValue = (selectedValue.isParent ? "[PGM] " : "") + selectedValue.problemId + " - " + this.budgetfind(selectedValue.problemUniqueId) + selectedValue.problemTitle;
+            returnValue = (selectedValue.isParent ? "[PGM] " : "") + selectedValue.problemId + " - " + (this.budgetfind(selectedValue.problemUniqueId) ? this.budgetfind(selectedValue.problemUniqueId) : "") + selectedValue.problemTitle;
         }
         return returnValue;
     }

@@ -186,7 +186,9 @@
                         </a>
                         <form [formGroup]="milestoneForm.controls[rowIndex]"
                             *ngIf="milestoneTableEditStack.includes(rowIndex)">
-                            <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false">
+                            <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false"
+                            [showHint]="true" [hintPostion]="'mat-hint'"
+                                [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
                                 <!-- [placeholder]="'Milestone Name'" -->
                             </spot-textarea>
                         </form>
@@ -502,7 +504,7 @@
                     </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column [flexGrow]="0.3" [resizeable]="false" [sortable]="false" [draggable]="false"
+                <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false"
                     *ngIf="mode== 'Normal'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
 

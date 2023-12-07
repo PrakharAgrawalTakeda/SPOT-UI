@@ -179,7 +179,9 @@ export class RiskIssueViewEditComponent implements OnInit {
       return this.viewElements.some(x => x == element)
   }
   getFunctionGroupID(): any {
-      return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')
+      return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77').sort((a, b) => {
+        return a.lookUpOrder - b.lookUpOrder;
+      })
   }
   getllookup() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -242,7 +244,7 @@ export class RiskIssueViewEditComponent implements OnInit {
           mitigation: this.riskIssueForm.value.mitigation,
           ownerId: this.riskIssueForm.value.usersingleid,
           ownerName: this.riskIssueForm.value.usersingle,
-          functionGroupId: this.riskIssueForm.value.functionGroupID?.lookUpId,
+          functionGroupId: this.riskIssueForm.value.functionGroupID ? this.riskIssueForm.value.functionGroupID.lookUpId : '',
           dueDate: moment(this.riskIssueForm.value.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           closeDate: moment(this.riskIssueForm.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           logDate: moment(this.riskissue.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
@@ -335,7 +337,7 @@ export class RiskIssueViewEditComponent implements OnInit {
           mitigation: this.riskIssueForm.value.mitigation,
           ownerId: this.riskIssueForm.value.usersingleid,
           ownerName: this.riskIssueForm.value.usersingle,
-          functionGroupId: this.riskIssueForm.value.functionGroupID.lookUpId,
+          functionGroupId: this.riskIssueForm.value.functionGroupID ? this.riskIssueForm.value.functionGroupID.lookUpId : '',
           dueDate: moment(this.riskIssueForm.value.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           closeDate: moment(this.riskIssueForm.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           logDate: moment(this.riskissue.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
