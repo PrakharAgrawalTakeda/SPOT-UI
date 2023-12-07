@@ -18,6 +18,8 @@ export class NewMetricsComponent {
   id: string;
   metricName: any;
   metric: any;
+  metricNameWithOwner: any;
+  displayMetricName: any;
 
   constructor(public projecthubservice: ProjectHubService, public apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService, private router: Router) {
     // this.newMetricForm.controls.metricName.valueChanges.subscribe(res => {
@@ -45,31 +47,51 @@ export class NewMetricsComponent {
             if (res && res.length > 0) {
               // Create a Set of existing metric IDs for efficient lookup
               const existingMetricIDsSet = new Set(res.map(item => item.metricData.metricID));
-            
+
               // Filter out metrics from vc that are not in the existingMetricIDsSet
               this.metricName = vc.filter(metric => !existingMetricIDsSet.has(metric.metricID));
             }
-            else{
+            else {
               this.metricName = vc.filter(metric => (metric.metricID));
             }
             console.log(this.metricName)
-if(this.metricName && relevantIds)
-{
-            // Further filter metrics based on the metric type ID and relevant IDs
-            this.metricName = this.metricName.filter(metric =>
-              metric.metricTypeID == 'e7a9e055-1319-4a4f-b929-cd7777599e39' ||
-              relevantIds.some(id => id == metric.metricPortfolioID)
-            );
+            if (this.metricName && relevantIds) {
+              // Further filter metrics based on the metric type ID and relevant IDs
+              this.metricName = this.metricName.filter(metric =>
+                metric.metricTypeID == 'e7a9e055-1319-4a4f-b929-cd7777599e39' ||
+                relevantIds.some(id => id == metric.metricPortfolioID)
+              );
 
 
-            console.log(this.metricName)
-            console.log(res)
+
+
+              console.log(this.metricName)
+              console.log(res)
+
+
+
+            }
+
             // Ensure unique metrics
             this.metricName = this.metricName.filter((value, index, self) =>
               self.findIndex(m => m.metricID == value.metricID) == index
             );
-}
 
+
+// Enhance each object in metricName with a new display property
+this.metricName = this.metricName.map(metric => {
+  let displayText = metric.metricName;
+  if (metric.portfolioOwner) {
+    displayText = metric.portfolioOwner + ' - ' + displayText;
+  } else {
+    displayText = 'Global - ' + displayText;
+  }
+  return { ...metric, displayMetricName: displayText };
+});
+
+
+
+console.log(this.displayMetricName)
 
             this.newMetricForm.controls.metricName.patchValue('');
             this.projecthubservice.isFormChanged = false;
