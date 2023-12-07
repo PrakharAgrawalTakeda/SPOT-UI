@@ -70,13 +70,13 @@ export class LessonLearnedSingleEditComponent implements OnInit {
   }
 
   GetType(): string {
-    return this.lookupdata.filter(x => x.lookUpParentId == "3B747FFC-139E-4ECC-8123-85D8A730245E")
+    return this.lookupdata?.filter(x => x.lookUpParentId == "3B747FFC-139E-4ECC-8123-85D8A730245E")
   }
   GetCriticality(): string {
-    return this.lookupdata.filter(x => x.lookUpParentId == "DFC4E626-10A1-464E-8B1A-09A223B125A1")
+    return this.lookupdata?.filter(x => x.lookUpParentId == "DFC4E626-10A1-464E-8B1A-09A223B125A1")
   }
   GetRole(): string {
-    return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77").sort((a, b) => {
+    return this.lookupdata?.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77").sort((a, b) => {
       if (a.lookUpName === "None") {
         return true
       }

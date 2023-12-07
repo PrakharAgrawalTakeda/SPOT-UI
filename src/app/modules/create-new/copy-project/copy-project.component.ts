@@ -32,7 +32,7 @@ export class CopyProjectComponent implements OnInit {
   viewContent: boolean = false
   CopyProjectForm = new FormGroup({
     projectTitle: new FormControl({ value: true, disabled: true }),
-    projectType: new FormControl({ value: true, disabled: true }),
+    // projectType: new FormControl({ value: false, disabled: true }),
     problemDescription: new FormControl(true),
     proposedStatement: new FormControl(true),
     keySuccess: new FormControl(true),
@@ -64,14 +64,14 @@ export class CopyProjectComponent implements OnInit {
         link: '/create-project',
         children: [
           {
-            title: 'Create a Strategic Initiative/Program',
-            type: 'basic',
-            link: '/create-project/create-strategic-initiative-project'
-          },
-          {
             title: 'Create a Standard/Simple Project/Program',
             type: 'basic',
             link: '/create-project/create-new-project'
+          },
+          {
+            title: 'Create a Strategic Initiative/Program',
+            type: 'basic',
+            link: '/create-project/create-strategic-initiative-project'
           },
           {
             title: 'Copy an existing Project',
@@ -79,12 +79,6 @@ export class CopyProjectComponent implements OnInit {
             link: '/create-project/copy-project'
           }
         ],
-      },
-      {
-        id: 'project-hub',
-        title: 'Project Hub',
-        type: 'basic',
-        link: '/project-hub'
       },
       {
         id: 'spot-documents',
@@ -173,7 +167,7 @@ export class CopyProjectComponent implements OnInit {
       }
       var copyProjectParameter = {
         projectTitle: true,
-        projectType: true,
+        // projectType: true,
         problemDescription: true,
         proposedStatement: true,
         keySuccessCriteria: true,
@@ -216,12 +210,18 @@ export class CopyProjectComponent implements OnInit {
         CopyUserID: this.activeaccount.localAccountId,
         CopyProjectParameter: copyProjectParameter
       }
-      this.createApiservice.getTemplateInfo(dataToSend).then(res => {
+      this.createApiservice.getTemplateInfo(dataToSend).then((res : any) => {
         this.createApiservice.getQuality(this.projectid).then(quality => {
           console.log(quality);
           console.log(res);
           if (res != "") {
-            this.router.navigateByUrl('/create-project/create-new-project', { state: { data: res, quality: quality, callLocation: 'CopyProject', copytemplateId: this.projectid, lookupString: this.finalData.toString(), copyParameterObject: copyProjectParameter } });
+            if(res.problemType == 'Strategic Initiative / Program'){
+              this.router.navigateByUrl('/create-project/create-strategic-initiative-project', { state: { data: res, quality: quality, callLocation: 'CopyProject', copytemplateId: this.projectid, lookupString: this.finalData.toString(), copyParameterObject: copyProjectParameter } });
+            }
+            else{
+              this.router.navigateByUrl('/create-project/create-new-project', { state: { data: res, quality: quality, callLocation: 'CopyProject', copytemplateId: this.projectid, lookupString: this.finalData.toString(), copyParameterObject: copyProjectParameter } });
+            }
+            
           }
         })
       })

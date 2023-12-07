@@ -3,6 +3,7 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup, FormCo
 import { debounceTime, filter, map, Observable, startWith, Subject, takeUntil, timeout } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { GlobalVariables } from 'app/shared/global-variables';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 @Component({
   selector: 'spot-multiselect-user-autocomplete',
   templateUrl: './spot-multiselect-user-autocomplete.component.html',
@@ -50,7 +51,8 @@ export class SpotMultiselectUserAutocompleteComponent implements OnInit, Control
   filteredOptions: any
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-  constructor(private fb: FormBuilder, private _httpClient: HttpClient) {
+  constructor(private fb: FormBuilder, private _httpClient: HttpClient,
+    public fuseAlert: FuseConfirmationService) {
     this.form.controls.control.valueChanges.subscribe((res: any) => {
       if (this.form.controls.control.value == "") {
         //this.onChange({})
@@ -81,23 +83,80 @@ export class SpotMultiselectUserAutocompleteComponent implements OnInit, Control
         const params = new HttpParams().set('query', value);
         this._httpClient.post(GlobalVariables.apiurl + `ProjectTeams/UserSearch?${params.toString()}`, { body: [] })
           .subscribe((resultSets: any) => {
-            if (this.selectedOption.length > 0 && resultSets.length > 0) {
-              var select = this.selectedOption.map(x => x.userAdid).filter((obj) => obj.userIsActive)
-              resultSets.filter(x => select.includes(x.userAdid))
-            }
+            // Sort and filter logic
+          this.resultSets = resultSets
+          .filter(obj => obj.userIsActive)
+          .sort((a, b) => {
+            const lastNameA = a.userDisplayName.split(',')[0].trim();
+            const lastNameB = b.userDisplayName.split(',')[0].trim();
+            return lastNameA.localeCompare(lastNameB);
+          });
 
-            // Store the result sets
-            this.resultSets = resultSets;
-            console.log(this.resultSets)
-            console.log(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`)
-            // Execute the event
-            //this.search.next(resultSets);
+            // Remove already selected options
+          if (this.selectedOption.length > 0) {
+            const selectedIds = this.selectedOption.map(x => x.userAdid);
+            this.resultSets = this.resultSets.filter(x => !selectedIds.includes(x.userAdid));
+          }
           });
       });
   }
   changeInput() {
     this.form.controls.control.patchValue('')
     this.input.nativeElement.value = ''
+  }
+  onFocusout(event) {
+    var count = 0;
+    setTimeout(() => {
+      for(var i=0;i<this.selectedOption.length;i++){
+        if(this.selectedOption[i][this.valuePointer] === undefined){
+          count++;
+        }
+      }
+      if(this.selectedOption.length == 0 && this.selectedOption[this.valuePointer] === undefined && event != ""){
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "The entered name does not exist. Please review your selection!",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": false,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": false
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+      }
+      else if (count > 0 && event != "") {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "The entered name does not exist. Please review your selection!",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+      }
+    }, 700);
   }
   ngOnInit() {
   }

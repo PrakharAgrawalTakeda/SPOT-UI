@@ -19,7 +19,9 @@ export class ProjectSingleDropdownComponent implements OnInit {
   @Input() showHint: boolean = false
   @Input() hint: string = ''
   @Input() hideRelations: boolean = false
+  @Input() isStrategicInitiative: boolean = false
   @Input() confidentialProjects: 'None' | 'User' | 'Only' = 'User'
+  @Input() idRequired: boolean = false
 
   options: string[] = ['One', 'Two', 'Three'];
   resultSets: any[];
@@ -77,10 +79,12 @@ export class ProjectSingleDropdownComponent implements OnInit {
           abc$ = this._httpClient.get(GlobalVariables.apiurl + `ProjectHubData/ProjectTree/${this.projecthubservice.projectid}`)
           const response = lastValueFrom(abc$)
           response.then((res: any) => {
+            console.log(res)
             res.values.forEach(project => {
               ids.push(project.problemUniqueId);
             })
             this.projecthubservice.removedIds = ids;
+            console.log("Removeid", this.projecthubservice.removedIds)
             for (var i = 0; i < resultSets.projectData.length; i++) {
               var obj = resultSets.projectData[i];
               if (this.projecthubservice.removedIds.indexOf(obj.problemUniqueId) !== -1) {
@@ -88,33 +92,65 @@ export class ProjectSingleDropdownComponent implements OnInit {
                 i--;
               }
             }
-          })
-
-
-        }
-        // Store the result sets
-        if (this.confidentialProjects != 'Only') {
-          this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
-        }
-        else {
-          this.resultSets = [];
-        }
-        if (this.confidentialProjects != 'None') {
-          var activeaccount = this.msalService.instance.getActiveAccount()
-          this.roleService.getCurrentRole(activeaccount.localAccountId).then((resp: any) => {
-            if (resp.confidentialProjects.length > 0) {
-              var confProjectUserList = resultSets.projectData?.filter(x => resp.confidentialProjects?.includes(x.problemUniqueId));
-              if (confProjectUserList?.length > 0) {
-                this.resultSets = [...this.resultSets, ...confProjectUserList];
-              }
+            // Store the result setscc
+            console.log(this.confidentialProjects)
+            if (this.confidentialProjects != 'Only') {
+              this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
             }
-          });
+            else {
+              console.log("ELSE")
+              this.resultSets = [];
+            }
+            if (this.confidentialProjects != 'None') {
+              var activeaccount = this.msalService.instance.getActiveAccount()
+              this.roleService.getCurrentRole(activeaccount.localAccountId).then((resp: any) => {
+                if (resp.confidentialProjects.length > 0) {
+                  var confProjectUserList = resultSets.projectData?.filter(x => resp.confidentialProjects?.includes(x.problemUniqueId));
+                  if (confProjectUserList?.length > 0) {
+                    this.resultSets = [...this.resultSets, ...confProjectUserList];
+                  }
+                }
+              });
+            }
+            if (this.isStrategicInitiative) {
+              this.resultSets = this.resultSets.filter(x => x.problemType == "Strategic Initiative / Program")
+            }
+            this.budget = resultSets.budget;
+            console.log(resultSets)
+            console.log(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`)
+            // Execute the event
+            //this.search.next(resultSets);
+          })
         }
-        this.budget = resultSets.budget;
-        console.log(this.resultSets)
-        console.log(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`)
-        // Execute the event
-        //this.search.next(resultSets);
+        else{
+          console.log(this.confidentialProjects)
+          if (this.confidentialProjects != 'Only') {
+            this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
+          }
+          else {
+            console.log("ELSE")
+            this.resultSets = [];
+          }
+          if (this.confidentialProjects != 'None') {
+            var activeaccount = this.msalService.instance.getActiveAccount()
+            this.roleService.getCurrentRole(activeaccount.localAccountId).then((resp: any) => {
+              if (resp.confidentialProjects.length > 0) {
+                var confProjectUserList = resultSets.projectData?.filter(x => resp.confidentialProjects?.includes(x.problemUniqueId));
+                if (confProjectUserList?.length > 0) {
+                  this.resultSets = [...this.resultSets, ...confProjectUserList];
+                }
+              }
+            });
+          }
+          if (this.isStrategicInitiative) {
+            this.resultSets = this.resultSets.filter(x => x.problemType == "Strategic Initiative / Program")
+          }
+          this.budget = resultSets.budget;
+          console.log(resultSets)
+          console.log(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`)
+          // Execute the event
+          //this.search.next(resultSets);
+        }
       });
   }
   budgetfind(projectid: string): string {
@@ -130,9 +166,17 @@ export class ProjectSingleDropdownComponent implements OnInit {
   }
   onProjectSelectenter(option: any) {
     console.log(option.option.value)
-    this.formgroup.patchValue({
-      projectsingle: option.option.value.problemTitle,
-      projectsingleid: option.option.value.problemUniqueId
-    })
+    if (this.idRequired) {
+      this.formgroup.patchValue({
+        projectsingle: option.option.value.problemId + ' - ' + option.option.value.problemTitle,
+        projectsingleid: option.option.value.problemUniqueId
+      })
+    }
+    else {
+      this.formgroup.patchValue({
+        projectsingle: option.option.value.problemTitle,
+        projectsingleid: option.option.value.problemUniqueId
+      })
+    }
   }
 }

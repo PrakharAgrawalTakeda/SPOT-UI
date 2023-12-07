@@ -1,11 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MyPreferenceService} from "./my-preference.service";
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {Title} from '@angular/platform-browser';
-import {MyPreferenceApiService} from "./my-preference-api.service";
-import {MsalService} from "@azure/msal-angular";
-
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MyPreferenceService } from "./my-preference.service";
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
+import { MyPreferenceApiService } from "./my-preference-api.service";
+import { MsalService } from "@azure/msal-angular";
+import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
+import moment from 'moment';
 @Component({
     selector: 'app-my-preference',
     templateUrl: './my-preference.component.html',
@@ -14,21 +15,14 @@ import {MsalService} from "@azure/msal-angular";
 export class MyPreferenceComponent implements OnInit {
     milestoneAccess = false;
     checkAccessError = false;
-
+    activeaccount: any;
+    newmainnav: any = [];
     constructor(private _Activatedroute: ActivatedRoute,
-                private router: Router,
-                public myPreferenceService: MyPreferenceService,
-                public myPreferenceApiService: MyPreferenceApiService,
-                private msalService: MsalService,
-                private titleService: Title, private snack: MatSnackBar) {
-                    // this.myPreferenceService.successSave.subscribe(res => {
-                    //     if (res == true) {
-                    //         this.snack.open("The information has been saved successfully", "", {
-                    //             duration: 2000,
-                    //             panelClass: ["bg-primary", "text-on-primary"]
-                    //         })
-                    //     }
-                    // })
+        private router: Router,
+        public myPreferenceService: MyPreferenceService,
+        public myPreferenceApiService: MyPreferenceApiService,
+        private msalService: MsalService,
+        private titleService: Title, private snack: MatSnackBar, private _fuseNavigationService: FuseNavigationService) {
         // this.myPreferenceService.successSave.subscribe(res => {
         //     if (res == true) {
         //         this.snack.open("The information has been saved successfully", "", {
@@ -37,6 +31,75 @@ export class MyPreferenceComponent implements OnInit {
         //         })
         //     }
         // })
+        // this.myPreferenceService.successSave.subscribe(res => {
+        //     if (res == true) {
+        //         this.snack.open("The information has been saved successfully", "", {
+        //             duration: 2000,
+        //             panelClass: ["bg-primary", "text-on-primary"]
+        //         })
+        //     }
+        // })
+        const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
+        this.activeaccount = this.msalService.instance.getActiveAccount();
+        this.newmainnav = [
+            {
+                id: 'portfolio-center',
+                title: 'Portfolio Center',
+                type: 'basic',
+                link: '/portfolio-center'
+            },
+            {
+                // id: 'create-project',
+                title: 'Create Project',
+                type: 'collapsable',
+                link: '/create-project',
+                children: [
+                    {
+                        title: 'Create a Standard/Simple Project/Program',
+                        type: 'basic',
+                        link: '/create-project/create-new-project'
+                    },
+                    {
+                        title: 'Create a Strategic Initiative/Program',
+                        type: 'basic',
+                        link: '/create-project/create-strategic-initiative-project'
+                    },
+                    {
+                        title: 'Copy an existing Project',
+                        type: 'basic',
+                        link: '/create-project/copy-project'
+                    }
+                ],
+            },
+            {
+                id: 'spot-documents',
+                title: 'SPOT Supporting Documents',
+                type: 'basic',
+                externalLink: true,
+                link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+                target: '_blank'
+            },
+            {
+                id: 'report-navigator',
+                title: 'Report Navigator',
+                type: 'basic',
+                link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+                externalLink: true,
+                target: "_blank"
+
+            },
+            {
+                id: 'spot-support',
+                title: 'Need Help or Propose a Change',
+                type: 'basic',
+                link: 'mailto:DL.SPOTSupport@takeda.com?Subject=SPOT Support Request ' + this.activeaccount.name + ' (Logged on ' + moment().format('llll') + ')',
+                externalLink: true,
+                target: "_blank"
+
+            }
+        ]
+        mainNavComponent.navigation = this.newmainnav
+        mainNavComponent.refresh()
         this.myPreferenceService.successSave.subscribe(res => {
             if (res == true) {
                 this.snack.open("The information has been saved successfully", "", {
@@ -66,7 +129,7 @@ export class MyPreferenceComponent implements OnInit {
         this.titleService.setTitle("My Preferences")
         this.checkMilestoneSetsAccess();
         this.viewContent = true
-        if(this.checkAccessError==false){
+        if (this.checkAccessError == false) {
             this.checkMilestoneSetsAccess();
         }
     }
@@ -77,14 +140,15 @@ export class MyPreferenceComponent implements OnInit {
 
     checkMilestoneSetsAccess() {
         this.myPreferenceApiService.checkAccess(this.msalService.instance.getActiveAccount().localAccountId).then((res: any) => {
-            if(res.HasAccess == true){
-                this.milestoneAccess=true;
-            }else{
-                this.milestoneAccess=false;
+            if (res.HasAccess == true) {
+                this.milestoneAccess = true;
+            } else {
+                this.milestoneAccess = false;
             }
             this.reloadName()
         }).catch(err => {
-            this.checkAccessError = true;}
+            this.checkAccessError = true;
+        }
         )
     }
 
@@ -102,7 +166,7 @@ export class MyPreferenceComponent implements OnInit {
                 }
             ]
         }
-        if(this.milestoneAccess){
+        if (this.milestoneAccess) {
             this.navItem.children.push({
                 title: 'Milestone Sets',
                 link: 'my-preference/milestone-sets'

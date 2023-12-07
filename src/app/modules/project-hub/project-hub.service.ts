@@ -20,6 +20,7 @@ export class ProjectHubService {
   projectid: string = ""
   localCurrency: any = [];
   hasChildren: boolean = false
+  projectState: string = "";
   submitbutton = new BehaviorSubject<boolean>(false)
   isNavChanged = new BehaviorSubject<boolean>(false)
   isFormChanged: boolean = false
@@ -30,12 +31,14 @@ export class ProjectHubService {
   }
   successSave = new BehaviorSubject<boolean>(false)
   isBulkEdit: boolean = false
-  fuseDrawerLarge: boolean = false
+  fuseDrawerSmall: boolean = false
   roleControllerControl: RoleController = new RoleController;
   removedIds: any[];
   projectChildren: any[];
   projects: any[];
   currentSpotId: string;
+  projectName: string;
+  isStrategicIniative: boolean = false;
 
 
   alert: FuseConfirmationConfig = {
@@ -87,7 +90,7 @@ export class ProjectHubService {
           title: 'Value Creation',
           type: 'basic',
           icon: 'feather:target',
-          link: 'project-benefits'
+          link: 'value-creation'
         },
         {
           title: 'Budget',
@@ -426,7 +429,7 @@ export class ProjectHubService {
       type: 'group',
       children: [
         {
-          title: 'Strategic initiative Board',
+          title: 'Strategic Initiative Board',
           type: 'basic',
           icon: 'heroicons_outline:clipboard-list',
           link: 'project-board'
@@ -447,13 +450,13 @@ export class ProjectHubService {
           title: 'Value Creation',
           type: 'basic',
           icon: 'feather:target',
-          link: 'project-benefits'
+          link: 'value-creation'
         },
         {
           title: 'Budget Performance',
           type: 'basic',
           icon: 'heroicons_outline:currency-dollar',
-          link: 'budget'
+          link: 'budget-performance'
         },
         {
           title: 'Initiative Team',
@@ -514,7 +517,7 @@ export class ProjectHubService {
               link: 'project-proposal/benefits'
             },
             {
-              title: 'Planning Team',
+              title: 'Initiative Team',
               type: 'basic',
               link: 'project-proposal/planning-team'
             },
@@ -665,7 +668,7 @@ export class ProjectHubService {
               link: 'project-charter/milestones'
             },
             {
-              title: 'Project Team',
+              title: 'Initiative Team',
               type: 'basic',
               link: 'project-charter/project-team'
             },
@@ -773,7 +776,7 @@ export class ProjectHubService {
   getroles() {
     this.roleControllerControl = this.roleController.getRolesbyProjectData(this.projectid)
   }
-  toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, isBulkEdit: boolean = false, fuseDrawerLarge: boolean = false): void {
+  toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, isBulkEdit: boolean = false, fuseDrawerSmall: boolean = false): void {
     console.log(itemtype)
     if (this.drawerOpenedright == true && this.isFormChanged == true) {
       const alertopener = this.fusealert.open(this.alert)
@@ -797,10 +800,10 @@ export class ProjectHubService {
       this.drawerOpenedright = !this.drawerOpenedright
     }
     this.isBulkEdit = isBulkEdit
-    this.fuseDrawerLarge = fuseDrawerLarge
+    this.fuseDrawerSmall = fuseDrawerSmall
   }
   drawerOpenedChanged(event: any): void {
-
+      window.onbeforeunload = null;
     if (this.drawerOpenedright != event) {
       if (event == false) {
         this.drawerOpenedright = event

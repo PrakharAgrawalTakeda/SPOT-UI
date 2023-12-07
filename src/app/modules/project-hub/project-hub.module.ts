@@ -183,6 +183,10 @@ import { CloseOutValueCreationComponent } from './close-out/close-out-value-crea
 import { BusinessCaseValueCreationComponent } from './business-case/business-case-value-creation/business-case-value-creation.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BudgetForecastBulkEditComponent } from './budget/budget-forecast-bulk-edit/budget-forecast-bulk-edit.component';
+import { BudgetPerformanceComponent } from './budget-performance/budget-performance.component';
+import { NewMetricsComponent } from './project-benefits/new-metrics/new-metrics.component';
+// import { SpotInputForecastComponent } from 'app/core/spot-forms/spot-input-forecast/spot-input-forecast.component';
+import { EditMetricsComponent } from './project-benefits/edit-metrics/edit-metrics.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -214,6 +218,11 @@ export const projectRoutes: Route[] = [
       pathMatch: 'full'
     },
     {
+        path: 'budget-performance',
+        component: BudgetPerformanceComponent,
+        pathMatch: 'full'
+    },
+    {
       path: 'project-documents',
       component: ProjectDocumentsComponent,
       pathMatch: 'full'
@@ -229,7 +238,7 @@ export const projectRoutes: Route[] = [
       pathMatch: 'full'
     },
     {
-      path: 'project-benefits',
+      path: 'value-creation',
       component: ProjectBenefitsComponent,
       pathMatch: 'full'
     },
@@ -596,7 +605,11 @@ export const projectRoutes: Route[] = [
     ProjectCharterValueCreationComponent,
     CloseOutValueCreationComponent,
     BusinessCaseValueCreationComponent,
-    BudgetForecastBulkEditComponent
+    BudgetForecastBulkEditComponent,
+    BudgetPerformanceComponent,
+    NewMetricsComponent,
+    // SpotInputForecastComponent,
+    EditMetricsComponent
   ],
     imports: [
     HttpClientModule,

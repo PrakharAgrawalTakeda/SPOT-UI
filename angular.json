@@ -35,6 +35,7 @@
                             "quill"
                         ],
                         "assets": [
+                            "src/web.config",
                             "src/favicon-16x16.png",
                             "src/favicon-32x32.png",
                             "src/assets",
@@ -102,6 +103,27 @@
                             ],
                             "outputHashing": "all"
                         },
+                        "qa2-1": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "3mb",
+                                    "maximumError": "5mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "75kb",
+                                    "maximumError": "90kb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.qa2-1.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
                         "dev": {
                             "budgets": [
                                 {
@@ -143,6 +165,9 @@
                         "qa": {
                             "browserTarget": "fuse:build:qa"
                         },
+                        "qa2-1": {
+                            "browserTarget": "fuse:build:qa2-1"
+                        },
                         "dev": {
                             "browserTarget": "fuse:build:dev"
                         },
@@ -180,5 +205,8 @@
                 }
             }
         }
+    },
+    "cli": {
+      "analytics": false
     }
 }

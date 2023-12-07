@@ -5,12 +5,12 @@
         </mat-label>
         <h1 *ngIf="Required; then ifBlock else elseBlock"></h1>
         <ng-template #ifBlock>
-            <input #input (focusout)="onFocusout($event.target.value)" required="true" matInput (focus)="changeInput()"
-                formControlName="control" [placeholder]="placeholder" [matAutocomplete]="singleSelect">
+            <input #input required="true" matInput (focus)="changeInput()"
+                formControlName="control" [placeholder]="placeholder" [matAutocomplete]="singleSelect" (focusout)="onFocusout($event.target.value)">
         </ng-template>
         <ng-template #elseBlock>
             <input #input matInput (focus)="changeInput()" formControlName="control" [placeholder]="placeholder"
-                [matAutocomplete]="singleSelect">
+                [matAutocomplete]="singleSelect" (focusout)="onFocusout($event.target.value)">
         </ng-template>
         <mat-autocomplete autoActiveFirstOption #singleSelect="matAutocomplete"
             (optionSelected)="onFunctionSelect($event)">

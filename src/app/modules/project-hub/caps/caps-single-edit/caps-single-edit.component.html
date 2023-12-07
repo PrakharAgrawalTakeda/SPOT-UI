@@ -7,9 +7,8 @@
             </a>
         </div>
     </div>
-    <form class="pl-3 w-full overflow-hidden" [formGroup]="CAPSform" (ngSubmit)="submitCAPS()">
-        <div [ngClass]="{'overflow-y-scroll overflow-x-hidden h-[86.5vh] pt-3 pr-3': viewType == 'SidePanel'}">
-            
+    <form class="m-2 overflow-hidden" [formGroup]="CAPSform" >
+        <div [style]="viewType === 'SidePanel' ? 'height:calc(100vh - 110px)' : null">
             <div class="w-25">
                 <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
                     <mat-label>Impact Realization Date</mat-label>
@@ -29,14 +28,14 @@
                 [autoAddDecimal]="false" [placeholder]="'0'" [label]="wasteLabel" [allowNegativeValues]="true">
             </spot-input>
         </div>
-        <div *ngIf="viewType == 'SidePanel'" class="pr-3 flex items-start justify-between mt-6">
-            <a class="min-w-26" mat-flat-button [color]="'primary'"
-                (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
-                Cancel
-            </a>
-            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
-                Submit
-            </button>
-        </div>
     </form>
+    <div *ngIf="viewType == 'SidePanel'" class="w-full px-3 pr-3 flex items-start justify-between">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+           (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitCAPS()">
+            Submit
+        </button>
+    </div>
 </div>

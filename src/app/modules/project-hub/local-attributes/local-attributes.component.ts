@@ -66,7 +66,7 @@ export class LocalAttributesComponent implements OnInit {
             var newData = i.data
             var dataMulti = []
             for (var j = 0; j < newData.length;j++){
-              i.data[j] = this.lookupData.filter(x => x.lookUpId == newData[j].value)[0]
+              i.data[j] = newData[j].value? this.lookupData.filter(x => x.lookUpId == newData[j].value)[0] : []
               // dataMulti.push(i.data[j].value)
             }
             // i.data = dataMulti
@@ -85,7 +85,7 @@ export class LocalAttributesComponent implements OnInit {
                 this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
               }
               else{
-              i.data = this.lookupData.filter(x => x.lookUpId == i.data[0].value)[0].lookUpName
+              i.data = i.data[0].value?this.lookupData.filter(x => x.lookUpId == i.data[0].value)[0].lookUpName:""
               this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
               }
             }

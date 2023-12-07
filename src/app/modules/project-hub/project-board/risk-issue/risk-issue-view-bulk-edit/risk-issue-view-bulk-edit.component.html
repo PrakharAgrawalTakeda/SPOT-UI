@@ -1,4 +1,4 @@
-
+<div *ngIf="viewContent">
     <div class="flex items-start justify-between bg-primary sidepanel-header">
         <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Risk/Issues</div>
         <div style="padding-top: 2px">
@@ -20,8 +20,8 @@
                 </mat-slide-toggle>
             </form>
         </div>
-        <div class="h-[80vh] w-screen pl-3" id="askNeedTableDiv">
-            <ngx-datatable *ngIf="viewContent" [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
+        <div class="w-screen pl-3">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
                            columnMode="force"
                            class="material datatable-ri-73 font-medium text-sm text-default whitespace-nowrap cursor-pointer"
                            [rows]="tableData" #riskIssueTable [rowClass]="getRowClass">
@@ -160,7 +160,7 @@
                             <p *ngIf="value == ''">&nbsp;</p>
                             {{getLookUpName(value)}}
                         </a>
-                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
+                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)"  style="margin-bottom: 22px;">
                             <spot-select formControlName="functionGroupId" name="functionGroupId" [placeholder]="'Function'"
                                          [dropDownArrayType]="'object'" [dropDownArray]="getFunctionOwner()" [idPointer]="'lookUpId'"
                                          [valuePointer]="'lookUpName'">
@@ -242,13 +242,14 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-        <div class="flex items-start justify-between mt-6 px-6">
-            <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
-               (click)="projectHubService.toggleDrawerOpen('', '',[],'',true)">
-                Cancel
-            </a>
-            <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitRI()" type="button">
-                Submit
-            </button>
-        </div>
     </div>
+    <div class="w-full pr-4 m-2 flex items-start justify-between">
+        <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+           (click)="projectHubService.toggleDrawerOpen('', '',[],'',true)">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitRI()" type="button">
+            Submit
+        </button>
+    </div>
+</div>

@@ -19,6 +19,11 @@
     width: 20%;
 }
 
+.apexcharts-tooltip-marker{
+    width: 0px !important;
+    height: 0px !important;
+}
+
 .submit-button{
     margin: 20px 15px 15px 15px !important;
     // width: 100%;
@@ -37,24 +42,25 @@
 }
 
 .frozen-header-class {
-    top: 33px !important;
-    left: 200px !important;
+    top: 60px !important;
+    left: 223px !important;
 }
 
 .frozen-header-classID {
-    top: 55px !important;
-    margin-left: 6px !important;
+    top: 83px !important;
+    margin-left: 9px !important;
 }
+
 .datatable-body{
-    height: 72vh !important;
+    height: 58vh !important;
 }
 
 .datatable-row-left{
     background: white !important;
-    height: 102px !important;
+    height: 132px !important;
 }
 .datatable-row-center {
-    height: 102px !important;
+    height: 132px !important;
 }
 
 .projectNames {
@@ -166,25 +172,27 @@ li{
 //     overflow-x: scroll !important;
 //     overflow-y: scroll !important;
 // }
-.datatable-body{
-    height: 63vh !important;
-}
 
 
 .fuse-drawer-large {
     min-width: 95vw !important;
     max-width: 95vw !important;
-    min-height: 144vh !important;
-    max-height: 144vh !important;
+    // min-height: 120vh !important;
+    // max-height: 120vh !important;
+}
+.fuse-drawer-small{
+    min-width: 35vw !important;
+    max-width: 35vw !important;
+     min-height: 100vh !important;
+     max-height: 100vh !important;
 }
 fuse-drawer {
     min-width: 50vw;
     max-width: 50vw;
-    min-height: 100vh !important;
-    max-height: 100vh !important;
+    // min-height: 120vh !important;
+    // max-height: 120vh !important;
 }
 
 fuse-drawer .fuse-drawer-content {
     display: block !important;
-    overflow: hidden !important;
 }

@@ -9,21 +9,21 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon : 'heroicons_outline:chart-pie',
         link : '/portfolio-center'
     },
-    {
+    /*{
         // id   : 'create-project',
         title: 'Create Project',
         type: 'collapsable',
         link: '/create-project',
         children: [
             {
-                title: 'Create a Strategic Initiative/Program',
-                type: 'basic',
-                link: '/create-project/create-strategic-initiative-project'
-            },
-            {
                 title: 'Create a Standard/Simple Project/Program',
                 type: 'basic',
                 link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
             },
             {
                 title: 'Copy an existing Project',
@@ -31,7 +31,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 link: '/create-project/copy-project'
             }
         ],
-    },
+    },*/
     {
         id   : 'spot-documents',
         title: 'SPOT Supporting Documents',
@@ -48,21 +48,21 @@ export const compactNavigation: FuseNavigationItem[] = [
         icon : 'heroicons_outline:chart-pie',
         link : '/portfolio-center'
     },
-    {
+    /*{
         // id   : 'create-project',
         title: 'Create Project',
         type: 'collapsable',
         link: '/create-project',
         children: [
             {
-                title: 'Create a Strategic Initiative/Program',
-                type: 'basic',
-                link: '/create-project/create-strategic-initiative-project'
-            },
-            {
                 title: 'Create a Standard/Simple Project/Program',
                 type: 'basic',
                 link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
             },
             {
                 title: 'Copy an existing Project',
@@ -70,7 +70,7 @@ export const compactNavigation: FuseNavigationItem[] = [
                 link: '/create-project/copy-project'
             }
         ],
-    },
+    },*/
     {
         id   : 'spot-documents',
         title: 'SPOT Documents',
@@ -87,21 +87,21 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         icon : 'heroicons_outline:chart-pie',
         link : '/portfolio-center'
     },
-    {
+    /*{
         // id   : 'create-project',
         title: 'Create Project',
         type: 'collapsable',
         link: '/create-project',
         children: [
             {
-                title: 'Create a Strategic Initiative/Program',
-                type: 'basic',
-                link: '/create-project/create-strategic-initiative-project'
-            },
-            {
                 title: 'Create a Standard/Simple Project/Program',
                 type: 'basic',
                 link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
             },
             {
                 title: 'Copy an existing Project',
@@ -109,7 +109,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
                 link: '/create-project/copy-project'
             }
         ],
-    },
+    },*/
     {
         id   : 'spot-documents',
         title: 'SPOT Documents',
@@ -125,21 +125,21 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         type : 'basic',
         link : '/portfolio-center'
     },
-    {
+    /*{
         // id   : 'create-project',
         title: 'Create Project',
         type: 'collapsable',
         link: '/create-project',
         children: [
             {
-                title: 'Create a Strategic Initiative/Program',
-                type: 'basic',
-                link: '/create-project/create-strategic-initiative-project'
-            },
-            {
                 title: 'Create a Standard/Simple Project/Program',
                 type: 'basic',
                 link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
             },
             {
                 title: 'Copy an existing Project',
@@ -147,7 +147,7 @@ export const horizontalNavigation: FuseNavigationItem[] = [
                 link: '/create-project/copy-project'
             }
         ],
-    },
+    },*/
     {
         id   : 'spot-documents',
         title: 'SPOT Supporting Documents',

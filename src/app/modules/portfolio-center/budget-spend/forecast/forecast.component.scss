@@ -8,7 +8,7 @@
 }
 :host {
     ::ng-deep .ngx-datatable .datatable-PB-80 .datatable-body .datatable-scroll {
-        height: 40vh !important;
+        height: 30vh !important;
         width: 100vw !important;
         overflow-x: scroll !important;
         overflow-y: scroll !important;
@@ -17,14 +17,14 @@
 :host{
     ::ng-deep .datatable-PB-80{
         ::ng-deep .datatable-body {
-    height: 60vh !important;
+    height: 40vh !important;
         }
 }
 }
 :host {
     ::ng-deep .datatable-CX-80 {
         ::ng-deep .datatable-body {
-            height: 30vh !important;
+            height: 20vh !important;
         }
     }
 }
@@ -39,11 +39,11 @@
     height: 40px;
     width: 25px;
 }
-
-// .datatable-header {
-//     /* Set the background color with a linear gradient effect */
-//     background-image: linear-gradient(to bottom, #FF0000 50%, transparent 50%) !important;
-// }
+.customButton{
+    position: relative !important;
+    width: 49% !important;
+    top: 30px !important;
+}
 .w-1qua {
     width: 55vw;
 }
@@ -55,14 +55,14 @@
 :host{
     ::ng-deep .datatable-row-left {
     background: white !important;
-    height: 59px !important;
+    height: 49px !important;
 }
 }
 
 
 :host{
     ::ng-deep .datatable-row-center {
-    height: 60px !important;
+    height: 37px !important;
 }
 }
 
@@ -81,7 +81,7 @@
 .headBgHeight {
     display: block !important;
     height: 28px !important;
-    margin: -.5em -.6em .4em -.6em !important;
+    margin: 0em -.0em .4em -.0em !important;
 }
 .projectNames {
     cursor: pointer !important;
@@ -93,4 +93,8 @@
 .projectNames:hover {
     text-decoration: underline;
     cursor: pointer !important;
+}
+
+.datatable{
+    margin-top: -1.5rem !important;
 }

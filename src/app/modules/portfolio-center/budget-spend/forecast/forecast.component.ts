@@ -44,8 +44,10 @@ export class ForecastComponent {
   @ViewChild('FxRateDrawer') FxRateDrawer: MatSidenav
   constructor(private portfoliService: PortfolioApiService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
     , public fuseAlert: FuseConfirmationService, private router: Router, private titleService: Title, private auth: AuthService, public PortfolioCenterService: PortfolioCenterService) {
-    this.ForecastForm.controls.PM.valueChanges.subscribe(res => {
+    this.ForecastForm.valueChanges.subscribe(res => {
+      if (this.showContent) {
       this.PortfolioCenterService.isFormChanged = true
+      }
     })
     this.ForecastForm.controls.ForecastType.valueChanges.subscribe((res: any) => {
       if (this.showContent) {
@@ -97,8 +99,7 @@ export class ForecastComponent {
     })
   }
   ngOnInit(): void {
-    // this.titleService.setTitle("Project Forecast")
-    this.filterdata = this.PortfolioCenterService.all;
+    this.filterdata = JSON.parse(JSON.stringify(this.PortfolioCenterService.all))
     console.log(this.ForecastForm)
     this.dataloader()
   }
@@ -142,6 +143,11 @@ export class ForecastComponent {
             this.localCAPEX = forecastData.forecastTableItems[val]
             this.localOPEX = forecastData.forecastTableItems[val1]
           }
+          else{
+            this.ForecastForm.patchValue({
+              Currency: this.currencyList[0]
+            })
+          }
           this.CAPEXdata = forecastData.forecastTableItems["CapExForecast|OY"]
           this.OPEXdata = forecastData.forecastTableItems["OpExForecast|OY"]
           this.fundingRequests = forecastData.forecastTableItems["CapExForecast|OY"]
@@ -172,19 +178,19 @@ export class ForecastComponent {
     this.showDrawer = true
     this.FxRateDrawer.toggle()
   }
-  getBlue(): any {
-    return ' blue';
-  }
+  
   ApplyFilter(){
+    this.PortfolioCenterService.isFormChanged = false
+    const originalData = JSON.parse(JSON.stringify(this.filterdata))
     var index = 0
     var append = false
     if (this.ForecastForm.controls.PM.value){
     if (this.ForecastForm.controls.PM.value.length == 0) {
-      this.filterdata = this.PortfolioCenterService.all;
+      this.ngOnInit()
     }
     else {
-      for (var z = 0; z < this.filterdata.filterGroups.length;z++){
-        if (this.filterdata.filterGroups[z].filterItems[0].filterAttribute == "ProjectTeamMember"){
+      for (var z = 0; z < originalData.filterGroups.length;z++){
+        if (originalData.filterGroups[z].filterItems[0].filterAttribute == "ProjectTeamMember"){
           index = z
           append = true
         }
@@ -200,7 +206,7 @@ export class ForecastComponent {
           "unionOperator": 2
         }
         if(append == true){
-          this.filterdata.filterGroups[index].filterItems.push(filterItems1)
+          originalData.filterGroups[index].filterItems.push(filterItems1)
         }
         else{
           filterItems.push(filterItems1)
@@ -211,13 +217,14 @@ export class ForecastComponent {
           filterItems,
           "groupCondition": 0
         })
-        this.filterdata.filterGroups.push(filterGroups[0])
+        originalData.filterGroups.push(filterGroups[0])
       }
-      console.log(this.filterdata)
+      this.filterdata = originalData
+      this.dataloader()
     }
   }
   else{
-      this.filterdata = this.PortfolioCenterService.all;
+      this.ngOnInit()
   }
   this.dataloader()
   }

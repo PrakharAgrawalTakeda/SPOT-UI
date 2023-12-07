@@ -12,8 +12,11 @@ export class FxRateComponent {
   constructor(private portfoliService: PortfolioApiService, public PortfolioCenterService: PortfolioCenterService) {
   }
   ngOnInit(): void {
-    this.portfoliService.getLocalCurrency().then(currency => {
-      this.localCurrency = currency
+    this.portfoliService.getLocalCurrency().then((currency: any[]) => {
+      this.localCurrency = currency.sort((a, b) => a.displayOrder - b.displayOrder);
     })
+  }
+  getNgxDatatableNumberHeader(): any {
+      return ' ngx-number-header';
   }
 }

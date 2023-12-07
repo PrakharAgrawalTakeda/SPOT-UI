@@ -26,7 +26,7 @@ export const appRoutes: Route[] = [
             initialData: InitialDataResolver,
         },
         children: [
-            { path: 'example', loadChildren: () => import('app/modules/admin/example/example.module').then(m => m.ExampleModule) },
+            { path: 'admin', loadChildren: () => import('app/modules/admin/admin.module').then(m => m.AdminModule) },
             { path: 'dashboard', loadChildren: () => import('app/modules/dashboard/dashboard.module').then(m => m.DashboardModule) },
             { path: 'portfolio-center', loadChildren: () => import('app/modules/portfolio-center/portfolio-center.module').then(m => m.PortfolioCenterModule) },
             { path: 'create-project', loadChildren: () => import('app/modules/create-new/create-new.module').then(m => m.CreateNewModule) },
@@ -46,6 +46,11 @@ export const appRoutes: Route[] = [
     {
         path: 'HTML/MyPreferences.html',
         redirectTo: '/my-preference/settings',
+        pathMatch: 'full'
+    },
+    {
+        path: 'HTML/SecurityGroupUsers.html',
+        redirectTo: '/admin',
         pathMatch: 'full'
     },
     { path: '**', redirectTo: '', pathMatch: 'full' },

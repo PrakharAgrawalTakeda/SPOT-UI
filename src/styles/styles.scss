@@ -73,6 +73,10 @@ $square-size: 10px;
 .ngx-number-header{
     text-align: right;
 }
+.ngx-number-header-center{
+    text-align: center;
+}
+
 
 .ngx-icon-header {
     text-align: center;
@@ -82,9 +86,9 @@ $square-size: 10px;
         width: 100% !important;
     }
 }
-.twelve-px-font-table{
+.ten-px-font-table{
     p {
-        font-size: 12px;
+        font-size: 10px;
     }
 }
 

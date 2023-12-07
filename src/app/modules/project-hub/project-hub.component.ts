@@ -39,6 +39,7 @@ export class ProjectHubComponent implements OnInit {
     activeaccount: any
     newmainnav: any
     projectHubNavigation: any
+    viewContent: boolean = false
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(private _fuseMediaWatcherService: FuseMediaWatcherService,
         private apiService: ProjectApiService,
@@ -121,14 +122,14 @@ export class ProjectHubComponent implements OnInit {
                     link: '/create-project',
                     children: [
                         {
-                            title: 'Create a Strategic Initiative/Program',
-                            type: 'basic',
-                            link: '/create-project/create-strategic-initiative-project'
-                        },
-                        {
                             title: 'Create a Standard/Simple Project/Program',
                             type: 'basic',
                             link: '/create-project/create-new-project'
+                        },
+                        {
+                            title: 'Create a Strategic Initiative/Program',
+                            type: 'basic',
+                            link: '/create-project/create-strategic-initiative-project'
                         },
                         {
                             title: 'Copy an existing Project',
@@ -192,31 +193,35 @@ export class ProjectHubComponent implements OnInit {
             }
             if (this.projectDetails.problemType == "Strategic Initiative / Program") {
                 this.projectHubNavigation = this.projecthubservice.menuDataStrat
+                this.projecthubservice.isStrategicIniative = true
             }
             else {
                 this.projectHubNavigation = this.projecthubservice.menuData
+                this.projecthubservice.isStrategicIniative = false
             }
             this.projecthubservice.hasChildren = res.hasChildren
             this.portfolioDetails = res.portfolioCeterData
+            this.projecthubservice.projectState = this.portfolioDetails.projStatus;
             console.log(res.indicator)
             this.spotLightIndicator = res.indicators
             this.projectType = this.projectDetails.problemType;
             this.titleService.setTitle(this.projectDetails.problemId + " - " + this.projectDetails.problemTitle)
             this.projecthubservice.currentSpotId = this.projectDetails.problemId;
+            this.projecthubservice.projectName = this.projectDetails.problemTitle;
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
             mainNavComponent.navigation = this.newmainnav
             mainNavComponent.refresh()
             this.apiService.getHubSettings(this.id).then((response: any) => {
                 if (this.projectDetails.problemType == "Strategic Initiative / Program") {
-                   //Budget
-                   this.projectHubNavigation[0].children[4].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
-                   //Documents
-                   this.projectHubNavigation[0].children[6].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
-                   //Teams
-                   this.projectHubNavigation[0].children[5].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
-                   if (this.projecthubservice.roleControllerControl.projectHub.hubSettings == false) {
-                       this.projectHubNavigation[0].children[11].disabled = true
-                   } 
+                    //Budget
+                    this.projectHubNavigation[0].children[4].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
+                    //Documents
+                    this.projectHubNavigation[0].children[6].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
+                    //Teams
+                    this.projectHubNavigation[0].children[5].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
+                    if (this.projecthubservice.roleControllerControl.projectHub.hubSettings == false) {
+                        this.projectHubNavigation[0].children[11].disabled = true
+                    }
                 }
                 else {
                     //Budget
@@ -234,6 +239,7 @@ export class ProjectHubComponent implements OnInit {
                 navComponent.refresh();
             })
             //
+            this.viewContent = true
         })
         this.apiService.getDataCompletenessPercent(this.id).then((res: any) => {
             this.dataQualityPercentage = res * 100;
@@ -246,7 +252,7 @@ export class ProjectHubComponent implements OnInit {
         if (this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-board' ||
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-team' ||
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'general-info' ||
-            this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-benefits' ||
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'value-creation' ||
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'associated-projects' ||
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-charter' ||
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'close-out' ||
@@ -333,7 +339,7 @@ export class ProjectHubComponent implements OnInit {
         } else {
             this.dataQualityPercentageString = (~~this.dataQualityPercentage).toString() + "%";
         }
-        if (this.projectType == "Simple Project" || percentage == null) {
+        if (this.projectType == "SimpleProject" || percentage == null) {
             return '#4c9bcf';
         } else {
             if (percentage < this.lowerTargetPercentage) {
@@ -349,7 +355,7 @@ export class ProjectHubComponent implements OnInit {
     }
     openPhaseStateDrawer() {
         if (this.phaseStatePermission) {
-            this.projecthubservice.toggleDrawerOpen('PhaseState', '', [], '', false, true);
+            this.projecthubservice.toggleDrawerOpen('PhaseState', '', [], '', true, false);
         }
     }
     isCursorPointer() {

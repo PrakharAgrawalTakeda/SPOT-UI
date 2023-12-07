@@ -1,5 +1,5 @@
 <div class="flex items-start justify-between bg-primary sidepanel-header">
-    <div class="text-on-primary" style="padding-top: 6px">Primary KPI</div>
+    <div class="text-on-primary" style="padding-top: 6px">Value Capture Fields</div>
     <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
             href="javascript:void(0)" title="Close">
             <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
@@ -8,17 +8,26 @@
 </div>
 <form class="w-full p-[20px]" [formGroup]="primaryKPIForm" (ngSubmit)="submitpkpi()">
     <div class=" h-[84vh] overflow-hidden">
+        <spot-input-date class="w-full read-only" formControlName="vcdate"
+                             [label]="'Value Capture Start Date'" [placeholder]="'Value Capture Start Date'"
+                             [showHint]="true" [hint]="'Value Capture Start defines the first fiscal year in which value will be captured.'">
+            </spot-input-date>
     <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full" name="primaryKpi"
-        [label]="'Primary KPI'" [placeholder]="'Primary KPI'" [valuePointer]="'kpiname'"
-        [dropDownArray]="projecthubservice.kpiMasters">
+        [label]="'Primary Value Driver'" [placeholder]="'Primary KPI'" [valuePointer]="'lookUpName'"
+        [dropDownArray]="primaryKPI">
     </spot-singleselect-autocomplete>
+    <spot-textarea formControlName="valueCommentary"
+                           [label]="'Value Commentary'"
+                           [placeholder]="'Value Commentary'">
+            </spot-textarea>
 </div>
     <div class="flex items-start justify-between mt-6">
         <a class="min-w-26" mat-flat-button [color]="'primary'"
             (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
             Cancel
         </a>
-        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" matTooltip="This will save, and cascade to children if applicable,
+         any changes to Value Capture Start Date, primary value driver, and value commentary.">
             Submit
         </button>
     </div>

@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, OnInit, forwardRef, Input, Output, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { GlobalVariables } from 'app/shared/global-variables';
 import { debounceTime, filter, map, Observable, startWith, Subject, takeUntil, timeout } from 'rxjs';
 @Component({
@@ -49,7 +50,8 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
   filteredOptions: any
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  constructor(private fb: FormBuilder, private _httpClient: HttpClient) {
+  constructor(private fb: FormBuilder, private _httpClient: HttpClient,
+    public fuseAlert: FuseConfirmationService) {
     this.form.controls.control.valueChanges.subscribe((res: any) => {
       if (this.form.controls.control.value == "") {
         this.onChange({})
@@ -81,17 +83,48 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
         this._httpClient.post(GlobalVariables.apiurl + `ProjectTeams/UserSearch?${params.toString()}`, { body: [] })
           .subscribe((resultSets: any) => {
 
-            // Store the result sets
-            this.resultSets = resultSets.filter((obj) => obj.userIsActive!=false);
-            console.log(this.resultSets.filter((obj) => obj.userIsActive))
-            console.log(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`)
-            // Execute the event
-            //this.search.next(resultSets);
+            // Sort and filter logic
+          this.resultSets = resultSets
+          .filter(obj => obj.userIsActive)
+          .sort((a, b) => {
+            const lastNameA = a.userDisplayName.split(',')[0].trim();
+            const lastNameB = b.userDisplayName.split(',')[0].trim();
+            return lastNameA.localeCompare(lastNameB);
+          })
           });
       });
   }
   changeInput() {
       this.form.controls.control.patchValue(this.selectedOption[this.valuePointer])
+  }
+  onFocusout(event) {
+    setTimeout(() => {
+      if (this.selectedOption[this.valuePointer] === undefined && event != "") {
+        this.form.controls.control.patchValue('')
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "The entered name does not exist. Please review your selection!",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": false,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": false
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+      }
+    }, 200);
   }
   ngOnInit() {
   }

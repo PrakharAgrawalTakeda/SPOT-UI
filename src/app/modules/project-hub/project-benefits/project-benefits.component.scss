@@ -1,1 +1,49 @@
 @import '../../../../../node_modules/@swimlane/ngx-datatable/assets/icons.css';
+/* Custom class to target this specific ngx-datatable */
+.custom-ngx-table .datatable-VC-80 .datatable-body .datatable-scroll {
+  height: 80vh;
+  width: 100vw;
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
+
+.custom-ngx-table .datatable-row-left {
+  background: white;
+  height: 142px;
+}
+
+.custom-ngx-table .frozen-header-classID {
+  top: 120px;
+  margin-left: 12px;
+}
+
+.custom-ngx-table .frozen-header-class {
+  top: 120px;
+  margin-left: 2px;
+}
+
+.custom-ngx-table .column-style {
+  top: 120px;
+  margin-left: -11px;
+}
+
+.custom-ngx-table .frozen-header {
+  top: 120px;
+  margin-left: 8px;
+}
+
+.custom-ngx-table .frozen-header-ID {
+  top: 99px;
+  margin-left: 6px;
+}
+
+.custom-ngx-table .datatable-body {
+  height: 80vh;
+}
+
+.frozen-header-class2 {
+  top: 33px !important;
+  right: 40px !important;
+}
+
+

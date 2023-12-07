@@ -9,7 +9,6 @@ import { ActivatedRoute } from '@angular/router';
 import {
     FuseConfirmationService,
 } from '@fuse/services/confirmation';
-import { ColumnMode } from '@swimlane/ngx-datatable';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../project-api.service';
 import { Constants } from '../../../../shared/constants';
@@ -21,7 +20,6 @@ import { Constants } from '../../../../shared/constants';
     encapsulation: ViewEncapsulation.None,
 })
 export class DataQualityPageComponent implements OnInit {
-    isclosed: boolean = false;
     @ViewChild('dataCompletnessTable') dataCompletnessTable: any;
 
     constructor(
@@ -32,7 +30,6 @@ export class DataQualityPageComponent implements OnInit {
     ) {}
     id: string = '';
     rows = [];
-    reorderable = true;
     spotId: string = '';
     projectName: string = '';
     projectType: string = '';
@@ -41,7 +38,6 @@ export class DataQualityPageComponent implements OnInit {
     dataQualityPercentageString: string = '';
     lowerTargetPercentage = Constants.QUALITY_LOWER_TARGET_PERCENTAGE;
     rowClass = getRowClass;
-    ColumnMode = ColumnMode;
     viewContent = false;
     getCellClass(value: any): any {
         if (value.row.hitMiss == 'Complete') {
@@ -59,7 +55,7 @@ export class DataQualityPageComponent implements OnInit {
         if(percentage == null){
             return '#808080';
         }
-        if (this.projectType == 'Simple Project') {
+        if (this.projectType == 'SimpleProject') {
             return '#4c9bcf';
         } else {
             if (percentage < this.lowerTargetPercentage) {

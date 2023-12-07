@@ -51,6 +51,14 @@ export class CloseOutBudgetPerformanceComponent implements OnInit {
                 budgetCommentary: res.budgetCommentary,});
             this.financialRequirements = res.finalRequirementsValue;
             this.budgetPerformanceDetailCapexOpex = res.budgetPerformanceDetails.budgetPerformanceDetailCapexOpex
+            this.budgetPerformanceDetailCapexOpex.forEach((x, index) => {
+                let varianceString = x.variance
+                if(varianceString != null){
+                    let parts = varianceString.split('\r\n');
+                    let numericValue = Number(parts[0].replace(/,(\d+)/, '')).toLocaleString();
+                    x.variance = `${numericValue}\r\n${parts[1]}`;
+                }
+            })
             this.budgetPerformanceDetailEvents = res.budgetPerformanceDetails.budgetPerformanceDetailEvents
             this.viewContent = true;
         })

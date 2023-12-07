@@ -1,6 +1,6 @@
    <div class="flex items-start justify-between bg-primary sidepanel-header">
             <div class="text-on-primary" style="padding-top: 6px">Budget/Spend</div>
-            <div style="padding-top: 2px"><a (click)="PortfolioCenterService.toggleDrawerOpen('BudgetSpendOpen', '',[],'',true)"
+            <div style="padding-top: 2px"><a (click)="PortfolioCenterService.toggleDrawerOpen('', '',[],'',true)"
                     href="javascript:void(0)" title="Close">
                     <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
                 </a>
@@ -13,8 +13,16 @@
                 </button>
             </div>
         </div>
-        <div class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
+        <div *ngFor="let item of  navItem.children" class="flex flex-col flex-auto w-full min-w-0"
             [ngStyle]="{ 'position' : PortfolioCenterService.drawerOpenedright ? 'fixed' : 'relative'}">
-            <app-forecast></app-forecast>
+            <app-forecast *ngIf="item.title == 'Forecast Bulk View' && item.toggled == true"></app-forecast>
+            <app-project-performance *ngIf="item.title == 'Project Performance' && item.toggled == true"></app-project-performance>
+            <app-forecast-excel-update *ngIf="item.title == 'Forecast Excel Update' && item.toggled == true"></app-forecast-excel-update>
+            <app-portfolio-performance *ngIf="item.title == 'Portfolio Performance' && item.toggled == true"></app-portfolio-performance>
+            <div *ngIf="item.toggled" class="w-full pr-4 m-2 flex items-start justify-end">
+                <button type="button" mat-flat-button class="bg-primary text-on-primary text-primary'" (click)="PortfolioCenterService.toggleDrawerOpen('', '',[],'',true)">
+                    OK
+                </button>
+            </div>
         </div>
         

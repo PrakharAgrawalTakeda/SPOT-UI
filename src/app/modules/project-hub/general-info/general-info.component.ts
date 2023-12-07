@@ -23,7 +23,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' | 'BusinessCase' = 'ProjectHub'
-  @Input() viewElements: any = ["isConfidential", "isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "projectManager", "sponsor", "topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription", "isTechTransfer", "isOeproject", "isQualityRef", "StrategicDrivers", "primaryKPI", "isAgile", "isPobos", "isGmsgqltannualMustWin", "isSiteAssessment", "isGoodPractise"]
+  @Input() viewElements: any = ["isConfidential", "isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "projectManager", "sponsor", "topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription", "isTechTransfer", "isOeproject", "isQualityRef", "StrategicDrivers", "primaryKPI", "isAgile", "isPobos", "isGmsgqltannualMustWin", "isSiteAssessment", "isGoodPractise", "isSprproject","sprprojectCategory","sprprojectGrouping"]
   generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' | 'GeneralInfoSingleEditBusinessCase' | 'GeneralInfoSingleEditStrategicInitiative' = 'GeneralInfoSingleEdit'
   strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' | 'StrategicDriversSingleEditStrategicInitiative' | 'StrategicDriversSingleEditProjectProposalStrategicInitiative' | 'StrategicDriversSingleEditCloseOutStrategicInitiative' = 'StrategicDriversSingleEdit'
   viewContent: boolean = false
@@ -90,11 +90,14 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
     RiskImpact: new FormControl(''),
     AdditionalAuthor: new FormControl([]),
     problemId: new FormControl(''),
-    businessCaseApprovedDate: new FormControl('')
+    businessCaseApprovedDate: new FormControl(''),
+    isSprproject: new FormControl(false),
+    sprprojectCategory: new FormControl(''),
+    sprprojectGrouping: new FormControl('')
   })
   qrTableEditStack: any = []
   qualityRefForm = new FormArray([])
-  projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project", "Strategic Initiative / Program"]
+  projectTypeDropDrownValues = ["Standard Project / Program", "SimpleProject", "Strategic Initiative / Program"]
   isStrategicInitiative: boolean = false
   formFieldHelpers: any
   lookUpPVD: any;
@@ -273,7 +276,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
       problemType: response.projectData.problemType,
       topsGroup: response.topsData ? response.topsData.topsgroup : '',
       recordCreationDate: response.projectData.createdDate,
-      parentProgram: response.parentProject ? response.parentProject.problemTitle : '',
+      parentProgram: response.parentProject ? response.parentProject.problemId + ' - ' + response.parentProject.problemTitle : '',
       submittedBy: response.projectData.problemOwnerName,
       projectManager: response.portfolioCenterData.pm,
       sponsor: response.sponsor?.teamMemberName,
@@ -340,7 +343,10 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
       RiskImpact: response.businessCaseImpactOfDoingNothing,
       AdditionalAuthor: response.businessCaseAdditionalAuthorsContributors == null ? [] : response.businessCaseAdditionalAuthorsContributors,
       problemId: response.projectData.problemId,
-      businessCaseApprovedDate: response.businessCaseApprovedDate
+      businessCaseApprovedDate: response.businessCaseApprovedDate,
+      isSprproject: response.projectData.isSprproject,
+      sprprojectCategory: this.getLookUpName(response.projectData.sprprojectCategory),
+      sprprojectGrouping: this.getLookUpName(response.projectData.sprprojectGrouping)
     })
   }
 }

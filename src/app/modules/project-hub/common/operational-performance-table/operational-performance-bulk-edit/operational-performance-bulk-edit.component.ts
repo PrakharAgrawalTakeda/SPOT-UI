@@ -55,6 +55,7 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
         }
       }
       this.projectViewDetails.overallPerformace = this.sortbyKPIName(this.projectViewDetails.overallPerformace)
+      console.log(this.projectViewDetails.overallPerformace)
       for (var i of this.projectViewDetails.overallPerformace) {
         this.opDb.push(i)
         this.operationalPerformanceForm.push(new FormGroup({
@@ -100,7 +101,7 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
   }
 
   getLookUpName(lookUpId: string): string {
-    return lookUpId && lookUpId != '' ? this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId).lookUpName : ''
+    return lookUpId && lookUpId != '' && this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId) ? this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId).lookUpName : ''
   }
   getKPIName(kpiid: string): string {
     return this.projecthubservice.kpiMasters.find(x => x.kpiid == kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == kpiid).kpiname : ''

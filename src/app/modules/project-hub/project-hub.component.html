@@ -1,6 +1,6 @@
 <fuse-drawer [name]="'rightDrawer'" [opened]="projecthubservice.drawerOpenedright"
     (openedChanged)="projecthubservice.drawerOpenedChanged($event)" [mode]="'over'" #myDiv [position]="'right'"
-    [ngClass]="{'bulkEdit':projecthubservice.isBulkEdit , 'fuse-drawer-large':projecthubservice.fuseDrawerLarge}">
+    [ngClass]="{'bulkEdit':projecthubservice.isBulkEdit , 'fuse-drawer-small':projecthubservice.fuseDrawerSmall}">
     <div>
         <app-ask-need-view-edit *ngIf="projecthubservice.itemtype == 'AskNeed'"></app-ask-need-view-edit>
         <app-ask-need-bulk-edit *ngIf="projecthubservice.itemtype == 'AskNeedBulkEdit'"></app-ask-need-bulk-edit>
@@ -100,6 +100,8 @@
             [mode]="'Project-Proposal'"></app-operational-performance-bulk-edit>
         <app-primary-kpi-single-edit
             *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
+            <app-new-metrics *ngIf="projecthubservice.itemtype == 'addnewmetrics'"></app-new-metrics>
+            <app-edit-metrics *ngIf="projecthubservice.itemtype == 'valueCreation'"></app-edit-metrics>
         <app-link-project *ngIf="projecthubservice.itemtype == 'LinkProject'"></app-link-project>
         <app-update-parent *ngIf="projecthubservice.itemtype == 'UpdateParent'"></app-update-parent>
         <app-general-info-single-edit
@@ -237,7 +239,9 @@
             *ngIf="projecthubservice.itemtype == 'BudgetFundingAddNew'"></app-budget-funding-add-view>
         <app-budget-fxrate *ngIf="projecthubservice.itemtype == 'BudgetFxRates'"></app-budget-fxrate>
         <app-budget-forecast-bulk-edit
-            *ngIf="projecthubservice.itemtype == 'BudgetForecastBulkEdit'"></app-budget-forecast-bulk-edit>
+            *ngIf="projecthubservice.itemtype == 'BudgetForecastCapexBulkEdit'" [mode]="'Capex'"></app-budget-forecast-bulk-edit>
+        <app-budget-forecast-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'BudgetForecastOpexBulkEdit'" [mode]="'Opex'"></app-budget-forecast-bulk-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projectHubNavigation" [mode]="'side'"
@@ -267,12 +271,15 @@
 <div class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
     [ngClass]="navigationAppearance=='default'?'project-hub-default':'project-hub-dense'"
     [ngStyle]="{ 'position' : projecthubservice.drawerOpenedright ? 'fixed' : 'relative'}">
-    <div class="p-8 pb-6 pt-2">
+    <div class="p-8 pb-6 pt-2" *ngIf="viewContent">
         <div class="w-full bg-card shadow rounded-2xl">
             <div class="flex-1 min-w-0 p-6 pt-1" [ngClass]="{'text-gray-400': projectDetails.isArchived}">
                 <!-- Title -->
                 <div class="flex justify-between gap-8 mt-2">
                     <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10">
+
+                        <span
+                            *ngIf="projectDetails.problemType == 'Strategic Initiative / Program'">Strategic Initiative -&nbsp;</span>
                         <span
                             *ngIf="projectDetails.isArchived && !projectDetails.isConfidential">[ARCHIVED]&nbsp;</span>
                         <span *ngIf="projectDetails.isConfidential && !projectDetails.isArchived">[CONF]&nbsp;</span>
@@ -332,23 +339,23 @@
                                 class="{{(indicator.getIndicators(spotLightIndicator.askNeedIndicator, 'overall')).iconcolor}} icon-size-12">
                             </mat-icon>
                         </div>
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-4" *ngIf="!projecthubservice.isStrategicIniative">
                             <p> Budget</p>
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.budgetIndicator, 'overall')).icontype}}"
+                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.budgetIndicator, 'circle')).icontype}}"
                                 class="{{(indicator.getIndicators(spotLightIndicator.budgetIndicator, 'overall')).iconcolor}} icon-size-12">
                             </mat-icon>
                         </div>
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-4" *ngIf="!projecthubservice.isStrategicIniative">
                             <p> Spend </p>
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.spendIndicator, 'overall')).icontype}}"
+                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.spendIndicator, 'circle')).icontype}}"
                                 class="{{(indicator.getIndicators(spotLightIndicator.spendIndicator, 'overall')).iconcolor}} icon-size-12">
                             </mat-icon>
                         </div>
                     </div>
                     <button class="min-w-26 ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                        (click)="projecthubservice.toggleDrawerOpen('DataQuality', 'new', [] , '',false,true)">
+                        (click)="projecthubservice.toggleDrawerOpen('DataQuality', 'new', [] , '',true,false)">
                         <b>Data Quality:&nbsp;</b><a
                             [ngStyle]="{color:getColor(dataQualityPercentage)}">{{dataQualityPercentageString}}</a>
                     </button>

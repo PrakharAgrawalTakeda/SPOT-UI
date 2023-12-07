@@ -15,7 +15,7 @@ export class MsalGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     console.log(this.authService.instance.getActiveAccount())
-    
+
 
     if (this.authService.instance.getActiveAccount() == null) {
       localStorage.setItem('spot-redirect', state.url);

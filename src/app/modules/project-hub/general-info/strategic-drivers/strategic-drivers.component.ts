@@ -24,7 +24,10 @@ export class StrategicDriversComponent implements OnInit {
     annualMustWinID: new FormControl(null),
     isSiteAssessment: new FormControl(false),
     siteAssessmentCategory: new FormControl([]),
-    isGoodPractise: new FormControl(false)
+    isGoodPractise: new FormControl(false),
+    isSprproject: new FormControl(false),
+    sprprojectCategory: new FormControl(null),
+    sprprojectGrouping: new FormControl(null)
   })
   generalInfo: any = {}
   filterCriteria = {}
@@ -41,7 +44,7 @@ export class StrategicDriversComponent implements OnInit {
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' | 'CreateNewSIP' = 'ProjectHub'
   @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' |'CloseOut' = 'ProjectHub'
-  @Input() viewElements: any = ["primaryKPI", "isAgile", "agilePrimaryWorkstream", "agileSecondaryWorkstream", "agileWave", "isPobos", "pobosCategory", "isGmsgqltannualMustWin", "strategicYear", "annualMustWinID", "isSiteAssessment", "siteAssessmentCategory", "isGoodPractise"]
+  @Input() viewElements: any = ["primaryKPI", "isAgile", "agilePrimaryWorkstream", "agileSecondaryWorkstream", "agileWave", "isPobos", "pobosCategory", "isGmsgqltannualMustWin", "strategicYear", "annualMustWinID", "isSiteAssessment", "siteAssessmentCategory", "isGoodPractise", "isSprproject", "sprprojectCategory", "sprprojectGrouping"]
   @Output() formValueStrategic = new EventEmitter();
   lookUpData: any;
   kpiData: any;
@@ -218,6 +221,45 @@ export class StrategicDriversComponent implements OnInit {
         }
       }
     })
+    this.strategicDriversForm.controls.isSprproject.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        if (res == false) {
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Are you sure?",
+            "message": "Are you sure you want to remove the SPR Project Information?",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warn"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Remove",
+                "color": "warn"
+              },
+              "cancel": {
+                "show": true,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+          alert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+              this.strategicDriversForm.patchValue({
+                sprprojectCategory: {},
+                sprprojectGrouping: {}
+              })
+            }
+            else {
+              this.strategicDriversForm.controls.isSprproject.patchValue(true)
+            }
+          })
+        }
+      }
+    })
   }
 
   ngOnInit(): void {
@@ -230,33 +272,26 @@ export class StrategicDriversComponent implements OnInit {
         this.filterCriteria = this.projectHubService.all
         this.kpiMasters = this.lookUpData.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474")
         this.kpiData = this.projectHubService.kpiMasters
-        this.lookUpMaster = this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474")
-         this.strategicDriversForm.patchValue({
-        primaryKPI: res.projectData.primaryKpi ? this.lookUpMaster.find(x => x.lookUpId == res.projectData.primaryKpi) : {},
-        //   primaryKPI: (() => {
-        //     if (res.projectData.primaryKpi) {
-        //         const lookUpResult = this.lookUpData.find(x => x.lookUpId == res.projectData.primaryKpi);
-        //         if (lookUpResult) {
-        //             return lookUpResult;
-        //         } else {
-        //             const kpiResult = this.kpiData.find(x => x.kpiid == res.projectData.primaryKpi);
-        //             if (kpiResult) {
-        //                 return kpiResult;
-        //             }
-        //         }
-        //     }
-        //     else{
-        //       return '';
-        //     }
+        this.lookUpMaster = this.projectHubService.lookUpMaster
+        this.strategicDriversForm.patchValue({
+          //primaryKPI: res.projectData.primaryKpi && this.kpiMasters.find(x => x.lookUpId == res.projectData.primaryKpi) ? this.kpiMasters.find(x => x.lookUpId == res.projectData.primaryKpi).lookUpName : {},
+          primaryKPI: (() => {
+            if (res.projectData.primaryKpi) {
+                const lookUpResult = this.lookUpData.find(x => x.lookUpId == res.projectData.primaryKpi);
+                if (lookUpResult) {
+                    return lookUpResult;
+                } else {
+                    const kpiResult = this.kpiData.find(x => x.kpiid == res.projectData.primaryKpi);
+                    if (kpiResult) {
+                        return kpiResult;
+                    }
+                }
+            }
+            else{
+              return '';
+            }
             
-        // })(),
-        // this.generalInfo = res
-        // this.filterCriteria = this.projectHubService.all
-        // this.kpiMasters = this.projectHubService.kpiMasters
-        // this.lookUpMaster = this.projectHubService.lookUpMaster
-        // this.strategicDriversForm.patchValue({
-        //   primaryKPI: res.projectData.primaryKpi ? this.kpiMasters.find(x => x.kpiid == res.projectData.primaryKpi) : {},
-          
+        })(),
           isAgile: (res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream) ? true : false,
           agilePrimaryWorkstream: res.agilePrimaryWorkstream ? res.agilePrimaryWorkstream : {},
           agileSecondaryWorkstream: res.agileSecondaryWorkstream ? res.agileSecondaryWorkstream : [],
@@ -268,7 +303,10 @@ export class StrategicDriversComponent implements OnInit {
           annualMustWinID: res.annualMustWinID ? res.annualMustWinID : {},
           isSiteAssessment: res.projectData.isSiteAssessment,
           siteAssessmentCategory: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
-          isGoodPractise: res.projectData.isGoodPractise
+          isGoodPractise: res.projectData.isGoodPractise,
+          isSprproject: res.projectData.isSprproject,
+          sprprojectCategory: res.projectData.sprprojectCategory && res.projectData.sprprojectCategory != '' ? this.lookUpData.find(x => x.lookUpId == res.projectData.sprprojectCategory) : {},
+          sprprojectGrouping: res.projectData.sprprojectGrouping && res.projectData.sprprojectGrouping != '' ? this.lookUpData.find(x => x.lookUpId == res.projectData.sprprojectGrouping) : {}
         })
         this.viewContent = true
       })
@@ -278,11 +316,11 @@ export class StrategicDriversComponent implements OnInit {
       this.auth.lookupMaster().then(res => {
         this.auth.KPIMaster().then(kpi => {
           this.lookupdata = res;
-          this.kpiMasters = kpi;
-          this.lookUpMaster = this.lookupdata.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474")
+          this.kpiMasters = this.lookupdata.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474");
+          //this.lookUpMaster = 
           if (history.state.data != undefined) {
             if (history.state.data.primaryKpi != null) {
-              history.state.data.primaryKpi = this.lookUpMaster.filter(function (entry) {
+              history.state.data.primaryKpi = this.kpiMasters.filter(function (entry) {
                 return entry.lookUpId == history.state.data.primaryKpi
               })
             }
@@ -380,7 +418,10 @@ export class StrategicDriversComponent implements OnInit {
               annualMustWinID: history.state.data.annualMustWinId == null || history.state.data.annualMustWinId == "" || history.state.data.annualMustWinId == undefined ? '' : history.state.data.annualMustWinId[0],
               isSiteAssessment: history.state.data.isSiteAssessment,
               siteAssessmentCategory: history.state.data.siteAssessmentCategory == null || history.state.data.siteAssessmentCategory == "" || history.state.data.siteAssessmentCategory == undefined ? [] : finaldataSite,
-              isGoodPractise: false
+              isGoodPractise: false,
+              isSprproject: false,
+              sprprojectCategory: {},
+              sprprojectGrouping: {}
             })
             this.formValueStrategic.emit(this.strategicDriversForm.getRawValue())
             this.viewContent = true
@@ -468,6 +509,30 @@ export class StrategicDriversComponent implements OnInit {
     return this.lookUpMaster.filter(x => x.lookUpParentId == "265400f0-6202-469b-bb3d-38727928d1b2")
     }
   }
+  getSPRProjectCategory(): any {
+    if (this.callLocation == 'CreateNew') {
+      this.annualMustWin = this.lookupdata.filter(x => x.lookUpParentId == '218576ed-07ee-4d7f-8572-89c8e5b9a7e9');
+      this.annualMustWin.sort((a, b) => {
+        return a.lookUpOrder - b.lookUpOrder;
+      })
+      return this.annualMustWin;
+    }
+    else {
+    return this.lookUpMaster.filter(x => x.lookUpParentId == "218576ed-07ee-4d7f-8572-89c8e5b9a7e9")
+    }
+  }
+  getSPRProjectGrouping(): any {
+    if (this.callLocation == 'CreateNew') {
+      this.annualMustWin = this.lookupdata.filter(x => x.lookUpParentId == 'bebda2cb-c33a-4ad1-b133-8257e9d10526');
+      this.annualMustWin.sort((a, b) => {
+        return a.lookUpOrder - b.lookUpOrder;
+      })
+      return this.annualMustWin;
+    }
+    else {
+    return this.lookUpMaster.filter(x => x.lookUpParentId == "bebda2cb-c33a-4ad1-b133-8257e9d10526")
+    }
+  }
 
   submitSD() {
     this.projectHubService.isFormChanged = false
@@ -486,6 +551,9 @@ export class StrategicDriversComponent implements OnInit {
     mainObj.isSiteAssessment = formValue.isSiteAssessment
     mainObj.siteAssessmentCategory = formValue.siteAssessmentCategory.length > 0 ? formValue.siteAssessmentCategory.map(x => x.lookUpId).join() : ''
     mainObj.isGoodPractise = formValue.isGoodPractise
+    mainObj.isSprproject = formValue.isSprproject
+    mainObj.sprprojectCategory = Object.keys(formValue.sprprojectCategory).length > 0? formValue.sprprojectCategory.lookUpId :''
+    mainObj.sprprojectGrouping = Object.keys(formValue.sprprojectGrouping).length > 0? formValue.sprprojectGrouping.lookUpId :''
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       if (this.subCallLocation == 'ProjectProposal') {
         this.apiService.updateReportDates(this.projectHubService.projectid, "ProjectProposalModifiedDate").then(secondRes => {

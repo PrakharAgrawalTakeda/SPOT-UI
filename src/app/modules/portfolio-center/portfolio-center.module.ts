@@ -31,6 +31,8 @@ import { PortfolioPerformanceComponent } from './budget-spend/portfolio-performa
 import { ProjectPerformanceComponent } from './budget-spend/project-performance/project-performance.component';
 import { ProjectHub } from 'app/shared/role-controller';
 import { FxRateComponent } from './budget-spend/fx-rate/fx-rate.component';
+import { ForecastExcelUpdateComponent } from './budget-spend/forecast-excel-update/forecast-excel-update.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export const projectRoutes: Route[] = [
   {
@@ -46,7 +48,8 @@ export const projectRoutes: Route[] = [
     BudgetSpendComponent,
     PortfolioPerformanceComponent,
     ProjectPerformanceComponent,
-    FxRateComponent
+    FxRateComponent,
+    ForecastExcelUpdateComponent,
   ],
   imports: [
     RouterModule.forChild(projectRoutes),
@@ -72,7 +75,8 @@ export const projectRoutes: Route[] = [
     SpotFormsModule,
     NgScrollbarModule,
     NgxDatatableModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatSnackBarModule
   ],
   exports: [RouterModule]
 })

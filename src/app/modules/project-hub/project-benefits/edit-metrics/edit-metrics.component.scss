@@ -1,0 +1,18 @@
+.custom-ngx-table .datatable-row-left{
+  background: white !important;
+  height: 142px !important;
+}
+
+.custom-ngx-table .frozen-header-classID {
+  top: 120px;
+  margin-left: 12px;
+}
+
+.custom-ngx-table .frozen-header-class {
+  top: 120px;
+  margin-left: 2px;
+}
+
+.non-editable-row {
+  background-color: var(--fuse-bg-default);
+}

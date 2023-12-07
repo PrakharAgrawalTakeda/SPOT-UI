@@ -18,7 +18,7 @@
           <div
             *ngIf="projectHubService.roleControllerControl.generalInfo.confidentialEdit && viewElementChecker('isConfidential')"
             class="flex justify-start w-full gap-3 items-center font-medium">
-            Is Confidential
+            Confidential
             <mat-icon svgIcon="heroicons_outline:x-circle"
               *ngIf="!generalInfoForm.controls.isConfidential.value"></mat-icon>
             <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
@@ -29,7 +29,7 @@
             *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')"
             class="flex justify-start w-full gap-3 items-center font-medium"
             [ngClass]="{'pt-2 pb-6': projectHubService.roleControllerControl.generalInfo.confidentialEdit}">
-            Is Archived?
+            Archived
             <mat-icon svgIcon="heroicons_outline:x-circle"
               *ngIf="!generalInfoForm.controls.isArchived.value"></mat-icon>
             <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
@@ -40,8 +40,7 @@
 
         <div class="grid grid-cols-2 gap-x-6 gap-y-0 w-full">
           <spot-input class="w-full read-only text-default" formControlName="problemTitle" name="problemTitle"
-            *ngIf="viewElementChecker('problemTitle')"
-            [label]="projectNameLabel">
+            *ngIf="viewElementChecker('problemTitle')" [label]="projectNameLabel">
           </spot-input>
           <div class="w-full" *ngIf="callLocation == 'BusinessCase'"></div>
           <spot-input class="w-full read-only" [ngClass]="{'read-only': callLocation != 'ProjectCharter'}"
@@ -49,6 +48,7 @@
             [label]="'Parent Program'" [showHint]="true"
             [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
           </spot-input>
+
           <spot-input *ngIf="viewElementChecker('projectReviewedYN')" formControlName="projectReviewedYN"
             name="projectReviewedYN" class="w-full read-only" [label]="'Project Reviewed'">
           </spot-input>
@@ -400,7 +400,25 @@
                 </mat-icon>
               </div>
             </div>
-
+            <div class="flex justify-between items-center gap-6 pb-3" *ngIf="viewElementChecker('isSprproject')">
+              <div class="flex justify-start items-center gap-3 font-medium">
+                SPR Project
+                <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isSprproject.value">
+                </mat-icon>
+                <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                  *ngIf="generalInfoForm.controls.isSprproject.value">
+                </mat-icon>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-6"
+              *ngIf="viewElementChecker('isSprproject')&&generalInfoForm.controls['isSprproject'].value">
+              <spot-input class="w-full read-only" formControlName="sprprojectCategory" name="sprprojectCategory"
+                [label]="'SPR Project Category'">
+              </spot-input>
+              <spot-input class="w-full read-only" formControlName="sprprojectGrouping" name="sprprojectGrouping"
+                [label]="'SPR Project Grouping'">
+              </spot-input>
+            </div>
           </div>
 
         </div>

@@ -8,7 +8,6 @@
         </div>
     </div>
     <div>
-        
         <form *ngIf = "callLocation == 'CreateNew'" class="pl-3 w-full overflow-hidden" [formGroup]="qualityForm">
             <spot-toggle class="w-full" formControlName="isQualityRef" [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'"
                 [label]="'Quality Reference #'">
@@ -20,9 +19,10 @@
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
             </button>
         </div>
-        <div *ngIf="callLocation == 'ProjectHub' || qualityForm.controls['isQualityRef'].value" style="margin-left:10px;" [ngClass] = "{'w-full pl-3 overflow-hidden h-[81vh]': viewType == 'SidePanel'}" >
+        <div *ngIf="callLocation == 'ProjectHub' || qualityForm.controls['isQualityRef'].value" style="margin-left:10px;" [style]="viewType === 'SidePanel' ? 'height:calc(100vh - 150px)' : null"
+             class="spot-table overflow-y-scroll overflow-x-hidden">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                class="datatable-qr-80 material font-medium text-sm text-default whitespace-nowrap"
+                class="material font-medium text-sm text-default whitespace-nowrap"
                 [rows]="generalInfoData.qualityReferences" #qualityRefTable>
                 <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
                     [sortable]="false" [flexGrow]="0.75">
@@ -65,7 +65,7 @@
             </ngx-datatable>
         </div>
     </div>
-    <div *ngIf="viewType == 'SidePanel'" class="flex items-start justify-between mt-6 px-3">
+    <div *ngIf="viewType == 'SidePanel'" class="w-full px-3 pr-3 flex items-start justify-between">
         <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
             (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
             Cancel

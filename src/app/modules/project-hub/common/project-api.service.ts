@@ -94,6 +94,13 @@ export class ProjectApiService {
         const response = await lastValueFrom(abc$)
         return response
     }
+    async getBudgetPerformancePageInfo(projectId) {
+        var url = GlobalVariables.apiurl + "StrategicInitiativeBudgetPerformance/GetByProjectId/"+projectId
+        const abc$ = this.http.get(url)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+
     async checkBudgetIdPrefix(budgetId) {
         var url = GlobalVariables.apiurl + "Budget/ValidateBudgetId/"+budgetId
         const abc$ = this.http.get(url)
@@ -106,8 +113,8 @@ export class ProjectApiService {
         const response = await lastValueFrom(abc$)
         return response
     }
-    async getNewBudgetId(projectId) {
-        var url = GlobalVariables.apiurl + "Budget/GenerateNewBudgetId/"+projectId
+    async getNewBudgetId(projectId, gmsBudgetOwnerId) {
+        var url = GlobalVariables.apiurl + "Budget/GenerateNewBudgetId/"+projectId+"/"+gmsBudgetOwnerId
         const abc$ = this.http.get(url)
         const response = await lastValueFrom(abc$)
         return response
@@ -589,7 +596,7 @@ async addBCFunding(body,optionId,projectId){
       return response
   }
   async programReport(body){
-     var link = GlobalVariables.apiurl+"ProjectHubData/InsertReports"
+     var link = GlobalVariables.apiurl+"Report/GeneratePortfolioReport"
      const abc$ = this.http.post(link,body)
      const response = await lastValueFrom(abc$)
      return response
@@ -685,7 +692,7 @@ async updateBusinessCaseFunding(body, projectId, optionid){
   const response = await lastValueFrom(abc$)
   return response
 }
-  async BulkEditProjectCharter(projectid: string, data) {
+  async BulkEditProjectCharter(data, projectid: string) {
     var url = GlobalVariables.apiurl + "ProjectCharter/" + projectid
     const abc$ = this.http.put(url, data)
     const response = await lastValueFrom(abc$)
@@ -860,9 +867,9 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     return response
   }
 
-  async generateReports(body, userid, reporttype) {
-    var link = GlobalVariables.apiurl + "Report/Generate/" + userid + "/" + reporttype
-    const abc$ = this.http.put(link, body)
+  async generateReports(projectid, reporttype) {
+    var link = GlobalVariables.apiurl + "Report/Generate/" + projectid + "/" + reporttype
+    const abc$ = this.http.put(link, null)
     const response = await lastValueFrom(abc$)
     return response
   }
@@ -873,5 +880,74 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     return response
   }
 
+  async getvalueCreation(projectid) {
+    var url = GlobalVariables.apiurl + "MetricProjectData/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async getmetricRepo(projectid) {
+    var url = GlobalVariables.apiurl + "MetricRepository"
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  // async editValueCreation(body,projectid){
+  //   var link = GlobalVariables.apiurl+"ValueCreation/ValueCaptureFields/" + projectid
+  //   const abc$ = this.http.put(link,body)
+  //   const response = await lastValueFrom(abc$)
+  //   return response
+  // }
+
+  async getMetricProjectData(projectid) {
+    var url = GlobalVariables.apiurl + "MetricProjectData/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async singleEditMetricProjectData(projectId, metricUID) {
+    var link = GlobalVariables.apiurl + "MetricProjectData/" + projectId+ "/"+metricUID
+    const abc$ = this.http.get(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async submitMetricProjectData(body, projectid, metricUID) {
+    var url = GlobalVariables.apiurl + "MetricProjectData/" + projectid+"/"+metricUID
+    const abc$ = this.http.put(url, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async baselineProjectMetricData(projectid) {
+    var url = GlobalVariables.apiurl + "MetricProjectData/Baseline/" + projectid
+    const abc$ = this.http.put(url, null)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async deleteMetric(projectId, metricUID){
+    var link = GlobalVariables.apiurl+"MetricProjectData/"+projectId+"/"+metricUID
+    const abc$ = this.http.delete(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async addNewMetric(projectId, metricUID){
+    var link = GlobalVariables.apiurl+"MetricProjectData/AddMetricToProject/"+projectId+"/"+metricUID
+    const abc$ = this.http.put(link,null)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async putProjectData(body, projectId){
+    var link = GlobalVariables.apiurl+"GeneralInfo/"+projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
   }
 

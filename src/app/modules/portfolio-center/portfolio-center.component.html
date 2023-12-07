@@ -1,13 +1,13 @@
 <!-- Budget/Spend -->
-<fuse-drawer *ngIf="PortfolioCenterService.itemtype == 'BudgetSpendOpen' || PortfolioCenterService.itemtype == 'FXRateOpen'" [name]="'rightDrawer'" [opened]="PortfolioCenterService.drawerOpenedright"
+<fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.drawerOpenedright"
     (openedChanged)="PortfolioCenterService.drawerOpenedChanged($event)" [mode]="'over'" [position]="'right'"
     [ngClass]="{'fuse-drawer-large':PortfolioCenterService.fuseDrawerLarge}">
     <div>
-        <app-budget-spend></app-budget-spend>
+        <app-budget-spend *ngIf="PortfolioCenterService.itemtype == 'BudgetSpendOpen' || PortfolioCenterService.itemtype == 'FXRateOpen'"></app-budget-spend>
     </div>
     <fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.drawerOpened"
         (openedChanged)="PortfolioCenterService.drawerOpenedChangedSmall($event)" [mode]="'over'" [position]="'right'"
-        [ngClass]="{'fuse-drawer-large':PortfolioCenterService.fuseDrawerSmall}">
+        [ngClass]="{'fuse-drawer-small':PortfolioCenterService.fuseDrawerSmall}">
         <div>
             <app-fx-rate *ngIf="PortfolioCenterService.itemtype == 'FXRateOpen'"></app-fx-rate>
         </div>
@@ -24,6 +24,13 @@
             <form class="w-full overflow-hidden" [formGroup]="PortfolioFilterForm" *ngIf="showContent && showFilter"
                 style="overflow-y: scroll; height: 85vh;">
                 <div class=" form-ask-need h-[77.5vh]  overflow-y-scroll">
+                    <button (click)= "resetfilters()" style="margin: 20px 15px 15px 765px !important" class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Default filters
+                    </button>
+                    <spot-multiselect-user-autocomplete formControlName="ProjectTeamMember"
+                        [placeholder]="'Last Name, First Name'" [label]="'Project Team Member'" name="ProjectTeamMember"
+                        [showLabel]="true">
+                    </spot-multiselect-user-autocomplete>
                     <spot-multiselect-autocomplete formControlName="PortfolioOwner" class="w-full" name="PortfolioOwner"
                         [label]="'Portfolio Owner'" [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
                         [idPointer]="'portfolioOwnerId'" [dropDownArray]="getPortfolioOwner()" [sortByType]="'custom'"
@@ -73,19 +80,15 @@
                         [idPointer]="'lookUpId'" [dropDownArray]="totalCAPEX" [sortByType]="'custom'"
                         [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="Product" class="w-full" name="Product"
-                        [label]="'Product(s)'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
-                        [idPointer]="'productId'" [dropDownArray]="filterlist.products" [showHint]="true"
-                        [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
-                    </spot-multiselect-autocomplete>
-                    <spot-multiselect-user-autocomplete formControlName="ProjectTeamMember"
-                        [placeholder]="'Last Name, First Name'" [label]="'Project Team Member'" name="ProjectTeamMember"
-                        [showLabel]="true">
-                    </spot-multiselect-user-autocomplete>
                     <spot-multiselect-autocomplete formControlName="GMSBudgetOwner" class="w-full" name="GMSBudgetOwner"
                         [label]="'GMS Budget Owner'" [placeholder]="'GMS Budget Owner'"
                         [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
                         [dropDownArray]="getGMSBudgetOwner()" [sortByType]="'custom'" [customSortPointer]="'pfid'">
+                    </spot-multiselect-autocomplete>
+                    <spot-multiselect-autocomplete formControlName="Product" class="w-full" name="Product"
+                        [label]="'Product(s)'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
+                        [idPointer]="'productId'" [dropDownArray]="filterlist.products" [showHint]="true"
+                        [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="AGILEWorkstream" class="w-full"
                         name="AGILEWorkstream" [label]="'AGILE Workstream'" [placeholder]="'AGILE Workstream'"
@@ -95,6 +98,15 @@
                         [label]="'AGILE Wave'" [placeholder]="'AGILE Wave'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
                     </spot-multiselect-autocomplete>
+                    <spot-select class="w-full" formControlName="SPRProjectCategory" name="SPRProjectCategory"
+                        [label]="'SPR Project Category'" [placeholder]="'SPR Project Category'" [showNoneOption]="true"
+                        [dropDownArrayType]="'string'" [dropDownArray]="CAPSDropDrownValues">
+                    </spot-select>
+                    <spot-multiselect-autocomplete formControlName="PrimaryValueDriver"
+                class="w-full" name="PrimaryValueDriver" [label]="'Primary Value Driver'" [placeholder]="'Primary Value Driver'"
+                [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" [dropDownArray]="primaryKPI" [sortByType]="'custom'"
+                [customSortPointer]="'lookUpOrder'">
+            </spot-multiselect-autocomplete>
                     <spot-select class="w-full" formControlName="CAPSProject" name="CAPSProject"
                         [label]="'CAPS Project'" [placeholder]="'CAPS Project'" [showNoneOption]="true"
                         [dropDownArrayType]="'string'" [dropDownArray]="CAPSDropDrownValues" [showHint]="true"
@@ -140,15 +152,15 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                                             name={{item.uniqueId}} [label]=item.name [rows]="item.linesCount">
                                         </spot-textarea>
                                     </div>
-                                    <div *ngIf="!item.isMulti" #Lookup>
+                                    <!-- <div *ngIf="!item.isMulti" #Lookup>
                                         <spot-singleselect-autocomplete *ngSwitchCase="'3'"
                                             formControlName={{item.uniqueId}} class="w-full" name={{item.uniqueId}}
                                             [label]=item.name [placeholder]=item.name [valuePointer]="'lookUpName'"
                                             [dropDownArray]="getLookup(item.lookupParentId)" [sortByType]="'custom'"
                                             [customSortPointer]="'lookUpOrder'">
                                         </spot-singleselect-autocomplete>
-                                    </div>
-                                    <div *ngIf="item.isMulti" #multiLookup>
+                                    </div> -->
+                                    <div #multiLookup>
                                         <spot-multiselect-autocomplete *ngSwitchCase="'3'"
                                             formControlName={{item.uniqueId}} class="w-full" name={{item.uniqueId}}
                                             [label]=item.name [placeholder]=item.name [valuePointer]="'lookUpName'"
@@ -160,32 +172,32 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                                         <spot-input style="display: flex;" *ngSwitchCase="'4'" class="w-full"
                                             formControlName={{item.name}} name={{item.name}} [label]=item.name
                                             [decimalCount]=item.linesCount [inputType]="'Number'"
-                                            [callLocation]="'LocalAttribute'" [placeholder]=item.name>
+                                            [callLocation]="'LocalAttribute'" [placeholder]="'From'">
                                         </spot-input>
                                         <spot-input style="display: flex; left: 10px; position: relative;"
                                             *ngSwitchCase="'4'" class="w-full" formControlName={{item.uniqueId}}
                                             name={{item.uniqueId}} [decimalCount]=item.linesCount [inputType]="'Number'"
-                                            [callLocation]="'LocalAttribute'" [placeholder]=item.name>
+                                            [callLocation]="'LocalAttribute'" [placeholder]="'To'">
                                         </spot-input>
                                     </div>
                                     <div style="display: flex;">
                                         <spot-input-date style="display: flex;" *ngSwitchCase="'2'"
                                             class="w-full read-only" formControlName={{item.name}} name={{item.name}}
-                                            [label]=item.name [placeholder]=item.name>
+                                            [label]=item.name [placeholder]="'From'">
                                         </spot-input-date>
                                         <spot-input-date style="display: flex; left: 10px; position: relative;"
                                             *ngSwitchCase="'2'" class="w-full read-only"
                                             formControlName={{item.uniqueId}} name={{item.uniqueId}}
-                                            [placeholder]=item.name>
+                                            [placeholder]="'To'">
                                         </spot-input-date>
                                     </div>
-                                    <div *ngIf="!item.isMulti" #people>
+                                    <!-- <div *ngIf="!item.isMulti" #people>
                                         <spot-singleselect-user-autocomplete *ngSwitchCase="'5'"
                                             formControlName={{item.uniqueId}} [label]=item.name name={{item.uniqueId}}
                                             [showLabel]="true" [placeholder]="'Last Name, First Name'">
                                         </spot-singleselect-user-autocomplete>
-                                    </div>
-                                    <div *ngIf="item.isMulti" #multiPeople>
+                                    </div> -->
+                                    <div #multiPeople>
                                         <spot-multiselect-user-autocomplete *ngSwitchCase="'5'"
                                             formControlName={{item.uniqueId}} [label]=item.name name={{item.uniqueId}}
                                             [showLabel]="true" [placeholder]="'Last Name, First Name'">
@@ -362,9 +374,9 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <button class="ml-4" mat-flat-button [color]="'primary'" (click)="openDrawer('Filter')">
                             Filters
                         </button>
-                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="resetfilters()">
+                        <!-- <button class="ml-4" mat-flat-button [color]="'primary'" (click)="resetfilters()">
                             Reset Filters (only dev)
-                        </button>
+                        </button> -->
                     </div>
                 </div>
                 <div style="top: 25px; display: inline;position: relative;left: 10px;">
@@ -373,9 +385,23 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             {{item.name}} : {{item.value}} {{isLast?'':', '}}
                         </span>
                         <span *ngIf="item.count > 1" class="text-primary text-base">
-                            {{item.name}}( {{item.count}} ) {{isLast?'':', '}}
+                            {{item.name}} ({{item.count}}) {{isLast?'':', '}}
                         </span>
                     </span>
+
+                    <span *ngFor="let item of localAttributeData; last as isLast; first as isFirst">
+                        <span *ngIf="item.count == 1" class="text-primary text-base">
+                           {{isFirst?', ':''}} {{item.name}} : {{item.value}} {{isLast?'':', '}}
+                        </span>
+                        <span *ngIf="item.count > 1" class="text-primary text-base">
+                            {{item.name}} ({{item.count}}) {{isLast?'':', '}}
+                        </span>
+                    </span>
+                </div>
+                <div style="top: 25px; display: inline;position: relative;left: 10px;" *ngIf="showdefault">
+                    <button class="ml-4" mat-flat-button [color]="'primary'" (click)="DefaultFilter()">
+                        Cancel Loading
+                    </button>
                 </div>
                 <div *ngIf='showContent'
                     class="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full min-w-0 mt-8 " @slideInRight>
@@ -437,7 +463,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                     <!-- Milestones -->
                     <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
-                            <div class="text-2xl lg:text-3xl font-medium tracking-tight leading-6 text-primary truncate mb-0">
+                            <div class="text-2xl lg:text-3xl font-medium tracking-tight leading-6 text-primary mb-0">
                                 Budget</div>
 
                             <div class="flex flex-col mt-2">
@@ -462,9 +488,9 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </div>
 
                         </div>
-                        
+
                         <div class="p-4 text-right">
-                            <button class="forecast" (click)="PortfolioCenterService.toggleDrawerOpen('BudgetSpendOpen', '' , groupData , '1', true)">Forecast Bulk Edit Page</button>
+                            <button class="forecast" (click)="PortfolioCenterService.toggleDrawerOpen('BudgetSpendOpen', '' , groupData , '1', true)">Forecast Bulk View</button>
                         </div>
                     </div>
                     <!-- Ask Needs -->
@@ -537,6 +563,25 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap"
                         [rows]="projectOverview" #projectOverviewTable>
 
+                        <ngx-datatable-column prop="dataFreshness" [width]="20" [frozenLeft]="true"
+                            [resizeable]="false">
+                            <ng-template let-column="column" ngx-datatable-header-template>
+                                <ng-container>
+                                    <span class="datatable-header-cell-wrapper">
+                                        <span></span>
+                                    </span>
+                                </ng-container>
+                            </ng-template>
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <!-- <mat-icon style="margin-left: 12px;"
+                                    svgIcon="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).iconcolor}} ">
+                                </mat-icon> -->
+                                <span *ngIf="row.grey" style="background-color: #ccc8c8; margin-left: 10px; height: 90px; display: flex;" title="{{value}}"></span>
+                                <span *ngIf="row.darkGrey" style="background-color: #999999; margin-left: 10px; height: 90px; display: flex;" title="{{value}}"></span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
                         <ngx-datatable-column name="Overall status" prop="overallStatus"
                             [headerClass]="getFrozenHeaderClassID" [width]="70" [sortable]="true" [frozenLeft]="true"
                             [resizeable]="false">
@@ -556,7 +601,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Program/Project Name" prop="problemTitle" [width]="300"
+                        <ngx-datatable-column name="Program/Project Name" prop="problemTitle" [width]="350"
                             [frozenLeft]="true" [headerClass]="getFrozenHeaderClass" [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p (click)="OpenProject(value)" class="projectNames">{{ value }}</p>
@@ -616,7 +661,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             [resizeable]="false" [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon
-                                    svgIcon="{{(indicator.getIndicators(row.budgetIndicator, 'overall')).icontype}}"
+                                    svgIcon="{{(indicator.getIndicators(row.budgetIndicator, 'circle')).icontype}}"
                                     class="{{(indicator.getIndicators(row.budgetIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
@@ -626,7 +671,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             [resizeable]="false" [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon
-                                    svgIcon="{{(indicator.getIndicators(row.spendIndicator, 'overall')).icontype}}"
+                                    svgIcon="{{(indicator.getIndicators(row.spendIndicator, 'circle')).icontype}}"
                                     class="{{(indicator.getIndicators(row.spendIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
@@ -643,28 +688,28 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             [width]="180">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <!-- <p>{{value}}</p> -->
-                                <div class="grid grid-cols-1 text-right" style="margin-right: 10px;">
+                                <p class="grid grid-cols-1 text-right" style="margin-right: 28px;">
                                     {{
                                     row.CAPEX ? row.CAPEX.toLocaleString() : 0
                                     }} &nbsp; {{row.currencyAbb}}
-                                </div>
-                                <br />
-                                <div class="text-right" style="margin-right: 12px;">
+                                </p>
+                                <!-- <br /> -->
+                                <p class="text-right" style="margin-right: 28px;">
                                     {{ row.FORECAST ? row.FORECAST.toLocaleString() : 0 }} &nbsp; {{row.currencyAbb}}
-                                </div>
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="Carbon Impact (Tons CO2)" prop="calculatedEmissionsImpact"
                             [width]="130">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align: right;margin-right: 15px;">{{value}}</p>
+                                <p style="text-align: right;margin-right: 15px;">{{row.calculatedEmissionsImpact1}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Water Impact (m3)" prop="waterImpactUnits" [width]="110">
+                        <ngx-datatable-column name="Water Impact (m3)" prop="waterImpactUnits" [width]="110" [sortable]="true">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align: right;margin-right: 15px;">{{value}}</p>
+                                <p style="text-align: right;margin-right: 15px;">{{row.waterImpactUnits1}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
@@ -693,7 +738,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                                                                                 name: 'Target',
                                                                                 value: row.targetToComplete,
                                                                                 strokeWidth: 5,
-                                                                                strokeColor: '#775DD0'
+                                                                                strokeColor: 'rgba(255,255,255,0)'
                                                                             },
                                                                             {
                                                                                 name: 'Total',
@@ -747,10 +792,8 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <ngx-datatable-column name="Execution Duration (Days)" prop="executionDuration"
                             [resizeable]="false" [width]="150">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align: right;margin-right: 15px;">{{value}}</p> <br
-                                    *ngIf="row.completed">
-                                <p style="text-align: right;margin-right: 15px;" *ngIf="row.completed">Completed</p> <br
-                                    *ngIf="row.notBaselined">
+                                <p style="text-align: right;margin-right: 15px;">{{value}}</p>
+                                <p style="text-align: right;margin-right: 15px;" *ngIf="row.completed">Completed</p>
                                 <p style="text-align: right;margin-right: 15px;" *ngIf="row.notBaselined">Not Baselined
                                 </p>
                             </ng-template>

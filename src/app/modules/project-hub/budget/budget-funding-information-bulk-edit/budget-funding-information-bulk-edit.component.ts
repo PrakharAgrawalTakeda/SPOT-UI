@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {ProjectApiService} from "../../common/project-api.service";
 import {ProjectHubService} from "../../project-hub.service";
 import {AuthService} from "../../../../core/auth/auth.service";
@@ -6,8 +6,8 @@ import {RoleService} from "../../../../core/auth/role.service";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
 import {Router} from "@angular/router";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
-import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
 import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
+import {BudgetService} from "../budget.service";
 
 @Component({
     selector: 'app-budget-funding-information-bulk-edit',
@@ -21,7 +21,7 @@ export class BudgetFundingInformationBulkEditComponent {
                 public role: RoleService,
                 private portfoliService: PortfolioApiService,
                 public fuseAlert: FuseConfirmationService,
-                private router: Router) {
+                public budgetService: BudgetService) {
         this.fundingRequestForm.valueChanges.subscribe(res => {
             if (this.viewContent == true) {
                 this.formValue()
@@ -51,7 +51,7 @@ export class BudgetFundingInformationBulkEditComponent {
 
     dataloader() {
         this.budgetInfo = this.projecthubservice.all
-        this.fundingRequests = this.projecthubservice.all.budgetIOs;
+        this.fundingRequests = this.budgetService.budgetPageInfo.budgetIOs;
         this.portfoliService.getLocalCurrency().then(currency => {
             this.localCurrency = currency
             this.viewContent = true;
@@ -100,7 +100,7 @@ export class BudgetFundingInformationBulkEditComponent {
             this.fundingRequestsSubmit = []
             for (var i of form) {
                 this.fundingRequestsSubmit.push({
-                    "budgetIoid": i.budgetIoid,
+                    "budgetIoid": i.budgetIoid ? i.budgetIoid : "",
                     "projectId": this.projecthubservice.projectid,
                     "budgetIo1": i.budgetIo1,
                     "carapprovedCapex": i.carapprovedCapex,
@@ -112,7 +112,6 @@ export class BudgetFundingInformationBulkEditComponent {
                     "approvalStatus": i.approvalStatus,
                     "approvalCurrency": i.approvalCurrency,
                     "keep": i.keep,
-
                 })
             }
         } else {
@@ -152,7 +151,7 @@ export class BudgetFundingInformationBulkEditComponent {
         }))
         this.fundingRequests = [...this.fundingRequests, ...j]
         this.frTableEditStack.push(this.fundingRequests.length - 1)
-        var div = document.getElementsByClassName('datatable-scroll')[0]
+        var div = document.getElementsByClassName('ngx-datatable')[0]
         setTimeout(() => {
             div.scroll({
                 top: div.scrollHeight,
@@ -301,6 +300,8 @@ export class BudgetFundingInformationBulkEditComponent {
                     this.projecthubservice.isFormChanged = false
                     this.formValue()
                     this.budgetInfo.budgetIOs  = this.fundingRequestsSubmit.filter((item) => item.keep);
+                    this.budgetInfo.budgetForecasts = []
+                    this.budgetInfo.budgetForecastsY1 = []
                     this.apiService.updateBudgetPageInfo(this.projecthubservice.projectid,this.budgetInfo).then(res => {
                         this.projecthubservice.submitbutton.next(true)
                         this.projecthubservice.toggleDrawerOpen('', '', [], '')
@@ -313,6 +314,13 @@ export class BudgetFundingInformationBulkEditComponent {
             this.projecthubservice.submitbutton.next(true)
             this.projecthubservice.toggleDrawerOpen('', '', [], '')
             this.projecthubservice.isNavChanged.next(true)
+        }
+    }
+    calculateHeight(): string {
+        if (this.showAddNewButton) {
+            return 'calc(100vh - 160px)';
+        } else {
+            return 'calc(100vh - 120px)';
         }
     }
 }
