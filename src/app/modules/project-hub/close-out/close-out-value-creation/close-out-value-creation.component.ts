@@ -70,6 +70,7 @@ export class CloseOutValueCreationComponent implements OnInit {
           res.forEach((element)=>{
             var format = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID).lookUpName : ''
             var order = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID).lookUpOrder : ''
+            element.metricData.PO = element.metricData.metricPortfolioID ? 0 : 1
             element.metricData.metricFormat = format
             element.metricData.sortOrder = order
             element.metricData.FianncialType1 = "Target"
