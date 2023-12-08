@@ -45,6 +45,8 @@ export class ProjectBenefitsComponent implements OnInit {
           this.ngOnInit()
         }
       })
+
+
   }
 
   ngOnInit(): void {
@@ -317,6 +319,7 @@ console.log(problemCapture)
               this.projectApiService.baselineProjectMetricData(this.id)
         .then(response => {
           console.log('Update successful', response);
+          this.projecthubservice.submitbutton.next(true)
 
         })
       })
