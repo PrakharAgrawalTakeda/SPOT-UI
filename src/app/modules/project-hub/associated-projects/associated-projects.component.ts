@@ -79,7 +79,6 @@ export class AssociatedProjectsComponent implements OnInit {
                 this.projecthubservice.projectChildren = children;
                 this.projecthubservice.projects = projects;
                 this.rows = this.projecthubservice.projects.filter(row => row.problemUniqueId !== row.parentId);
-                console.log(res)
             })
         });
 
@@ -161,7 +160,7 @@ export class AssociatedProjectsComponent implements OnInit {
         reportAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
                 let problemIds: string[] = [];
-                this.projecthubservice.projects.map(x => {
+                this.projecthubservice.projectChildren.map(x => {
                     problemIds.push(x.problemId.toString())
                 });
                 this.apiService.programReport(problemIds).then((res: any) => {
