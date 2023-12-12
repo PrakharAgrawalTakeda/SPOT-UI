@@ -179,7 +179,8 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                   this.captureLevel = true
                 }
                 if (this.capexAvoidanceForm && this.captureLevel) {
-                  this.capexAvoidanceForm.get('metricLevelId').disable();
+                  // TODO: Doubt? Why is it disabled?
+                  // this.capexAvoidanceForm.get('metricLevelId').disable();
                 } else {
                   this.capexAvoidanceForm.get('statusId').disable();
                 }
