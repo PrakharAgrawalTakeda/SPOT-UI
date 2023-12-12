@@ -14,17 +14,17 @@
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="material datatable-an-80 font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
                 [rows]="localCurrency">
-                <ngx-datatable-column name="Currency Code" prop="localCurrencyAbbreviation" [flexGrow]="1">
+                <ngx-datatable-column name="Currency Code" prop="localCurrencyAbbreviation" [flexGrow]="1" [resizeable]="false" [draggable]="false">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p>{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Currency Name" prop="localCurrencyName" [flexGrow]="1">
+                <ngx-datatable-column name="Currency Name" prop="localCurrencyName" [flexGrow]="2" [resizeable]="false" [draggable]="false">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p>{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Exchange Rate to JPY" prop="fixRate" [flexGrow]="2" [headerClass]="getNgxDatatableNumberHeader">
+                <ngx-datatable-column name="Exchange Rate to JPY" prop="fixRate" [flexGrow]="2" [headerClass]="getNgxDatatableNumberHeader" [resizeable]="false" [draggable]="false">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p style="text-align: right; margin-right: 20px;">{{value.toFixed(5)}}</p>
                     </ng-template>
