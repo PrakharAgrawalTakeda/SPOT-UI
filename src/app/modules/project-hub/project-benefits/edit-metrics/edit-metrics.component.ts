@@ -178,12 +178,29 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                 if (this.capexAvoidanceForm.get('metricLevelId').value == 'Capture' || res.projectsMetricsData.metricLevelId == 'd6a905be-4ff9-402e-b074-028242b6f8e0') {
                   this.captureLevel = true
                 }
-                if (this.capexAvoidanceForm && this.captureLevel) {
-                  // TODO: Doubt? Why is it disabled?
-                  // this.capexAvoidanceForm.get('metricLevelId').disable();
-                } else {
-                  this.capexAvoidanceForm.get('statusId').disable();
+
+                // TODO: Doubt? This is not clear, URS says different, @Mannat, check if it is required.
+                // if (this.capexAvoidanceForm && this.captureLevel) {
+                //   this.capexAvoidanceForm.get('metricLevelId').disable();
+                // } else {
+                //   this.capexAvoidanceForm.get('statusId').disable();
+                // }
+
+                // Metric level is editable only for Strategic Initiative type of projects
+                if (pc.problemType != 'Strategic Initiative / Program') {
+                  this.capexAvoidanceForm?.get('metricLevelId')?.disable();
                 }
+                // Metric level is disabled, even for SI project type, for global sustainibility metrics
+                else if (res.metricData.metricCategoryID == '8681a5a9-5a00-48f2-b60f-21f0422ba90d'  //Sustainability/Environmental
+                         && res.metricData.metricTypeID == 'e7a9e055-1319-4a4f-b929-cd7777599e39'){ //Global
+                  this.capexAvoidanceForm?.get('metricLevelId')?.disable();
+                }
+
+                //Status is disabled for 'Cascade' level
+                if (!this.captureLevel) {
+                  this.capexAvoidanceForm?.get('statusId')?.disable();
+                }
+
                 this.tempImpactForm.patchValue({
                   temporaryImpact: (res.projectsMetricsData.temporaryImpact)
                 });
