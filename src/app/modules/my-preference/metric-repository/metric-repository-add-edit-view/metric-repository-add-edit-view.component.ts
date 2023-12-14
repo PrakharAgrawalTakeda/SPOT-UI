@@ -25,6 +25,39 @@ export class MetricRepositoryAddEditViewComponent {
                 this.categoryChanged = true;
             }
         })
+        this.metricRepositoryForm.controls.metricFormat.valueChanges.subscribe(res => {
+            if(this.myPreferenceService.itemid != "new"){
+                var comfirmConfig: FuseConfirmationConfig = {
+                    "title": "",
+                    "message": "Updating the format will remove all the current data from the metric. Do you want to proceed?",
+                    "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "warning"
+                    },
+                    "actions": {
+                        "confirm": {
+                            "show": true,
+                            "label": "Okay",
+                            "color": "primary"
+                        },
+                        "cancel": {
+                            "show": true,
+                            "label": "Cancel"
+                        }
+                    },
+                    "dismissible": true
+                }
+                const alert = this.fuseAlert.open(comfirmConfig)
+                alert.afterClosed().subscribe(close => {
+                    if (close == 'cancelled') {
+                        this.metricRepositoryForm.patchValue({
+                            metricFormat: this.metricRepository.metricFormatID,
+                        }, {emitEvent: false})
+                    }
+                })
+            }
+        });
         this.metricRepositoryForm.valueChanges.subscribe(res => {
             this.myPreferenceService.isFormChanged = true
         })
