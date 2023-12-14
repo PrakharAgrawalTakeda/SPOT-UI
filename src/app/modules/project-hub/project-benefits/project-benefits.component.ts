@@ -85,8 +85,8 @@ console.log(problemCapture)
           this.lookupData = resp
           this.filterData = filterres
           res.forEach((element)=>{
-            var format = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID).lookUpName : ''
-            var order = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID).lookUpOrder : ''
+            var format = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID)?.lookUpName : ''
+            var order = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID)?.lookUpOrder : ''
             element.metricData.metricFormat = format
             element.metricData.PO = element.metricData.metricPortfolioID ? 0 : 1
             element.metricData.sortOrder = order
@@ -106,7 +106,7 @@ console.log(problemCapture)
       console.log(problemCapture)
       this.ValueCaptureForm.patchValue({
           valueCaptureStart: problemCapture.financialRealizationStartDate,
-            primaryValueDriver: this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi).lookUpName : null,
+            primaryValueDriver: this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi)?.lookUpName : null,
             valueCommentary: problemCapture.valueCommentary
       })
       this.isStrategicInitiative = problemCapture.problemType == 'Strategic Initiative / Program' ? true : false
@@ -125,7 +125,7 @@ console.log(problemCapture)
               }
             }
             for(var i=0;i<year.length;i++){
-              var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i]).lookUpName : ''
+              var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i])?.lookUpName : ''
               this.columnYear.push({year: yearName})
               yearList.push(yearName)
             }
@@ -202,6 +202,7 @@ console.log(problemCapture)
                 this.columnYear.push({ year: fiscalYear });
               }
             }
+            this.columnYear.sort((a, b) => a.year.localeCompare(b.year));
             this.ValueCaptureForm.disable()
             this.viewContent = true
         })
@@ -229,7 +230,7 @@ console.log(problemCapture)
   
 
   private getFiscalYearFromDate(dateString: string): string {
-    const date = new Date(dateString);
+    let date = dateString ? new Date(dateString) : new Date();
     let year = date.getFullYear();
     if (date.getMonth() < 3) { // January, February, March
       year--; // Fiscal year is the previous year
@@ -240,7 +241,7 @@ console.log(problemCapture)
   
 
   getLookup(id: any){
-    return id && id.lookUpId != '' ? this.lookupData.find(x => x.lookUpId == id).lookUpName : ''
+    return id && id.lookUpId != '' ? this.lookupData.find(x => x.lookUpId == id)?.lookUpName : ''
   }
   compare( array: any ): any {
     return array.length > 1 ? array.sort((a, b) => {

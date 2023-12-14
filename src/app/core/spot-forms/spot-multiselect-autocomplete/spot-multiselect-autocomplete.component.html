@@ -3,7 +3,7 @@
         <mat-label class="items-center flex" *ngIf="showLabel">{{label}}<mat-icon class="pe"
                 *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}">help</mat-icon>
         </mat-label>
-        <mat-chip-grid #chipListList class="chiplist" formControlName="chipList" [required]="Required" ngDefaultControl>
+        <mat-chip-grid #chipListList class="chipList" formControlName="chipList" [required]="Required" ngDefaultControl>
             <mat-chip *ngFor="let item of selectedOption" (removed)="removeOption(item)">
                 {{item[valuePointer]}}
                 <button matChipRemove *ngIf="!isDisabled">
