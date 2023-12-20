@@ -103,7 +103,6 @@ export class EditMetricsComponent implements OnInit, OnChanges {
     })
 
 
-
   }
   ngOnChanges(changes: SimpleChanges): void {
     throw new Error('Method not implemented.');
@@ -122,6 +121,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                 if (res && res.projectsMetricsData.metricLevelId == 'd6a905be-4ff9-402e-b074-028242b6f8e0') {
                   this.captureLevel = true
                 }
+                console.log(result)
                 this.result = res
                 console.log(res)
                 console.log(currency)
@@ -195,7 +195,8 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                          && res.metricData.metricTypeID == 'e7a9e055-1319-4a4f-b929-cd7777599e39'){ //Global
                   this.capexAvoidanceForm?.get('metricLevelId')?.disable();
                 }
-
+                console.log(res.projectsMetricsData.metricLevelId)
+                console.log(this.capexAvoidanceForm.get('metricLevelId').value)
                 //Status is disabled for 'Cascade' level
                 if (!this.captureLevel) {
                   this.capexAvoidanceForm?.get('statusId')?.disable();
@@ -292,7 +293,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                     { financialType: 'Actual', values: this.processFinancialList(res.projectsMetricsData.strategicActualList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) }
                   ];
                 }
-                if (!res.projectsMetricsDataYearly || res.projectsMetricsDataYearly.length === 0) {
+                if (!pc.financialRealizationStartDate && (!res.projectsMetricsDataYearly || res.projectsMetricsDataYearly.length === 0)) {
                   const currentYear = new Date().getFullYear();
                   const shortYear = currentYear % 100; // Get the last two digits of the year
                   const fiscalYearKey = `FY${shortYear}`; // Format as 'FYXX'
@@ -308,6 +309,28 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                     financialType.values[fiscalYearKey] = '0';
                   });
                 }
+                if (pc.financialRealizationStartDate && (!res.projectsMetricsDataYearly || res.projectsMetricsDataYearly.length === 0)) {
+                  // New code to handle the case when financialRealizationStartDate is present
+                  // but there is no yearly data. It initializes fiscal years starting from 
+                  // the year in financialRealizationStartDate.
+                  const realizationStartYear = this.getFiscalYearFromDate(pc.financialRealizationStartDate);
+                  const currentYear = new Date().getFullYear();
+                  
+                  for (let year = realizationStartYear; year <= currentYear; year++) {
+                    const shortYear = year % 100;
+                    const fiscalYearKey = `FY${shortYear}`;
+                
+                    this.columnYear.push({ year: `FY ${year}` });
+                
+                    this.valuecreationngxdata.forEach(financialType => {
+                      if (!financialType.values) {
+                        financialType.values = {};
+                      }
+                      financialType.values[fiscalYearKey] = '0';
+                    });
+                  }
+                }
+                
                 console.log(this.valuecreationngxdata)
                 console.log(this.valuecreationngxdata); // Add this to inspect the final data structure
 
@@ -340,6 +363,14 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                 )
                 this.viewContent = true
               }
+
+                  this.capexAvoidanceForm.get('metricLevelId').valueChanges.subscribe(newValue => {
+      const oldValue = res.projectsMetricsData.metricLevelId; // Adjust based on where the original value is stored
+      if (oldValue != 'd6a905be-4ff9-402e-b074-028242b6f8e0' && newValue == 'Capture') {
+        // Show warning message
+        this.showWarningMessage();
+      }
+    });
             })
           })
         })
@@ -348,15 +379,53 @@ export class EditMetricsComponent implements OnInit, OnChanges {
 
   }
 
-                  // Helper function to calculate fiscal year from a date
-getFiscalYearFromDate = (dateString: string): number => {
-  const date = new Date(dateString);
-  let year = date.getFullYear();
-  if (date.getMonth() < 3) { // If month is before April
-    year--; // Fiscal year starts in the previous calendar year
+showWarningMessage() {
+  var comfirmConfig: FuseConfirmationConfig = {
+    "title": "",
+    "message": "This will remove the metric linking from child projects.",
+    "icon": {
+      "show": true,
+      "name": "heroicons_outline:exclamation",
+      "color": "warn"
+    },
+    "actions": {
+      "confirm": {
+        "show": true,
+        "label": "OK",
+        "color": "warn"
+      },
+      "cancel": {
+        "show": true,
+        "label": "Cancel"
+      }
+    },
+    "dismissible": true
   }
+  const removeYearAlert = this.fuseAlert.open(comfirmConfig)
+}
+
+// Helper function to calculate fiscal year from a date
+getFiscalYearFromDate = (dateString: string): number => {
+  let date;
+  let year;
+
+  if (dateString != null) {
+    date = new Date(dateString);
+    year = date.getFullYear();
+    if (date.getMonth() < 3) { // If month is before April
+      year--; // Fiscal year starts in the previous calendar year
+    }
+  } else {
+    date = new Date();
+    year = date.getFullYear();
+    if (date.getMonth() < 3) { // Also consider the fiscal year in the current year
+      year--;
+    }
+  }
+
   return year;
 };
+
 
   getFrozenHeaderClassID(): any {
     return ' frozen-header-classID';
@@ -673,6 +742,11 @@ getFiscalYearFromDate = (dateString: string): number => {
   }
 
   addYear() {
+      // Ensure globalMaxYear is a valid number, set it to current year if not
+  if (isNaN(this.globalMaxYear) || !isFinite(this.globalMaxYear)) {
+    const currentYear = new Date().getFullYear();
+    this.globalMaxYear = currentYear;
+  }
     if (this.globalMaxYear < 2034) {
       const newYear = this.globalMaxYear + 1;
       this.globalMaxYear = newYear; // Update globalMaxYear
@@ -724,7 +798,8 @@ getFiscalYearFromDate = (dateString: string): number => {
 
 
   removeYear() {
-    if (this.columnYear.length > 0) {
+    console.log(this.columnYear.length)
+    if (this.columnYear.length > 1) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Are you sure?",
         "message": "This function will delete all Financial data for max year. Are you sure you want to continue? ",
@@ -749,8 +824,58 @@ getFiscalYearFromDate = (dateString: string): number => {
       const removeYearAlert = this.fuseAlert.open(comfirmConfig)
       removeYearAlert.afterClosed().subscribe(close => {
         if (close == 'confirmed') {
-          if (this.columnYear.length > 0) {
+          //if (this.columnYear.length > 1) {
             const currentYear = new Date().getFullYear();
+            // if (this.globalMaxYear == currentYear) {
+            //   // Prevent deletion of current year data
+            //   var comfirmConfig: FuseConfirmationConfig = {
+            //     "title": "",
+            //     "message": "Current Financial Year data cannot be removed! ",
+            //     "icon": {
+            //       "show": true,
+            //       "name": "heroicons_outline:exclamation",
+            //       "color": "warn"
+            //     },
+            //     "actions": {
+            //       "confirm": {
+            //         "show": true,
+            //         "label": "OK",
+            //         "color": "warn"
+            //       },
+            //       "cancel": {
+            //         "show": true,
+            //         "label": "Cancel"
+            //       }
+            //     },
+            //     "dismissible": true
+            //   }
+            //   const removeYearAlert = this.fuseAlert.open(comfirmConfig)
+            // }
+            // Remove the last year from columnYear as full year
+            const removedYearObj = this.columnYear.pop();
+            const removedYear = `FY ${this.globalMaxYear}`; // Use the full year for removal
+
+            // Update globalMaxYear
+            this.globalMaxYear = this.globalMaxYear - 1;
+
+            // Remove the year from each financial type's values
+            this.valuecreationngxdata.forEach(financialType => {
+              delete financialType.values[`FY${removedYear}`];
+            });
+
+            // Remove the form control for this year from each FormGroup
+            this.bulkEditFormArray.controls.forEach((group: AbstractControl) => {
+              if (group instanceof FormGroup) {
+                group.removeControl(`FY${removedYear}`);
+              }
+            });
+          }
+        //}
+      })
+    }
+    else {
+      if (this.columnYear.length >= 1) {
+        const currentYear = new Date().getFullYear();
             if (this.globalMaxYear == currentYear) {
               // Prevent deletion of current year data
               var comfirmConfig: FuseConfirmationConfig = {
@@ -776,30 +901,7 @@ getFiscalYearFromDate = (dateString: string): number => {
               }
               const removeYearAlert = this.fuseAlert.open(comfirmConfig)
             }
-            // Remove the last year from columnYear as full year
-            const removedYearObj = this.columnYear.pop();
-            const removedYear = `FY ${this.globalMaxYear}`; // Use the full year for removal
-
-            // Update globalMaxYear
-            this.globalMaxYear = this.globalMaxYear - 1;
-
-            // Remove the year from each financial type's values
-            this.valuecreationngxdata.forEach(financialType => {
-              delete financialType.values[`FY${removedYear}`];
-            });
-
-            // Remove the form control for this year from each FormGroup
-            this.bulkEditFormArray.controls.forEach((group: AbstractControl) => {
-              if (group instanceof FormGroup) {
-                group.removeControl(`FY${removedYear}`);
-              }
-            });
-          }
-        }
-      })
-    }
-    else {
-
+      }
     }
   }
 

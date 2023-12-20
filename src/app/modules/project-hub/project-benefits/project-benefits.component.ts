@@ -230,13 +230,26 @@ console.log(problemCapture)
   
 
   private getFiscalYearFromDate(dateString: string): string {
-    let date = dateString ? new Date(dateString) : new Date();
-    let year = date.getFullYear();
-    if (date.getMonth() < 3) { // January, February, March
-      year--; // Fiscal year is the previous year
+    let date;
+    let year;
+  
+    if (dateString != null) {
+      date = new Date(dateString);
+      year = date.getFullYear();
+      if (date.getMonth() < 3) { // January, February, March
+        year--; // Fiscal year is the previous year
+      }
+    } else {
+      date = new Date();
+      year = date.getFullYear();
+      if (date.getMonth() < 3) { // For consistency, also consider the fiscal year in the current year
+        year--;
+      }
     }
+  
     return `FY ${year}`;
   }
+  
   
   
 
