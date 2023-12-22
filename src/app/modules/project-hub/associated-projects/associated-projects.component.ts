@@ -36,6 +36,7 @@ export class AssociatedProjectsComponent implements OnInit {
     view: any[] = [700, 400];
     lastIndex = 15;
     viewContent = false;
+    problemID = ''
     count:number = 0
     ngOnInit(): void {
         this.dataloader();
@@ -53,6 +54,9 @@ export class AssociatedProjectsComponent implements OnInit {
             this.apiService.getfilterlist().then((filterCriteria: any) => {
                 this.filterCriteria = filterCriteria
                 res.values.forEach(project => {
+                    if(project.problemUniqueId == this.projecthubservice.projectid){
+                        this.problemID = project.problemId
+                    }
                     ids.push(project.problemUniqueId);
                     if (project.parentId == this.id) {
                         children.push(project)
@@ -161,6 +165,8 @@ export class AssociatedProjectsComponent implements OnInit {
         reportAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
                 let problemIds: string[] = [];
+                problemIds.push(this.problemID.toString())
+
                 this.projecthubservice.projectChildren.map(x => {
                     problemIds.push(x.problemId.toString())
                 });
