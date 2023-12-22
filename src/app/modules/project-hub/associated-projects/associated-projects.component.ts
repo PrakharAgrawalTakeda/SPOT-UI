@@ -36,6 +36,7 @@ export class AssociatedProjectsComponent implements OnInit {
     view: any[] = [700, 400];
     lastIndex = 15;
     viewContent = false;
+    count:number = 0
     ngOnInit(): void {
         this.dataloader();
         window.dispatchEvent(new Event('resize'));
@@ -168,9 +169,24 @@ export class AssociatedProjectsComponent implements OnInit {
             }
         })
     }
+    // tootlipFormatter(value, series) {
+    //     return value.toString();
+    // }
     tootlipFormatter(value, series) {
-        return value.toString();
-    }
+        this.count = this.count == undefined ? 0 : this.count
+        if(this.count == 0){
+          this.count++
+          return value.toString();
+        }
+        else if(this.count == 1){
+          this.count++
+          return '<div style="color: #775DD0;">'+value.toString()+'</div>';
+        }
+        else{
+          this.count = 0
+          return '<div style="color: rgba(0,143,251,0.85);">'+value.toString()+'</div>';
+        }
+      }
 }
 function percentTickFormatting(val: any) {
     return val.toLocaleString() + '%';

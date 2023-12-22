@@ -546,7 +546,7 @@ export class CreateProjectComponent implements OnInit {
           var genQRFORM = this.qualityForm
           if (history.state.callLocation == "CopyProject") {
             for (var quality of this.qualityForm) {
-              if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != "") {
+              if (quality.qualityReferenceTypeId != null && Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != "") {
                 this.qualityformValue.push({
                   qualityUniqueId: "",
                   problemUniqueId: res.problemUniqueId,
@@ -558,7 +558,7 @@ export class CreateProjectComponent implements OnInit {
           }
           else {
             for (var quality of this.qualityForm) {
-              if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != "") {
+              if (quality.qualityReferenceTypeId != null && Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != "") {
                 this.qualityformValue.push({
                   qualityUniqueId: quality.qualityUniqueId,
                   problemUniqueId: res.problemUniqueId,
@@ -622,10 +622,10 @@ export class CreateProjectComponent implements OnInit {
     window.open('/project-hub/' + this.projectid + '/project-proposal/general-info', "_blank")
   }
 
-  RouteCreateProject() {
-    this.router.navigate([`./portfolio-center`]);
-    window.location.reload()
-  }
+  // RouteCreateProject() {
+  //   this.router.navigate([`./portfolio-center`]);
+  //   window.location.reload()
+  // }
 
   CheckMandatory(index: number) {
     this.stepper.selectedIndex = index;

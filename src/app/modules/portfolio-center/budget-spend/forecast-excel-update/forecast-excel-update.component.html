@@ -2,7 +2,6 @@
     <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl" style="margin-right: 10px; margin-left: 10px;height: 125vh;">
         <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full">
             <div>
-                
                 <div class="pb-3 pt-2.5 flex items-center justify-between overflow-hidden bg-card shadow rounded-2xl" *ngIf="showContent">
                     <form class="grid-cols-2 grid" style="width: 80vw;" [formGroup]="ForecastForm">
                         <spot-multiselect-autocomplete class="custom" formControlName="Reference"
@@ -11,15 +10,9 @@
                         </spot-multiselect-autocomplete>
                         <spot-select class="custom" formControlName="DataType" name="DataType" [showNoneOption]="false" [label]="'Data For'" [placeholder]="'Data For'" [dropDownArrayType]="'string'"
                         [dropDownArray]="Type"></spot-select>
-                        <!-- <app-spot-multiselect-project-autocomplete class="custom" formControlName="ProjectId" [placeholder]="'Project Ids'" [label]="'Project Ids'" name="ProjectId" [showLabel]="true">
-                        </app-spot-multiselect-project-autocomplete> -->
                         <spot-input class="custom" formControlName="ProjectId" name="ProjectId"
                             [label]="'Project Ids'" [placeholder]="'Project Ids'">
                         </spot-input>
-                        <!-- <spot-multiselect-autocomplete class="custom" formControlName="BudgetId"
-                            name="BudgetId" [label]="'Budget Ids'" [placeholder]="'Budget Ids'"
-                            [valuePointer]="'ID'" [dropDownArray]="LookupDataBudget" [idPointer]="'ID'">
-                        </spot-multiselect-autocomplete> -->
                         <spot-input class="custom" formControlName="BudgetId" name="BudgetId"
                             [label]="'Budget Ids'" [placeholder]="'Budget Ids'">
                         </spot-input>
@@ -43,7 +36,7 @@
                             </form>
 
                             <!-- Historical Excel Update -->
-                            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarH]="true"
+                            <!-- <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarH]="true"
                                 [scrollbarV]="false" columnMode="force"
                                 class="font-medium text-sm text-default whitespace-nowrap datatable-HF-80"
                                 [rows]="forecastExcelHistorical" style="margin-top: -1rem;" *ngIf="showData">
@@ -253,10 +246,10 @@
                                         </form>
                                     </ng-template>
                                 </ngx-datatable-column>
-                            </ngx-datatable>
+                            </ngx-datatable> -->
 
                             <!-- Forecast Excel Update -->
-                            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarH]="true"
+                            <!-- <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarH]="true"
                                 [scrollbarV]="false" columnMode="force"
                                 class="font-medium text-sm text-default whitespace-nowrap datatable-HF-80"
                                 [rows]="forecastExcel" style="margin-top: -1rem;" *ngIf="showDataForecast">
@@ -899,7 +892,10 @@
                                     </ng-template>
                                 </ngx-datatable-column>
                                 
-                            </ngx-datatable>
+                            </ngx-datatable> -->
+                            <div #spreadsheet>
+                                <!-- <kendo-spreadsheet class="pb-3 pt-2.5 flex items-center justify-between overflow-hidden bg-card shadow rounded-2xl" *ngIf="showContent" [k-sheets]="data" style="height: 400px; width: 100%; display: flex;"></kendo-spreadsheet> -->
+                            </div>
                 </div>
             </div>
         </div>

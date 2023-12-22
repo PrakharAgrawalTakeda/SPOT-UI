@@ -33,6 +33,7 @@ import { ProjectHub } from 'app/shared/role-controller';
 import { FxRateComponent } from './budget-spend/fx-rate/fx-rate.component';
 import { ForecastExcelUpdateComponent } from './budget-spend/forecast-excel-update/forecast-excel-update.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { SpreadsheetModule } from '@progress/kendo-angular-spreadsheet';
 
 export const projectRoutes: Route[] = [
   {
@@ -76,7 +77,8 @@ export const projectRoutes: Route[] = [
     NgScrollbarModule,
     NgxDatatableModule,
     MatSlideToggleModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    SpreadsheetModule
   ],
   exports: [RouterModule]
 })
