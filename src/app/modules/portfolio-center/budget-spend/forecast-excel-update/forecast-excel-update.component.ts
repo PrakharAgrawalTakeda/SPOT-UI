@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { PortfolioApiService } from '../../portfolio-api.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { PortfolioCenterService } from '../../portfolio-center.service';
 import { AuthService } from 'app/core/auth/auth.service';
+import { SheetDescriptor } from '@progress/kendo-angular-spreadsheet';
+import '@progress/kendo-ui';
+declare var kendo: any;
 
 @Component({
   selector: 'app-forecast-excel-update',
@@ -40,7 +43,113 @@ export class ForecastExcelUpdateComponent {
   y3Label: string = '';
   y4Label: string = '';
   forecastDB = []
-
+data: SheetDescriptor[] = [
+  {
+      name: 'Food Order',
+      rows: [
+          {
+              cells: [
+                  {
+                      value: 'ID',
+                      background: 'rgb(167,214,255)',
+                      textAlign: 'center',
+                      color: 'rgb(0,62,117)',
+                  },
+                  {
+                      value: 'Product',
+                      background: 'rgb(167,214,255)',
+                      textAlign: 'center',
+                      color: 'rgb(0,62,117)',
+                  },
+              ],
+          },
+          {
+              cells: [
+                  {
+                      value: 216321,
+                      textAlign: 'center',
+                      background: 'rgb(229,243,255)',
+                      color: 'rgb(0,62,117)',
+                  },
+                  {
+                      value: 'Calzone',
+                      background: 'rgb(229,243,255)',
+                      color: 'rgb(0,62,117)',
+                  },
+              ],
+          },
+          {
+              cells: [
+                  {
+                      value: 546897,
+                      textAlign: 'center',
+                      background: 'rgb(229,243,255)',
+                      color: 'rgb(0,62,117)',
+                  },
+                  {
+                      value: 'Margarita',
+                      background: 'rgb(229,243,255)',
+                      color: 'rgb(0,62,117)',
+                  },
+              ],
+          },
+          {
+              cells: [
+                  {
+                      value: 456231,
+                      textAlign: 'center',
+                      background: 'rgb(229,243,255)',
+                      color: 'rgb(0,62,117)',
+                  },
+                  {
+                      value: 'Pollo Formaggio',
+                      background: 'rgb(229,243,255)',
+                      color: 'rgb(0,62,117)',
+                  },
+              ],
+          },
+          {
+              cells: [
+                  {
+                      value: 455873,
+                      textAlign: 'center',
+                      background: 'rgb(229,243,255)',
+                      color: 'rgb(0,62,117)',
+                  },
+                  {
+                      value: 'Greek Salad',
+                      background: 'rgb(229,243,255)',
+                      color: 'rgb(0,62,117)',
+                  },
+              ],
+          },
+          {
+              cells: [
+                  {
+                      value: 456892,
+                      textAlign: 'center',
+                      background: 'rgb(229,243,255)',
+                      color: 'rgb(0,62,117)',
+                  },
+                  {
+                      value: 'Spinach and Blue Cheese',
+                      background: 'rgb(229,243,255)',
+                      color: 'rgb(0,62,117)',
+                  },
+              ],
+          },
+      ],
+      columns: [
+          {
+              width: 100,
+          },
+          {
+              width: 100,
+          },
+      ],
+  },
+];
+@ViewChild('spreadsheet') el: ElementRef;
   constructor(private portfoliService: PortfolioApiService, public fuseAlert: FuseConfirmationService, public PortfolioCenterService: PortfolioCenterService, private auth: AuthService) {
     this.ForecastForm.valueChanges.subscribe(res => {
       if (this.showContent) {
@@ -163,6 +272,408 @@ export class ForecastExcelUpdateComponent {
       for(var i=0;i<BudgetId.length;i++){
         this.LookupDataBudget.push({ID:BudgetId[i]})
       }
+      // kendo.jQuery(this.el.nativeElement).kendoSpreadsheet({
+      //   sheets: [
+      //   {
+      //                    frozenRows: 2,
+             
+      //       name: "Contracts",
+      //       mergedCells: [
+      //           "A1:L1"
+      //       ],
+      //       filter: {
+      //           ref: "A2:L49",
+      //           columns:[]
+      //       },
+      //       columns: [
+      //           // { field: "link", width: 70 },
+      //           { width: 50 },
+      //           { width: 50 },
+      //           { width: 80 },
+      //           { width: 80 },
+      //           { width: 80 },
+      //           { width: 80 },
+      //           { width: 80 },
+      //           { width: 80 },
+      //           { width: 80 },
+      //           { width: 80 },
+      //           { width: 80 }
+      //       ],
+      //       rows: [
+      //       {
+      //           height: 30,
+      //           cells: [
+      //           {
+      //               value: "Contracts", background: "rgb(144,164,174)", textAlign: "left", color: "white", fontSize: 18
+      //           }
+      //           ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "Contract#", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+      //       },
+      //       {
+      //       value: "P/S", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+      //       },
+      //       {
+      //       value: "Co.", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+      //       },
+      //       {
+      //       value: "Date", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+      //       },
+      //       {
+      //       value: "Comm", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+      //       },
+      //       {
+      //       value: "Price", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+      //       },
+      //       {
+      //       value: "FOB", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+      //       },
+      //       {
+      //       value: "Qty", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+      //       },
+      //       {
+      //       value: "Appld", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+      //       },
+      //       {
+      //       value: "Bal", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+      //       },
+      //       {
+      //       value: "S.Date", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+      //       },
+      //       {
+      //       value: "E.Date", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+      //       }
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "963798", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "s", textAlign: "center"},
+      //       { value: new Date("10/13/21"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    178.00, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:     138, textAlign: "right"},
+      //       { value:      46, textAlign: "right"},
+      //       { value:      92, textAlign: "right"},
+      //       { value: new Date("11/01/21"), textAlign: "center"},
+      //       { value: new Date("12/31/21"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "963686", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "s", textAlign: "center"},
+      //       { value: new Date("08/11/21"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    159.00, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:      69, textAlign: "right"},
+      //       { value:      69, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("08/06/21"), textAlign: "center"},
+      //       { value: new Date("10/31/21"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "676598", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "y", textAlign: "center"},
+      //       { value: new Date("07/27/21"), textAlign: "center"},
+      //       { value: "lgrlc", textAlign: "center"},
+      //       { value:      6.45, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "chamn", textAlign: "center"},
+      //       { value:      35, textAlign: "right"},
+      //       { value:      35, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("07/26/21"), textAlign: "center"},
+      //       { value: new Date("07/30/21"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "676525", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "y", textAlign: "center"},
+      //       { value: new Date("06/23/21"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    159.00, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("06/21/21"), textAlign: "center"},
+      //       { value: new Date("06/21/21"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "675894", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "y", textAlign: "center"},
+      //       { value: new Date("11/24/20"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    159.00, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:      92, textAlign: "right"},
+      //       { value:      92, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("11/23/20"), textAlign: "center"},
+      //       { value: new Date("04/30/21"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "963109", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "s", textAlign: "center"},
+      //       { value: new Date("10/21/20"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    159.00, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("10/19/20"), textAlign: "center"},
+      //       { value: new Date("10/19/20"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "675600", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "y", textAlign: "center"},
+      //       { value: new Date("07/21/20"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    159.00, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("07/27/20"), textAlign: "center"},
+      //       { value: new Date("07/31/20"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "674490", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "y", textAlign: "center"},
+      //       { value: new Date("08/27/19"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    198.00, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:      92, textAlign: "right"},
+      //       { value:      92, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("11/01/19"), textAlign: "center"},
+      //       { value: new Date("04/30/20"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "674483", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "y", textAlign: "center"},
+      //       { value: new Date("08/26/19"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    198.00, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("08/27/19"), textAlign: "center"},
+      //       { value: new Date("08/27/19"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "674156", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "y", textAlign: "center"},
+      //       { value: new Date("03/20/19"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    195.00, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("03/19/19"), textAlign: "center"},
+      //       { value: new Date("03/19/19"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "673879", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "y", textAlign: "center"},
+      //       { value: new Date("01/10/19"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    195.00, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("01/10/19"), textAlign: "center"},
+      //       { value: new Date("01/31/19"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "673688", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "y", textAlign: "center"},
+      //       { value: new Date("12/06/18"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    195.00, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("12/05/18"), textAlign: "center"},
+      //       { value: new Date("12/05/18"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "673511", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "y", textAlign: "center"},
+      //       { value: new Date("11/01/18"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    188.00, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("10/30/18"), textAlign: "center"},
+      //       { value: new Date("10/30/18"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "673147", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "y", textAlign: "center"},
+      //       { value: new Date("07/25/18"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    188.00, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("07/25/18"), textAlign: "center"},
+      //       { value: new Date("10/31/18"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "672100", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "y", textAlign: "center"},
+      //       { value: new Date("11/16/17"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    188.00, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("11/16/17"), textAlign: "center"},
+      //       { value: new Date("04/30/18"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "671770", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "y", textAlign: "center"},
+      //       { value: new Date("09/11/17"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    191.42, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("09/11/17"), textAlign: "center"},
+      //       { value: new Date("10/31/17"), textAlign: "center"}
+      //       ]
+      //       },
+      //       {
+      //       cells: [
+      //       {
+      //       value: "671292", 
+      //       textAlign: "center",
+      //       link: "http://mcm.mix30.com/images/print2.gif"},
+      //       { value: "S", textAlign: "center"},
+      //       { value: "y", textAlign: "center"},
+      //       { value: new Date("04/04/17"), textAlign: "center"},
+      //       { value: "mix30+", textAlign: "center"},
+      //       { value:    181.00, format: "$###,##0.00", textAlign: "right"},
+      //       { value: "fortx", textAlign: "center"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:      23, textAlign: "right"},
+      //       { value:       0, textAlign: "right"},
+      //       { value: new Date("04/04/17"), textAlign: "center"},
+      //       { value: new Date("04/30/17"), textAlign: "center"}
+      //       ]
+      //       }
+      //                   ]
+      //                 }]
+      //               });
       // this.LookupDataBudget = BudgetId
       this.showContent = true
     })
@@ -258,6 +769,408 @@ export class ForecastExcelUpdateComponent {
             }), { emitEvent: false })
         }
           this.showData = true
+          kendo.jQuery(this.el.nativeElement).kendoSpreadsheet({
+            sheets: [
+            {
+                             frozenRows: 2,
+                 
+                name: "Contracts",
+                mergedCells: [
+                    "A1:L1"
+                ],
+                filter: {
+                    ref: "A2:L49",
+                    columns:[]
+                },
+                columns: [
+                    // { field: "link", width: 70 },
+                    { width: 50 },
+                    { width: 50 },
+                    { width: 80 },
+                    { width: 80 },
+                    { width: 80 },
+                    { width: 80 },
+                    { width: 80 },
+                    { width: 80 },
+                    { width: 80 },
+                    { width: 80 },
+                    { width: 80 }
+                ],
+                rows: [
+                {
+                    height: 30,
+                    cells: [
+                    {
+                        value: "Contracts", background: "rgb(144,164,174)", textAlign: "left", color: "white", fontSize: 18
+                    }
+                    ]
+                },
+                {
+                cells: [
+                {
+                value: "Contract#", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "P/S", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "Co.", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "Date", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "Comm", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "Price", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "FOB", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "Qty", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "Appld", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "Bal", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "S.Date", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "E.Date", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                }
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "963798", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "s", textAlign: "center"},
+                { value: new Date("10/13/21"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    178.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:     138, textAlign: "right"},
+                { value:      46, textAlign: "right"},
+                { value:      92, textAlign: "right"},
+                { value: new Date("11/01/21"), textAlign: "center"},
+                { value: new Date("12/31/21"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "963686", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "s", textAlign: "center"},
+                { value: new Date("08/11/21"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    159.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      69, textAlign: "right"},
+                { value:      69, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("08/06/21"), textAlign: "center"},
+                { value: new Date("10/31/21"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "676598", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("07/27/21"), textAlign: "center"},
+                { value: "lgrlc", textAlign: "center"},
+                { value:      6.45, format: "$###,##0.00", textAlign: "right"},
+                { value: "chamn", textAlign: "center"},
+                { value:      35, textAlign: "right"},
+                { value:      35, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("07/26/21"), textAlign: "center"},
+                { value: new Date("07/30/21"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "676525", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("06/23/21"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    159.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("06/21/21"), textAlign: "center"},
+                { value: new Date("06/21/21"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "675894", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("11/24/20"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    159.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      92, textAlign: "right"},
+                { value:      92, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("11/23/20"), textAlign: "center"},
+                { value: new Date("04/30/21"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "963109", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "s", textAlign: "center"},
+                { value: new Date("10/21/20"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    159.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("10/19/20"), textAlign: "center"},
+                { value: new Date("10/19/20"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "675600", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("07/21/20"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    159.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("07/27/20"), textAlign: "center"},
+                { value: new Date("07/31/20"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "674490", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("08/27/19"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    198.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      92, textAlign: "right"},
+                { value:      92, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("11/01/19"), textAlign: "center"},
+                { value: new Date("04/30/20"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "674483", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("08/26/19"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    198.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("08/27/19"), textAlign: "center"},
+                { value: new Date("08/27/19"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "674156", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("03/20/19"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    195.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("03/19/19"), textAlign: "center"},
+                { value: new Date("03/19/19"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "673879", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("01/10/19"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    195.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("01/10/19"), textAlign: "center"},
+                { value: new Date("01/31/19"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "673688", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("12/06/18"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    195.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("12/05/18"), textAlign: "center"},
+                { value: new Date("12/05/18"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "673511", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("11/01/18"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    188.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("10/30/18"), textAlign: "center"},
+                { value: new Date("10/30/18"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "673147", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("07/25/18"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    188.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("07/25/18"), textAlign: "center"},
+                { value: new Date("10/31/18"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "672100", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("11/16/17"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    188.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("11/16/17"), textAlign: "center"},
+                { value: new Date("04/30/18"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "671770", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("09/11/17"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    191.42, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("09/11/17"), textAlign: "center"},
+                { value: new Date("10/31/17"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "671292", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("04/04/17"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    181.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("04/04/17"), textAlign: "center"},
+                { value: new Date("04/30/17"), textAlign: "center"}
+                ]
+                }
+                            ]
+                          }]
+                        });
         })
       }
       if(this.ForecastForm.controls.DataType.value == "Forecast"){
@@ -328,6 +1241,408 @@ export class ForecastExcelUpdateComponent {
             }), { emitEvent: false })
         }
           this.showDataForecast = true
+          kendo.jQuery(this.el.nativeElement).kendoSpreadsheet({
+            sheets: [
+            {
+                             frozenRows: 2,
+                 
+                name: "Contracts",
+                mergedCells: [
+                    "A1:L1"
+                ],
+                filter: {
+                    ref: "A2:L49",
+                    columns:[]
+                },
+                columns: [
+                    // { field: "link", width: 70 },
+                    { width: 50 },
+                    { width: 50 },
+                    { width: 80 },
+                    { width: 80 },
+                    { width: 80 },
+                    { width: 80 },
+                    { width: 80 },
+                    { width: 80 },
+                    { width: 80 },
+                    { width: 80 },
+                    { width: 80 }
+                ],
+                rows: [
+                {
+                    height: 30,
+                    cells: [
+                    {
+                        value: "Contracts", background: "rgb(144,164,174)", textAlign: "left", color: "white", fontSize: 18
+                    }
+                    ]
+                },
+                {
+                cells: [
+                {
+                value: "Contract#", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "P/S", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "Co.", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "Date", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "Comm", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "Price", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "FOB", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "Qty", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "Appld", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "Bal", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "S.Date", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                },
+                {
+                value: "E.Date", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+                }
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "963798", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "s", textAlign: "center"},
+                { value: new Date("10/13/21"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    178.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:     138, textAlign: "right"},
+                { value:      46, textAlign: "right"},
+                { value:      92, textAlign: "right"},
+                { value: new Date("11/01/21"), textAlign: "center"},
+                { value: new Date("12/31/21"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "963686", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "s", textAlign: "center"},
+                { value: new Date("08/11/21"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    159.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      69, textAlign: "right"},
+                { value:      69, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("08/06/21"), textAlign: "center"},
+                { value: new Date("10/31/21"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "676598", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("07/27/21"), textAlign: "center"},
+                { value: "lgrlc", textAlign: "center"},
+                { value:      6.45, format: "$###,##0.00", textAlign: "right"},
+                { value: "chamn", textAlign: "center"},
+                { value:      35, textAlign: "right"},
+                { value:      35, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("07/26/21"), textAlign: "center"},
+                { value: new Date("07/30/21"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "676525", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("06/23/21"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    159.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("06/21/21"), textAlign: "center"},
+                { value: new Date("06/21/21"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "675894", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("11/24/20"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    159.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      92, textAlign: "right"},
+                { value:      92, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("11/23/20"), textAlign: "center"},
+                { value: new Date("04/30/21"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "963109", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "s", textAlign: "center"},
+                { value: new Date("10/21/20"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    159.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("10/19/20"), textAlign: "center"},
+                { value: new Date("10/19/20"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "675600", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("07/21/20"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    159.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("07/27/20"), textAlign: "center"},
+                { value: new Date("07/31/20"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "674490", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("08/27/19"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    198.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      92, textAlign: "right"},
+                { value:      92, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("11/01/19"), textAlign: "center"},
+                { value: new Date("04/30/20"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "674483", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("08/26/19"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    198.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("08/27/19"), textAlign: "center"},
+                { value: new Date("08/27/19"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "674156", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("03/20/19"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    195.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("03/19/19"), textAlign: "center"},
+                { value: new Date("03/19/19"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "673879", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("01/10/19"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    195.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("01/10/19"), textAlign: "center"},
+                { value: new Date("01/31/19"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "673688", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("12/06/18"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    195.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("12/05/18"), textAlign: "center"},
+                { value: new Date("12/05/18"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "673511", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("11/01/18"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    188.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("10/30/18"), textAlign: "center"},
+                { value: new Date("10/30/18"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "673147", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("07/25/18"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    188.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("07/25/18"), textAlign: "center"},
+                { value: new Date("10/31/18"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "672100", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("11/16/17"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    188.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("11/16/17"), textAlign: "center"},
+                { value: new Date("04/30/18"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "671770", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("09/11/17"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    191.42, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("09/11/17"), textAlign: "center"},
+                { value: new Date("10/31/17"), textAlign: "center"}
+                ]
+                },
+                {
+                cells: [
+                {
+                value: "671292", 
+                textAlign: "center",
+                link: "http://mcm.mix30.com/images/print2.gif"},
+                { value: "S", textAlign: "center"},
+                { value: "y", textAlign: "center"},
+                { value: new Date("04/04/17"), textAlign: "center"},
+                { value: "mix30+", textAlign: "center"},
+                { value:    181.00, format: "$###,##0.00", textAlign: "right"},
+                { value: "fortx", textAlign: "center"},
+                { value:      23, textAlign: "right"},
+                { value:      23, textAlign: "right"},
+                { value:       0, textAlign: "right"},
+                { value: new Date("04/04/17"), textAlign: "center"},
+                { value: new Date("04/30/17"), textAlign: "center"}
+                ]
+                }
+                            ]
+                          }]
+                        });
         })
       }
     }
