@@ -331,7 +331,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         });
         this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
         this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'SimpleProject' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-        //this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.problemType.enable() : this.generalInfoForm.controls.problemType.disable()
+        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.problemType.enable() : this.generalInfoForm.controls.problemType.disable()
         if (this.isStrategicInitiative) {
           this.projectNameLabel = "Initiaitive Name"
           if (['ProjectCharter', 'CloseOut', 'BusinessCase'].includes(this.subCallLocation)) {
