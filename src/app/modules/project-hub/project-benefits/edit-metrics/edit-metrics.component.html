@@ -109,10 +109,12 @@
                         <!-- Form field for editing, shown only if editing is allowed -->
                         <form *ngIf="ptTableEditStack.includes(rowIndex) && canEditRow(row.financialType)" [formGroup]="bulkEditFormArray.at(rowIndex)" (click)="preventDefault($event)">
                             <spot-input class="w-full" [formControlName]="getControlName(col.year)"
-                                        [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
+                                        [autoAddDecimal]="getDecimalProperties(row.metricFormat).autoAddDecimal" 
+                                        [inputType]="'Number'"
+                                        [decimalCount]="getDecimalProperties(row.metricFormat).decimalCount"
                                         (change)="onValueChange(rowIndex, col.year, $event.target.value)">
                             </spot-input>
-                        </form>
+                          </form>
                     </ng-template>
                 </ngx-datatable-column>
                 
