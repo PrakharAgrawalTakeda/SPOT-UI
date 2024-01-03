@@ -220,10 +220,10 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                 </div>
             </form>
             <!-- GENERATE REPORT -->
-            <div class="mt-6 pl-3 pt-3 pr-3 h-[80.5vh] w-full" #target id="scheduleTableDiv" *ngIf="showContent && !showFilter">
+            <div class="mt-3 pl-3 pr-3 h-[80.5vh] w-full" #target id="scheduleTableDiv" *ngIf="showContent && !showFilter">
                 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="true" [scrollbarH]="false"
                     columnMode="force" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
-                    [limit]="size" (page)="setPage('',$event)" (sort)="sort($event)" [virtualization]="false" [footerHeight]="50"
+                    [limit]="size" (page)="setPage('',$event)" (sort)="sort($event)" [virtualization]="false" [footerHeight]="20"
                     [sorts]="[{ prop: 'overallStatus', dir: 'desc' },{ prop: 'problemTitle', dir: 'asc' }]"
                     class="datatable-PO-60 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview"
                     #projectOverviewTable>
@@ -269,7 +269,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                     </ngx-datatable-column>
 
                     <!-- Toggle column -->
-                    <ngx-datatable-column [width]="50" [sortable]="false" [resizeable]="false">
+                    <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
                         <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelectedToggleName"
                           let-selectFn="selectFnToggleName">
                           <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['Project Proposal'].allToggledFn()"
@@ -282,7 +282,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             (change)="toggles['Project Proposal'].toggleFn(rowIndex)"></mat-slide-toggle>
                         </ng-template>
                       </ngx-datatable-column>
-                      <ngx-datatable-column [width]="50" [sortable]="false" [resizeable]="false">
+                      <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
                         <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelectedToggleName"
                           let-selectFn="selectFnToggleName">
                           <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['Project Charter'].allToggledFn()"
@@ -295,7 +295,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             (change)="toggles['Project Charter'].toggleFn(rowIndex)"></mat-slide-toggle>
                         </ng-template>
                       </ngx-datatable-column>
-                      <ngx-datatable-column [width]="50" [sortable]="false" [resizeable]="false">
+                      <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
                         <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelectedToggleName"
                           let-selectFn="selectFnToggleName">
                           <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['Performance Dashboard'].allToggledFn()"
@@ -308,7 +308,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             (change)="toggles['Performance Dashboard'].toggleFn(rowIndex)"></mat-slide-toggle>
                         </ng-template>
                       </ngx-datatable-column>
-                      <ngx-datatable-column [width]="50" [sortable]="false" [resizeable]="false">
+                      <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
                         <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelectedToggleName"
                           let-selectFn="selectFnToggleName">
                           <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['Budget Dashboard'].allToggledFn()"
@@ -321,7 +321,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             (change)="toggles['Budget Dashboard'].toggleFn(rowIndex)"></mat-slide-toggle>
                         </ng-template>
                       </ngx-datatable-column>
-                      <ngx-datatable-column [width]="50" [sortable]="false" [resizeable]="false">
+                      <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
                         <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelectedToggleName"
                           let-selectFn="selectFnToggleName">
                           <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['Project Closeout'].allToggledFn()"
@@ -334,7 +334,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             (change)="toggles['Project Closeout'].toggleFn(rowIndex)"></mat-slide-toggle>
                         </ng-template>
                       </ngx-datatable-column>
-                      <ngx-datatable-column [width]="50" [sortable]="false" [resizeable]="false">
+                      <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
                         <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelectedToggleName"
                           let-selectFn="selectFnToggleName">
                           <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['GMSGQ Product Team'].allToggledFn()"
