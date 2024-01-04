@@ -1450,8 +1450,8 @@ export class PortfolioCenterComponent implements OnInit {
       for(var i=0;i<index.length;i++){
         updateArray.push(dataToSend[index[i]])
       }
-      dataToSend = updateArray
     }
+    dataToSend = updateArray
     // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     if((LA == null || LA == undefined) && dataToSend.length == 0) {
       localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
@@ -1490,8 +1490,8 @@ export class PortfolioCenterComponent implements OnInit {
         for(var i=0;i<newIndex.length;i++){
           newArray.push(dataToSend[newIndex[i]])
         }
-        dataToSend = newArray
       }
+      dataToSend = newArray
       // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     }
     else if ((LA != null || LA != undefined) && dataToSend.length == 0){

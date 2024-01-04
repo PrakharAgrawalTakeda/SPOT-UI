@@ -152,6 +152,14 @@
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+::ng-deep .ngx-datatable.datatable-schedule-close-out .datatable-body .datatable-scroll {
+    height: calc(100vh - 180px) !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+}
+::ng-deep .ngx-datatable.datatable-schedule-close-out {
+    width: 100% !important;
+}
 
 ::ng-deep .ngx-datatable.datatable-op-80 .datatable-body .datatable-scroll {
     height: 70vh !important;
