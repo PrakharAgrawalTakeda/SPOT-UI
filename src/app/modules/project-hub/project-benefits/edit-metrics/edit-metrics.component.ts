@@ -348,6 +348,10 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                     ? `${item.financialType} (${this.localCurrency})`
                     : item.financialType;
                 });
+                this.valuecreationngxdata.forEach(item => {
+                  // If the metric format is 'Currency (local)' and local currency is available, append it to the financial type
+                  item.metricFormat = res.projectsMetricsData.metricFormat;
+                });
 
                 //this.projecthubservice.isFormChanged = false
                 this.capexAvoidanceForm.valueChanges.subscribe(res => {
@@ -371,6 +375,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
         this.showWarningMessage();
       }
     });
+    console.log(this.valuecreationngxdata)
             })
           })
         })
@@ -633,6 +638,28 @@ getFiscalYearFromDate = (dateString: string): number => {
     }
   }
 
+  getDecimalProperties(metricFormat: string): { autoAddDecimal: boolean, decimalCount: number } {
+    console.log("getDecimalProperties called with metricFormat:", metricFormat);
+
+  let result;
+    switch (metricFormat) {
+      case 'Decimal (1 decimal)':
+        return { autoAddDecimal: true, decimalCount: 1 };
+      case 'Percentage (2 decimal)':
+      case 'Decimal (2 decimals)':
+        return { autoAddDecimal: true, decimalCount: 2 };
+      case 'Whole Number':
+      case 'Currency (local)':
+        return { autoAddDecimal: false, decimalCount: 0 };
+      // Add other cases here if needed
+      default:
+      result = { autoAddDecimal: false, decimalCount: 0 };
+  }
+
+  console.log("Returning from getDecimalProperties:", result);
+  return result;
+  }
+  
 
 
   getControlName(year: string): string {

@@ -172,7 +172,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="1.5" *ngIf="mode== 'Project-Charter' || mode =='Business-Case'">
+                    [flexGrow]="1" *ngIf="mode== 'Project-Charter' || mode =='Business-Case'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
                             (click)="milestoneTableEditRow(rowIndex)">
@@ -302,7 +302,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName" [resizeable]="false"
-                    [sortable]="false" [flexGrow]="0.7" *ngIf="mode== 'Project-Charter'">
+                    [sortable]="false" [flexGrow]="0.5" *ngIf="mode== 'Project-Charter'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
                             (click)="milestoneTableEditRow(rowIndex)">
@@ -338,7 +338,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false"
-                    [sortable]="false" [flexGrow]="0.7" *ngIf="mode== 'Project-Charter' || mode =='Business-Case'">
+                    [sortable]="false" [flexGrow]="0.5" *ngIf="mode== 'Project-Charter' || mode =='Business-Case'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
                             (click)="milestoneTableEditRow(rowIndex)">
@@ -517,8 +517,8 @@
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [flexGrow]="0.2" [resizeable]="false" [sortable]="false" [draggable]="false"
-                    *ngIf="mode== 'Project-Charter' || mode == 'Business-Case'">
+                <ngx-datatable-column [flexGrow]="0.3" [resizeable]="false" [sortable]="false" [draggable]="false"
+                    *ngIf="mode== 'Project-Charter'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
 
                         <div class="flex items-center justify-start gap-6">
@@ -530,6 +530,19 @@
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
+                <ngx-datatable-column [flexGrow]="0.3" [resizeable]="false" [sortable]="false" [draggable]="false"
+                *ngIf="mode == 'Business-Case'">
+                <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+
+                    <div class="flex items-center justify-start gap-6">
+                        <a href="javascript:void(0)" title="Delete"
+                            (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)"
+                            *ngIf="(row.milestoneType?!row.milestoneType >=1:true && !islink(row.scheduleUniqueId)) || islink(row.scheduleUniqueId)">
+                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                        </a>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
 
             </ngx-datatable>
         </div>
