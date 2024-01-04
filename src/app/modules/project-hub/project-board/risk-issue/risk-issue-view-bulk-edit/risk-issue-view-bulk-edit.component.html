@@ -160,7 +160,7 @@
                             <p *ngIf="value == ''">&nbsp;</p>
                             {{getLookUpName(value)}}
                         </a>
-                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)"  style="margin-bottom: 22px;">
+                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)"  style="margin-bottom: 24px;">
                             <spot-select formControlName="functionGroupId" name="functionGroupId" [placeholder]="'Function'"
                                          [dropDownArrayType]="'object'" [dropDownArray]="getFunctionOwner()" [idPointer]="'lookUpId'"
                                          [valuePointer]="'lookUpName'">
