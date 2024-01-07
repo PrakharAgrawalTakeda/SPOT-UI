@@ -71,7 +71,7 @@
                 </div>
             </form>
             <div class="flex justify-end items-center gap-3 pr-6 mt-4">
-                <button mat-flat-button [color]="'primary-200'" type="button" class="min-w-26 text-primary bg-gray-200"
+                <button mat-flat-button [color]="'primary-200'" type="button" class="min-w-26 text-primary bg-gray-200" *ngIf="mode!= 'Project-Close-Out'"
                     (click)="openStandardMilestonesSets()">Standard Milestone Sets
                 </button>
                 <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
@@ -196,7 +196,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="1.5" *ngIf="mode== 'Project-Close-Out'">
+                    [flexGrow]="0.5" *ngIf="mode== 'Project-Close-Out'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <p *ngIf="value == ''">&nbsp;</p>
                         <div class="w-full px-1">
@@ -416,7 +416,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column name="Comment" prop="comments" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="0.7" *ngIf="mode== 'Project-Close-Out'">
+                    [flexGrow]="0.5" *ngIf="mode== 'Project-Close-Out'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
                             (click)="milestoneTableEditRow(rowIndex)">
