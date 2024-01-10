@@ -164,6 +164,26 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             this.insertarray = []
             for (let control of this.milestoneForm.controls) {
                 //debugger
+                let temp = this.scheduleData.links.find(x => x.linkItemId == control['value']['scheduleUniqueId'])
+                console.log("TEMP", temp)
+                if (temp) {
+                    //debugger
+                    let parentLink = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
+                    if (parentLink) {
+                        let parentID = temp.parentProjectId
+                        console.log("PARENT ID", parentID)
+                        if (this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId'])) {
+                            // console.log( moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish.value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'))
+                            if (moment(control['controls']['baselineFinish'].value).format('YYYY-MM-DD[T]HH:mm:ss') != this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish) {
+                                //this.insertArray(control['controls']['projectId'].value)
+                                this.insertArray(parentID)
+                            }
+                        }
+                    }
+
+
+                }
+
                 //this.scheduleData.scheduleData = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
                 if (this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId'])) {
                     // console.log( moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish.value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'))
@@ -171,6 +191,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         this.insertArray(control['controls']['projectId'].value)
                     }
                 }
+                console.log("INSERT ARRAY", this.insertarray)
             }
             if (this.viewContent == true && this.mode != "Business-Case") {
                 //this.saveScheduleBulkEdit()
@@ -225,6 +246,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         if (!this.insertarray.includes(projectId)) {
             this.insertarray.push(projectId)
         }
+        console.log(this.insertarray)
     }
     isReasonRequiredPassedChecker(formValue: any): boolean {
         if (formValue.completionDate) {
@@ -1367,7 +1389,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         this.teamMemberAdId = this.msalService.instance.getActiveAccount().localAccountId
         //if (this.projecthubservice.itemid != "new") {
         for (var i = 0; i < this.insertarray.length; i++) {
-            // debugger
+            //debugger
             this.apiService.getProjectBaselineLog(this.insertarray[i]).then((res: any) => {
                 this.baselineLog = res.projectBaselineLog.sort((a, b) => {
                     return a.baselineCount - b.baselineCount;
@@ -1495,7 +1517,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                 baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
                                 includeInCloseout: i.includeInCloseout,
                                 includeSlipChart: i.includeSlipChart,
-                                baseLineReasonCode: this.baselineForm.value.baseLineReasonCode.lookUpId
+                                baseLineReasonCode: this.baselineForm.value.baseLineReasonCode?.lookUpId
                             }
                             var baselineObj = {
                                 projectId: i.projectId,
@@ -1854,7 +1876,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 //     return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
                 // })
                 // if (baselinedates.length == baselinedates2.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates2)) {
-                debugger
+                //debugger
                 this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
                     // this.viewBaseline = true
                     // this.viewBaselineLogs = true

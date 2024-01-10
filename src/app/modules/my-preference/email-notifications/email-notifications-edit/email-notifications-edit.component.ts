@@ -212,7 +212,7 @@ export class EmailNotificationsEditComponent {
                 if (this.confidentialProjects != 'None') {
                     var activeaccount = this.msalService.instance.getActiveAccount();
                     this.roleService.getCurrentRole(activeaccount.localAccountId).then((resp: any) => {
-                        debugger
+                        //debugger
                         if (resp.confidentialProjects.length > 0) {
                             // Filter confidential projects
                             var confProjectUserList = resultSets.projectData.filter(x => resp.confidentialProjects.includes(x.problemUniqueId));
