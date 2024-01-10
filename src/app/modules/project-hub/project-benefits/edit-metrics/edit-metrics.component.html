@@ -103,17 +103,19 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
                         <!-- Display the value and make it clickable for editing if allowed -->
                         <div [ngClass]="getRowClass(row.financialType)" *ngIf="!ptTableEditStack.includes(rowIndex) || !canEditRow(row.financialType)" (click)="ptTableEditRow(rowIndex)" style="padding-left:30px;">
-                            {{ row.values['FY' + col.year.slice(-2)] }}
+                            {{ formatValue(row.values['FY' + col.year.slice(-2)], row.metricFormat) }}
                         </div>
                 
                         <!-- Form field for editing, shown only if editing is allowed -->
                         <form *ngIf="ptTableEditStack.includes(rowIndex) && canEditRow(row.financialType)" [formGroup]="bulkEditFormArray.at(rowIndex)" (click)="preventDefault($event)">
                             <spot-input class="w-full" [formControlName]="getControlName(col.year)"
+                            [inputType]="getInputType(row.metricFormat)"
                                         [autoAddDecimal]="getDecimalProperties(row.metricFormat).autoAddDecimal" 
-                                        [inputType]="'Number'"
+                                        
                                         [decimalCount]="getDecimalProperties(row.metricFormat).decimalCount"
                                         (change)="onValueChange(rowIndex, col.year, $event.target.value)">
                             </spot-input>
+                            <!-- [inputType]="'Number'" -->
                           </form>
                     </ng-template>
                 </ngx-datatable-column>

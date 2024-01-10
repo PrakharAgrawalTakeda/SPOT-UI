@@ -86,7 +86,7 @@
                             <p *ngIf="value == ''">&nbsp;</p>
                             {{getLookUpName(value)}}
                         </a>
-                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
+                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)" style="margin-bottom: 18px;">
                             <spot-select formControlName="probabilityId" name="probability" [placeholder]="'Probability'"
                                          [dropDownArrayType]="'object'" [dropDownArray]="getprobability()" [idPointer]="'lookUpId'"
                                          [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
@@ -114,7 +114,7 @@
                             <p *ngIf="value == ''">&nbsp;</p>
                             {{getLookUpName(value)}}
                         </a>
-                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
+                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)" style="margin-bottom: 18px;">
                             <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
                                 <spot-select formControlName="impactId" name="impact" [placeholder]="'Impact'"
                                              [dropDownArrayType]="'object'" [dropDownArray]="getimpact()" [idPointer]="'lookUpId'"

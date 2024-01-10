@@ -277,6 +277,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                 this.compare(this.columnYear)
                 console.log(this.columnYear)
                 if (pc.problemType == 'Strategic Initiative / Program') {
+
                   this.valuecreationngxdata = [
                     {
                       financialType: 'Target',
@@ -287,12 +288,14 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                     { financialType: 'Actual', values: this.processFinancialList(res.projectsMetricsData.strategicActualList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) }
                   ];
                 } else {
+                 console.log("THIS",res.projectsMetricsData) 
                   this.valuecreationngxdata = [
                     { financialType: 'Baseline Plan', values: this.processFinancialList(res.projectsMetricsData.strategicBaselineList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) },
                     { financialType: 'Current Plan', values: this.processFinancialList(res.projectsMetricsData.strategicCurrentList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) },
                     { financialType: 'Actual', values: this.processFinancialList(res.projectsMetricsData.strategicActualList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) }
                   ];
                 }
+                console.log("YO", this.valuecreationngxdata)
                 if (!pc.financialRealizationStartDate && (!res.projectsMetricsDataYearly || res.projectsMetricsDataYearly.length === 0)) {
                   const currentYear = new Date().getFullYear();
                   const shortYear = currentYear % 100; // Get the last two digits of the year
@@ -450,9 +453,16 @@ getFiscalYearFromDate = (dateString: string): number => {
 
   onValueChange(rowIndex: number, year: string, newValue: string): void {
     const financialTypeRow = this.valuecreationngxdata[rowIndex];
+    console.log("HERE", financialTypeRow);
     if (financialTypeRow) {
       const fiscalYearKey = 'FY' + year.slice(-2);
-      financialTypeRow.values[fiscalYearKey] = this.convertToNumber(newValue);
+  
+      // Directly assign newValue for 'Time (HH:MM)' format, otherwise convert to number
+      if (financialTypeRow.metricFormat === 'Time (HH:MM)') {
+        financialTypeRow.values[fiscalYearKey] = newValue;
+      } else {
+        financialTypeRow.values[fiscalYearKey] = this.convertToNumber(newValue);
+      }
   
       // Recalculate the total based on the metric format
       financialTypeRow.total = this.calculateTotalForFinancialType(financialTypeRow);
@@ -460,13 +470,14 @@ getFiscalYearFromDate = (dateString: string): number => {
       // Update the form array to trigger change detection
       const formGroup = this.bulkEditFormArray.at(rowIndex) as FormGroup;
       formGroup.patchValue({
-        [fiscalYearKey]: this.convertToNumber(newValue),
+        [fiscalYearKey]: financialTypeRow.values[fiscalYearKey],
         total: financialTypeRow.total, // Update the total in the form group
       });
-  
+  console.log(formGroup)
       this.projecthubservice.isFormChanged = true;
     }
   }
+  
   
 
 
@@ -477,14 +488,23 @@ getFiscalYearFromDate = (dateString: string): number => {
 
   sumTimesHHMM(times: string[]): string {
     let totalMinutes = times.reduce((total, time) => {
-      const [hours, minutes] = time.split(':').map(Number);
-      return total + hours * 60 + minutes;
+        if (time && this.isValidTimeFormat(time)) {
+            const [hours, minutes] = time.split(':').map(Number);
+            return total + hours * 60 + minutes;
+        }
+        return total;
     }, 0);
 
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
     return `${hours}:${minutes.toString().padStart(2, '0')}`;
-  }
+}
+
+isValidTimeFormat(timeStr: string): boolean {
+    const regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+    return regex.test(timeStr);
+}
+
 
 
   calculateTotalForFinancialType(financialType: any): string {
@@ -512,12 +532,28 @@ getFiscalYearFromDate = (dateString: string): number => {
 
 
   calculateTotalFromList(listString) {
-    if (!listString) return 0;
-    return listString.split(',').reduce((acc, item) => {
-      const match = item.match(/FY\d+:\s*([0-9.]+)/);
-      return match ? acc + parseFloat(match[1]) : acc;
-    }, 0);
+    if (!listString) return '0';
+  
+    // Check if the format is HH:MM
+    const isTimeFormat = listString.match(/\d{1,2}:\d{2}/);
+  
+    if (isTimeFormat) {
+      return listString.split(',').reduce((acc, item) => {
+        const timeMatch = item.match(/\d{1,2}:\d{2}/);
+        if (timeMatch) {
+          const [hours, minutes] = timeMatch[0].split(':').map(Number);
+          return acc + (hours * 60 + minutes);
+        }
+        return acc;
+      }, 0);
+    } else {
+      return listString.split(',').reduce((acc, item) => {
+        const match = item.match(/FY\d+:\s*([0-9.]+)/);
+        return match ? acc + parseFloat(match[1]) : acc;
+      }, 0);
+    }
   }
+  
 
 
   toggleTemporaryImpact(event: any) {
@@ -543,23 +579,27 @@ getFiscalYearFromDate = (dateString: string): number => {
 
 
 
-  processFinancialList(listString: string, minYear: number, maxYear: number, metricFormat: string): any {
+  processFinancialList(listString, minYear, maxYear, metricFormat) {
     const values = this.initializeValues(minYear, maxYear);
-
+  
     if (!listString) {
       return values;
     }
-
+  
     listString.split(',').forEach(item => {
-      const [yearKey, value] = item.trim().split(':');
-      if (yearKey && value) {
-        // Use the two-digit year format directly
-        values[yearKey.trim()] = this.formatValue(value.trim(), metricFormat);
+      // Use a regex to properly separate the fiscal year key from the value
+      const match = item.trim().match(/(FY\d+):\s*(.+)/);
+      if (match) {
+        const yearKey = match[1];
+        const value = match[2];
+        values[yearKey] = this.formatValue(value, metricFormat);
       }
     });
-
+  
+    console.log("VALUES", values);
     return values;
   }
+  
 
 
 
@@ -619,27 +659,37 @@ getFiscalYearFromDate = (dateString: string): number => {
     }
   }
 
-  // Function to format the value based on metricFormat
-  formatValue(value: string, metricFormat: string): string {
-    switch (metricFormat) {
-      case 'Time (HH:MM)':
-      case '':
-        return value;
-      case 'Whole Number':
-      case 'Currency (local)':
-        return parseInt(value).toFixed(0); // Formats as whole number
-      case 'Decimal (1 decimal)':
-        return parseFloat(value).toFixed(1); // Formats with 1 decimal place
-      case 'Percentage (2 decimal)':
-      case 'Decimal (2 decimals)':
-        return parseFloat(value).toFixed(2); // Formats with 2 decimal places
-      default:
-        return value; // Default format if no specific format is matched
-    }
+ // Function to format the value based on metricFormat
+formatValue(value: string, metricFormat: string): string {
+  switch (metricFormat) {
+    case 'Time (HH:MM)':
+      // Adjusted regex to be more flexible
+      const regex = /^(\d{1,2}):(\d{2})$/;
+      if (regex.test(value)) {
+        const [hours, minutes] = value.split(':').map(Number);
+        // Ensure hours are within 0-23 and minutes within 0-59
+        if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
+          return value;
+        }
+      }
+      return '00:00'; // or return the original value or a specific error message
+    case '':
+      return value;
+    case 'Whole Number':
+    case 'Currency (local)':
+      return parseInt(value).toFixed(0); // Formats as whole number
+    case 'Decimal (1 decimal)':
+      return parseFloat(value).toFixed(1); // Formats with 1 decimal place
+    case 'Percentage (2 decimal)':
+    case 'Decimal (2 decimals)':
+      return parseFloat(value).toFixed(2); // Formats with 2 decimal places
+    default:
+      return value; // Default format if no specific format is matched
   }
+}
+
 
   getDecimalProperties(metricFormat: string): { autoAddDecimal: boolean, decimalCount: number } {
-    console.log("getDecimalProperties called with metricFormat:", metricFormat);
 
   let result;
     switch (metricFormat) {
@@ -656,11 +706,16 @@ getFiscalYearFromDate = (dateString: string): number => {
       result = { autoAddDecimal: false, decimalCount: 0 };
   }
 
-  console.log("Returning from getDecimalProperties:", result);
   return result;
   }
   
-
+  getInputType(metricFormat: string): 'Text' | 'Number' | 'Time' {
+    if (metricFormat === 'Time (HH:MM)') {
+      return 'Time';
+    } else {
+      return 'Number'; // Default to Number for other formats
+    }
+  }
 
   getControlName(year: string): string {
     return 'FY' + year.slice(-2); // Adjust as necessary to match the control names
@@ -971,15 +1026,22 @@ getFiscalYearFromDate = (dateString: string): number => {
 
   // Helper function to create financial list string
   createFinancialList(financialType) {
-    return this.valuecreationngxdata
+    //debugger
+    let result
+    result = this.valuecreationngxdata
       .filter(data => data.financialType === financialType)
       .map(data => {
         const yearlyValues = Object.entries(data.values)
           .map(([year, value]) => `${year}: ${value}`)
           .join(', ');
         return yearlyValues;
+
       })
       .join(', ');
+      console.log(result)
+      return result
+
+
   }
 
   getFinancialYearId(year: string): string {
@@ -1008,6 +1070,7 @@ getFiscalYearFromDate = (dateString: string): number => {
     const strategicBaselineList = this.createFinancialList('Baseline Plan');
     const strategicCurrentList = this.createFinancialList('Current Plan');
     const strategicActualList = this.createFinancialList('Actual');
+    console.log(strategicCurrentList)
 
     const strategicTargetTotal = this.calculateTotalFromList(strategicTargetList);
     const strategicBaselineTotal = this.calculateTotalFromList(strategicBaselineList);
@@ -1026,6 +1089,7 @@ console.log(this.capexAvoidanceForm.get('metricLevelId').value)
       temporaryImpact: this.tempImpactForm.get('temporaryImpact').value,
 
       // Calculated values and lists
+
       strategicTarget: strategicTargetTotal.toString(),
       strategicBaseline: strategicBaselineTotal.toString(),
       strategicCurrent: strategicCurrentTotal.toString(),
@@ -1039,14 +1103,19 @@ console.log(this.capexAvoidanceForm.get('metricLevelId').value)
       // Other fields like includeProposalSlide, includeCharter, etc., if they need to be sent
       includePerformanceDashboard: this.includeinForm.get('toggleIncludeIn').value
     };
-
+console.log(projectsMetricsData)
     // Generate projectsMetricsDataYearly array based on the columnYear and valuecreationngxdata
     const projectsMetricsDataYearly = this.columnYear.flatMap(yearObj => {
       const financialYearId = this.getFinancialYearId(yearObj.year); // Convert year to financial year ID
       return this.valuecreationngxdata.map(financialType => {
         const fiscalYearKey = `FY${yearObj.year.slice(-2)}`; // Extract last two digits for year
         const financialTypeId = this.getFinancialTypeId(financialType.financialType); // Use your method to get financial type ID
-        const metricValue = financialType.values[fiscalYearKey] || '0';
+        let metricValue = financialType.values[fiscalYearKey] || '0';
+        // Check if metricValue is in HH:MM format and convert to minutes
+    if (/\d{1,2}:\d{2}/.test(metricValue)) {
+      const [hours, minutes] = metricValue.split(':').map(Number);
+      metricValue = (hours * 60 + minutes).toString();
+    }
         return {
           projectId: this.projectData.projectId,
           metricId: this.metricData.metricID,
