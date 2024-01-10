@@ -41,11 +41,11 @@ export class BudgetCapexOpexTableComponent {
             this.data = this.inputData;
         }
         if(this.mode=="Opex"){
-            this.data = this.inputData.budgetForecasts.filter(x => x.budgetData == "OpEx Forecast")
+            this.data = this.inputData ?  this.inputData.budgetForecasts.filter(x => x.budgetData == "OpEx Forecast") : [];
             this.budgetService.forecastEditButtonEnabler();
         }
         if(this.mode=="Capex"){
-            this.data = this.inputData.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast")
+            this.data = this.inputData ?  this.inputData.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast") : [];
         }
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         this.setTableColumnMode();

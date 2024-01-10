@@ -43,7 +43,7 @@ export class MetricRepositoryComponent {
                 this.metricRepositoryData.forEach(element => {
                     element.metricTypeID = element.metricTypeID == "e7a9e055-1319-4a4f-b929-cd7777599e39" ? 'Global' : 'Local'
                     element.metricPortfolioID = element.metricPortfolioID == "2eb536f8-bb88-4bd7-b4d5-4d1fb287059a" ? 'Global' : this.filterCriteria.portfolioOwner.filter(x => x.portfolioOwnerId==element.metricPortfolioID)[0]?.portfolioOwner
-                    element.metricCategoryID = element.metricCategoryID && element.metricCategoryID.lookUpId != '' ? this.myPreferenceService.lookUpMaster.find(x => x.lookUpId == element.metricCategoryID).lookUpName : ''                   
+                    element.metricCategoryID = element.metricCategoryID && element.metricCategoryID.lookUpId != '' ? this.myPreferenceService.lookUpMaster.find(x => x.lookUpId == element.metricCategoryID)?.lookUpName : ''
                 })
             })
             .catch((error) => {
@@ -83,7 +83,7 @@ export class MetricRepositoryComponent {
         })
     }
     getLookUpName(id: any): any {
-        return id && id.lookUpId != '' ? this.myPreferenceService.lookUpMaster.find(x => x.lookUpId == id).lookUpName : ''
+        return id && id.lookUpId != '' ? this.myPreferenceService.lookUpMaster.find(x => x.lookUpId == id)?.lookUpName : ''
     }
     isEditable(row: any): boolean {
         return row.metricTypeID != "e7a9e055-1319-4a4f-b929-cd7777599e39";
