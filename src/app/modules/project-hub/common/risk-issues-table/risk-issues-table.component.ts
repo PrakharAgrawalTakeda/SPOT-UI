@@ -114,6 +114,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
      }
 
      if(this.callLocation == 'Project-Charter'){
+         this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
          this.riskIssueViewEditType = "ProjectCharterRiskIssueAddSingle"
          this.riskIssueBulkEditType = "ProjectCharterRiskIssueBulkEdit"
      }
@@ -209,7 +210,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
           }else{
               this.apiService.deleteRiskIssue(this.projectid, id).then(res => {
                   if (this.callLocation == 'Project-Charter') {
-                      this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+                      this.apiService.updateReportDates(this.id, "ModifiedDate").then(secondRes => {
                           this.projecthubservice.submitbutton.next(true)
                           this.projecthubservice.isNavChanged.next(true)
                       })

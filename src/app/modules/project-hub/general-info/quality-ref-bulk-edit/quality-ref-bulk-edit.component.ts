@@ -172,7 +172,7 @@ export class QualityRefBulkEditComponent implements OnInit {
   addQR() {
     this.qualityRefForm.push(new FormGroup({
       qualityUniqueId: new FormControl(''),
-      qualityReferenceTypeId: new FormControl(null),
+      qualityReferenceTypeId: new FormControl(''),
       qualityReference1: new FormControl(''),
       problemUniqueId: new FormControl(this.projectHubService.projectid)
     }))
