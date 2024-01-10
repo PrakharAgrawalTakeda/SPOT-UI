@@ -14,7 +14,7 @@
     </fuse-drawer>
 </fuse-drawer>
 <!-- Budget/Spend -->
-<div class="flex flex-col min-w-0 overflow-hidden pt-12">
+<div class="flex flex-col min-w-0 overflow-hidden pt-12 w-full">
     <mat-drawer-container class="flex-auto h-full"
         [ngStyle]="{ 'position' : filterDrawer.opened ? 'fixed' : 'relative'}">
         <!-- Drawer -->
@@ -363,7 +363,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
         </mat-drawer>
 
         <!-- Drawer content -->
-        <mat-drawer-content class="flex flex-col" style="width: 100vw;">
+        <mat-drawer-content class="flex flex-col w-full">
 
             <!-- Header -->
             <div [hidden]='!showContent' class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10">
