@@ -78,6 +78,10 @@
     cursor: pointer !important;
     //margin-right: 50px !important;
     color: rgb(81, 174, 245);
+    white-space: normal; /* Allow wrapping */
+    word-wrap: break-word; /* Break words to next line */
+    line-height: normal; /* Adjust line height for better readability */
+    max-height: none; /* Remove any maximum height restrictions */
 }
 .projectName:hover {
     text-decoration: underline;
