@@ -17,6 +17,7 @@ export class AssociatedProjectsComponent implements OnInit {
     single: any[];
     localCurrency: any = [];
     filterCriteria: any = {};
+    allprojects: any;
     constructor(
         private apiService: ProjectApiService,
         private _Activatedroute: ActivatedRoute,
@@ -53,6 +54,8 @@ export class AssociatedProjectsComponent implements OnInit {
         this.apiService.getProjectTree(this.id).then((res: any) => {
             this.apiService.getfilterlist().then((filterCriteria: any) => {
                 this.filterCriteria = filterCriteria
+                console.log(res)
+                this.allprojects = res
                 res.values.forEach(project => {
                     if(project.problemUniqueId == this.projecthubservice.projectid){
                         this.problemID = project.problemId
@@ -164,16 +167,20 @@ export class AssociatedProjectsComponent implements OnInit {
 
         reportAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
+                debugger
                 let problemIds: string[] = [];
-                problemIds.push(this.problemID.toString())
-
-                this.projecthubservice.projectChildren.map(x => {
-                    problemIds.push(x.problemId.toString())
-                });
-                this.apiService.programReport(problemIds).then((res: any) => {
-                });
-            }
-        })
+                problemIds.push(this.problemID.toString());
+                console.log(typeof this.allprojects)
+                problemIds = this.allprojects.values.map(project => project.problemId.toString());
+    
+                const problemIdsString = ',' + problemIds.join(',');
+    
+                console.log(problemIdsString);
+            this.apiService.generateReports(problemIdsString,'Portfolio Report').then((res: any) => {
+                // handle response
+            });
+        }
+    });
     }
     // tootlipFormatter(value, series) {
     //     return value.toString();
