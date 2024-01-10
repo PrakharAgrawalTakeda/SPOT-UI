@@ -167,7 +167,7 @@ export class AssociatedProjectsComponent implements OnInit {
 
         reportAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
-                debugger
+                //debugger
                 let problemIds: string[] = [];
                 problemIds.push(this.problemID.toString());
                 console.log(typeof this.allprojects)

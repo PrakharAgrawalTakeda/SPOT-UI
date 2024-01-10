@@ -449,7 +449,6 @@ export class EditMetricsComponent implements OnInit, OnChanges {
     var yearlist = []
     const allYears = new Set<string>(); // To store unique years
     allMetrics.forEach(metric => {
-      debugger
       metric.projectsMetricsDataYearly.forEach(yearlyData => {
         const yearId = yearlyData.financialYearId;
         if (yearId) {
