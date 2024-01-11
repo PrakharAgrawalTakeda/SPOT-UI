@@ -4,7 +4,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { PortfolioCenterService } from '../../portfolio-center.service';
 import { AuthService } from 'app/core/auth/auth.service';
-import { SheetDescriptor } from '@progress/kendo-angular-spreadsheet';
+import { SheetDescriptor, SpreadsheetComponent } from '@progress/kendo-angular-spreadsheet';
 import '@progress/kendo-ui';
 declare var kendo: any;
 
@@ -43,113 +43,185 @@ export class ForecastExcelUpdateComponent {
   y3Label: string = '';
   y4Label: string = '';
   forecastDB = []
-data: SheetDescriptor[] = [
-  {
-      name: 'Food Order',
+  finalDatatoSheet = [
+    {
+      name: "Food Order",
+      mergedCells: ["A1:G1", "C15:E15"],
       rows: [
-          {
-              cells: [
-                  {
-                      value: 'ID',
-                      background: 'rgb(167,214,255)',
-                      textAlign: 'center',
-                      color: 'rgb(0,62,117)',
-                  },
-                  {
-                      value: 'Product',
-                      background: 'rgb(167,214,255)',
-                      textAlign: 'center',
-                      color: 'rgb(0,62,117)',
-                  },
-              ],
-          },
-          {
-              cells: [
-                  {
-                      value: 216321,
-                      textAlign: 'center',
-                      background: 'rgb(229,243,255)',
-                      color: 'rgb(0,62,117)',
-                  },
-                  {
-                      value: 'Calzone',
-                      background: 'rgb(229,243,255)',
-                      color: 'rgb(0,62,117)',
-                  },
-              ],
-          },
-          {
-              cells: [
-                  {
-                      value: 546897,
-                      textAlign: 'center',
-                      background: 'rgb(229,243,255)',
-                      color: 'rgb(0,62,117)',
-                  },
-                  {
-                      value: 'Margarita',
-                      background: 'rgb(229,243,255)',
-                      color: 'rgb(0,62,117)',
-                  },
-              ],
-          },
-          {
-              cells: [
-                  {
-                      value: 456231,
-                      textAlign: 'center',
-                      background: 'rgb(229,243,255)',
-                      color: 'rgb(0,62,117)',
-                  },
-                  {
-                      value: 'Pollo Formaggio',
-                      background: 'rgb(229,243,255)',
-                      color: 'rgb(0,62,117)',
-                  },
-              ],
-          },
-          {
-              cells: [
-                  {
-                      value: 455873,
-                      textAlign: 'center',
-                      background: 'rgb(229,243,255)',
-                      color: 'rgb(0,62,117)',
-                  },
-                  {
-                      value: 'Greek Salad',
-                      background: 'rgb(229,243,255)',
-                      color: 'rgb(0,62,117)',
-                  },
-              ],
-          },
-          {
-              cells: [
-                  {
-                      value: 456892,
-                      textAlign: 'center',
-                      background: 'rgb(229,243,255)',
-                      color: 'rgb(0,62,117)',
-                  },
-                  {
-                      value: 'Spinach and Blue Cheese',
-                      background: 'rgb(229,243,255)',
-                      color: 'rgb(0,62,117)',
-                  },
-              ],
-          },
+        {
+          height: 70,
+          cells: [
+            {
+              index: 0,
+              value: "Invoice #52 - 06/23/2022",
+              fontSize: 32,
+              background: "rgb(96,181,255)",
+              textAlign: "center",
+              color: "white",
+            },
+          ],
+        },
+        {
+          height: 25,
+          cells: [
+            {
+              value: "ID",
+              background: "rgb(167,214,255)",
+              textAlign: "center",
+              color: "rgb(0,62,117)",
+            },
+            {
+              value: "Product",
+              background: "rgb(167,214,255)",
+              textAlign: "center",
+              color: "rgb(0,62,117)",
+            },
+            {
+              value: "Quantity",
+              background: "rgb(167,214,255)",
+              textAlign: "center",
+              color: "rgb(0,62,117)",
+            },
+            {
+              value: "Price",
+              background: "rgb(167,214,255)",
+              textAlign: "center",
+              color: "rgb(0,62,117)",
+            },
+            {
+              value: "Tax",
+              background: "rgb(167,214,255)",
+              textAlign: "center",
+              color: "rgb(0,62,117)",
+            },
+            {
+              value: "Amount",
+              background: "rgb(167,214,255)",
+              textAlign: "center",
+              color: "rgb(0,62,117)",
+            },
+            {
+              background: "rgb(167,214,255)",
+              color: "rgb(0,62,117)",
+            },
+          ],
+        },
+        {
+          cells: [
+            {
+              value: 216321,
+              textAlign: "center",
+              background: "rgb(255,255,255)",
+              color: "rgb(0,62,117)",
+            },
+            {
+              value: "Calzone",
+              background: "rgb(255,255,255)",
+              color: "rgb(0,62,117)",
+            },
+            {
+              value: 1,
+              textAlign: "center",
+              background: "rgb(255,255,255)",
+              color: "rgb(0,62,117)",
+            },
+            {
+              value: 12.39,
+              format: "$#,##0.00",
+              background: "rgb(255,255,255)",
+              color: "rgb(0,62,117)",
+            },
+            {
+              formula: "C3*D3*0.2",
+              format: "$#,##0.00",
+              background: "rgb(255,255,255)",
+              color: "rgb(0,62,117)",
+            },
+            {
+              formula: "C3*D3+E3",
+              format: "$#,##0.00",
+              background: "rgb(255,255,255)",
+              color: "rgb(0,62,117)",
+            },
+            {
+              background: "rgb(255,255,255)",
+              color: "rgb(0,62,117)",
+            },
+          ],
+        },
+        {
+          cells: [
+            {
+              value: 546897,
+              textAlign: "center",
+              background: "rgb(229,243,255)",
+              color: "rgb(0,62,117)",
+            },
+            {
+              value: "Margarita",
+              background: "rgb(229,243,255)",
+              color: "rgb(0,62,117)",
+            },
+            {
+              value: 2,
+              textAlign: "center",
+              background: "rgb(229,243,255)",
+              color: "rgb(0,62,117)",
+            },
+            {
+              value: 8.79,
+              format: "$#,##0.00",
+              background: "rgb(229,243,255)",
+              color: "rgb(0,62,117)",
+            },
+            {
+              formula: "C4*D4*0.2",
+              format: "$#,##0.00",
+              background: "rgb(229,243,255)",
+              color: "rgb(0,62,117)",
+            },
+            {
+              formula: "C4*D4+E4",
+              format: "$#,##0.00",
+              background: "rgb(229,243,255)",
+              color: "rgb(0,62,117)",
+            },
+            {
+              background: "rgb(229,243,255)",
+              color: "rgb(0,62,117)",
+            },
+          ],
+        },
+        
       ],
       columns: [
-          {
-              width: 100,
-          },
-          {
-              width: 100,
-          },
+        {
+          width: 100,
+        },
+        {
+          width: 215,
+        },
+        {
+          width: 115,
+        },
+        {
+          width: 115,
+        },
+        {
+          width: 115,
+        },
+        {
+          width: 155,
+        },
       ],
-  },
-];
+    },
+    {
+      name: "Sheet1",
+    },
+  ];
+
 @ViewChild('spreadsheet') el: ElementRef;
+@ViewChild('Forecastspreadsheet') forecastElement: ElementRef;
   constructor(private portfoliService: PortfolioApiService, public fuseAlert: FuseConfirmationService, public PortfolioCenterService: PortfolioCenterService, private auth: AuthService) {
     this.ForecastForm.valueChanges.subscribe(res => {
       if (this.showContent) {
@@ -228,27 +300,135 @@ data: SheetDescriptor[] = [
           this.showData = false;
           this.showDataForecast = false
           this.forecastExcelHistorical = this.ExcelData.filter(x => x.budgetDataType == res.lookUpName)
-          this.historicalForm.value.patchValue = []
-          this.historicalForm.controls = []
-          for (var i of this.forecastExcelHistorical) {
-            this.historicalForm.push(new FormGroup({
-              budgetDataType: new FormControl(i.budgetDataType),
-              budgetDataTypeID: new FormControl(i.budgetDataTypeID),
-              budgetHistoricalActualID: new FormControl(i.budgetHistoricalActualID),
-              capitalBudgetID: new FormControl(i.capitalBudgetID),
-              problemID: new FormControl(i.problemID),
-              problemTitle: new FormControl(i.problemTitle),
-              projectID: new FormControl(i.projectID),
-              historicalActualFY14: new FormControl(i.historicalActualFY14),
-              historicalActualFY15: new FormControl(i.historicalActualFY15),
-              historicalActualFY16: new FormControl(i.historicalActualFY16),
-              historicalActualFY17: new FormControl(i.historicalActualFY17),
-              historicalActualFY18: new FormControl(i.historicalActualFY18),
-              historicalActualFY19: new FormControl(i.historicalActualFY19),
-              historicalActualFY20: new FormControl(i.historicalActualFY20),
-              historicalActualFY21: new FormControl(i.historicalActualFY21),
-            }), { emitEvent: false })
+        //   this.historicalForm.value.patchValue = []
+        //   this.historicalForm.controls = []
+        //   for (var i of this.forecastExcelHistorical) {
+        //     this.historicalForm.push(new FormGroup({
+        //       budgetDataType: new FormControl(i.budgetDataType),
+        //       budgetDataTypeID: new FormControl(i.budgetDataTypeID),
+        //       budgetHistoricalActualID: new FormControl(i.budgetHistoricalActualID),
+        //       capitalBudgetID: new FormControl(i.capitalBudgetID),
+        //       problemID: new FormControl(i.problemID),
+        //       problemTitle: new FormControl(i.problemTitle),
+        //       projectID: new FormControl(i.projectID),
+        //       historicalActualFY14: new FormControl(i.historicalActualFY14),
+        //       historicalActualFY15: new FormControl(i.historicalActualFY15),
+        //       historicalActualFY16: new FormControl(i.historicalActualFY16),
+        //       historicalActualFY17: new FormControl(i.historicalActualFY17),
+        //       historicalActualFY18: new FormControl(i.historicalActualFY18),
+        //       historicalActualFY19: new FormControl(i.historicalActualFY19),
+        //       historicalActualFY20: new FormControl(i.historicalActualFY20),
+        //       historicalActualFY21: new FormControl(i.historicalActualFY21),
+        //     }), { emitEvent: false })
+        // }
+        var ExcelCol = [
+          { field: "budgetHistoricalActualID", title: "Budget Global ID" },
+          { field: "budgetDatatypeID", title: "Budget Global ID" },
+          { field: "problemtitle", title: "Budget Global ID" },
+          { field: "BudgetDataType", title: "Budget Data Type" },
+          { field: "ProblemId", title: "Problem Id" },
+          { field: "CapitalBudgetId", title: "Capital Budget Id" },
+          { field: "HistoricalActual", title: "Historical Actual" },
+          { field: "historicalActualFY14", title: "historicalActualFY14" },
+          { field: "historicalActualFY15", title: "historicalActualFY15" },
+          { field: "historicalActualFY16", title: "historicalActualFY16" },
+          { field: "historicalActualFY17", title: "historicalActualFY17" },
+          { field: "historicalActualFY18", title: "historicalActualFY18" },
+          { field: "historicalActualFY19", title: "historicalActualFY19" },
+          { field: "historicalActualFY20", title: "historicalActualFY20" },
+          { field: "historicalActualFY21", title: "historicalActualFY21" },
+        ]
+        var firstrow={
+          height: 30,
+          cells: [
+          {
+              value: "Budget Data Type", background: "rgb(144,164,174)", textAlign: "left", color: "white", fontSize: 18
+          }
+          ]
         }
+        var secondrow = {
+          cells: [
+            {
+              value: "budgetHistoricalActualID", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center", hidden: true
+              },
+              {
+              value: 'budgetDataTypeID', bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "problemTitle", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: 'Budget Data Type', bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Problem Id", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Capital Budget Id", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Historical Actual", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY14", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY15", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY16", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY17", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY18", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY19", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY20", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY21", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              }
+            ]
+        }
+        var finaldata = []
+        finaldata.push(firstrow)
+        finaldata.push(secondrow)
+        var rowData
+        for (var i of this.forecastExcelHistorical) {
+          rowData={cells: [
+            { value: i.budgetHistoricalActualID, textAlign: "center"},
+            { value: i.budgetDataTypeID, textAlign: "center"},
+            { value: i.budgetDataType, textAlign: "center"},
+            { value: i.capitalBudgetID, textAlign: "center"},
+            { value: i.problemID, textAlign: "center"},
+            { value: i.problemTitle, textAlign: "center"},
+            { value: i.historicalActual, textAlign: "center"},
+            { value: i.historicalActualFY14, textAlign: "right"},
+            { value: i.historicalActualFY15, textAlign: "center"},
+            { value: i.historicalActualFY16, textAlign: "right"},
+            { value: i.historicalActualFY17, textAlign: "right"},
+            { value: i.historicalActualFY18, textAlign: "right"},
+            { value: i.historicalActualFY19, textAlign: "center"},
+            { value: i.historicalActualFY20, textAlign: "center"},
+            { value: i.historicalActualFY21, textAlign: "center"}
+            ]
+          }
+          finaldata.push(rowData)
+        }
+          var spreadsheet = kendo.jQuery(this.el.nativeElement).data("kendoSpreadsheet")
+          var sheet = spreadsheet.activeSheet();
+          // sheet.setDataSource(finaldata,ExcelCol);
+          sheet.setDataSource(finaldata);
+          sheet.dataSource.read();
+          // spreadsheet.spreadsheetWidget.fromJSON({sheets: finaldata})
+          sheet.hideColumn(0)
+          sheet.hideColumn(1)
+          sheet.hideColumn(2)
           this.showData = true;
         }
       }
@@ -272,409 +452,7 @@ data: SheetDescriptor[] = [
       for(var i=0;i<BudgetId.length;i++){
         this.LookupDataBudget.push({ID:BudgetId[i]})
       }
-      // kendo.jQuery(this.el.nativeElement).kendoSpreadsheet({
-      //   sheets: [
-      //   {
-      //                    frozenRows: 2,
-             
-      //       name: "Contracts",
-      //       mergedCells: [
-      //           "A1:L1"
-      //       ],
-      //       filter: {
-      //           ref: "A2:L49",
-      //           columns:[]
-      //       },
-      //       columns: [
-      //           // { field: "link", width: 70 },
-      //           { width: 50 },
-      //           { width: 50 },
-      //           { width: 80 },
-      //           { width: 80 },
-      //           { width: 80 },
-      //           { width: 80 },
-      //           { width: 80 },
-      //           { width: 80 },
-      //           { width: 80 },
-      //           { width: 80 },
-      //           { width: 80 }
-      //       ],
-      //       rows: [
-      //       {
-      //           height: 30,
-      //           cells: [
-      //           {
-      //               value: "Contracts", background: "rgb(144,164,174)", textAlign: "left", color: "white", fontSize: 18
-      //           }
-      //           ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "Contract#", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-      //       },
-      //       {
-      //       value: "P/S", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-      //       },
-      //       {
-      //       value: "Co.", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-      //       },
-      //       {
-      //       value: "Date", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-      //       },
-      //       {
-      //       value: "Comm", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-      //       },
-      //       {
-      //       value: "Price", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-      //       },
-      //       {
-      //       value: "FOB", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-      //       },
-      //       {
-      //       value: "Qty", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-      //       },
-      //       {
-      //       value: "Appld", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-      //       },
-      //       {
-      //       value: "Bal", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-      //       },
-      //       {
-      //       value: "S.Date", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-      //       },
-      //       {
-      //       value: "E.Date", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-      //       }
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "963798", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "s", textAlign: "center"},
-      //       { value: new Date("10/13/21"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    178.00, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:     138, textAlign: "right"},
-      //       { value:      46, textAlign: "right"},
-      //       { value:      92, textAlign: "right"},
-      //       { value: new Date("11/01/21"), textAlign: "center"},
-      //       { value: new Date("12/31/21"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "963686", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "s", textAlign: "center"},
-      //       { value: new Date("08/11/21"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    159.00, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:      69, textAlign: "right"},
-      //       { value:      69, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("08/06/21"), textAlign: "center"},
-      //       { value: new Date("10/31/21"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "676598", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "y", textAlign: "center"},
-      //       { value: new Date("07/27/21"), textAlign: "center"},
-      //       { value: "lgrlc", textAlign: "center"},
-      //       { value:      6.45, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "chamn", textAlign: "center"},
-      //       { value:      35, textAlign: "right"},
-      //       { value:      35, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("07/26/21"), textAlign: "center"},
-      //       { value: new Date("07/30/21"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "676525", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "y", textAlign: "center"},
-      //       { value: new Date("06/23/21"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    159.00, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("06/21/21"), textAlign: "center"},
-      //       { value: new Date("06/21/21"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "675894", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "y", textAlign: "center"},
-      //       { value: new Date("11/24/20"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    159.00, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:      92, textAlign: "right"},
-      //       { value:      92, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("11/23/20"), textAlign: "center"},
-      //       { value: new Date("04/30/21"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "963109", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "s", textAlign: "center"},
-      //       { value: new Date("10/21/20"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    159.00, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("10/19/20"), textAlign: "center"},
-      //       { value: new Date("10/19/20"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "675600", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "y", textAlign: "center"},
-      //       { value: new Date("07/21/20"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    159.00, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("07/27/20"), textAlign: "center"},
-      //       { value: new Date("07/31/20"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "674490", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "y", textAlign: "center"},
-      //       { value: new Date("08/27/19"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    198.00, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:      92, textAlign: "right"},
-      //       { value:      92, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("11/01/19"), textAlign: "center"},
-      //       { value: new Date("04/30/20"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "674483", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "y", textAlign: "center"},
-      //       { value: new Date("08/26/19"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    198.00, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("08/27/19"), textAlign: "center"},
-      //       { value: new Date("08/27/19"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "674156", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "y", textAlign: "center"},
-      //       { value: new Date("03/20/19"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    195.00, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("03/19/19"), textAlign: "center"},
-      //       { value: new Date("03/19/19"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "673879", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "y", textAlign: "center"},
-      //       { value: new Date("01/10/19"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    195.00, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("01/10/19"), textAlign: "center"},
-      //       { value: new Date("01/31/19"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "673688", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "y", textAlign: "center"},
-      //       { value: new Date("12/06/18"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    195.00, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("12/05/18"), textAlign: "center"},
-      //       { value: new Date("12/05/18"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "673511", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "y", textAlign: "center"},
-      //       { value: new Date("11/01/18"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    188.00, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("10/30/18"), textAlign: "center"},
-      //       { value: new Date("10/30/18"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "673147", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "y", textAlign: "center"},
-      //       { value: new Date("07/25/18"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    188.00, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("07/25/18"), textAlign: "center"},
-      //       { value: new Date("10/31/18"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "672100", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "y", textAlign: "center"},
-      //       { value: new Date("11/16/17"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    188.00, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("11/16/17"), textAlign: "center"},
-      //       { value: new Date("04/30/18"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "671770", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "y", textAlign: "center"},
-      //       { value: new Date("09/11/17"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    191.42, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("09/11/17"), textAlign: "center"},
-      //       { value: new Date("10/31/17"), textAlign: "center"}
-      //       ]
-      //       },
-      //       {
-      //       cells: [
-      //       {
-      //       value: "671292", 
-      //       textAlign: "center",
-      //       link: "http://mcm.mix30.com/images/print2.gif"},
-      //       { value: "S", textAlign: "center"},
-      //       { value: "y", textAlign: "center"},
-      //       { value: new Date("04/04/17"), textAlign: "center"},
-      //       { value: "mix30+", textAlign: "center"},
-      //       { value:    181.00, format: "$###,##0.00", textAlign: "right"},
-      //       { value: "fortx", textAlign: "center"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:      23, textAlign: "right"},
-      //       { value:       0, textAlign: "right"},
-      //       { value: new Date("04/04/17"), textAlign: "center"},
-      //       { value: new Date("04/30/17"), textAlign: "center"}
-      //       ]
-      //       }
-      //                   ]
-      //                 }]
-      //               });
-      // this.LookupDataBudget = BudgetId
+      
       this.showContent = true
     })
   })
@@ -724,22 +502,12 @@ data: SheetDescriptor[] = [
       var projectId = ""
       var budgetId = ""
       var LBEPeriod = ""
-      // if(this.ForecastForm.controls.ProjectId.value != null){
-      //   for(var i=0;i<this.ForecastForm.controls.ProjectId.value.length;i++){
-      //     projectId = projectId + this.ForecastForm.controls.ProjectId.value[i].problemId + ','
-      //   }
-      // }
       projectId = this.ForecastForm.controls.ProjectId.value ? this.ForecastForm.controls.ProjectId.value : ''
       if(this.ForecastForm.controls.Reference.value != null){
         for(var i=0;i<this.ForecastForm.controls.Reference.value.length;i++){
           LBEPeriod = LBEPeriod + this.ForecastForm.controls.Reference.value[i].DateMasterId + ','
         }
       }
-      // if(this.ForecastForm.controls.BudgetId.value != null){
-      //   for(var i=0;i<this.ForecastForm.controls.BudgetId.value.length;i++){
-      //     budgetId = budgetId + this.ForecastForm.controls.BudgetId.value[i].ID + ','
-      //   }
-      // }
       budgetId = this.ForecastForm.controls.BudgetId.value ? this.ForecastForm.controls.BudgetId.value : ''
       if(this.ForecastForm.controls.DataType.value == "Historical"){
         this.portfoliService.getHistoricalExcelData(projectId, budgetId).then((historicalData : any) => {
@@ -749,45 +517,26 @@ data: SheetDescriptor[] = [
           this.ExcelData = historicalData
           this.forecastExcelHistorical = historicalData.filter(x => x.budgetDataType == this.ForecastForm.controls.ForecastType.value.lookUpName)
 
-          for (var i of this.forecastExcelHistorical) {
-            this.historicalForm.push(new FormGroup({
-              budgetDataType: new FormControl(i.budgetDataType),
-              budgetDataTypeID: new FormControl(i.budgetDataTypeID),
-              budgetHistoricalActualID: new FormControl(i.budgetHistoricalActualID),
-              capitalBudgetID: new FormControl(i.capitalBudgetID),
-              problemID: new FormControl(i.problemID),
-              problemTitle: new FormControl(i.problemTitle),
-              projectID: new FormControl(i.projectID),
-              historicalActualFY14: new FormControl(i.historicalActualFY14),
-              historicalActualFY15: new FormControl(i.historicalActualFY15),
-              historicalActualFY16: new FormControl(i.historicalActualFY16),
-              historicalActualFY17: new FormControl(i.historicalActualFY17),
-              historicalActualFY18: new FormControl(i.historicalActualFY18),
-              historicalActualFY19: new FormControl(i.historicalActualFY19),
-              historicalActualFY20: new FormControl(i.historicalActualFY20),
-              historicalActualFY21: new FormControl(i.historicalActualFY21),
-            }), { emitEvent: false })
-        }
+        //   for (var i of this.forecastExcelHistorical) {
+        //     this.historicalForm.push(new FormGroup({
+        //       budgetDataType: new FormControl(i.budgetDataType),
+        //       budgetDataTypeID: new FormControl(i.budgetDataTypeID),
+        //       budgetHistoricalActualID: new FormControl(i.budgetHistoricalActualID),
+        //       capitalBudgetID: new FormControl(i.capitalBudgetID),
+        //       problemID: new FormControl(i.problemID),
+        //       problemTitle: new FormControl(i.problemTitle),
+        //       projectID: new FormControl(i.projectID),
+        //       historicalActualFY14: new FormControl(i.historicalActualFY14),
+        //       historicalActualFY15: new FormControl(i.historicalActualFY15),
+        //       historicalActualFY16: new FormControl(i.historicalActualFY16),
+        //       historicalActualFY17: new FormControl(i.historicalActualFY17),
+        //       historicalActualFY18: new FormControl(i.historicalActualFY18),
+        //       historicalActualFY19: new FormControl(i.historicalActualFY19),
+        //       historicalActualFY20: new FormControl(i.historicalActualFY20),
+        //       historicalActualFY21: new FormControl(i.historicalActualFY21),
+        //     }), { emitEvent: false })
+        // }
           this.showData = true
-          var rowData
-          for (var i of this.forecastExcelHistorical) {
-            rowData = {cells: [
-              { value: i.budgetDataType, textAlign: "center"},
-              { value: i.capitalBudgetID, textAlign: "center"},
-              { value: i.problemID, textAlign: "center"},
-              { value: i.problemTitle, textAlign: "center"},
-              { value: i.historicalActual, textAlign: "center"},
-              { value: i.historicalActualFY14, textAlign: "right"},
-              { value: i.historicalActualFY15, textAlign: "center"},
-              { value: i.historicalActualFY16, textAlign: "right"},
-              { value: i.historicalActualFY17, textAlign: "right"},
-              { value: i.historicalActualFY18, textAlign: "right"},
-              { value: i.historicalActualFY19, textAlign: "center"},
-              { value: i.historicalActualFY20, textAlign: "center"},
-              { value: i.historicalActualFY21, textAlign: "center"}
-              ]
-            }
-          }
           var firstrow={
             height: 30,
             cells: [
@@ -799,16 +548,22 @@ data: SheetDescriptor[] = [
           var secondrow = {
             cells: [
               {
-              'value': 'Budget Data Type', bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              value: "budgetHistoricalActualID", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center", hidden: true
+              },
+              {
+              value: 'budgetDataTypeID', bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "problemTitle", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: 'Budget Data Type', bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
               },
               {
               value: "Problem Id", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
               },
               {
               value: "Capital Budget Id", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-              },
-              {
-              value: "Problem Title", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
               },
               {
               value: "Historical Actual", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
@@ -839,51 +594,41 @@ data: SheetDescriptor[] = [
               }
               ]
           }
-          var finaldata = {
-            ...firstrow,
-            ...secondrow,
-            ...rowData
-          }
-          var dataSourceHistoricalDataExcel = new kendo.data.DataSource({
-            transport: {
-                read: function (e) {
-                    e.success(this.forecastExcelHistorical);
-                },
-            },
-            batch: true,
-            schema: {
-                model: {
-                    id: "BudgetHistoricalActualID",
-                    fields: {
-                        BudgetDataTypeID: { type: "string" },
-                        ProjectID: { type: "string" },
-                        BudgetDataType: { type: "string" },
-                        ProblemID: { type: "string" },
-                        CapitalBudgetID: { type: "string" },
-                        ProblemTitle: { type: "string" },
-                        HistoricalActual: { type: "number" },
-                        HistoricalActualFY14: { type: "number" },
-                        HistoricalActualFY15: { type: "number" },
-                        HistoricalActualFY16: { type: "number" },
-                        HistoricalActualFY17: { type: "number" },
-                        HistoricalActualFY18: { type: "number" },
-                        HistoricalActualFY19: { type: "number" },
-                        HistoricalActualFY20: { type: "number" },
-                        HistoricalActualFY21: { type: "number" },
-                    }
-                }
+          var finaldata = []
+          finaldata.push(firstrow)
+          finaldata.push(secondrow)
+          var rowData
+          var z=3
+          for (var i of this.forecastExcelHistorical) {
+            var formula = '=SUM(H' + z + ':L' + z + ')'
+            rowData={cells: [
+              { value: i.budgetHistoricalActualID, textAlign: "center"},
+              { value: i.budgetDataTypeID, textAlign: "center"},
+              { value: i.budgetDataType, textAlign: "center"},
+              { value: i.capitalBudgetID, textAlign: "center"},
+              { value: i.problemID, textAlign: "center"},
+              { value: i.problemTitle, textAlign: "center"},
+              { value: i.historicalActual, textAlign: "center", formula: formula},
+              { value: i.historicalActualFY14, textAlign: "right"},
+              { value: i.historicalActualFY15, textAlign: "center"},
+              { value: i.historicalActualFY16, textAlign: "right"},
+              { value: i.historicalActualFY17, textAlign: "right"},
+              { value: i.historicalActualFY18, textAlign: "right"},
+              { value: i.historicalActualFY19, textAlign: "center"},
+              { value: i.historicalActualFY20, textAlign: "center"},
+              { value: i.historicalActualFY21, textAlign: "center"}
+              ]
             }
-        });
+            finaldata.push(rowData)
+            z++;
+          }
+          
           setTimeout(() => {
           kendo.jQuery(this.el.nativeElement).kendoSpreadsheet({
             sheets: [{
               mergedCells: [
                         "A1:L1"
                     ],
-              filter: {
-                        ref: "A2:L49",
-                        columns:[]
-                    },
               name: "Budget",
               columns: [
                         { width: 150 },
@@ -898,131 +643,18 @@ data: SheetDescriptor[] = [
                         { width: 150 },
                         { width: 150 },
                         { width: 150 },
+                        { width: 150 },
+                        { width: 150 },
                         { width: 150 }
                     ],
-              rows: dataSourceHistoricalDataExcel
+              rows: finaldata
           }]
-            // sheets: [
-            // {
-            //                  frozenRows: 2,
-                 
-            //     name: "Contracts",
-            //     mergedCells: [
-            //         "A1:L1"
-            //     ],
-            //     filter: {
-            //         ref: "A2:L49",
-            //         columns:[]
-            //     },
-            //     columns: [
-            //         { width: 150 },
-            //         { width: 150 },
-            //         { width: 150 },
-            //         { width: 150 },
-            //         { width: 150 },
-            //         { width: 150 },
-            //         { width: 150 },
-            //         { width: 150 },
-            //         { width: 150 },
-            //         { width: 150 },
-            //         { width: 150 },
-            //         { width: 150 },
-            //         { width: 150 }
-            //     ],
-            //     rows: [
-            //     {
-            //         height: 30,
-            //         cells: [
-            //         {
-            //             value: "Budget Data Type", background: "rgb(144,164,174)", textAlign: "left", color: "white", fontSize: 18
-            //         }
-            //         ]
-            //     },
-            //     {
-            //     cells: [
-            //     {
-            //     value: "Budget Data Type", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-            //     },
-            //     {
-            //     value: "Problem Id", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-            //     },
-            //     {
-            //     value: "Capital Budget Id", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-            //     },
-            //     {
-            //     value: "Problem Title", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-            //     },
-            //     {
-            //     value: "Historical Actual", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-            //     },
-            //     {
-            //     value: "historicalActualFY14", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-            //     },
-            //     {
-            //     value: "historicalActualFY15", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-            //     },
-            //     {
-            //     value: "historicalActualFY16", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-            //     },
-            //     {
-            //     value: "historicalActualFY17", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-            //     },
-            //     {
-            //     value: "historicalActualFY18", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-            //     },
-            //     {
-            //     value: "historicalActualFY19", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-            //     },
-            //     {
-            //     value: "historicalActualFY20", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-            //     },
-            //     {
-            //     value: "historicalActualFY21", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-            //     }
-            //     ]
-            //     },
-            //     {
-            //     cells: [
-            //     { value: "963798", textAlign: "center", link: "http://mcm.mix30.com/images/print2.gif"},
-            //     { value: "S", textAlign: "center"},
-            //     { value: "s", textAlign: "center"},
-            //     { value: new Date("10/13/21"), textAlign: "center"},
-            //     { value: "mix30+", textAlign: "center"},
-            //     { value:    178.00, format: "$###,##0.00", textAlign: "right"},
-            //     { value: "fortx", textAlign: "center"},
-            //     { value:     138, textAlign: "right"},
-            //     { value:      46, textAlign: "right"},
-            //     { value:      92, textAlign: "right"},
-            //     { value: new Date("11/01/21"), textAlign: "center"},
-            //     { value: new Date("12/31/21"), textAlign: "center"}
-            //     ]
-            //     },
-            //     {
-            //     cells: [
-            //     {
-            //     value: "963686", 
-            //     textAlign: "center",
-            //     link: "http://mcm.mix30.com/images/print2.gif"},
-            //     { value: "S", textAlign: "center"},
-            //     { value: "s", textAlign: "center"},
-            //     { value: new Date("08/11/21"), textAlign: "center"},
-            //     { value: "mix30+", textAlign: "center"},
-            //     { value:    159.00, format: "$###,##0.00", textAlign: "right"},
-            //     { value: "fortx", textAlign: "center"},
-            //     { value:      69, textAlign: "right"},
-            //     { value:      69, textAlign: "right"},
-            //     { value:       0, textAlign: "right"},
-            //     { value: new Date("08/06/21"), textAlign: "center"},
-            //     { value: new Date("10/31/21"), textAlign: "center"}
-            //     ]
-            //     },]
-                  
-            //         }]
                      });
-                    
-            var spreadsheet = kendo.jQuery("#spreadsheet").data("kendoSpreadsheet");
-            var sheet = spreadsheet.activeSheet();
-            sheet.setDataSource(dataSourceHistoricalDataExcel);
+                     var spreadsheet = kendo.jQuery(this.el.nativeElement).data("kendoSpreadsheet")
+          var sheet = spreadsheet.activeSheet();
+          sheet.hideColumn(0)
+          sheet.hideColumn(1)
+          sheet.hideColumn(2)
            }, 1000)
         })
       }
@@ -1046,692 +678,554 @@ data: SheetDescriptor[] = [
           this.y4Label= 'FY' + year6 + '+';
 
           this.forecastExcel = LBE.filter(x => x.budgetData == this.ForecastForm.controls.ForecastType.value.lookUpName)
-          for (var i of this.forecastExcel) {
-            this.forecastExcelForm.push(new FormGroup({
-              budgetGlobalID: new FormControl(i.budgetGlobalID),
-              dateMasterID: new FormControl(i.dateMasterID),
-              budgetDataID: new FormControl(i.budgetDataID),
-              budgetDataIDY1: new FormControl(i.budgetDataIDY1),
-              projectID: new FormControl(i.projectID),
-              budgetDataTypeID: new FormControl(i.budgetDataTypeID),
-              budgetData: new FormControl(i.budgetData),
-              capitalBudgetID: new FormControl(i.capitalBudgetID),
-              problemID: new FormControl(i.problemID),
-              problemTitle: new FormControl(i.problemTitle),
-              periodName: new FormControl(i.periodName),
-              historicalActual: new FormControl(i.historicalActual),
-              apr: new FormControl(i.apr),
-              may: new FormControl(i.may),
-              jun: new FormControl(i.jun),
-              jul: new FormControl(i.jul),
-              aug: new FormControl(i.aug),
-              sep: new FormControl(i.sep),
-              oct: new FormControl(i.oct),
-              nov: new FormControl(i.nov),
-              dec: new FormControl(i.dec),
-              jan: new FormControl(i.jan),
-              feb: new FormControl(i.feb),
-              mar: new FormControl(i.Mar),
-              y1_Apr: new FormControl(i.y1_Apr),
-              y1_May: new FormControl(i.y1_May),
-              y1_Jun: new FormControl(i.y1_Jun),
-              y1_Jul: new FormControl(i.y1_Jul),
-              y1_Aug: new FormControl(i.y1_Aug),
-              y1_Sep: new FormControl(i.y1_Sep),
-              y1_Oct: new FormControl(i.Y1_Oct),
-              y1_Nov: new FormControl(i.y1_Nov),
-              y1_Dec: new FormControl(i.y1_Dec),
-              y1_Jan: new FormControl(i.y1_Jan),
-              y1_Feb: new FormControl(i.y1_Feb),
-              y1_Mar: new FormControl(i.y1_Mar),
-              y2: new FormControl(i.y2),
-              y3: new FormControl(i.y3),
-              y4: new FormControl(i.y4),
-              y5: new FormControl(i.y5),
-              y1: new FormControl(i.Y1),
-              annualTotal: new FormControl(i.annualTotal),
-              cumulativeTotal: new FormControl(i.cumulativeTotal),
-            }), { emitEvent: false })
-        }
+        //   for (var i of this.forecastExcel) {
+        //     this.forecastExcelForm.push(new FormGroup({
+        //       budgetGlobalID: new FormControl(i.budgetGlobalID),
+        //       dateMasterID: new FormControl(i.dateMasterID),
+        //       budgetDataID: new FormControl(i.budgetDataID),
+        //       budgetDataIDY1: new FormControl(i.budgetDataIDY1),
+        //       projectID: new FormControl(i.projectID),
+        //       budgetDataTypeID: new FormControl(i.budgetDataTypeID),
+        //       budgetData: new FormControl(i.budgetData),
+        //       capitalBudgetID: new FormControl(i.capitalBudgetID),
+        //       problemID: new FormControl(i.problemID),
+        //       problemTitle: new FormControl(i.problemTitle),
+        //       periodName: new FormControl(i.periodName),
+        //       historicalActual: new FormControl(i.historicalActual),
+        //       apr: new FormControl(i.apr),
+        //       may: new FormControl(i.may),
+        //       jun: new FormControl(i.jun),
+        //       jul: new FormControl(i.jul),
+        //       aug: new FormControl(i.aug),
+        //       sep: new FormControl(i.sep),
+        //       oct: new FormControl(i.oct),
+        //       nov: new FormControl(i.nov),
+        //       dec: new FormControl(i.dec),
+        //       jan: new FormControl(i.jan),
+        //       feb: new FormControl(i.feb),
+        //       mar: new FormControl(i.Mar),
+        //       y1_Apr: new FormControl(i.y1_Apr),
+        //       y1_May: new FormControl(i.y1_May),
+        //       y1_Jun: new FormControl(i.y1_Jun),
+        //       y1_Jul: new FormControl(i.y1_Jul),
+        //       y1_Aug: new FormControl(i.y1_Aug),
+        //       y1_Sep: new FormControl(i.y1_Sep),
+        //       y1_Oct: new FormControl(i.Y1_Oct),
+        //       y1_Nov: new FormControl(i.y1_Nov),
+        //       y1_Dec: new FormControl(i.y1_Dec),
+        //       y1_Jan: new FormControl(i.y1_Jan),
+        //       y1_Feb: new FormControl(i.y1_Feb),
+        //       y1_Mar: new FormControl(i.y1_Mar),
+        //       y2: new FormControl(i.y2),
+        //       y3: new FormControl(i.y3),
+        //       y4: new FormControl(i.y4),
+        //       y5: new FormControl(i.y5),
+        //       y1: new FormControl(i.Y1),
+        //       annualTotal: new FormControl(i.annualTotal),
+        //       cumulativeTotal: new FormControl(i.cumulativeTotal),
+        //     }), { emitEvent: false })
+        // }
           this.showDataForecast = true
-          kendo.jQuery(this.el.nativeElement).kendoSpreadsheet({
-            sheets: [
+          var firstrow={
+            height: 30,
+            cells: [
             {
-                             frozenRows: 2,
-                 
-                name: "Contracts",
-                mergedCells: [
-                    "A1:L1"
-                ],
-                filter: {
-                    ref: "A2:L49",
-                    columns:[]
-                },
-                columns: [
-                    // { field: "link", width: 70 },
-                    { width: 50 },
-                    { width: 50 },
-                    { width: 80 },
-                    { width: 80 },
-                    { width: 80 },
-                    { width: 80 },
-                    { width: 80 },
-                    { width: 80 },
-                    { width: 80 },
-                    { width: 80 },
-                    { width: 80 }
-                ],
-                rows: [
-                {
-                    height: 30,
-                    cells: [
-                    {
-                        value: "Contracts", background: "rgb(144,164,174)", textAlign: "left", color: "white", fontSize: 18
-                    }
-                    ]
-                },
-                {
-                cells: [
-                {
-                value: "Contract#", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-                },
-                {
-                value: "P/S", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-                },
-                {
-                value: "Co.", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-                },
-                {
-                value: "Date", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-                },
-                {
-                value: "Comm", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-                },
-                {
-                value: "Price", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-                },
-                {
-                value: "FOB", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-                },
-                {
-                value: "Qty", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-                },
-                {
-                value: "Appld", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-                },
-                {
-                value: "Bal", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-                },
-                {
-                value: "S.Date", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-                },
-                {
-                value: "E.Date", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-                }
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "963798", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "s", textAlign: "center"},
-                { value: new Date("10/13/21"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    178.00, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:     138, textAlign: "right"},
-                { value:      46, textAlign: "right"},
-                { value:      92, textAlign: "right"},
-                { value: new Date("11/01/21"), textAlign: "center"},
-                { value: new Date("12/31/21"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "963686", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "s", textAlign: "center"},
-                { value: new Date("08/11/21"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    159.00, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:      69, textAlign: "right"},
-                { value:      69, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("08/06/21"), textAlign: "center"},
-                { value: new Date("10/31/21"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "676598", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "y", textAlign: "center"},
-                { value: new Date("07/27/21"), textAlign: "center"},
-                { value: "lgrlc", textAlign: "center"},
-                { value:      6.45, format: "$###,##0.00", textAlign: "right"},
-                { value: "chamn", textAlign: "center"},
-                { value:      35, textAlign: "right"},
-                { value:      35, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("07/26/21"), textAlign: "center"},
-                { value: new Date("07/30/21"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "676525", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "y", textAlign: "center"},
-                { value: new Date("06/23/21"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    159.00, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:      23, textAlign: "right"},
-                { value:      23, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("06/21/21"), textAlign: "center"},
-                { value: new Date("06/21/21"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "675894", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "y", textAlign: "center"},
-                { value: new Date("11/24/20"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    159.00, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:      92, textAlign: "right"},
-                { value:      92, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("11/23/20"), textAlign: "center"},
-                { value: new Date("04/30/21"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "963109", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "s", textAlign: "center"},
-                { value: new Date("10/21/20"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    159.00, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:      23, textAlign: "right"},
-                { value:      23, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("10/19/20"), textAlign: "center"},
-                { value: new Date("10/19/20"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "675600", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "y", textAlign: "center"},
-                { value: new Date("07/21/20"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    159.00, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:      23, textAlign: "right"},
-                { value:      23, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("07/27/20"), textAlign: "center"},
-                { value: new Date("07/31/20"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "674490", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "y", textAlign: "center"},
-                { value: new Date("08/27/19"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    198.00, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:      92, textAlign: "right"},
-                { value:      92, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("11/01/19"), textAlign: "center"},
-                { value: new Date("04/30/20"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "674483", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "y", textAlign: "center"},
-                { value: new Date("08/26/19"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    198.00, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:      23, textAlign: "right"},
-                { value:      23, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("08/27/19"), textAlign: "center"},
-                { value: new Date("08/27/19"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "674156", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "y", textAlign: "center"},
-                { value: new Date("03/20/19"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    195.00, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:      23, textAlign: "right"},
-                { value:      23, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("03/19/19"), textAlign: "center"},
-                { value: new Date("03/19/19"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "673879", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "y", textAlign: "center"},
-                { value: new Date("01/10/19"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    195.00, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:      23, textAlign: "right"},
-                { value:      23, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("01/10/19"), textAlign: "center"},
-                { value: new Date("01/31/19"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "673688", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "y", textAlign: "center"},
-                { value: new Date("12/06/18"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    195.00, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:      23, textAlign: "right"},
-                { value:      23, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("12/05/18"), textAlign: "center"},
-                { value: new Date("12/05/18"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "673511", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "y", textAlign: "center"},
-                { value: new Date("11/01/18"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    188.00, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:      23, textAlign: "right"},
-                { value:      23, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("10/30/18"), textAlign: "center"},
-                { value: new Date("10/30/18"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "673147", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "y", textAlign: "center"},
-                { value: new Date("07/25/18"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    188.00, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:      23, textAlign: "right"},
-                { value:      23, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("07/25/18"), textAlign: "center"},
-                { value: new Date("10/31/18"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "672100", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "y", textAlign: "center"},
-                { value: new Date("11/16/17"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    188.00, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:      23, textAlign: "right"},
-                { value:      23, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("11/16/17"), textAlign: "center"},
-                { value: new Date("04/30/18"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "671770", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "y", textAlign: "center"},
-                { value: new Date("09/11/17"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    191.42, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:      23, textAlign: "right"},
-                { value:      23, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("09/11/17"), textAlign: "center"},
-                { value: new Date("10/31/17"), textAlign: "center"}
-                ]
-                },
-                {
-                cells: [
-                {
-                value: "671292", 
-                textAlign: "center",
-                link: "http://mcm.mix30.com/images/print2.gif"},
-                { value: "S", textAlign: "center"},
-                { value: "y", textAlign: "center"},
-                { value: new Date("04/04/17"), textAlign: "center"},
-                { value: "mix30+", textAlign: "center"},
-                { value:    181.00, format: "$###,##0.00", textAlign: "right"},
-                { value: "fortx", textAlign: "center"},
-                { value:      23, textAlign: "right"},
-                { value:      23, textAlign: "right"},
-                { value:       0, textAlign: "right"},
-                { value: new Date("04/04/17"), textAlign: "center"},
-                { value: new Date("04/30/17"), textAlign: "center"}
-                ]
-                }
-                            ]
-                          }]
-                        });
+                value: "Budget Data Type", background: "rgb(144,164,174)", textAlign: "left", color: "white", fontSize: 18
+            }
+            ]
+          }
+          var secondrow = {
+            cells: [
+              {
+              value: "budgetGlobalID", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: 'dateMasterID', bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "budgetDataID", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: 'budgetDataIDY1', bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "projectID", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "budgetDataTypeID", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Budget Data", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Capital Budget ID", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Problem ID", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Project Name", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Period Name", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Historical Actual", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Apr", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "May", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Jun", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Jul", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Aug", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Sep", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Oct", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Nov", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Dec", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Jan", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Feb", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Mar", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "AprY1", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "MayY1", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "JunY1", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "JulY1", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "AugY1", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "SepY1", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "OctY1", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "NovY1", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "DecY1", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "JanY1", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "FebY1", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "MarY1", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: this.y1Label, bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: this.y2Label, bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: this.y3Label, bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: this.y4Label, bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: this.y0Label, bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Annual Total", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "Cummulative Total", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              }
+              ]
+          }
+          var finaldata = []
+          finaldata.push(firstrow)
+          finaldata.push(secondrow)
+          var rowData
+          var z=3
+          for (var i of this.forecastExcel) {
+            var formula = '=SUM(M' + z + ':X' + z + ')'
+            var formula1 = '=SUM(Y' + z + ':AJ' + z + ')'
+            var formula2 = '=SUM(M' + z + ':AJ' + z + ')'
+            rowData={cells: [
+              { value: i.budgetGlobalID, textAlign: "center"},
+              { value: i.dateMasterID, textAlign: "center"},
+              { value: i.budgetDataID, textAlign: "center"},
+              { value: i.budgetDataIDY1, textAlign: "center"},
+              { value: i.projectID, textAlign: "center"},
+              { value: i.budgetDataTypeID, textAlign: "center"},
+              { value: i.budgetData, textAlign: "center"},
+              { value: i.capitalBudgetID, textAlign: "right"},
+              { value: i.problemID, textAlign: "center"},
+              { value: i.problemTitle, textAlign: "right"},
+              { value: i.periodName, textAlign: "right"},
+              { value: i.historicalActual, textAlign: "right"},
+              { value: i.apr, textAlign: "center"},
+              { value: i.may, textAlign: "center"},
+              { value: i.jun, textAlign: "center"},
+              { value: i.jul, textAlign: "center"},
+              { value: i.aug, textAlign: "center"},
+              { value: i.sep, textAlign: "center"},
+              { value: i.oct, textAlign: "center"},
+              { value: i.nov, textAlign: "center"},
+              { value: i.dec, textAlign: "center"},
+              { value: i.jan, textAlign: "center"},
+              { value: i.feb, textAlign: "center"},
+              { value: i.mar, textAlign: "center"},
+              { value: i.y1_Apr, textAlign: "center"},
+              { value: i.y1_May, textAlign: "center"},
+              { value: i.y1_Jun, textAlign: "center"},
+              { value: i.y1_Jul, textAlign: "center"},
+              { value: i.y1_Aug, textAlign: "center"},
+              { value: i.y1_Sep, textAlign: "center"},
+              { value: i.y1_Oct, textAlign: "center"},
+              { value: i.y1_nov, textAlign: "center"},
+              { value: i.y1_Dec, textAlign: "center"},
+              { value: i.y1_Jan, textAlign: "center"},
+              { value: i.y1_Feb, textAlign: "center"},
+              { value: i.y1_Mar, textAlign: "center"},
+              { value: i.y2, textAlign: "center"},
+              { value: i.y3, textAlign: "center"},
+              { value: i.y4, textAlign: "center"},
+              { value: i.y5, textAlign: "center"},
+              { value: i.y1, textAlign: "center", formula: formula1},
+              { value: i.annualTotal, textAlign: "center", formula: formula},
+              { value: i.cumulativeTotal, textAlign: "center", formula: formula2}
+              ]
+            }
+            finaldata.push(rowData)
+            z++;
+          }
+          // setTimeout(() => {
+          //   kendo.jQuery(this.forecastElement.nativeElement).kendoSpreadsheet({
+          //     sheets: [{
+          //       mergedCells: [
+          //                 "A1:L1"
+          //             ],
+          //       name: "Budget",
+          //       columns: [
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 150 },
+          //                 { width: 210 },
+          //                 { width: 210 }
+          //             ],
+          //       rows: finaldata
+          //   }]
+          //              });
+          //              var spreadsheet = kendo.jQuery(this.forecastElement.nativeElement).data("kendoSpreadsheet")
+          //   var sheet = spreadsheet.activeSheet();
+          //   sheet.hideColumn(0)
+          //   sheet.hideColumn(1)
+          //   sheet.hideColumn(2)
+          //   sheet.hideColumn(3)
+          //   sheet.hideColumn(4)
+          //   sheet.hideColumn(5)
+          //    }, 1000)
         })
       }
     }
   }
-  fTableEditRow(rowIndex) {
-    if (!this.fTableEditStack.includes(rowIndex)) {
-        // if (this.forecastExcelHistorical[rowIndex].isopen) {
-            this.fTableEditStack.push(rowIndex)
-        // }
-    }
-  }
-  hTableEditRow(rowIndex) {
-    if (!this.hTableEditStack.includes(rowIndex)) {
-        // if (this.forecastExcelHistorical[rowIndex].isopen) {
-            this.hTableEditStack.push(rowIndex)
-        // }
-    }
-  }
-  onPaste(event: ClipboardEvent, rowIndex: number, field: string): void {
-    event.preventDefault();
-    const clipboardData = event.clipboardData || window['clipboardData'];
-    const pastedData = clipboardData.getData('text').split('\t');
-    for (let i = 0; i < pastedData.length; i++) {
-        let cleanedValue = pastedData[i].replace(/,/g, '');
-        const roundedNumber = Math.round(cleanedValue);
-        this.historicalForm.controls[rowIndex].value[field] = roundedNumber;
-        this.historicalForm.controls[rowIndex].patchValue({
-            [field]: roundedNumber
-        });
-        field = this.getNextField(field);
-    }
-    this.recalculateAnnualTotal(rowIndex)
-    // this.formValue()
-  }
+  // fTableEditRow(rowIndex) {
+  //   if (!this.fTableEditStack.includes(rowIndex)) {
+  //       // if (this.forecastExcelHistorical[rowIndex].isopen) {
+  //           this.fTableEditStack.push(rowIndex)
+  //       // }
+  //   }
+  // }
+  // hTableEditRow(rowIndex) {
+  //   if (!this.hTableEditStack.includes(rowIndex)) {
+  //       // if (this.forecastExcelHistorical[rowIndex].isopen) {
+  //           this.hTableEditStack.push(rowIndex)
+  //       // }
+  //   }
+  // }
+  // onPaste(event: ClipboardEvent, rowIndex: number, field: string): void {
+  //   event.preventDefault();
+  //   const clipboardData = event.clipboardData || window['clipboardData'];
+  //   const pastedData = clipboardData.getData('text').split('\t');
+  //   for (let i = 0; i < pastedData.length; i++) {
+  //       let cleanedValue = pastedData[i].replace(/,/g, '');
+  //       const roundedNumber = Math.round(cleanedValue);
+  //       this.historicalForm.controls[rowIndex].value[field] = roundedNumber;
+  //       this.historicalForm.controls[rowIndex].patchValue({
+  //           [field]: roundedNumber
+  //       });
+  //       field = this.getNextField(field);
+  //   }
+  //   this.recalculateAnnualTotal(rowIndex)
+  //   // this.formValue()
+  // }
 
-  onPasteY1(event: ClipboardEvent, rowIndex: number, field: string): void {
-    event.preventDefault();
-    const clipboardData = event.clipboardData || window['clipboardData'];
-    const pastedData = clipboardData.getData('text').split('\t');
-    for (let i = 0; i < pastedData.length; i++) {
-        let cleanedValue = pastedData[i].replace(/,/g, '');
-        const roundedNumber = Math.round(cleanedValue);
-        this.forecastExcelForm.controls[rowIndex].value[field] = roundedNumber;
-        this.forecastExcelForm.controls[rowIndex].patchValue({
-            [field]: roundedNumber
-        });
-        field = this.getNextFieldY1(field);
-    }
-    this.recalculateAnnualTotalForecastY1(rowIndex)
-    // this.formValue()
-  }
+  // onPasteY1(event: ClipboardEvent, rowIndex: number, field: string): void {
+  //   event.preventDefault();
+  //   const clipboardData = event.clipboardData || window['clipboardData'];
+  //   const pastedData = clipboardData.getData('text').split('\t');
+  //   for (let i = 0; i < pastedData.length; i++) {
+  //       let cleanedValue = pastedData[i].replace(/,/g, '');
+  //       const roundedNumber = Math.round(cleanedValue);
+  //       this.forecastExcelForm.controls[rowIndex].value[field] = roundedNumber;
+  //       this.forecastExcelForm.controls[rowIndex].patchValue({
+  //           [field]: roundedNumber
+  //       });
+  //       field = this.getNextFieldY1(field);
+  //   }
+  //   this.recalculateAnnualTotalForecastY1(rowIndex)
+  //   // this.formValue()
+  // }
 
-  onPasteY2(event: ClipboardEvent, rowIndex: number, field: string): void {
-    event.preventDefault();
-    const clipboardData = event.clipboardData || window['clipboardData'];
-    const pastedData = clipboardData.getData('text').split('\t');
-    for (let i = 0; i < pastedData.length; i++) {
-        const roundedNumber = Math.round(Number(pastedData[i]));
-        this.forecastExcelForm.controls[rowIndex].value[field] = roundedNumber;
-        this.forecastExcelForm.controls[rowIndex].patchValue({
-            [field]: roundedNumber
-        });
-        field = this.getNextFieldY1(field);
-    }
-    this.recalculateAnnualTotalForecastY2(rowIndex)
-    // this.formValue()
-  }
+  // onPasteY2(event: ClipboardEvent, rowIndex: number, field: string): void {
+  //   event.preventDefault();
+  //   const clipboardData = event.clipboardData || window['clipboardData'];
+  //   const pastedData = clipboardData.getData('text').split('\t');
+  //   for (let i = 0; i < pastedData.length; i++) {
+  //       const roundedNumber = Math.round(Number(pastedData[i]));
+  //       this.forecastExcelForm.controls[rowIndex].value[field] = roundedNumber;
+  //       this.forecastExcelForm.controls[rowIndex].patchValue({
+  //           [field]: roundedNumber
+  //       });
+  //       field = this.getNextFieldY1(field);
+  //   }
+  //   this.recalculateAnnualTotalForecastY2(rowIndex)
+  //   // this.formValue()
+  // }
 
-  getNextField(field: string): string {
-    switch (field) {
-      case 'historicalActualFY14':
-          return 'historicalActualFY15';
-      case 'historicalActualFY15':
-          return 'historicalActualFY16';
-      case 'historicalActualFY16':
-          return 'historicalActualFY17';
-      case 'historicalActualFY17':
-          return 'historicalActualFY18';
-      case 'historicalActualFY18':
-          return 'historicalActualFY19';
-      case 'historicalActualFY19':
-          return 'historicalActualFY20';
-      case 'historicalActualFY20':
-          return 'historicalActualFY21';
-      case 'historicalActualFY21':
-          return '';
-      default:
-          return '';
-  }
-  }
+//   getNextField(field: string): string {
+//     switch (field) {
+//       case 'historicalActualFY14':
+//           return 'historicalActualFY15';
+//       case 'historicalActualFY15':
+//           return 'historicalActualFY16';
+//       case 'historicalActualFY16':
+//           return 'historicalActualFY17';
+//       case 'historicalActualFY17':
+//           return 'historicalActualFY18';
+//       case 'historicalActualFY18':
+//           return 'historicalActualFY19';
+//       case 'historicalActualFY19':
+//           return 'historicalActualFY20';
+//       case 'historicalActualFY20':
+//           return 'historicalActualFY21';
+//       case 'historicalActualFY21':
+//           return '';
+//       default:
+//           return '';
+//   }
+//   }
 
-  getNextFieldY1(field: string): string {
-    switch (field) {
-      case 'apr':
-        return 'may';
-      case 'may':
-        return 'jun';
-      case 'jun':
-        return 'jul';
-      case 'jul':
-        return 'aug';
-      case 'aug':
-        return 'sep';
-      case 'sep':
-        return 'oct';
-      case 'oct':
-        return 'nov';
-      case 'nov':
-        return 'dec';
-      case 'dec':
-        return 'jan';
-      case 'jan':
-        return 'feb';
-      case 'feb':
-        return 'mar';
-      case 'mar':
-        return '';
-      default:
-          return '';
-  }
-  }
+//   getNextFieldY1(field: string): string {
+//     switch (field) {
+//       case 'apr':
+//         return 'may';
+//       case 'may':
+//         return 'jun';
+//       case 'jun':
+//         return 'jul';
+//       case 'jul':
+//         return 'aug';
+//       case 'aug':
+//         return 'sep';
+//       case 'sep':
+//         return 'oct';
+//       case 'oct':
+//         return 'nov';
+//       case 'nov':
+//         return 'dec';
+//       case 'dec':
+//         return 'jan';
+//       case 'jan':
+//         return 'feb';
+//       case 'feb':
+//         return 'mar';
+//       case 'mar':
+//         return '';
+//       default:
+//           return '';
+//   }
+//   }
 
-  getNextFieldY2(field: string): string {
-    switch (field) {
-      case 'y1_Apr':
-          return 'y1_May';
-      case 'y1_May':
-          return 'y1_Jun';
-      case 'y1_Jun':
-          return 'y1_Jul';
-      case 'y1_Jul':
-          return 'y1_Aug';
-      case 'y1_Aug':
-          return 'y1_Sep';
-      case 'y1_Sep':
-          return 'y1_Oct';
-      case 'y1_Oct':
-          return 'y1_Nov';
-      case 'y1_Nov':
-          return 'y1_Dec';
-      case 'y1_Dec':
-        return 'y1_Jan';
-      case 'y1_Jan':
-        return 'y1_Feb';
-      case 'y1_Feb':
-        return 'y1_Mar';
-      case 'y1_Mar':
-        return '';
-      default:
-          return '';
-  }
-  }
+//   getNextFieldY2(field: string): string {
+//     switch (field) {
+//       case 'y1_Apr':
+//           return 'y1_May';
+//       case 'y1_May':
+//           return 'y1_Jun';
+//       case 'y1_Jun':
+//           return 'y1_Jul';
+//       case 'y1_Jul':
+//           return 'y1_Aug';
+//       case 'y1_Aug':
+//           return 'y1_Sep';
+//       case 'y1_Sep':
+//           return 'y1_Oct';
+//       case 'y1_Oct':
+//           return 'y1_Nov';
+//       case 'y1_Nov':
+//           return 'y1_Dec';
+//       case 'y1_Dec':
+//         return 'y1_Jan';
+//       case 'y1_Jan':
+//         return 'y1_Feb';
+//       case 'y1_Feb':
+//         return 'y1_Mar';
+//       case 'y1_Mar':
+//         return '';
+//       default:
+//           return '';
+//   }
+//   }
 
-  recalculateAnnualTotal(index) {
-    const isOpenEntry = this.historicalForm.controls[index];
-    const newAnnualTotal =
-            (isNaN(isOpenEntry.value.historicalActualFY14) ? 0 : isOpenEntry.value.historicalActualFY14) +
-            (isNaN(isOpenEntry.value.historicalActualFY15) ? 0 : isOpenEntry.value.historicalActualFY15) +
-            (isNaN(isOpenEntry.value.historicalActualFY16) ? 0 : isOpenEntry.value.historicalActualFY16) +
-            (isNaN(isOpenEntry.value.historicalActualFY17) ? 0 : isOpenEntry.value.historicalActualFY17) +
-            (isNaN(isOpenEntry.value.historicalActualFY18) ? 0 : isOpenEntry.value.historicalActualFY18) +
-            (isNaN(isOpenEntry.value.historicalActualFY19) ? 0 : isOpenEntry.value.historicalActualFY19) +
-            (isNaN(isOpenEntry.value.historicalActualFY20) ? 0 : isOpenEntry.value.historicalActualFY20) +
-            (isNaN(isOpenEntry.value.historicalActualFY21) ? 0 : isOpenEntry.value.historicalActualFY21) ;
-    isOpenEntry.patchValue({
-      historicalActual: newAnnualTotal
-    });
-    this.forecastExcelHistorical[index].historicalActual = newAnnualTotal
-    // this.forecastExcelHistorical.find(value => value.budgetHistoricalActualID === isOpenEntry.value.budgetHistoricalActualID).historicalActual = newAnnualTotal;
-}
+//   recalculateAnnualTotal(index) {
+//     const isOpenEntry = this.historicalForm.controls[index];
+//     const newAnnualTotal =
+//             (isNaN(isOpenEntry.value.historicalActualFY14) ? 0 : isOpenEntry.value.historicalActualFY14) +
+//             (isNaN(isOpenEntry.value.historicalActualFY15) ? 0 : isOpenEntry.value.historicalActualFY15) +
+//             (isNaN(isOpenEntry.value.historicalActualFY16) ? 0 : isOpenEntry.value.historicalActualFY16) +
+//             (isNaN(isOpenEntry.value.historicalActualFY17) ? 0 : isOpenEntry.value.historicalActualFY17) +
+//             (isNaN(isOpenEntry.value.historicalActualFY18) ? 0 : isOpenEntry.value.historicalActualFY18) +
+//             (isNaN(isOpenEntry.value.historicalActualFY19) ? 0 : isOpenEntry.value.historicalActualFY19) +
+//             (isNaN(isOpenEntry.value.historicalActualFY20) ? 0 : isOpenEntry.value.historicalActualFY20) +
+//             (isNaN(isOpenEntry.value.historicalActualFY21) ? 0 : isOpenEntry.value.historicalActualFY21) ;
+//     isOpenEntry.patchValue({
+//       historicalActual: newAnnualTotal
+//     });
+//     this.forecastExcelHistorical[index].historicalActual = newAnnualTotal
+//     // this.forecastExcelHistorical.find(value => value.budgetHistoricalActualID === isOpenEntry.value.budgetHistoricalActualID).historicalActual = newAnnualTotal;
+// }
 
-recalculateAnnualTotalForecastY1(index) {
-  const isOpenEntry = this.forecastExcelForm.controls[index];
-  const newAnnualTotal =
-          (isNaN(isOpenEntry.value.apr) ? 0 : isOpenEntry.value.apr) +
-          (isNaN(isOpenEntry.value.may) ? 0 : isOpenEntry.value.may) +
-          (isNaN(isOpenEntry.value.jun) ? 0 : isOpenEntry.value.jun) +
-          (isNaN(isOpenEntry.value.jul) ? 0 : isOpenEntry.value.jul) +
-          (isNaN(isOpenEntry.value.aug) ? 0 : isOpenEntry.value.aug) +
-          (isNaN(isOpenEntry.value.sep) ? 0 : isOpenEntry.value.sep) +
-          (isNaN(isOpenEntry.value.oct) ? 0 : isOpenEntry.value.oct) +
-          (isNaN(isOpenEntry.value.nov) ? 0 : isOpenEntry.value.nov) +
-          (isNaN(isOpenEntry.value.dec) ? 0 : isOpenEntry.value.dec) +
-          (isNaN(isOpenEntry.value.jan) ? 0 : isOpenEntry.value.jan) +
-          (isNaN(isOpenEntry.value.feb) ? 0 : isOpenEntry.value.feb) +
-          (isNaN(isOpenEntry.value.mar) ? 0 : isOpenEntry.value.mar) ;
+// recalculateAnnualTotalForecastY1(index) {
+//   const isOpenEntry = this.forecastExcelForm.controls[index];
+//   const newAnnualTotal =
+//           (isNaN(isOpenEntry.value.apr) ? 0 : isOpenEntry.value.apr) +
+//           (isNaN(isOpenEntry.value.may) ? 0 : isOpenEntry.value.may) +
+//           (isNaN(isOpenEntry.value.jun) ? 0 : isOpenEntry.value.jun) +
+//           (isNaN(isOpenEntry.value.jul) ? 0 : isOpenEntry.value.jul) +
+//           (isNaN(isOpenEntry.value.aug) ? 0 : isOpenEntry.value.aug) +
+//           (isNaN(isOpenEntry.value.sep) ? 0 : isOpenEntry.value.sep) +
+//           (isNaN(isOpenEntry.value.oct) ? 0 : isOpenEntry.value.oct) +
+//           (isNaN(isOpenEntry.value.nov) ? 0 : isOpenEntry.value.nov) +
+//           (isNaN(isOpenEntry.value.dec) ? 0 : isOpenEntry.value.dec) +
+//           (isNaN(isOpenEntry.value.jan) ? 0 : isOpenEntry.value.jan) +
+//           (isNaN(isOpenEntry.value.feb) ? 0 : isOpenEntry.value.feb) +
+//           (isNaN(isOpenEntry.value.mar) ? 0 : isOpenEntry.value.mar) ;
 
-  const newCummulativeTotal =
-          (isNaN(isOpenEntry.value.y1) ? 0 : isOpenEntry.value.y1) +
-          (isNaN(isOpenEntry.value.y2) ? 0 : isOpenEntry.value.y2) +
-          (isNaN(isOpenEntry.value.y3) ? 0 : isOpenEntry.value.y3) +
-          (isNaN(isOpenEntry.value.y4) ? 0 : isOpenEntry.value.y4) +
-          (isNaN(newAnnualTotal) ? 0 : newAnnualTotal) +
-          (isNaN(isOpenEntry.value.y5) ? 0 : isOpenEntry.value.y5) ;
-  isOpenEntry.patchValue({
-    annualTotal: newAnnualTotal,
-    cumulativeTotal: newCummulativeTotal
-  });
-  this.forecastExcel[index].annualTotal = newAnnualTotal
-  this.forecastExcel[index].cumulativeTotal = newCummulativeTotal
-  // this.forecastExcelHistorical.find(value => value.budgetHistoricalActualID === isOpenEntry.value.budgetHistoricalActualID).historicalActual = newAnnualTotal;
-}
+//   const newCummulativeTotal =
+//           (isNaN(isOpenEntry.value.y1) ? 0 : isOpenEntry.value.y1) +
+//           (isNaN(isOpenEntry.value.y2) ? 0 : isOpenEntry.value.y2) +
+//           (isNaN(isOpenEntry.value.y3) ? 0 : isOpenEntry.value.y3) +
+//           (isNaN(isOpenEntry.value.y4) ? 0 : isOpenEntry.value.y4) +
+//           (isNaN(newAnnualTotal) ? 0 : newAnnualTotal) +
+//           (isNaN(isOpenEntry.value.y5) ? 0 : isOpenEntry.value.y5) ;
+//   isOpenEntry.patchValue({
+//     annualTotal: newAnnualTotal,
+//     cumulativeTotal: newCummulativeTotal
+//   });
+//   this.forecastExcel[index].annualTotal = newAnnualTotal
+//   this.forecastExcel[index].cumulativeTotal = newCummulativeTotal
+//   // this.forecastExcelHistorical.find(value => value.budgetHistoricalActualID === isOpenEntry.value.budgetHistoricalActualID).historicalActual = newAnnualTotal;
+// }
 
-recalculateAnnualTotalForecastY2(index) {
-  const isOpenEntry = this.forecastExcelForm.controls[index];
-  const newAnnualTotal =
-          (isNaN(isOpenEntry.value.y1_Apr) ? 0 : isOpenEntry.value.y1_Apr) +
-          (isNaN(isOpenEntry.value.y1_May) ? 0 : isOpenEntry.value.y1_May) +
-          (isNaN(isOpenEntry.value.y1_Jun) ? 0 : isOpenEntry.value.y1_Jun) +
-          (isNaN(isOpenEntry.value.y1_Jul) ? 0 : isOpenEntry.value.y1_Jul) +
-          (isNaN(isOpenEntry.value.y1_Aug) ? 0 : isOpenEntry.value.y1_Aug) +
-          (isNaN(isOpenEntry.value.y1_Sep) ? 0 : isOpenEntry.value.y1_Sep) +
-          (isNaN(isOpenEntry.value.y1_Oct) ? 0 : isOpenEntry.value.y1_Oct) +
-          (isNaN(isOpenEntry.value.y1_Nov) ? 0 : isOpenEntry.value.y1_Nov) +
-          (isNaN(isOpenEntry.value.y1_Dec) ? 0 : isOpenEntry.value.y1_Dec) +
-          (isNaN(isOpenEntry.value.y1_Jan) ? 0 : isOpenEntry.value.y1_Jan) +
-          (isNaN(isOpenEntry.value.y1_Feb) ? 0 : isOpenEntry.value.y1_Feb) +
-          (isNaN(isOpenEntry.value.y1_Mar) ? 0 : isOpenEntry.value.y1_Mar) ;
+// recalculateAnnualTotalForecastY2(index) {
+//   const isOpenEntry = this.forecastExcelForm.controls[index];
+//   const newAnnualTotal =
+//           (isNaN(isOpenEntry.value.y1_Apr) ? 0 : isOpenEntry.value.y1_Apr) +
+//           (isNaN(isOpenEntry.value.y1_May) ? 0 : isOpenEntry.value.y1_May) +
+//           (isNaN(isOpenEntry.value.y1_Jun) ? 0 : isOpenEntry.value.y1_Jun) +
+//           (isNaN(isOpenEntry.value.y1_Jul) ? 0 : isOpenEntry.value.y1_Jul) +
+//           (isNaN(isOpenEntry.value.y1_Aug) ? 0 : isOpenEntry.value.y1_Aug) +
+//           (isNaN(isOpenEntry.value.y1_Sep) ? 0 : isOpenEntry.value.y1_Sep) +
+//           (isNaN(isOpenEntry.value.y1_Oct) ? 0 : isOpenEntry.value.y1_Oct) +
+//           (isNaN(isOpenEntry.value.y1_Nov) ? 0 : isOpenEntry.value.y1_Nov) +
+//           (isNaN(isOpenEntry.value.y1_Dec) ? 0 : isOpenEntry.value.y1_Dec) +
+//           (isNaN(isOpenEntry.value.y1_Jan) ? 0 : isOpenEntry.value.y1_Jan) +
+//           (isNaN(isOpenEntry.value.y1_Feb) ? 0 : isOpenEntry.value.y1_Feb) +
+//           (isNaN(isOpenEntry.value.y1_Mar) ? 0 : isOpenEntry.value.y1_Mar) ;
 
-  const newCummulativeTotal =
-          (isNaN(newAnnualTotal) ? 0 : newAnnualTotal) +
-          (isNaN(isOpenEntry.value.y2) ? 0 : isOpenEntry.value.y2) +
-          (isNaN(isOpenEntry.value.y3) ? 0 : isOpenEntry.value.y3) +
-          (isNaN(isOpenEntry.value.y4) ? 0 : isOpenEntry.value.y4) +
-          (isNaN(newAnnualTotal) ? 0 : newAnnualTotal) +
-          (isNaN(isOpenEntry.value.y5) ? 0 : isOpenEntry.value.y5) ;
-  isOpenEntry.patchValue({
-    y1: newAnnualTotal,
-    cumulativeTotal: newCummulativeTotal
-  });
-  this.forecastExcel[index].y1 = newAnnualTotal
-  this.forecastExcel[index].cumulativeTotal = newCummulativeTotal
-  // this.forecastExcelHistorical.find(value => value.budgetHistoricalActualID === isOpenEntry.value.budgetHistoricalActualID).historicalActual = newAnnualTotal;
-}
+//   const newCummulativeTotal =
+//           (isNaN(newAnnualTotal) ? 0 : newAnnualTotal) +
+//           (isNaN(isOpenEntry.value.y2) ? 0 : isOpenEntry.value.y2) +
+//           (isNaN(isOpenEntry.value.y3) ? 0 : isOpenEntry.value.y3) +
+//           (isNaN(isOpenEntry.value.y4) ? 0 : isOpenEntry.value.y4) +
+//           (isNaN(newAnnualTotal) ? 0 : newAnnualTotal) +
+//           (isNaN(isOpenEntry.value.y5) ? 0 : isOpenEntry.value.y5) ;
+//   isOpenEntry.patchValue({
+//     y1: newAnnualTotal,
+//     cumulativeTotal: newCummulativeTotal
+//   });
+//   this.forecastExcel[index].y1 = newAnnualTotal
+//   this.forecastExcel[index].cumulativeTotal = newCummulativeTotal
+//   // this.forecastExcelHistorical.find(value => value.budgetHistoricalActualID === isOpenEntry.value.budgetHistoricalActualID).historicalActual = newAnnualTotal;
+// }
 
-SubmitData(){
+SubmitData(spreadsheet: SpreadsheetComponent){
+  console.log(spreadsheet)
+  console.log(this.finalDatatoSheet)
+  // var spreadsheet = kendo.jQuery(this.el.nativeElement).data("kendoSpreadsheet")
+  // var sheet = spreadsheet.activeSheet();
   if(this.ForecastForm.controls.DataType.value == "Forecast"){
     var dataToSend = this.forecastExcelForm.getRawValue()
     this.portfoliService.putForecastExcelData(dataToSend).then((forecastData : any) => {

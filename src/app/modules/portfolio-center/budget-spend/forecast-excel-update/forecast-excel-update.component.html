@@ -1,5 +1,5 @@
 <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12">
-    <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl" style="margin-right: 10px; margin-left: 10px;height: 125vh;">
+    <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl" style="margin-right: 10px; margin-left: 10px;height: 110vh;">
         <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full">
             <div>
                 <div class="pb-3 pt-2.5 flex items-center justify-between overflow-hidden bg-card shadow rounded-2xl" *ngIf="showContent">
@@ -31,7 +31,7 @@
                                     [valuePointer]="'lookUpName'" [dropDownArray]="forecastType" [sortByType]="'custom'"
                                     [customSortPointer]="'lookUpOrder'">
                                 </spot-singleselect-autocomplete>
-                                <button style="margin-left: 1521px;width: 10%;top: -65px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="SubmitData()"> Save Changes
+                                <button style="margin-left: 1521px;width: 10%;top: -65px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="SubmitData(Forecastspreadsheet)"> Save Changes
                                 </button>
                             </form>
 
@@ -893,8 +893,11 @@
                                 </ngx-datatable-column>
                                 
                             </ngx-datatable> -->
-                            <div #spreadsheet>
-                                <!-- <kendo-spreadsheet class="pb-3 pt-2.5 flex items-center justify-between overflow-hidden bg-card shadow rounded-2xl" *ngIf="showContent" [k-sheets]="data" style="height: 400px; width: 100%; display: flex;"></kendo-spreadsheet> -->
+                            <div *ngIf="showData" #spreadsheet style="width: 100%;">
+                            </div>
+                            <div *ngIf="showDataForecast" #Forecastspreadsheet style="width: 100%;">
+                                <kendo-spreadsheet #Forecastspreadsheet [sheets]="finalDatatoSheet" style="width: 100%" >
+                                </kendo-spreadsheet>
                             </div>
                 </div>
             </div>
