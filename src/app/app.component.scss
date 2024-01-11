@@ -9,7 +9,15 @@
     color: black !important;
     @apply cursor-not-allowed;
 }
-
+::ng-deep .mat-mdc-snack-bar-container {
+    .mdc-snackbar__surface {
+        background-color: inherit !important;
+        color: inherit !important;
+        .mdc-snackbar__label {
+            color: inherit !important;
+        }
+    }
+}
 ::ng-deep .mat-chip.mat-standard-chip.mat-chip-disabled {
     opacity: 1 !important;
 }
@@ -52,7 +60,7 @@
             }
 
             input::placeholder {
-                @apply text-hint #{'!important'}
+                @apply text-hint #{'!important'};
             }
 
             textarea {
@@ -61,7 +69,7 @@
             }
 
             textarea::placeholder {
-                @apply text-hint #{'!important'}
+                @apply text-hint #{'!important'};
             }
             .mat-mdc-select .mat-mdc-select-trigger .mat-mdc-select-value {
                 color: black !important;
@@ -151,6 +159,14 @@
     height: calc(100vh - 290px) !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
+}
+::ng-deep .ngx-datatable.datatable-schedule-close-out .datatable-body .datatable-scroll {
+    height: calc(100vh - 180px) !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+}
+::ng-deep .ngx-datatable.datatable-schedule-close-out {
+    width: 100% !important;
 }
 
 ::ng-deep .ngx-datatable.datatable-op-80 .datatable-body .datatable-scroll {

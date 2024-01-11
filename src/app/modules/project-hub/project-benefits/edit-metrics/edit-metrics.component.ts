@@ -218,65 +218,123 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                 }
                 console.log(this.status)
                 console.log(this.capexAvoidanceForm.getRawValue())
-                var year = []
-                var yearList = []
+                this.processFiscalYears(result);
+                // var year = []
+                // var yearList = []
 
-                year = [...new Set(res.projectsMetricsDataYearly.map(item => item.financialYearId))]
-                for (var i = 0; i < year.length; i++) {
-                  var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i]).lookUpName : ''
-                  this.columnYear.push({ year: yearName })
-                  yearList.push(yearName)
-                }
-                yearList.sort()
-                for (var i = 0; i < res.projectsMetricsData.length; i++) {
-                  for (var j = 0; j < yearList.length; j++) {
-                    res.projectsMetricsData[i][yearList[j]] = [{ 'target': "0", 'baseline': "0", 'actual': "0", 'current': "0" }]
-                    if (res.projectsMetricsData[i].strategicBaselineList) {
-                      var data = res.projectsMetricsData[i].strategicBaselineList.split(',')
-                      for (var z = 0; z < data.length; z++) {
-                        var list = data[z].split(' ')
-                        if (list[1].replace(':', '') == yearList[j].replace(' 20', '')) {
-                          res.projectsMetricsData[i][yearList[j]][0].baseline = list[2]
+                // year = [...new Set(res.projectsMetricsDataYearly.map(item => item.financialYearId))]
+                // for (var i = 0; i < year.length; i++) {
+                //   var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i]).lookUpName : ''
+                //   this.columnYear.push({ year: yearName })
+                //   yearList.push(yearName)
+                // }
+                
+                const updateGlobalYearRange = (listString: string) => {
+                  console.log(this.columnYear)
+                  // const currentYear = new Date().getFullYear();
+                  // let currentFiscalYear = currentYear;
+                  // const currentMonth = new Date().getMonth();
+                
+                  // if (currentMonth < 3) { // If month is before April
+                  //   currentFiscalYear--; // Fiscal year is the previous year
+                  // }
+                
+                  //const currentFiscalYearString = `FY ${currentFiscalYear}`;
+                
+                  // Check and add the fiscal year from financialRealizationStartDate to columnYear
+                  if (!listString && pc.financialRealizationStartDate) {
+                    const fiscalYear = this.getFiscalYearFromDate(pc.financialRealizationStartDate);
+                    const fiscalYearString = `FY ${fiscalYear}`;
+                
+                    if (!this.columnYear.some(yearObj => yearObj.year === fiscalYearString)) {
+                      this.columnYear.push({ year: fiscalYearString });
+                    }
+                
+                    // Add current fiscal year if different from the start date's fiscal year
+                    // if (currentFiscalYear !== fiscalYear && !this.columnYear.some(yearObj => yearObj.year === currentFiscalYearString)) {
+                    //   this.columnYear.push({ year: currentFiscalYearString });
+                    // }
+                  }
+                
+                  // Now, extract years from the list string and add them if they are not already present
+                  if (listString) {
+                    listString.split(',').forEach(item => {
+                      const yearMatch = item.trim().match(/FY(\d{2})/);
+                      if (yearMatch) {
+                        const year = parseInt(yearMatch[1]);
+                        const fullYear = year < 100 ? 2000 + year : year;
+                        const yearString = `FY ${fullYear}`;
+                
+                        if (!this.columnYear.some(yearObj => yearObj.year === yearString)) {
+                          this.columnYear.push({ year: yearString });
                         }
                       }
-                    }
+                    });
                   }
                 };
-
-                const updateGlobalYearRange = (listString: string) => {
-                  console.log(listString)
-                  if (!listString)
-                  {
-                    if (pc.financialRealizationStartDate) {
-                      const fiscalYear = this.getFiscalYearFromDate(pc.financialRealizationStartDate);
-                      this.globalMinYear = fiscalYear;
-                      this.globalMaxYear = fiscalYear;
-                    }
-                   return;
-                }
-
-                  listString.split(',').forEach(item => {
-                    // Adjusted regex to match "FY" followed by two digits
-                    const yearMatch = item.trim().match(/FY(\d{2})/);
-                    if (yearMatch) {
-                      const year = parseInt(yearMatch[1]);
-                      // Assuming the years are for the 2000s, adding 2000 to convert to four digits
-                      const fullYear = year < 100 ? 2000 + year : year;
-                      this.globalMinYear = Math.min(this.globalMinYear, fullYear);
-                      this.globalMaxYear = Math.max(this.globalMaxYear, fullYear);
-                    }
-                  });
-                };
-                // Ensure you call this for each list after data is fetched
+                
+                // Call updateGlobalYearRange for each list
                 updateGlobalYearRange(res.projectsMetricsData.strategicTargetList);
                 updateGlobalYearRange(res.projectsMetricsData.strategicBaselineList);
                 updateGlobalYearRange(res.projectsMetricsData.strategicActualList);
                 updateGlobalYearRange(res.projectsMetricsData.strategicCurrentList);
+                
+                // Sort the columnYear array to ensure it's in order
+                this.columnYear.sort((a, b) => (a.year < b.year ? -1 : 1));
+                console.log(this.columnYear)
+                // Extract years from columnYear, then find the minimum and maximum year
+                const years = this.columnYear.map(yearObj => parseInt(yearObj.year.match(/\d{4}$/)[0]));
+                this.globalMinYear = Math.min(...years);
+                this.globalMaxYear = Math.max(...years);
+                
+                
+              //   const updateGlobalYearRange = (listString: string) => {
+              //     console.log(listString)
+              //     if (!listString)
+              //     {
+              //       if (pc.financialRealizationStartDate) {
+              //         const fiscalYear = this.getFiscalYearFromDate(pc.financialRealizationStartDate);
+              //         this.globalMinYear = fiscalYear;
+              //         this.globalMaxYear = fiscalYear;
+              //       }
+              //      return;
+              //   }
+              //   const years = this.columnYear.map(yearObj => {
+              //     // Extracting the numeric part of the year
+              //     const match = yearObj.year.match(/\d{4}$/);
+              //     return match ? parseInt(match[0]) : null;
+              //   }).filter(year => year !== null); // Filter out any null values
+              
+              //   if (years.length > 0) {
+              //     this.globalMinYear = Math.min(...years);
+              //     this.globalMaxYear = Math.max(...years);
+              //   } else {
+              //     // Handle the case where there are no years in columnYear
+              //     const currentYear = new Date().getFullYear();
+              //     this.globalMinYear = currentYear;
+              //     this.globalMaxYear = currentYear;
+              //   }
+              // }
+                  // listString.split(',').forEach(item => {
+                  //   // Adjusted regex to match "FY" followed by two digits
+                  //   const yearMatch = item.trim().match(/FY(\d{2})/);
+                  //   if (yearMatch) {
+                  //     const year = parseInt(yearMatch[1]);
+                  //     // Assuming the years are for the 2000s, adding 2000 to convert to four digits
+                  //     const fullYear = year < 100 ? 2000 + year : year;
+                  //     this.globalMinYear = Math.min(this.globalMinYear, fullYear);
+                  //     this.globalMaxYear = Math.max(this.globalMaxYear, fullYear);
+                  //   }
+                  // });
+                //};
+                // Ensure you call this for each list after data is fetched
+                
 
                 console.log(`Updated Min Year: ${this.globalMinYear}, Max Year: ${this.globalMaxYear}`);
                 this.compare(this.columnYear)
                 console.log(this.columnYear)
                 if (pc.problemType == 'Strategic Initiative / Program') {
+
                   this.valuecreationngxdata = [
                     {
                       financialType: 'Target',
@@ -287,12 +345,14 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                     { financialType: 'Actual', values: this.processFinancialList(res.projectsMetricsData.strategicActualList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) }
                   ];
                 } else {
+                 console.log("THIS",res.projectsMetricsData) 
                   this.valuecreationngxdata = [
                     { financialType: 'Baseline Plan', values: this.processFinancialList(res.projectsMetricsData.strategicBaselineList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) },
                     { financialType: 'Current Plan', values: this.processFinancialList(res.projectsMetricsData.strategicCurrentList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) },
                     { financialType: 'Actual', values: this.processFinancialList(res.projectsMetricsData.strategicActualList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) }
                   ];
                 }
+                console.log("YO", this.valuecreationngxdata)
                 if (!pc.financialRealizationStartDate && (!res.projectsMetricsDataYearly || res.projectsMetricsDataYearly.length === 0)) {
                   const currentYear = new Date().getFullYear();
                   const shortYear = currentYear % 100; // Get the last two digits of the year
@@ -309,27 +369,27 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                     financialType.values[fiscalYearKey] = '0';
                   });
                 }
-                if (pc.financialRealizationStartDate && (!res.projectsMetricsDataYearly || res.projectsMetricsDataYearly.length === 0)) {
-                  // New code to handle the case when financialRealizationStartDate is present
-                  // but there is no yearly data. It initializes fiscal years starting from 
-                  // the year in financialRealizationStartDate.
-                  const realizationStartYear = this.getFiscalYearFromDate(pc.financialRealizationStartDate);
-                  const currentYear = new Date().getFullYear();
+                // if (pc.financialRealizationStartDate && (!res.projectsMetricsDataYearly || res.projectsMetricsDataYearly.length === 0)) {
+                //   // New code to handle the case when financialRealizationStartDate is present
+                //   // but there is no yearly data. It initializes fiscal years starting from 
+                //   // the year in financialRealizationStartDate.
+                //   const realizationStartYear = this.getFiscalYearFromDate(pc.financialRealizationStartDate);
+                //   const currentYear = new Date().getFullYear();
                   
-                  for (let year = realizationStartYear; year <= currentYear; year++) {
-                    const shortYear = year % 100;
-                    const fiscalYearKey = `FY${shortYear}`;
+                //   for (let year = realizationStartYear; year <= currentYear; year++) {
+                //     const shortYear = year % 100;
+                //     const fiscalYearKey = `FY${shortYear}`;
                 
-                    this.columnYear.push({ year: `FY ${year}` });
+                //     this.columnYear.push({ year: `FY ${year}` });
                 
-                    this.valuecreationngxdata.forEach(financialType => {
-                      if (!financialType.values) {
-                        financialType.values = {};
-                      }
-                      financialType.values[fiscalYearKey] = '0';
-                    });
-                  }
-                }
+                //     this.valuecreationngxdata.forEach(financialType => {
+                //       if (!financialType.values) {
+                //         financialType.values = {};
+                //       }
+                //       financialType.values[fiscalYearKey] = '0';
+                //     });
+                //   }
+                // }
                 
                 console.log(this.valuecreationngxdata)
                 console.log(this.valuecreationngxdata); // Add this to inspect the final data structure
@@ -382,6 +442,44 @@ export class EditMetricsComponent implements OnInit, OnChanges {
       })
     })
 
+  }
+
+   // New method to process fiscal years from all metrics
+   private processFiscalYears(allMetrics: any[]): void {
+    var yearlist = []
+    const allYears = new Set<string>(); // To store unique years
+    allMetrics.forEach(metric => {
+      metric.projectsMetricsDataYearly.forEach(yearlyData => {
+        const yearId = yearlyData.financialYearId;
+        if (yearId) {
+          const yearName = this.lookupData.find(x => x.lookUpId == yearId)?.lookUpName;
+          if (yearName) {
+            allYears.add(yearName);
+            yearlist.push(yearName)
+          }
+        }
+      });
+    });
+
+    this.columnYear = Array.from(allYears).sort().map(year => ({ year }));
+
+    yearlist.sort()
+                for (var i = 0; i < this.result.projectsMetricsData.length; i++) {
+                  for (var j = 0; j < yearlist.length; j++) {
+                    this.result.projectsMetricsData[i][yearlist[j]] = [{ 'target': "0", 'baseline': "0", 'actual': "0", 'current': "0" }]
+                    if (this.result.projectsMetricsData[i].strategicBaselineList) {
+                      var data = this.result.projectsMetricsData[i].strategicBaselineList.split(',')
+                      for (var z = 0; z < data.length; z++) {
+                        var list = data[z].split(' ')
+                        if (list[1].replace(':', '') == yearlist[j].replace(' 20', '')) {
+                          this.result.projectsMetricsData[i][yearlist[j]][0].baseline = list[2]
+                        }
+                      }
+                    }
+                  }
+                };
+
+                console.log(this.columnYear)
   }
 
 showWarningMessage() {
@@ -450,9 +548,16 @@ getFiscalYearFromDate = (dateString: string): number => {
 
   onValueChange(rowIndex: number, year: string, newValue: string): void {
     const financialTypeRow = this.valuecreationngxdata[rowIndex];
+    console.log("HERE", financialTypeRow);
     if (financialTypeRow) {
       const fiscalYearKey = 'FY' + year.slice(-2);
-      financialTypeRow.values[fiscalYearKey] = this.convertToNumber(newValue);
+  
+      // Directly assign newValue for 'Time (HH:MM)' format, otherwise convert to number
+      if (financialTypeRow.metricFormat === 'Time (HH:MM)') {
+        financialTypeRow.values[fiscalYearKey] = newValue;
+      } else {
+        financialTypeRow.values[fiscalYearKey] = this.convertToNumber(newValue);
+      }
   
       // Recalculate the total based on the metric format
       financialTypeRow.total = this.calculateTotalForFinancialType(financialTypeRow);
@@ -460,13 +565,14 @@ getFiscalYearFromDate = (dateString: string): number => {
       // Update the form array to trigger change detection
       const formGroup = this.bulkEditFormArray.at(rowIndex) as FormGroup;
       formGroup.patchValue({
-        [fiscalYearKey]: this.convertToNumber(newValue),
+        [fiscalYearKey]: financialTypeRow.values[fiscalYearKey],
         total: financialTypeRow.total, // Update the total in the form group
       });
-  
+  console.log(formGroup)
       this.projecthubservice.isFormChanged = true;
     }
   }
+  
   
 
 
@@ -477,14 +583,23 @@ getFiscalYearFromDate = (dateString: string): number => {
 
   sumTimesHHMM(times: string[]): string {
     let totalMinutes = times.reduce((total, time) => {
-      const [hours, minutes] = time.split(':').map(Number);
-      return total + hours * 60 + minutes;
+        if (time && this.isValidTimeFormat(time)) {
+            const [hours, minutes] = time.split(':').map(Number);
+            return total + hours * 60 + minutes;
+        }
+        return total;
     }, 0);
 
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
     return `${hours}:${minutes.toString().padStart(2, '0')}`;
-  }
+}
+
+isValidTimeFormat(timeStr: string): boolean {
+    const regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+    return regex.test(timeStr);
+}
+
 
 
   calculateTotalForFinancialType(financialType: any): string {
@@ -512,12 +627,28 @@ getFiscalYearFromDate = (dateString: string): number => {
 
 
   calculateTotalFromList(listString) {
-    if (!listString) return 0;
-    return listString.split(',').reduce((acc, item) => {
-      const match = item.match(/FY\d+:\s*([0-9.]+)/);
-      return match ? acc + parseFloat(match[1]) : acc;
-    }, 0);
+    if (!listString) return '0';
+  
+    // Check if the format is HH:MM
+    const isTimeFormat = listString.match(/\d{1,2}:\d{2}/);
+  
+    if (isTimeFormat) {
+      return listString.split(',').reduce((acc, item) => {
+        const timeMatch = item.match(/\d{1,2}:\d{2}/);
+        if (timeMatch) {
+          const [hours, minutes] = timeMatch[0].split(':').map(Number);
+          return acc + (hours * 60 + minutes);
+        }
+        return acc;
+      }, 0);
+    } else {
+      return listString.split(',').reduce((acc, item) => {
+        const match = item.match(/FY\d+:\s*([0-9.]+)/);
+        return match ? acc + parseFloat(match[1]) : acc;
+      }, 0);
+    }
   }
+  
 
 
   toggleTemporaryImpact(event: any) {
@@ -543,23 +674,27 @@ getFiscalYearFromDate = (dateString: string): number => {
 
 
 
-  processFinancialList(listString: string, minYear: number, maxYear: number, metricFormat: string): any {
+  processFinancialList(listString, minYear, maxYear, metricFormat) {
     const values = this.initializeValues(minYear, maxYear);
-
+  
     if (!listString) {
       return values;
     }
-
+  
     listString.split(',').forEach(item => {
-      const [yearKey, value] = item.trim().split(':');
-      if (yearKey && value) {
-        // Use the two-digit year format directly
-        values[yearKey.trim()] = this.formatValue(value.trim(), metricFormat);
+      // Use a regex to properly separate the fiscal year key from the value
+      const match = item.trim().match(/(FY\d+):\s*(.+)/);
+      if (match) {
+        const yearKey = match[1];
+        const value = match[2];
+        values[yearKey] = this.formatValue(value, metricFormat);
       }
     });
-
+  
+    console.log("VALUES", values);
     return values;
   }
+  
 
 
 
@@ -619,27 +754,37 @@ getFiscalYearFromDate = (dateString: string): number => {
     }
   }
 
-  // Function to format the value based on metricFormat
-  formatValue(value: string, metricFormat: string): string {
-    switch (metricFormat) {
-      case 'Time (HH:MM)':
-      case '':
-        return value;
-      case 'Whole Number':
-      case 'Currency (local)':
-        return parseInt(value).toFixed(0); // Formats as whole number
-      case 'Decimal (1 decimal)':
-        return parseFloat(value).toFixed(1); // Formats with 1 decimal place
-      case 'Percentage (2 decimal)':
-      case 'Decimal (2 decimals)':
-        return parseFloat(value).toFixed(2); // Formats with 2 decimal places
-      default:
-        return value; // Default format if no specific format is matched
-    }
+ // Function to format the value based on metricFormat
+formatValue(value: string, metricFormat: string): string {
+  switch (metricFormat) {
+    case 'Time (HH:MM)':
+      // Adjusted regex to be more flexible
+      const regex = /^(\d{1,2}):(\d{2})$/;
+      if (regex.test(value)) {
+        const [hours, minutes] = value.split(':').map(Number);
+        // Ensure hours are within 0-23 and minutes within 0-59
+        if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
+          return value;
+        }
+      }
+      return '00:00'; // or return the original value or a specific error message
+    case '':
+      return value;
+    case 'Whole Number':
+    case 'Currency (local)':
+      return parseInt(value).toFixed(0); // Formats as whole number
+    case 'Decimal (1 decimal)':
+      return parseFloat(value).toFixed(1); // Formats with 1 decimal place
+    case 'Percentage (2 decimal)':
+    case 'Decimal (2 decimals)':
+      return parseFloat(value).toFixed(2); // Formats with 2 decimal places
+    default:
+      return value; // Default format if no specific format is matched
   }
+}
+
 
   getDecimalProperties(metricFormat: string): { autoAddDecimal: boolean, decimalCount: number } {
-    console.log("getDecimalProperties called with metricFormat:", metricFormat);
 
   let result;
     switch (metricFormat) {
@@ -656,11 +801,16 @@ getFiscalYearFromDate = (dateString: string): number => {
       result = { autoAddDecimal: false, decimalCount: 0 };
   }
 
-  console.log("Returning from getDecimalProperties:", result);
   return result;
   }
   
-
+  getInputType(metricFormat: string): 'Text' | 'Number' | 'Time' {
+    if (metricFormat === 'Time (HH:MM)') {
+      return 'Time';
+    } else {
+      return 'Number'; // Default to Number for other formats
+    }
+  }
 
   getControlName(year: string): string {
     return 'FY' + year.slice(-2); // Adjust as necessary to match the control names
@@ -971,15 +1121,22 @@ getFiscalYearFromDate = (dateString: string): number => {
 
   // Helper function to create financial list string
   createFinancialList(financialType) {
-    return this.valuecreationngxdata
+    //debugger
+    let result
+    result = this.valuecreationngxdata
       .filter(data => data.financialType === financialType)
       .map(data => {
         const yearlyValues = Object.entries(data.values)
           .map(([year, value]) => `${year}: ${value}`)
           .join(', ');
         return yearlyValues;
+
       })
       .join(', ');
+      console.log(result)
+      return result
+
+
   }
 
   getFinancialYearId(year: string): string {
@@ -1008,6 +1165,7 @@ getFiscalYearFromDate = (dateString: string): number => {
     const strategicBaselineList = this.createFinancialList('Baseline Plan');
     const strategicCurrentList = this.createFinancialList('Current Plan');
     const strategicActualList = this.createFinancialList('Actual');
+    console.log(strategicCurrentList)
 
     const strategicTargetTotal = this.calculateTotalFromList(strategicTargetList);
     const strategicBaselineTotal = this.calculateTotalFromList(strategicBaselineList);
@@ -1026,6 +1184,7 @@ console.log(this.capexAvoidanceForm.get('metricLevelId').value)
       temporaryImpact: this.tempImpactForm.get('temporaryImpact').value,
 
       // Calculated values and lists
+
       strategicTarget: strategicTargetTotal.toString(),
       strategicBaseline: strategicBaselineTotal.toString(),
       strategicCurrent: strategicCurrentTotal.toString(),
@@ -1039,14 +1198,19 @@ console.log(this.capexAvoidanceForm.get('metricLevelId').value)
       // Other fields like includeProposalSlide, includeCharter, etc., if they need to be sent
       includePerformanceDashboard: this.includeinForm.get('toggleIncludeIn').value
     };
-
+console.log(projectsMetricsData)
     // Generate projectsMetricsDataYearly array based on the columnYear and valuecreationngxdata
     const projectsMetricsDataYearly = this.columnYear.flatMap(yearObj => {
       const financialYearId = this.getFinancialYearId(yearObj.year); // Convert year to financial year ID
       return this.valuecreationngxdata.map(financialType => {
         const fiscalYearKey = `FY${yearObj.year.slice(-2)}`; // Extract last two digits for year
         const financialTypeId = this.getFinancialTypeId(financialType.financialType); // Use your method to get financial type ID
-        const metricValue = financialType.values[fiscalYearKey] || '0';
+        let metricValue = financialType.values[fiscalYearKey] || '0';
+        // Check if metricValue is in HH:MM format and convert to minutes
+    if (/\d{1,2}:\d{2}/.test(metricValue)) {
+      const [hours, minutes] = metricValue.split(':').map(Number);
+      metricValue = (hours * 60 + minutes).toString();
+    }
         return {
           projectId: this.projectData.projectId,
           metricId: this.metricData.metricID,

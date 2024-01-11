@@ -37,7 +37,7 @@
                         <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full custom" formControlName="EnergyImpact" name="EnergyImpact"
                             [label]="'Energy Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
-                                [autoAddDecimal]="false" [placeholder]="'0'">
+                                [autoAddDecimal]="true" [placeholder]="'0'">
                         </spot-input>
                         <label class="Unit">kWh</label>
                         </div>
@@ -64,7 +64,7 @@
                         <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full custom" formControlName="WaterImpact" name="WaterImpact"
                             [label]="'Water Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
-                                [autoAddDecimal]="false" [placeholder]="'0'">
+                                [autoAddDecimal]="true" [placeholder]="'0'">
                         </spot-input>
                         <label class="Unit">m3</label>
                         </div>
@@ -77,7 +77,7 @@
                         <div></div>
                         <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full custom" formControlName="TotalWasteImpact" [decimalCount]="0" [inputType]="'Number'"
-                                [autoAddDecimal]="false" name="TotalWasteImpact" [label]="'Total Waste Impact (per Year)'" [placeholder]="'0'">
+                                [autoAddDecimal]="true" name="TotalWasteImpact" [label]="'Total Waste Impact (per Year)'" [placeholder]="'0'">
                         </spot-input>
                         <label class="Unit">Kg</label>
                         </div>

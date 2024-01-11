@@ -11,11 +11,13 @@ import { MsalService } from '@azure/msal-angular';
 import { GlobalVariables } from 'app/shared/global-variables';
 import { Router } from '@angular/router';
 import moment from 'moment';
+import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { AppService } from 'app/app.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   TIMEOUT_DURATION = 1800000; // 10 seconds, for example
-  constructor(private authService: AuthService, private msalService: MsalService, private router: Router) { }
+  constructor(private authService: AuthService, private msalService: MsalService, private router: Router, private appSerice:AppService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return from(this.handle(request, next))
@@ -59,6 +61,9 @@ export class AuthInterceptor implements HttpInterceptor {
           } else {
             // handle other types of errors
             console.error('Request error:', error);
+            if(cloned.url.includes(GlobalVariables.apiurl)){
+              this.appSerice.errorSave.next(true)
+            }
           }
 
           // rethrow the error

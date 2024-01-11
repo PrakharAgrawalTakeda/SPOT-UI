@@ -48,7 +48,7 @@
                                [ngClass]="{'closed': row.closeDate != null}">Issue</p>
                             <p *ngIf="!value">&nbsp;</p>
                         </a>
-                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
+                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)" style="margin-bottom: 18px;">
                             <spot-select formControlName="riskIssueTypeId" name="type" [placeholder]="'Type'" [showNoneOption]="false"
                                          [dropDownArrayType]="'object'" [dropDownArray]="getissuetype()" [idPointer]="'lookUpId'"
                                          [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
@@ -86,7 +86,7 @@
                             <p *ngIf="value == ''">&nbsp;</p>
                             {{getLookUpName(value)}}
                         </a>
-                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
+                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)" style="margin-bottom: 18px;">
                             <spot-select formControlName="probabilityId" name="probability" [placeholder]="'Probability'"
                                          [dropDownArrayType]="'object'" [dropDownArray]="getprobability()" [idPointer]="'lookUpId'"
                                          [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
@@ -114,7 +114,7 @@
                             <p *ngIf="value == ''">&nbsp;</p>
                             {{getLookUpName(value)}}
                         </a>
-                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
+                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)" style="margin-bottom: 18px;">
                             <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
                                 <spot-select formControlName="impactId" name="impact" [placeholder]="'Impact'"
                                              [dropDownArrayType]="'object'" [dropDownArray]="getimpact()" [idPointer]="'lookUpId'"
@@ -145,7 +145,7 @@
                             <p *ngIf="!value">&nbsp;</p>
                             <p>{{value}}</p>
                         </a>
-                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
+                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)" style="margin-top: 6px;">
                             <spot-singleselect-user-autocomplete formControlName="owner" [showLabel]="false"
                                                                  [label]="'Owner'"
                                                                  [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'">
@@ -160,7 +160,7 @@
                             <p *ngIf="value == ''">&nbsp;</p>
                             {{getLookUpName(value)}}
                         </a>
-                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)"  style="margin-bottom: 24px;">
+                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)"  style="margin-bottom: 18px;">
                             <spot-select formControlName="functionGroupId" name="functionGroupId" [placeholder]="'Function'"
                                          [dropDownArrayType]="'object'" [dropDownArray]="getFunctionOwner()" [idPointer]="'lookUpId'"
                                          [valuePointer]="'lookUpName'">
