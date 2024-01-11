@@ -4,6 +4,7 @@
                     <div>
                         <div class="pb-3 pt-0 flex items-center justify-between overflow-hidden">
                             <form class="w-full grid-cols-4 grid" [formGroup]="ForecastForm">
+                                <!-- make spot selectt -->
                                 <spot-singleselect-autocomplete class="w-full custom" formControlName="ForecastType"
                                     name="ForecastType" [label]="'Forecast Type'" [placeholder]="'Forecast Type'"
                                     [valuePointer]="'lookUpName'" [dropDownArray]="forecastType" [sortByType]="'custom'"
