@@ -201,7 +201,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
      * @param event
      */
     selectedOption(event: any): void {
-        debugger
+        //debugger
         if (this.calledFrom == 'Copy') {
             //  this.searchControl.patchValue(event.option.value.problemTitle);
             //  this.projectid = event.option.value.problemUniqueId;

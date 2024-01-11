@@ -1517,7 +1517,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                 baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
                                 includeInCloseout: i.includeInCloseout,
                                 includeSlipChart: i.includeSlipChart,
-                                baseLineReasonCode: this.baselineForm.value.baseLineReasonCode.lookUpId
+                                baseLineReasonCode: this.baselineForm.value.baseLineReasonCode?.lookUpId
                             }
                             var baselineObj = {
                                 projectId: i.projectId,
