@@ -42,6 +42,7 @@ import { EmailNotificationsTableEditComponent } from './email-notifications/emai
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MetricRepositoryComponent } from './metric-repository/metric-repository.component';
 import { MetricRepositoryAddEditViewComponent } from './metric-repository/metric-repository-add-edit-view/metric-repository-add-edit-view.component';
+import { SpotGlobalMessageModule } from 'app/layout/common/spot-global-message/spot-global-message.module';
 export const projectRoutes: Route[] = [
   {
     path: '',
@@ -117,8 +118,8 @@ export const projectRoutes: Route[] = [
         FuseAlertModule,
         SpotFormsModule,
         DragDropModule,
-
-    MatSnackBarModule
+        SpotGlobalMessageModule,
+        MatSnackBarModule
     ]
 })
 export class MyPreferenceModule { }

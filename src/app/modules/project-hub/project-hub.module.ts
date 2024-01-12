@@ -187,6 +187,7 @@ import { BudgetPerformanceComponent } from './budget-performance/budget-performa
 import { NewMetricsComponent } from './project-benefits/new-metrics/new-metrics.component';
 // import { SpotInputForecastComponent } from 'app/core/spot-forms/spot-input-forecast/spot-input-forecast.component';
 import { EditMetricsComponent } from './project-benefits/edit-metrics/edit-metrics.component';
+import { SpotGlobalMessageModule } from 'app/layout/common/spot-global-message/spot-global-message.module';
 
 export const projectRoutes: Route[] = [
   {
@@ -652,7 +653,8 @@ export const projectRoutes: Route[] = [
     ShortcutsModule,
     MessagesModule,
     NotificationsModule,
-    UserModule
+    UserModule,
+    SpotGlobalMessageModule
     ],
   exports: [
     GeneralInfoSingleEditComponent,
