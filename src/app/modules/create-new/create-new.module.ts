@@ -43,6 +43,7 @@ import { UserModule } from 'app/layout/common/user/user.module';
 import { NotificationsModule } from 'app/layout/common/notifications/notifications.module';
 import { MessagesModule } from 'app/layout/common/messages/messages.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { SpotGlobalMessageModule } from 'app/layout/common/spot-global-message/spot-global-message.module';
 
 // Portfolio Manager C9F323D4 - EF97 - 4C2A - B748 - 11DB5B8589D0
 
@@ -109,7 +110,8 @@ export const projectRoutes: Routes = [
     UserModule,
     NotificationsModule,
     MessagesModule,
-    ProjectHubModule
+    ProjectHubModule,
+    SpotGlobalMessageModule
   ],
   exports: [RouterModule]
 })
