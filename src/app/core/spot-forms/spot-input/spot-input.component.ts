@@ -72,11 +72,21 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
       this.control.setValue(formattedValue);
     }
     else if (this.inputType == 'Time') {
-      // Implement logic for time format (HH:MM)
-      // Ensure the value is in correct time format or set it to an empty string
-      this.control.setValue(this.isValidTimeFormat(val) ? val : '');
+      if (this.isValidTimeFormat(val)) {
+        // Value is in correct time format
+        this.control.setValue(val);
+      } else if (/^\d+$/.test(val)) {
+        // Value is a whole number, treat as minutes and convert to HH:MM format
+        const minutes = parseInt(val);
+        const hours = Math.floor(minutes / 60);
+        const remainingMinutes = minutes % 60;
+        const formattedTime = `${hours.toString().padStart(2, '0')}:${remainingMinutes.toString().padStart(2, '0')}`;
+        this.control.setValue(formattedTime);
+      } else {
+        // If the value is not in a recognized format, set it to an empty string or a default time value
+        this.control.setValue('');
+      }
     }
-
     else {
       this.control.setValue(val);
     }
@@ -202,9 +212,10 @@ formatMinutes(minutes: string): string {
 
   onBlur(event: any): void {
     this.onTouch();
+    console.log(event)
     // Time formatting logic
     if (this.inputType === 'Time' && event?.target?.value) {
-      event.target.value = this.formatTimeOnBlur(event.target.value);
+        event.target.value = this.formatTimeOnBlur(event.target.value);
   }
 
     if (this.autoAddDecimal && this.decimalCount > 0 && event?.target?.value) {
