@@ -4,7 +4,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { PortfolioCenterService } from '../../portfolio-center.service';
 import { AuthService } from 'app/core/auth/auth.service';
-import { SheetDescriptor, SpreadsheetComponent } from '@progress/kendo-angular-spreadsheet';
+import { SheetDescriptor, SpreadsheetChangeEvent, SpreadsheetComponent } from '@progress/kendo-angular-spreadsheet';
 import '@progress/kendo-ui';
 declare var kendo: any;
 
@@ -132,14 +132,12 @@ export class ForecastExcelUpdateComponent {
               color: "rgb(0,62,117)",
             },
             {
-              formula: "C3*D3*0.2",
-              format: "$#,##0.00",
+              value: 10,
               background: "rgb(255,255,255)",
               color: "rgb(0,62,117)",
             },
             {
-              formula: "C3*D3+E3",
-              format: "$#,##0.00",
+              value: 10,
               background: "rgb(255,255,255)",
               color: "rgb(0,62,117)",
             },
@@ -175,14 +173,12 @@ export class ForecastExcelUpdateComponent {
               color: "rgb(0,62,117)",
             },
             {
-              formula: "C4*D4*0.2",
-              format: "$#,##0.00",
+              value: 10,
               background: "rgb(229,243,255)",
               color: "rgb(0,62,117)",
             },
             {
-              formula: "C4*D4+E4",
-              format: "$#,##0.00",
+              value: 10,
               background: "rgb(229,243,255)",
               color: "rgb(0,62,117)",
             },
@@ -925,6 +921,7 @@ export class ForecastExcelUpdateComponent {
             finaldata.push(rowData)
             z++;
           }
+
           // setTimeout(() => {
           //   kendo.jQuery(this.forecastElement.nativeElement).kendoSpreadsheet({
           //     sheets: [{
@@ -990,236 +987,6 @@ export class ForecastExcelUpdateComponent {
       }
     }
   }
-  // fTableEditRow(rowIndex) {
-  //   if (!this.fTableEditStack.includes(rowIndex)) {
-  //       // if (this.forecastExcelHistorical[rowIndex].isopen) {
-  //           this.fTableEditStack.push(rowIndex)
-  //       // }
-  //   }
-  // }
-  // hTableEditRow(rowIndex) {
-  //   if (!this.hTableEditStack.includes(rowIndex)) {
-  //       // if (this.forecastExcelHistorical[rowIndex].isopen) {
-  //           this.hTableEditStack.push(rowIndex)
-  //       // }
-  //   }
-  // }
-  // onPaste(event: ClipboardEvent, rowIndex: number, field: string): void {
-  //   event.preventDefault();
-  //   const clipboardData = event.clipboardData || window['clipboardData'];
-  //   const pastedData = clipboardData.getData('text').split('\t');
-  //   for (let i = 0; i < pastedData.length; i++) {
-  //       let cleanedValue = pastedData[i].replace(/,/g, '');
-  //       const roundedNumber = Math.round(cleanedValue);
-  //       this.historicalForm.controls[rowIndex].value[field] = roundedNumber;
-  //       this.historicalForm.controls[rowIndex].patchValue({
-  //           [field]: roundedNumber
-  //       });
-  //       field = this.getNextField(field);
-  //   }
-  //   this.recalculateAnnualTotal(rowIndex)
-  //   // this.formValue()
-  // }
-
-  // onPasteY1(event: ClipboardEvent, rowIndex: number, field: string): void {
-  //   event.preventDefault();
-  //   const clipboardData = event.clipboardData || window['clipboardData'];
-  //   const pastedData = clipboardData.getData('text').split('\t');
-  //   for (let i = 0; i < pastedData.length; i++) {
-  //       let cleanedValue = pastedData[i].replace(/,/g, '');
-  //       const roundedNumber = Math.round(cleanedValue);
-  //       this.forecastExcelForm.controls[rowIndex].value[field] = roundedNumber;
-  //       this.forecastExcelForm.controls[rowIndex].patchValue({
-  //           [field]: roundedNumber
-  //       });
-  //       field = this.getNextFieldY1(field);
-  //   }
-  //   this.recalculateAnnualTotalForecastY1(rowIndex)
-  //   // this.formValue()
-  // }
-
-  // onPasteY2(event: ClipboardEvent, rowIndex: number, field: string): void {
-  //   event.preventDefault();
-  //   const clipboardData = event.clipboardData || window['clipboardData'];
-  //   const pastedData = clipboardData.getData('text').split('\t');
-  //   for (let i = 0; i < pastedData.length; i++) {
-  //       const roundedNumber = Math.round(Number(pastedData[i]));
-  //       this.forecastExcelForm.controls[rowIndex].value[field] = roundedNumber;
-  //       this.forecastExcelForm.controls[rowIndex].patchValue({
-  //           [field]: roundedNumber
-  //       });
-  //       field = this.getNextFieldY1(field);
-  //   }
-  //   this.recalculateAnnualTotalForecastY2(rowIndex)
-  //   // this.formValue()
-  // }
-
-//   getNextField(field: string): string {
-//     switch (field) {
-//       case 'historicalActualFY14':
-//           return 'historicalActualFY15';
-//       case 'historicalActualFY15':
-//           return 'historicalActualFY16';
-//       case 'historicalActualFY16':
-//           return 'historicalActualFY17';
-//       case 'historicalActualFY17':
-//           return 'historicalActualFY18';
-//       case 'historicalActualFY18':
-//           return 'historicalActualFY19';
-//       case 'historicalActualFY19':
-//           return 'historicalActualFY20';
-//       case 'historicalActualFY20':
-//           return 'historicalActualFY21';
-//       case 'historicalActualFY21':
-//           return '';
-//       default:
-//           return '';
-//   }
-//   }
-
-//   getNextFieldY1(field: string): string {
-//     switch (field) {
-//       case 'apr':
-//         return 'may';
-//       case 'may':
-//         return 'jun';
-//       case 'jun':
-//         return 'jul';
-//       case 'jul':
-//         return 'aug';
-//       case 'aug':
-//         return 'sep';
-//       case 'sep':
-//         return 'oct';
-//       case 'oct':
-//         return 'nov';
-//       case 'nov':
-//         return 'dec';
-//       case 'dec':
-//         return 'jan';
-//       case 'jan':
-//         return 'feb';
-//       case 'feb':
-//         return 'mar';
-//       case 'mar':
-//         return '';
-//       default:
-//           return '';
-//   }
-//   }
-
-//   getNextFieldY2(field: string): string {
-//     switch (field) {
-//       case 'y1_Apr':
-//           return 'y1_May';
-//       case 'y1_May':
-//           return 'y1_Jun';
-//       case 'y1_Jun':
-//           return 'y1_Jul';
-//       case 'y1_Jul':
-//           return 'y1_Aug';
-//       case 'y1_Aug':
-//           return 'y1_Sep';
-//       case 'y1_Sep':
-//           return 'y1_Oct';
-//       case 'y1_Oct':
-//           return 'y1_Nov';
-//       case 'y1_Nov':
-//           return 'y1_Dec';
-//       case 'y1_Dec':
-//         return 'y1_Jan';
-//       case 'y1_Jan':
-//         return 'y1_Feb';
-//       case 'y1_Feb':
-//         return 'y1_Mar';
-//       case 'y1_Mar':
-//         return '';
-//       default:
-//           return '';
-//   }
-//   }
-
-//   recalculateAnnualTotal(index) {
-//     const isOpenEntry = this.historicalForm.controls[index];
-//     const newAnnualTotal =
-//             (isNaN(isOpenEntry.value.historicalActualFY14) ? 0 : isOpenEntry.value.historicalActualFY14) +
-//             (isNaN(isOpenEntry.value.historicalActualFY15) ? 0 : isOpenEntry.value.historicalActualFY15) +
-//             (isNaN(isOpenEntry.value.historicalActualFY16) ? 0 : isOpenEntry.value.historicalActualFY16) +
-//             (isNaN(isOpenEntry.value.historicalActualFY17) ? 0 : isOpenEntry.value.historicalActualFY17) +
-//             (isNaN(isOpenEntry.value.historicalActualFY18) ? 0 : isOpenEntry.value.historicalActualFY18) +
-//             (isNaN(isOpenEntry.value.historicalActualFY19) ? 0 : isOpenEntry.value.historicalActualFY19) +
-//             (isNaN(isOpenEntry.value.historicalActualFY20) ? 0 : isOpenEntry.value.historicalActualFY20) +
-//             (isNaN(isOpenEntry.value.historicalActualFY21) ? 0 : isOpenEntry.value.historicalActualFY21) ;
-//     isOpenEntry.patchValue({
-//       historicalActual: newAnnualTotal
-//     });
-//     this.forecastExcelHistorical[index].historicalActual = newAnnualTotal
-//     // this.forecastExcelHistorical.find(value => value.budgetHistoricalActualID === isOpenEntry.value.budgetHistoricalActualID).historicalActual = newAnnualTotal;
-// }
-
-// recalculateAnnualTotalForecastY1(index) {
-//   const isOpenEntry = this.forecastExcelForm.controls[index];
-//   const newAnnualTotal =
-//           (isNaN(isOpenEntry.value.apr) ? 0 : isOpenEntry.value.apr) +
-//           (isNaN(isOpenEntry.value.may) ? 0 : isOpenEntry.value.may) +
-//           (isNaN(isOpenEntry.value.jun) ? 0 : isOpenEntry.value.jun) +
-//           (isNaN(isOpenEntry.value.jul) ? 0 : isOpenEntry.value.jul) +
-//           (isNaN(isOpenEntry.value.aug) ? 0 : isOpenEntry.value.aug) +
-//           (isNaN(isOpenEntry.value.sep) ? 0 : isOpenEntry.value.sep) +
-//           (isNaN(isOpenEntry.value.oct) ? 0 : isOpenEntry.value.oct) +
-//           (isNaN(isOpenEntry.value.nov) ? 0 : isOpenEntry.value.nov) +
-//           (isNaN(isOpenEntry.value.dec) ? 0 : isOpenEntry.value.dec) +
-//           (isNaN(isOpenEntry.value.jan) ? 0 : isOpenEntry.value.jan) +
-//           (isNaN(isOpenEntry.value.feb) ? 0 : isOpenEntry.value.feb) +
-//           (isNaN(isOpenEntry.value.mar) ? 0 : isOpenEntry.value.mar) ;
-
-//   const newCummulativeTotal =
-//           (isNaN(isOpenEntry.value.y1) ? 0 : isOpenEntry.value.y1) +
-//           (isNaN(isOpenEntry.value.y2) ? 0 : isOpenEntry.value.y2) +
-//           (isNaN(isOpenEntry.value.y3) ? 0 : isOpenEntry.value.y3) +
-//           (isNaN(isOpenEntry.value.y4) ? 0 : isOpenEntry.value.y4) +
-//           (isNaN(newAnnualTotal) ? 0 : newAnnualTotal) +
-//           (isNaN(isOpenEntry.value.y5) ? 0 : isOpenEntry.value.y5) ;
-//   isOpenEntry.patchValue({
-//     annualTotal: newAnnualTotal,
-//     cumulativeTotal: newCummulativeTotal
-//   });
-//   this.forecastExcel[index].annualTotal = newAnnualTotal
-//   this.forecastExcel[index].cumulativeTotal = newCummulativeTotal
-//   // this.forecastExcelHistorical.find(value => value.budgetHistoricalActualID === isOpenEntry.value.budgetHistoricalActualID).historicalActual = newAnnualTotal;
-// }
-
-// recalculateAnnualTotalForecastY2(index) {
-//   const isOpenEntry = this.forecastExcelForm.controls[index];
-//   const newAnnualTotal =
-//           (isNaN(isOpenEntry.value.y1_Apr) ? 0 : isOpenEntry.value.y1_Apr) +
-//           (isNaN(isOpenEntry.value.y1_May) ? 0 : isOpenEntry.value.y1_May) +
-//           (isNaN(isOpenEntry.value.y1_Jun) ? 0 : isOpenEntry.value.y1_Jun) +
-//           (isNaN(isOpenEntry.value.y1_Jul) ? 0 : isOpenEntry.value.y1_Jul) +
-//           (isNaN(isOpenEntry.value.y1_Aug) ? 0 : isOpenEntry.value.y1_Aug) +
-//           (isNaN(isOpenEntry.value.y1_Sep) ? 0 : isOpenEntry.value.y1_Sep) +
-//           (isNaN(isOpenEntry.value.y1_Oct) ? 0 : isOpenEntry.value.y1_Oct) +
-//           (isNaN(isOpenEntry.value.y1_Nov) ? 0 : isOpenEntry.value.y1_Nov) +
-//           (isNaN(isOpenEntry.value.y1_Dec) ? 0 : isOpenEntry.value.y1_Dec) +
-//           (isNaN(isOpenEntry.value.y1_Jan) ? 0 : isOpenEntry.value.y1_Jan) +
-//           (isNaN(isOpenEntry.value.y1_Feb) ? 0 : isOpenEntry.value.y1_Feb) +
-//           (isNaN(isOpenEntry.value.y1_Mar) ? 0 : isOpenEntry.value.y1_Mar) ;
-
-//   const newCummulativeTotal =
-//           (isNaN(newAnnualTotal) ? 0 : newAnnualTotal) +
-//           (isNaN(isOpenEntry.value.y2) ? 0 : isOpenEntry.value.y2) +
-//           (isNaN(isOpenEntry.value.y3) ? 0 : isOpenEntry.value.y3) +
-//           (isNaN(isOpenEntry.value.y4) ? 0 : isOpenEntry.value.y4) +
-//           (isNaN(newAnnualTotal) ? 0 : newAnnualTotal) +
-//           (isNaN(isOpenEntry.value.y5) ? 0 : isOpenEntry.value.y5) ;
-//   isOpenEntry.patchValue({
-//     y1: newAnnualTotal,
-//     cumulativeTotal: newCummulativeTotal
-//   });
-//   this.forecastExcel[index].y1 = newAnnualTotal
-//   this.forecastExcel[index].cumulativeTotal = newCummulativeTotal
-//   // this.forecastExcelHistorical.find(value => value.budgetHistoricalActualID === isOpenEntry.value.budgetHistoricalActualID).historicalActual = newAnnualTotal;
-// }
 
 SubmitData(spreadsheet: SpreadsheetComponent){
   console.log(spreadsheet)
@@ -1244,6 +1011,12 @@ SubmitData(spreadsheet: SpreadsheetComponent){
       this.PortfolioCenterService.successSave.next(true)
     })
   }
+}
+onChange(event: SpreadsheetChangeEvent, type: string): void {
+  debugger;
+  console.log(`${type}`);
+  console.log(event);
+  console.log(event.range.value())
 }
 
 }

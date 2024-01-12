@@ -896,7 +896,7 @@
                             <div *ngIf="showData" #spreadsheet style="width: 100%;">
                             </div>
                             <div *ngIf="showDataForecast" #Forecastspreadsheet style="width: 100%;">
-                                <kendo-spreadsheet #Forecastspreadsheet [sheets]="finalDatatoSheet" style="width: 100%" >
+                                <kendo-spreadsheet #Forecastspreadsheet [sheets]="finalDatatoSheet" style="width: 100%" (change)="onChange($event, 'change')" >
                                 </kendo-spreadsheet>
                             </div>
                 </div>
