@@ -34,15 +34,20 @@
 
 </head>
 <style>
+    :root{
+        --custom-zoom: 1
+    }
     @media screen and (max-width: 1500px) and (min-width: 1400px) {
         body {
             zoom: 95%;
+            --custom-zoom: 0.95;
         }
     }
 
     @media screen and (max-width: 1400px) {
         body {
-            zoom: 85%
+            zoom: 85%;
+            --custom-zoom: 0.85;
         }
     }
 </style>

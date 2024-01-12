@@ -146,22 +146,22 @@
 }
 
 ::ng-deep .ngx-datatable.datatable-ri-73 .datatable-body .datatable-scroll {
-    height: calc(100vh - 220px) !important;
+    height: calc(calc(100vh/ var(--custom-zoom)) - 220px) !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
 ::ng-deep .ngx-datatable.datatable-schedule-1 .datatable-body .datatable-scroll {
-    height: calc(100vh - 335px) !important;
+    height: calc(calc(100vh/ var(--custom-zoom)) - 335px) !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
 ::ng-deep .ngx-datatable.datatable-schedule-2 .datatable-body .datatable-scroll {
-    height: calc(100vh - 290px) !important;
+    height: calc(calc(100vh/ var(--custom-zoom)) - 290px) !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
 ::ng-deep .ngx-datatable.datatable-schedule-close-out .datatable-body .datatable-scroll {
-    height: calc(100vh - 180px) !important;
+    height: calc(calc(100vh/ var(--custom-zoom)) - 180px) !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }

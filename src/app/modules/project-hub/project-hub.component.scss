@@ -1,7 +1,3 @@
-.w-3qua {
-    width: 75vw;
-}
-
 .pb-4rem {
     padding-bottom: 4rem;
 }
@@ -15,12 +11,12 @@
 }
 
 .bulkEdit{
-    min-width: 95vw !important;
-    max-width: 95vw !important;
+    min-width: 95% !important;
+    max-width: 95% !important;
 }
 .fuse-drawer-small{
-    min-width: 35vw !important;
-    max-width: 35vw !important;
+    min-width: 35% !important;
+    max-width: 35% !important;
 }
 
 .scroll-fixed {
@@ -33,8 +29,8 @@
 }
 
 fuse-drawer {
-    min-width: 50vw;
-    max-width: 50vw;
+    min-width: 50%;
+    max-width: 50%;
 }
 
 fuse-drawer .fuse-drawer-content {

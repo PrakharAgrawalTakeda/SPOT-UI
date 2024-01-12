@@ -8,7 +8,7 @@
         </div>
     </div>
     <form class="pl-3 w-full overflow-hidden mt-2" [formGroup]="generalInfoForm">
-        <div [style]="viewType === 'SidePanel' ? 'height:calc(100vh - 105px)' : null">
+        <div [style]="viewType === 'SidePanel' ? 'height: calc(calc(100vh/ var(--custom-zoom)) - 105px)' : null">
             <!-- <div class="w-full mt-4 mb-6"> -->
             <spot-toggle class="w-full" formControlName="isOeproject"
                          [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'" [label]="'OE Project'">

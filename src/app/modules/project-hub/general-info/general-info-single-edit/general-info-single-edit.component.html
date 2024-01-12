@@ -8,7 +8,7 @@
         </div>
     </div>
     <form class="pl-3 overflow-y-scroll overflow-x-hidden" [formGroup]="generalInfoForm"
-          [style]="viewType === 'SidePanel' ? 'height:calc(100vh - 100px)' : null">
+          [style]="viewType === 'SidePanel' ? 'height: calc(calc(100vh/ var(--custom-zoom)) - 100px)' : null">
         <p style="color:red;" *ngIf="showMessage">Error: Some of the
             required fields are missing. Please review and correct your data below</p>
         <div
