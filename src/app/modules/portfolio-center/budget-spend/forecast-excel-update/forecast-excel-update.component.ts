@@ -28,10 +28,6 @@ export class ForecastExcelUpdateComponent {
   forecastExcel:any = {}
   ExcelData:any = {}
   showContent = false
-  fTableEditStack = []
-  hTableEditStack = []
-  historicalForm = new FormArray([])
-  forecastExcelForm = new FormArray([])
   showData = false
   showDataForecast = false
   showDataForecastOpex = false
@@ -59,6 +55,7 @@ export class ForecastExcelUpdateComponent {
     this.ForecastForm.controls.DataType.valueChanges.subscribe(res => {
       if (this.showContent) {
         if(res == "Historical"){
+          this.ForecastForm.value.Reference = null
           this.ForecastForm.controls.Reference.disable();
         }
         else if(res == "Forecast"){
@@ -68,62 +65,12 @@ export class ForecastExcelUpdateComponent {
     })
     this.ForecastForm.controls.ForecastType.valueChanges.subscribe((res: any) => {
       if (this.showContent) {
-        console.log(res)
         if(this.ForecastForm.controls.DataType.value == "Forecast"){
           this.showData = false;
           this.showDataForecast = false;
           this.showDataForecastOpex = false;
           this.forecastExcel = this.ExcelData.filter(x => x.budgetData == res.lookUpName)
-          this.forecastExcelForm.value.patchValue = []
-          this.forecastExcelForm.controls = []
           this.finalDatatoSheet = []
-          for (var i of this.forecastExcel) {
-            this.forecastExcelForm.push(new FormGroup({
-              budgetGlobalID: new FormControl(i.budgetGlobalID),
-              dateMasterID: new FormControl(i.dateMasterID),
-              budgetDataID: new FormControl(i.budgetDataID),
-              budgetDataIDY1: new FormControl(i.budgetDataIDY1),
-              projectID: new FormControl(i.projectID),
-              budgetDataTypeID: new FormControl(i.budgetDataTypeID),
-              budgetData: new FormControl(i.budgetData),
-              capitalBudgetID: new FormControl(i.capitalBudgetID),
-              problemID: new FormControl(i.problemID),
-              problemTitle: new FormControl(i.problemTitle),
-              periodName: new FormControl(i.periodName),
-              historicalActual: new FormControl(i.historicalActual),
-              apr: new FormControl(i.apr),
-              may: new FormControl(i.may),
-              jun: new FormControl(i.jun),
-              jul: new FormControl(i.jul),
-              aug: new FormControl(i.aug),
-              sep: new FormControl(i.sep),
-              oct: new FormControl(i.oct),
-              nov: new FormControl(i.nov),
-              dec: new FormControl(i.dec),
-              jan: new FormControl(i.jan),
-              feb: new FormControl(i.feb),
-              mar: new FormControl(i.Mar),
-              y1_Apr: new FormControl(i.y1_Apr),
-              y1_May: new FormControl(i.y1_May),
-              y1_Jun: new FormControl(i.y1_Jun),
-              y1_Jul: new FormControl(i.y1_Jul),
-              y1_Aug: new FormControl(i.y1_Aug),
-              y1_Sep: new FormControl(i.y1_Sep),
-              y1_Oct: new FormControl(i.Y1_Oct),
-              y1_Nov: new FormControl(i.y1_Nov),
-              y1_Dec: new FormControl(i.y1_Dec),
-              y1_Jan: new FormControl(i.y1_Jan),
-              y1_Feb: new FormControl(i.y1_Feb),
-              y1_Mar: new FormControl(i.y1_Mar),
-              y2: new FormControl(i.y2),
-              y3: new FormControl(i.y3),
-              y4: new FormControl(i.y4),
-              y5: new FormControl(i.y5),
-              y1: new FormControl(i.Y1),
-              annualTotal: new FormControl(i.annualTotal),
-              cumulativeTotal: new FormControl(i.cumulativeTotal),
-            }), { emitEvent: false })
-        }
         var firstrow={
           height: 30,
           cells: [
@@ -301,7 +248,7 @@ export class ForecastExcelUpdateComponent {
         }
         this.finalDatatoSheet = [{
           name: "Budget",
-          mergedCells: ["A1:L1"],
+          mergedCells: ["A1:AK1"],
           columns: [
             { width: 150 },
             { width: 150 },
@@ -326,28 +273,7 @@ export class ForecastExcelUpdateComponent {
           this.showData = false;
           this.showDataForecast = false
           this.forecastExcelHistorical = this.ExcelData.filter(x => x.budgetDataType == res.lookUpName)
-          this.historicalForm.value.patchValue = []
-          this.historicalForm.controls = []
           this.finalDatatoSheetHistorical = []
-          for (var i of this.forecastExcelHistorical) {
-            this.historicalForm.push(new FormGroup({
-              budgetDataType: new FormControl(i.budgetDataType),
-              budgetDataTypeID: new FormControl(i.budgetDataTypeID),
-              budgetHistoricalActualID: new FormControl(i.budgetHistoricalActualID),
-              capitalBudgetID: new FormControl(i.capitalBudgetID),
-              problemID: new FormControl(i.problemID),
-              problemTitle: new FormControl(i.problemTitle),
-              projectID: new FormControl(i.projectID),
-              historicalActualFY14: new FormControl(i.historicalActualFY14),
-              historicalActualFY15: new FormControl(i.historicalActualFY15),
-              historicalActualFY16: new FormControl(i.historicalActualFY16),
-              historicalActualFY17: new FormControl(i.historicalActualFY17),
-              historicalActualFY18: new FormControl(i.historicalActualFY18),
-              historicalActualFY19: new FormControl(i.historicalActualFY19),
-              historicalActualFY20: new FormControl(i.historicalActualFY20),
-              historicalActualFY21: new FormControl(i.historicalActualFY21),
-            }), { emitEvent: false })
-        }
         var firstrow={
           height: 30,
           cells: [
@@ -427,7 +353,7 @@ export class ForecastExcelUpdateComponent {
         }
         this.finalDatatoSheetHistorical = [{
           name: "Budget",
-          mergedCells: ["A1:L1"],
+          mergedCells: ["A1:M1"],
           columns: [
             { width: 150 },
             { width: 150 },
@@ -536,29 +462,9 @@ export class ForecastExcelUpdateComponent {
         this.portfoliService.getHistoricalExcelData(projectId, budgetId).then((historicalData : any) => {
           this.showData = false
           this.showDataForecast = false
-          console.log(historicalData)
           this.ExcelData = historicalData
           this.forecastExcelHistorical = historicalData.filter(x => x.budgetDataType == this.ForecastForm.controls.ForecastType.value.lookUpName)
 
-          for (var i of this.forecastExcelHistorical) {
-            this.historicalForm.push(new FormGroup({
-              budgetDataType: new FormControl(i.budgetDataType),
-              budgetDataTypeID: new FormControl(i.budgetDataTypeID),
-              budgetHistoricalActualID: new FormControl(i.budgetHistoricalActualID),
-              capitalBudgetID: new FormControl(i.capitalBudgetID),
-              problemID: new FormControl(i.problemID),
-              problemTitle: new FormControl(i.problemTitle),
-              projectID: new FormControl(i.projectID),
-              historicalActualFY14: new FormControl(i.historicalActualFY14),
-              historicalActualFY15: new FormControl(i.historicalActualFY15),
-              historicalActualFY16: new FormControl(i.historicalActualFY16),
-              historicalActualFY17: new FormControl(i.historicalActualFY17),
-              historicalActualFY18: new FormControl(i.historicalActualFY18),
-              historicalActualFY19: new FormControl(i.historicalActualFY19),
-              historicalActualFY20: new FormControl(i.historicalActualFY20),
-              historicalActualFY21: new FormControl(i.historicalActualFY21),
-            }), { emitEvent: false })
-        }
           this.showData = true
           var firstrow={
             height: 30,
@@ -570,12 +476,6 @@ export class ForecastExcelUpdateComponent {
           }
           var secondrow = {
             cells: [
-              // {
-              // value: "budgetHistoricalActualID", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center", hidden: true
-              // },
-              // {
-              // value: 'budgetDataTypeID', bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-              // },
               {
               value: "problemTitle", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
               },
@@ -625,8 +525,6 @@ export class ForecastExcelUpdateComponent {
           for (var i of this.forecastExcelHistorical) {
             var formula = '=SUM(F' + z + ':J' + z + ')'
             rowData={cells: [
-              // { value: i.budgetHistoricalActualID, textAlign: "center"},
-              // { value: i.budgetDataTypeID, textAlign: "center"},
               { value: i.budgetDataType, textAlign: "center"},
               { value: i.capitalBudgetID, textAlign: "center"},
               { value: i.problemID, textAlign: "center"},
@@ -647,10 +545,8 @@ export class ForecastExcelUpdateComponent {
           }
           this.finalDatatoSheetHistorical = [{
             name: "Budget",
-            mergedCells: ["A1:L1"],
+            mergedCells: ["A1:M1"],
             columns: [
-              // { width: 150 },
-              // { width: 150 },
               { width: 150 },
               { width: 150 },
               { width: 150 },
@@ -673,7 +569,6 @@ export class ForecastExcelUpdateComponent {
         this.portfoliService.getForecastExcelData(LBEPeriod, projectId, budgetId).then((LBE : any) => {
           this.showData = false
           this.showDataForecast = false
-          console.log(LBE)
           this.ExcelData = LBE
           const d = new Date();
           let year = d.getFullYear();
@@ -689,53 +584,7 @@ export class ForecastExcelUpdateComponent {
           this.y4Label= 'FY' + year6 + '+';
 
           this.forecastExcel = LBE.filter(x => x.budgetData == this.ForecastForm.controls.ForecastType.value.lookUpName)
-          for (var i of this.forecastExcel) {
-            this.forecastExcelForm.push(new FormGroup({
-              budgetGlobalID: new FormControl(i.budgetGlobalID),
-              dateMasterID: new FormControl(i.dateMasterID),
-              budgetDataID: new FormControl(i.budgetDataID),
-              budgetDataIDY1: new FormControl(i.budgetDataIDY1),
-              projectID: new FormControl(i.projectID),
-              budgetDataTypeID: new FormControl(i.budgetDataTypeID),
-              budgetData: new FormControl(i.budgetData),
-              capitalBudgetID: new FormControl(i.capitalBudgetID),
-              problemID: new FormControl(i.problemID),
-              problemTitle: new FormControl(i.problemTitle),
-              periodName: new FormControl(i.periodName),
-              historicalActual: new FormControl(i.historicalActual),
-              apr: new FormControl(i.apr),
-              may: new FormControl(i.may),
-              jun: new FormControl(i.jun),
-              jul: new FormControl(i.jul),
-              aug: new FormControl(i.aug),
-              sep: new FormControl(i.sep),
-              oct: new FormControl(i.oct),
-              nov: new FormControl(i.nov),
-              dec: new FormControl(i.dec),
-              jan: new FormControl(i.jan),
-              feb: new FormControl(i.feb),
-              mar: new FormControl(i.Mar),
-              y1_Apr: new FormControl(i.y1_Apr),
-              y1_May: new FormControl(i.y1_May),
-              y1_Jun: new FormControl(i.y1_Jun),
-              y1_Jul: new FormControl(i.y1_Jul),
-              y1_Aug: new FormControl(i.y1_Aug),
-              y1_Sep: new FormControl(i.y1_Sep),
-              y1_Oct: new FormControl(i.Y1_Oct),
-              y1_Nov: new FormControl(i.y1_Nov),
-              y1_Dec: new FormControl(i.y1_Dec),
-              y1_Jan: new FormControl(i.y1_Jan),
-              y1_Feb: new FormControl(i.y1_Feb),
-              y1_Mar: new FormControl(i.y1_Mar),
-              y2: new FormControl(i.y2),
-              y3: new FormControl(i.y3),
-              y4: new FormControl(i.y4),
-              y5: new FormControl(i.y5),
-              y1: new FormControl(i.Y1),
-              annualTotal: new FormControl(i.annualTotal),
-              cumulativeTotal: new FormControl(i.cumulativeTotal),
-            }), { emitEvent: false })
-        }
+          
           this.showDataForecast = true
           var firstrow={
             height: 30,
@@ -747,24 +596,6 @@ export class ForecastExcelUpdateComponent {
           }
           var secondrow = {
             cells: [
-              // {
-              // value: "budgetGlobalID", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-              // },
-              // {
-              // value: 'dateMasterID', bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-              // },
-              // {
-              // value: "budgetDataID", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-              // },
-              // {
-              // value: 'budgetDataIDY1', bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-              // },
-              // {
-              // value: "projectID", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-              // },
-              // {
-              // value: "budgetDataTypeID", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
-              // },
               {
               value: "Budget Data", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
               },
@@ -888,12 +719,6 @@ export class ForecastExcelUpdateComponent {
             var formula1 = '=SUM(S' + z + ':AD' + z + ')'
             var formula2 = '=SUM(G' + z + ':AD' + z + ')'
             rowData={cells: [
-              // { value: i.budgetGlobalID, textAlign: "center"},
-              // { value: i.dateMasterID, textAlign: "center"},
-              // { value: i.budgetDataID, textAlign: "center"},
-              // { value: i.budgetDataIDY1, textAlign: "center"},
-              // { value: i.projectID, textAlign: "center"},
-              // { value: i.budgetDataTypeID, textAlign: "center"},
               { value: i.budgetData, textAlign: "center"},
               { value: i.capitalBudgetID, textAlign: "right"},
               { value: i.problemID, textAlign: "center"},
@@ -938,14 +763,8 @@ export class ForecastExcelUpdateComponent {
           }
           this.finalDatatoSheet = [{
             name: "Budget",
-            mergedCells: ["A1:L1"],
+            mergedCells: ["A1:AK1"],
             columns: [
-              // { width: 150 },
-              // { width: 150 },
-              // { width: 150 },
-              // { width: 150 },
-              // { width: 150 },
-              // { width: 150 },
               { width: 150 },
               { width: 150 },
               { width: 150 },
@@ -963,34 +782,85 @@ export class ForecastExcelUpdateComponent {
     }
   }
 
-SubmitData(forecastElement: SpreadsheetComponent){
-  console.log(this.forecastElement)
-  console.log(this.finalDatatoSheet)
-  if(this.ForecastForm.controls.DataType.value == "Forecast"){
-    var dataToSend = this.forecastExcel
-    this.portfoliService.putForecastExcelData(dataToSend).then((forecastData : any) => {
-      this.showDataForecast = false
-      this.getData()
-      this.fTableEditStack = []
-      this.PortfolioCenterService.successSave.next(true)
+SubmitData(){
+    if(this.ForecastForm.controls.DataType.value == "Forecast"){
+      var data:any = this.forecastElement
+  var jsonData
+  data.spreadsheetWidget.saveJSON().then((data) => {
+    jsonData = data.sheets[0].rows;
+      var i=2;
+      this.forecastExcel.forEach(element=>{
+        element.annualTotal = jsonData[i].cells[35].value
+        element.apr = jsonData[i].cells[6].value
+        element.aug= jsonData[i].cells[10].value
+        element.budgetData = jsonData[i].cells[0].value
+        element.capitalBudgetID = jsonData[i].cells[1].value
+        element.cumulativeTotal = jsonData[i].cells[36].value
+        element.dec = jsonData[i].cells[14].value
+        element.feb = jsonData[i].cells[16].value
+        element.historicalActual = jsonData[i].cells[5].value
+        element.jan = jsonData[i].cells[15].value
+        element.jul = jsonData[i].cells[9].value
+        element.jun = jsonData[i].cells[8].value
+        element.mar = jsonData[i].cells[17].value
+        element.may = jsonData[i].cells[7].value
+        element.nov = jsonData[i].cells[13].value
+        element.oct = jsonData[i].cells[12].value
+        element.sep = jsonData[i].cells[11].value
+        element.y1 = jsonData[i].cells[34].value
+        element.y1_Apr = jsonData[i].cells[18].value
+        element.y1_Aug = jsonData[i].cells[22].value
+        element.y1_Dec = jsonData[i].cells[26].value
+        element.y1_Feb = jsonData[i].cells[28].value
+        element.y1_Jan = jsonData[i].cells[27].value
+        element.y1_Jul = jsonData[i].cells[21].value
+        element.y1_Jun = jsonData[i].cells[20].value
+        element.y1_Mar = jsonData[i].cells[29].value
+        element.y1_May = jsonData[i].cells[19].value
+        element.y1_Nov = jsonData[i].cells[25].value
+        element.y1_Oct = jsonData[i].cells[24].value
+        element.y1_Sep = jsonData[i].cells[23].value
+        element.y2 = jsonData[i].cells[30].value
+        element.y3 = jsonData[i].cells[31].value
+        element.y4 = jsonData[i].cells[32].value
+        element.y5 = jsonData[i].cells[33].value
+        i++
+      })
+      var dataToSend = this.forecastExcel
+      this.portfoliService.putForecastExcelData(dataToSend).then((forecastData : any) => {
+        this.showDataForecast = false
+        this.getData()
+        this.PortfolioCenterService.successSave.next(true)
+      })
     })
-  }
-  else{
-    var dataToSend = this.forecastExcelHistorical
-    this.portfoliService.putHistoricalExcelData(dataToSend).then((historicalData : any) => {
-      this.showData = false
-      this.getData()
-      this.hTableEditStack = []
-      this.PortfolioCenterService.successSave.next(true)
+    }
+    else{
+      var data:any = this.el
+      var jsonData
+      data.spreadsheetWidget.saveJSON().then((data) => {
+      jsonData = data.sheets[0].rows;
+      var i=2
+      this.forecastExcelHistorical.forEach(element=>{
+        element.budgetDataType = jsonData[i].cells[0].value
+        element.historicalActual = jsonData[i].cells[4].value
+        element.historicalActualFY14 = jsonData[i].cells[5].value
+        element.historicalActualFY15 = jsonData[i].cells[6].value
+        element.historicalActualFY16 = jsonData[i].cells[7].value
+        element.historicalActualFY17 = jsonData[i].cells[8].value
+        element.historicalActualFY18 = jsonData[i].cells[9].value
+        element.historicalActualFY19 = jsonData[i].cells[10].value
+        element.historicalActualFY20 = jsonData[i].cells[11].value
+        element.historicalActualFY21 = jsonData[i].cells[12].value
+        i++
+      })
+      var dataToSend = this.forecastExcelHistorical
+      this.portfoliService.putHistoricalExcelData(dataToSend).then((historicalData : any) => {
+        this.showData = false
+        this.getData()
+        this.PortfolioCenterService.successSave.next(true)
+      })
     })
-  }
-}
-onChange(event: SpreadsheetChangeEvent, type: string): void {
-  var data: any = event.range;
-  var row = data._sheet._editSelection.originalActiveCell.row
-  var col = data._sheet._editSelection.originalActiveCell.col
-  var column = this.finalDatatoSheet[0].rows[1].cells[col].value.toString().toLowerCase();
-  this.forecastExcel[row-2][column] = event.range.value()
+    }
 }
 
 }
