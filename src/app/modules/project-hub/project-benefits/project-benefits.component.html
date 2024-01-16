@@ -96,7 +96,7 @@
             <ngx-datatable-column name="Portfolio Owner" prop="metricPortfolioID" [width]="130" [frozenLeft]="true"
                 [headerClass]="getFrozenHeaderClass" [resizeable]="false" [sortable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p style="margin-bottom: 68px;">{{getOwner(value, row.metricTypeID)}}</p>
+                    <p style="margin-bottom: 68px;">{{getOwner(value, row.metricTypeID ? row.metricTypeID : row.metricID)}}</p>
                 </ng-template>
             </ngx-datatable-column>
 
@@ -109,9 +109,9 @@
             <ngx-datatable-column name="Metric Name" prop="metricName" [width]="160" [frozenLeft]="true"
                 [headerClass]="getFrozenClass" [resizeable]="false" [sortable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p style="margin-bottom: 72px;"><mat-icon *ngIf="row.parentProjectId != null" 
-                        style="top: 7px;position: relative;" svgIcon="heroicons_outline:link" 
-                        [matTooltip]=row.parentName></mat-icon><mat-icon *ngIf="value!= '' && row.helpText && row.helpText != ''" 
+                    <p style="margin-bottom: 72px;"><mat-icon *ngIf="row.parentProjectId != null"
+                        style="top: 7px;position: relative;" svgIcon="heroicons_outline:link"
+                        [matTooltip]=row.parentName></mat-icon><mat-icon *ngIf="value!= '' && row.helpText && row.helpText != ''"
                         class="pe" style="font-size: 17px;top: 3px;position: relative;"
                         [matTooltip]=row.helpText>help</mat-icon>{{value}}</p>
                 </ng-template>
@@ -128,7 +128,7 @@
                     <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [width]="30" [frozenLeft]="true">
+            <ngx-datatable-column [width]="30" [frozenLeft]="true" [sortable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <div *ngIf="row.temporaryImpact" style="height: 92px !important;"><mat-icon style="color: red;"
                             svgIcon="heroicons_outline:clock"></mat-icon></div>
@@ -213,7 +213,7 @@
                             {{row.strategicCurrent | number:'1.0-2' }} <br> {{row.strategicActual | number:'1.0-2' }}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [width]="30" [resizeable]="false" [sortable]="false" 
+            <ngx-datatable-column [width]="30" [resizeable]="false" [sortable]="false"
                 [headerClass]="getFrozenHeaderClass2">
                 <ng-template let-row="row" ngx-datatable-cell-template>
 

@@ -148,27 +148,29 @@ export class ForecastComponent {
               Currency: this.currencyList[0]
             })
           }
-          this.CAPEXdata = forecastData.forecastTableItems["CapExForecast|OY"]
-          this.OPEXdata = forecastData.forecastTableItems["OpExForecast|OY"]
-          this.fundingRequests = forecastData.forecastTableItems["CapExForecast|OY"]
-          if (forecastData.forecastProjectItems.CapExForecast != undefined){
-            this.projectCAPEXdata = forecastData.forecastProjectItems.CapExForecast
-            this.projectFunding = forecastData.forecastProjectItems.CapExForecast
+          if(forecastData.forecastTableItems != null){
+            this.CAPEXdata = forecastData.forecastTableItems["CapExForecast|OY"]
+            this.OPEXdata = forecastData.forecastTableItems["OpExForecast|OY"]
+            this.fundingRequests = forecastData.forecastTableItems["CapExForecast|OY"]
+            if (forecastData.forecastProjectItems.CapExForecast != undefined){
+              this.projectCAPEXdata = forecastData.forecastProjectItems.CapExForecast
+              this.projectFunding = forecastData.forecastProjectItems.CapExForecast
+            }
+            if (forecastData.forecastProjectItems.OpExForecast != undefined) {
+              this.projectOPEXdata = forecastData.forecastProjectItems.OpExForecast
+            }
+            
+            this.projectFunding.sort((a, b) => {
+              return (a.problemID < b.problemID ? -1 : a.problemID == b.problemID ? 0 : 1);
+            })
+            this.yearLabel.currentYear = forecastData.yearLabels.FY
+            this.yearLabel.NextYear = forecastData.yearLabels["FY+1"]
+            this.yearLabel.Y1 = forecastData.yearLabels["FY+2"]
+            this.yearLabel.Y2 = forecastData.yearLabels["FY+3"]
+            this.yearLabel.Y3 = forecastData.yearLabels["FY+4"]
+            this.yearLabel.Y4 = forecastData.yearLabels["5+"]
+            this.localCurrency = currency
           }
-          if (forecastData.forecastProjectItems.OpExForecast != undefined) {
-            this.projectOPEXdata = forecastData.forecastProjectItems.OpExForecast
-          }
-          
-          this.projectFunding.sort((a, b) => {
-            return (a.problemID < b.problemID ? -1 : a.problemID == b.problemID ? 0 : 1);
-          })
-          this.yearLabel.currentYear = forecastData.yearLabels.FY
-          this.yearLabel.NextYear = forecastData.yearLabels["FY+1"]
-          this.yearLabel.Y1 = forecastData.yearLabels["FY+2"]
-          this.yearLabel.Y2 = forecastData.yearLabels["FY+3"]
-          this.yearLabel.Y3 = forecastData.yearLabels["FY+4"]
-          this.yearLabel.Y4 = forecastData.yearLabels["5+"]
-          this.localCurrency = currency
           this.showContent = true
         })
       })

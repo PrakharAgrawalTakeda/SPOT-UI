@@ -7,7 +7,7 @@
             </a>
         </div>
     </div>
-    <form class="overflow-auto m-2"  style="height: calc(100vh - 120px)" [formGroup]="optionInfoForm" >
+    <form class="overflow-auto m-2"  style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)" [formGroup]="optionInfoForm" >
             <!--Enter Element here-->
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="feasibilityData"

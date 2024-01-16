@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <div class="overflow-y-hidden h-auto w-screen pl-3" id="fundingRequestsTableDiv">
+        <div class="overflow-y-hidden h-auto w-full pl-3" id="fundingRequestsTableDiv">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
                            [rows]="fundingRequests" [ngStyle]="{ 'height': calculateHeight(), 'overflow-y': 'visible' }">

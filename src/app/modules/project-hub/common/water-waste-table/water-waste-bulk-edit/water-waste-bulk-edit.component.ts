@@ -340,7 +340,7 @@ export class WaterWasteBulkEditComponent {
 
         mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
 
-        this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {
+        this.apiService.editCAPSData(this.projecthubservice.projectid, mainObj).then(res => {
           this.apiService.bulkeditWW(this.waterWasteDb, this.projecthubservice.projectid).then(res => {
           this.projecthubservice.isFormChanged = false
           this.projecthubservice.isNavChanged.next(true)

@@ -245,8 +245,8 @@
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projectHubNavigation" [mode]="'side'"
-    [name]="'projecthub-navigation'" [autoCollapse]="true" [opened]="true" class=" fixed mt-0 bg-card print:hidden"
-    style="margin-top: 4rem !important; z-index: 48;">
+    [name]="'projecthub-navigation'" [autoCollapse]="true" [opened]="true" class=" fixed mt-16 bg-card print:hidden"
+    style="z-index: 48;">
     <ng-container fuseVerticalNavigationContentHeader>
         <!-- Logo -->
         <div class="flex items-center justify-end mt-3 mr-5" #container>
@@ -272,6 +272,7 @@
     [ngClass]="navigationAppearance=='default'?'project-hub-default':'project-hub-dense'"
     [ngStyle]="{ 'position' : projecthubservice.drawerOpenedright ? 'fixed' : 'relative'}">
     <div class="p-8 pb-6 pt-2" *ngIf="viewContent">
+        <spot-global-message [callLocation]="'ProjectHub'"></spot-global-message>
         <div class="w-full bg-card shadow rounded-2xl">
             <div class="flex-1 min-w-0 p-6 pt-1" [ngClass]="{'text-gray-400': projectDetails.isArchived}">
                 <!-- Title -->
@@ -310,7 +311,7 @@
                 </div>
                 <!-- Actions -->
                 <div class="flex items-start justify-between py-4">
-                    <div class="flex justify-between items-center gap-12 text-xl">
+                    <div class="flex justify-between items-center gap-4 xl_custom:gap-12 text-xl">
                         <div class="flex items-center gap-4">
                             <p>Overall Status</p>
                             <mat-icon

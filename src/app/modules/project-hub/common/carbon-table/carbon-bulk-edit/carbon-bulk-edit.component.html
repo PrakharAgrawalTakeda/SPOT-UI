@@ -16,7 +16,7 @@
         <div class="m-2">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material font-medium text-sm text-default whitespace-nowrap cursor-default w-[94vw]"
-                           style="height: calc(100vh - 215px); overflow-y:visible"
+                           style="height: calc(calc(100vh/ var(--custom-zoom)) - 215px); overflow-y:visible"
                            [rows]="Carbon" #carbonTable>
                 <ngx-datatable-column name="Emission Source" prop="emsourceName" [flexGrow]="0.8">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>

@@ -37,7 +37,7 @@ export class ProjectBenefitsComponent implements OnInit {
     localCurrency: string = ""
   valueCreation: any;
   projectsMetricsData = []
-  constructor(public projectApiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, 
+  constructor(public projectApiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute,
     public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService) {
       this.projecthubservice.submitbutton.subscribe(res => {
         if (res) {
@@ -45,10 +45,12 @@ export class ProjectBenefitsComponent implements OnInit {
           this.ngOnInit()
         }
       })
+
+
   }
 
   ngOnInit(): void {
-    
+
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
      // Clear the arrays before populating
      this.columnYear = [];
@@ -83,8 +85,8 @@ console.log(problemCapture)
           this.lookupData = resp
           this.filterData = filterres
           res.forEach((element)=>{
-            var format = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID).lookUpName : ''
-            var order = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID).lookUpOrder : ''
+            var format = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID)?.lookUpName : ''
+            var order = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID)?.lookUpOrder : ''
             element.metricData.metricFormat = format
             element.metricData.PO = element.metricData.metricPortfolioID ? 0 : 1
             element.metricData.sortOrder = order
@@ -104,15 +106,15 @@ console.log(problemCapture)
       console.log(problemCapture)
       this.ValueCaptureForm.patchValue({
           valueCaptureStart: problemCapture.financialRealizationStartDate,
-            primaryValueDriver: this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi).lookUpName : null,
+            primaryValueDriver: this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi)?.lookUpName : null,
             valueCommentary: problemCapture.valueCommentary
       })
       this.isStrategicInitiative = problemCapture.problemType == 'Strategic Initiative / Program' ? true : false
-          
+
           console.log(this.ValueCaptureForm.getRawValue())
           var year = []
           var yearList=[]
-          
+
           if(res.length > 0){
             for(var z=0;z<res.length;z++){
               if(res[z].projectsMetricsDataYearly.length > 0){
@@ -123,7 +125,7 @@ console.log(problemCapture)
               }
             }
             for(var i=0;i<year.length;i++){
-              var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i]).lookUpName : ''
+              var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i])?.lookUpName : ''
               this.columnYear.push({year: yearName})
               yearList.push(yearName)
             }
@@ -200,6 +202,7 @@ console.log(problemCapture)
                 this.columnYear.push({ year: fiscalYear });
               }
             }
+            this.columnYear.sort((a, b) => a.year.localeCompare(b.year));
             this.ValueCaptureForm.disable()
             this.viewContent = true
         })
@@ -223,22 +226,35 @@ console.log(problemCapture)
       }
     });
   }
-  
-  
+
+
 
   private getFiscalYearFromDate(dateString: string): string {
-    const date = new Date(dateString);
-    let year = date.getFullYear();
-    if (date.getMonth() < 3) { // January, February, March
-      year--; // Fiscal year is the previous year
+    let date;
+    let year;
+
+    if (dateString != null) {
+      date = new Date(dateString);
+      year = date.getFullYear();
+      if (date.getMonth() < 3) { // January, February, March
+        year--; // Fiscal year is the previous year
+      }
+    } else {
+      date = new Date();
+      year = date.getFullYear();
+      if (date.getMonth() < 3) { // For consistency, also consider the fiscal year in the current year
+        year--;
+      }
     }
+
     return `FY ${year}`;
   }
-  
-  
+
+
+
 
   getLookup(id: any){
-    return id && id.lookUpId != '' ? this.lookupData.find(x => x.lookUpId == id).lookUpName : ''
+    return id && id.lookUpId != '' ? this.lookupData.find(x => x.lookUpId == id)?.lookUpName : ''
   }
   compare( array: any ): any {
     return array.length > 1 ? array.sort((a, b) => {
@@ -317,6 +333,7 @@ console.log(problemCapture)
               this.projectApiService.baselineProjectMetricData(this.id)
         .then(response => {
           console.log('Update successful', response);
+          this.projecthubservice.submitbutton.next(true)
 
         })
       })

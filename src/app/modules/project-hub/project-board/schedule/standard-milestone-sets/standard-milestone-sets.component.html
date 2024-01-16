@@ -7,7 +7,7 @@
             </a>
         </div>
     </div>
-    <div class="overflow-x-hidden overflow-y-scroll ml-6" style="height: calc(100vh - 110px)">
+    <div class="overflow-x-hidden overflow-y-scroll ml-6" style="height: calc(calc(100vh/ var(--custom-zoom)) - 110px)">
             <mat-accordion multi>
                 <div *ngFor="let milestone of standardMilestoneData;let i = index;">
                     <mat-expansion-panel class="my-6" [expanded]="false">

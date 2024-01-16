@@ -85,7 +85,7 @@ export class FundingComponent implements OnInit, OnChanges {
               for (var i of this.fundingdata) {
                 console.log(i)
                 //res.equipmentRatingId ? lookup.find(x => x.lookUpId == res.equipmentRatingId)?.lookUpName : ''
-                i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
+                i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner?.find(x => x.portfolioOwnerId == i.fundingSourceId)?.portfolioOwner : ''
               }
             }
             this.projecthubservice.lookUpMaster = lookup

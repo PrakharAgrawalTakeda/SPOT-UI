@@ -51,10 +51,10 @@ export class CloseOutOutcomesSingleEditComponent implements OnInit {
     mainObj.emissionPortfolioId = mainObj.emissionPortfolioId == null ? "" : mainObj.emissionPortfolioId
     mainObj.projectDescription = formValue.projectDescription
     charterObj.detailedDescription = formValue.detailedDescription
+    charterObj.projectId = this.projectHubService.projectid
     mainObj.targetEndState = formValue.targetEndState
     mainObj.benefitsRealizedOutcome = formValue.benefitsRealizedOutcome
     mainObj.projectId = this.projectHubService.projectid
-    console.log(charterObj)
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       this.apiService.BulkEditProjectCharter(charterObj, this.projectHubService.projectid).then(res1 => {
          this.apiService.updateReportDates(this.projectHubService.projectid, "CloseoutModifiedDate").then(secondRes => {

@@ -38,7 +38,7 @@
 
         <ngx-datatable-column name="Portfolio Owner" prop="metricPortfolioID" [width]="130" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p style="margin-bottom: 68px;">{{getOwner(value, row.metricTypeID)}}</p>
+                <p style="margin-bottom: 68px;">{{getOwner(value, row.metricTypeID ? row.metricTypeID : row.metricId)}}</p>
             </ng-template>
         </ngx-datatable-column>
 

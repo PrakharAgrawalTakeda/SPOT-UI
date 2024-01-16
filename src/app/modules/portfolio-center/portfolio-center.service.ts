@@ -11,6 +11,7 @@ export class PortfolioCenterService {
   isNavChanged = new BehaviorSubject<boolean>(false)
   drawerOpenedright: boolean = false;
   drawerOpened:boolean = false
+  drawerOpenedPrakharTemp: boolean = false
   itemid: string = "new"
   itemtype: string = ""
   item: any = {}

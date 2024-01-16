@@ -15,7 +15,7 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup } from 
 export class SpotInputComponent implements OnInit, ControlValueAccessor {
   @Input() decimalCount: number = 0
   @Input() autoAddDecimal: boolean = false
-  @Input() inputType: 'Text' | 'Number' = 'Text'
+  @Input() inputType: 'Text' | 'Number' | 'Time' = 'Text';
   @Input() showLabel: boolean = true
   @Input() label: string = ''
   @Input() placeholder: string = ''
@@ -26,7 +26,7 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
   @Input() callLocation: 'View' | 'Edit' = 'Edit'
   @Input() allowNegativeValues: boolean = false
   @Input() isLabelStrong: boolean = false
-
+  firstTimeFocus: boolean = true; // Flag to track the first focus for time input
 
   formFieldHelpers: any
   onTouch: any = () => { };
@@ -70,6 +70,22 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
       const formattedValue = value?.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
 
       this.control.setValue(formattedValue);
+    }
+    else if (this.inputType == 'Time') {
+      if (this.isValidTimeFormat(val)) {
+        // Value is in correct time format
+        this.control.setValue(val);
+      } else if (/^\d+$/.test(val)) {
+        // Value is a whole number, treat as minutes and convert to HH:MM format
+        const minutes = parseInt(val);
+        const hours = Math.floor(minutes / 60);
+        const remainingMinutes = minutes % 60;
+        const formattedTime = `${hours.toString().padStart(2, '0')}:${remainingMinutes.toString().padStart(2, '0')}`;
+        this.control.setValue(formattedTime);
+      } else {
+        // If the value is not in a recognized format, set it to an empty string or a default time value
+        this.control.setValue('');
+      }
     }
     else {
       this.control.setValue(val);
@@ -118,13 +134,89 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
 
       // Call the onChange method with the float value
       this.onChange(parseFloat(value));
-    } else {
+    }
+    else if (this.inputType === 'Time') {
+      let value = event.target.value;
+      // Allow only digits and colon
+      value = value.replace(/[^\d:]/g, '');
+      event.target.value = value;
+  }
+     else {
       this.onChange(event.target.value);
     }
   }
 
+    // Utility method to check if a string is a valid time format (HH:MM)
+    isValidTimeFormat(timeStr) {
+      const regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+      return regex.test(timeStr);
+    }
+
+  //   formatTimeInput(value) {
+  //     let [hours, minutes] = value.split(':');
+  
+  //     // Validate and format hours
+  //     if (hours) {
+  //         let hoursInt = parseInt(hours, 10);
+  //         if (isNaN(hoursInt) || hoursInt > 23) {
+  //             hoursInt = 23;
+  //         } else if (hoursInt < 0) {
+  //             hoursInt = 0;
+  //         }
+  //         hours = hoursInt.toString().padStart(2, '0');
+  //     } else {
+  //         hours = '00';
+  //     }
+  
+  //     // Validate and format minutes
+  //     if (minutes) {
+  //         let minutesInt = parseInt(minutes, 10);
+  //         if (isNaN(minutesInt) || minutesInt > 59) {
+  //             minutesInt = 59;
+  //         } else if (minutesInt < 0) {
+  //             minutesInt = 0;
+  //         }
+  //         minutes = minutesInt.toString().padStart(2, '0');
+  //     } else {
+  //         minutes = '00';
+  //     }
+  
+  //     // Combine hours and minutes to get the final time string
+  //     return hours + ':' + minutes;
+  // }
+  
+  formatTimeOnBlur(value: string): string {
+    let [hours, minutes] = value.split(':');
+
+    // Format hours
+    hours = this.formatHours(hours);
+
+    // Format minutes
+    minutes = this.formatMinutes(minutes);
+
+    return `${hours}:${minutes}`;
+}
+formatHours(hours: string): string {
+  if (!hours) return '00';
+  let hoursInt = parseInt(hours, 10);
+  if (isNaN(hoursInt) || hoursInt > 23) hoursInt = 23;
+  return hoursInt.toString().padStart(2, '0');
+}
+
+formatMinutes(minutes: string): string {
+  if (!minutes) return '00';
+  let minutesInt = parseInt(minutes, 10);
+  if (isNaN(minutesInt) || minutesInt > 59) minutesInt = 59;
+  return minutesInt.toString().padStart(2, '0');
+}
+
   onBlur(event: any): void {
     this.onTouch();
+    console.log(event)
+    // Time formatting logic
+    if (this.inputType === 'Time' && event?.target?.value) {
+        event.target.value = this.formatTimeOnBlur(event.target.value);
+  }
 
     if (this.autoAddDecimal && this.decimalCount > 0 && event?.target?.value) {
       let value = event.target.value;
@@ -151,6 +243,7 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
       event.target.value = value;
     }
   }
+
   customUpdate(value: any) {
     if (this.inputType == 'Text') {
       this.onChange(value)

@@ -18,21 +18,21 @@
                 </div>
             </div>
             <div class="overflow-x-auto">
-                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'"  columnMode="flex" [sorts]="[{ prop: 'metricTypeID', dir: 'desc' },{ prop: 'metricPortfolioID', dir: 'desc' },{ prop: 'metricCategoryID', dir: 'desc' },{ prop: 'metricName', dir: 'desc' }]"
+                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'"  columnMode="flex" [sorts]="[{ prop: 'metricTypeID', dir: 'asc' },{ prop: 'metricPortfolioID', dir: 'asc' },{ prop: 'metricCategoryID', dir: 'asc' },{ prop: 'metricName', dir: 'asc' }]"
                                class="ml-3 datatable-sms material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="metricRepositoryData">
                     <ngx-datatable-column name="Global/Local" prop="metricTypeID" [flexGrow]="1" >
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                            <p>{{getGlobalLocal(value)}}</p>
+                            <p>{{value}}</p>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Managing Portofolio" prop="metricPortfolioID" [flexGrow]="1">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                            <p>{{getPortfolioOwnerNameById(value)}}</p>
+                            <p>{{value}}</p>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Category" prop="metricCategoryID" [flexGrow]="1">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                            <p>{{getLookUpName(value)}}</p>
+                            <p>{{value}}</p>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Metric Name" prop="metricName" [flexGrow]="1" [resizeable]="false" [draggable]="false">

@@ -1,5 +1,6 @@
 <div class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10" *ngIf="!viewContent">
     <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12" style="min-height: 680px;">
+        <spot-global-message [callLocation]="'CreateNew'"></spot-global-message>
         <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl">
             <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full">
                 <div>
@@ -533,8 +534,8 @@
                                 (click)="RoutetoCharter()" mat-button>Project Charter</button></div>
                         <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;"
                                 (click)="RoutetoBoard()" mat-button>Project Board</button></div>
-                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;"
-                                (click)="RouteCreateProject()" mat-button>Create another Project</button></div>
+                        <!-- <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;"
+                                (click)="RouteCreateProject()" mat-button>Create another Project</button></div> -->
                     </div>
                 </div>
             </div>

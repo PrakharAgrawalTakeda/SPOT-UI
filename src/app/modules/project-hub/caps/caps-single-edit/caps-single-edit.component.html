@@ -8,7 +8,7 @@
         </div>
     </div>
     <form class="m-2 overflow-hidden" [formGroup]="CAPSform" >
-        <div [style]="viewType === 'SidePanel' ? 'height:calc(100vh - 110px)' : null">
+        <div [style]="viewType === 'SidePanel' ? 'height: calc(calc(100vh/ var(--custom-zoom)) - 110px)' : null">
             <div class="w-25">
                 <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
                     <mat-label>Impact Realization Date</mat-label>

@@ -25,6 +25,39 @@ export class MetricRepositoryAddEditViewComponent {
                 this.categoryChanged = true;
             }
         })
+        this.metricRepositoryForm.controls.metricFormat.valueChanges.subscribe(res => {
+            if(this.myPreferenceService.itemid != "new"){
+                var comfirmConfig: FuseConfirmationConfig = {
+                    "title": "",
+                    "message": "Updating the format will remove all the current data from the metric. Do you want to proceed?",
+                    "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "warning"
+                    },
+                    "actions": {
+                        "confirm": {
+                            "show": true,
+                            "label": "Okay",
+                            "color": "primary"
+                        },
+                        "cancel": {
+                            "show": true,
+                            "label": "Cancel"
+                        }
+                    },
+                    "dismissible": true
+                }
+                const alert = this.fuseAlert.open(comfirmConfig)
+                alert.afterClosed().subscribe(close => {
+                    if (close == 'cancelled') {
+                        this.metricRepositoryForm.patchValue({
+                            metricFormat: this.metricRepository.metricFormatID,
+                        }, {emitEvent: false})
+                    }
+                })
+            }
+        });
         this.metricRepositoryForm.valueChanges.subscribe(res => {
             this.myPreferenceService.isFormChanged = true
         })
@@ -49,8 +82,8 @@ export class MetricRepositoryAddEditViewComponent {
                 this.metricRepository = this.myPreferenceService.all
                 this.metricRepositoryForm.patchValue({
                     globalLocal: this.metricRepository.metricID == "e7a9e055-1319-4a4f-b929-cd7777599e39" ? 'Global' : 'Local',
-                    managingPortfolio: this.getPortfolioOwnerById(this.metricRepository.metricPortfolioID),
-                    category: this.metricRepository.metricCategoryID,
+                    managingPortfolio: this.getPortfolioOwnerByName(this.metricRepository.metricPortfolioID),
+                    category: this.getLookUpID(this.metricRepository.metricCategoryID),
                     metricName: this.metricRepository.metricName,
                     unit: this.metricRepository.metricUnit,
                     metricFormat: this.metricRepository.metricFormatID,
@@ -189,7 +222,10 @@ export class MetricRepositoryAddEditViewComponent {
             return a.lookUpOrder - b.lookUpOrder;
         })
     }
-    getPortfolioOwnerById(portfolioId: string): any {
-        return this.portfolioOwnerList.filter(x =>  x.portfolioOwnerID == portfolioId)[0];
+    getPortfolioOwnerByName(portfolioId: string): any {
+        return this.portfolioOwnerList.filter(x =>  x.portfolioOwner == portfolioId)[0];
+    }
+    getLookUpID(name: any): any {
+        return this.myPreferenceService.lookUpMaster.find(x => x.lookUpName == name)?.lookUpId;
     }
 }
