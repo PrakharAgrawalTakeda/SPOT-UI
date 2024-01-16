@@ -7,7 +7,7 @@
     </div>
 </div>
 <form class="w-full p-[20px]" [formGroup]="newMetricForm">
-    <div class=" h-[84vh] overflow-hidden">
+    <div class="overflow-hidden" style = "height: calc(calc(100vh/ var(--custom-zoom)) - 140px)">
 
         <spot-singleselect-autocomplete formControlName="metricName" class="w-full" name="metricName"
         [label]="'Choose an Existing Metric'" [placeholder]="'Metric Name'" [valuePointer]="'displayMetricName'"

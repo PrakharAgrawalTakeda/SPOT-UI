@@ -8,7 +8,7 @@
         </div>
     </div>
     <div *ngIf="mode== 'Project-Charter'">
-        <form [formGroup]="FundingForm" class="overflow-auto m-2" style="height: calc(100vh - 120px)">
+        <form [formGroup]="FundingForm" class="overflow-auto m-2" style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)">
             <spot-select formControlName="fundingTypeId" name="fundingTypeId" [placeholder]="'Funding Type'"
                          [dropDownArrayType]="'object'" [dropDownArray]="getfundingtype()" [idPointer]="'lookUpId'"
                          [valuePointer]="'lookUpName'" [showNoneOption]="false" [label]="'Funding Type'">
@@ -47,7 +47,7 @@
 
     <div
         *ngIf="mode!= 'Project-Charter' && (optionType== 'option-3' || optionType== 'option-2' || optionType== 'recommended-option')">
-        <form class="overflow-auto m-2" [formGroup]="FundingBCForm" style="height: calc(100vh - 120px)">
+        <form class="overflow-auto m-2" [formGroup]="FundingBCForm" style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)">
             <spot-select formControlName="fundingTypeId" name="fundingTypeId" [placeholder]="'Funding Type'"
                          [dropDownArrayType]="'object'" [dropDownArray]="getfundingtype()" [idPointer]="'lookUpId'"
                          [valuePointer]="'lookUpName'" [showNoneOption]="false" [label]="'Funding Type'">

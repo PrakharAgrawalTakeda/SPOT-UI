@@ -7,7 +7,7 @@
         </a>
         </div>
     </div>
-    <form class="overflow-auto m-2"  style="height: calc(100vh - 120px)"  [formGroup]="budgetPerformanceForm" >
+    <form class="overflow-auto m-2"  style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)"  [formGroup]="budgetPerformanceForm" >
         <div class=" form-ask-need h-[87vh] overflow-y-scroll">
             <div  *ngFor="let fr of finalRequirements | keyvalue" [formGroup]="finalRequirementsValueForm.controls[fr.key]">
                 <div class="flex justify-between">

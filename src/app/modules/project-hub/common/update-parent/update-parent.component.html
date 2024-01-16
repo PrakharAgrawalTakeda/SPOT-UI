@@ -52,7 +52,7 @@
         </div>
     </div>
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-        style="height: calc(100vh - 195px); overflow-y:visible"
+        style="height: calc(calc(100vh/ var(--custom-zoom)) - 195px); overflow-y:visible"
         class="ml-5 material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="rows">
         <ngx-datatable-column name="Parent" prop="projectName" [flexGrow]="9" [resizeable]="false" [draggable]="false"
             [sortable]="false">

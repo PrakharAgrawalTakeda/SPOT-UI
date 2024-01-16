@@ -19,7 +19,7 @@
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
             </button>
         </div>
-        <div [ngClass]="{'custom': callLocation != 'ProjectHub'}" *ngIf="callLocation == 'ProjectHub' || qualityForm.controls['isQualityRef'].value" style="margin-left:10px;" [style]="viewType === 'SidePanel' ? 'height:calc(100vh - 150px)' : null"
+        <div [ngClass]="{'custom': callLocation != 'ProjectHub'}" *ngIf="callLocation == 'ProjectHub' || qualityForm.controls['isQualityRef'].value" style="margin-left:10px;" [style]="viewType === 'SidePanel' ? 'height: calc(calc(100vh/ var(--custom-zoom)) - 150px)' : null"
              class="spot-table overflow-y-scroll overflow-x-hidden">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="material font-medium text-sm text-default whitespace-nowrap"
