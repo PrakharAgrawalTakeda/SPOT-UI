@@ -1,999 +1,1000 @@
 <!-- <div (window:resize)="onResize($event)"> -->
-<div *ngIf="viewContent" [hidden]="viewBaseline && viewBaselineLogs || viewStandardMilestonesSets">
-    <div class="flex items-start justify-between bg-primary sidepanel-header">
-        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Milestones</div>
-        <div style="padding-top: 2px">
-            <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'', true)" href="javascript:void(0)" title="Close">
-                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
-            </a>
-        </div>
-    </div>
-    <div>
-        <fuse-alert [type]="'warning'"
-            *ngIf="mode == 'Normal' && scheduleData.projectData.isSprproject && projecthubservice.roleControllerControl.roleId != '0E83F6BE-79BE-426A-A316-F523FFAECC4F'">
-            <span fuseAlertTitle>This is a SPR project, only GMS PMO can baseline SPR Projects. Please reach out to
-                dl.SPOTSupport@takeda.com to request a baseline!</span>
-        </fuse-alert>
-        <div class="flex justify-between" *ngIf="mode== 'Normal'">
-            <div *ngIf="baselineCount.baselineCount > 0; else zero">
-                <h6 class="font-medium text-default text-md italic ml-4 mt-2">
-                    Baseline : {{baselineCount.baselineCount}}
-                </h6>
-            </div>
-            <ng-template #zero>
-                <h6 class="font-medium text-default text-md italic ml-4 mt-2">
-                    Baseline : 0
-                </h6>
-            </ng-template>
-
-            <div *ngIf="log != ''; else null">
-
-                <div class="font-medium text-default text-md italic mt-2" style="margin-right:3rem !important;">
-
-                    <h6 class="font-medium text-default text-md italic ml-4 mt-2">
-                        Last Baseline: {{log.modifiedDate | date:'dd-MMM-yyyy'}} </h6>
-                </div>
-            </div>
-            <ng-template #null>
-                <div class="font-medium text-default text-md italic mt-2" style="margin-right:3rem !important;">
-
-                    <h6 class="font-medium text-default text-md italic ml-4 mt-2">
-                        Last Baseline: </h6>
-                </div>
-            </ng-template>
-
-            <div class="font-medium text-default text-md italic mt-2" style="margin-right:3rem !important;">
-                <form [formGroup]="localIncludedItems">
-                    <mat-slide-toggle class="primary slider-adjust" formControlName="toggle"
-                        (checked)="projecthubservice.includeClosedItems.schedule.value"
-                        (change)="toggleSchedule($event)">
-                        Include Closed Items
-                    </mat-slide-toggle>
-                </form>
-            </div>
-        </div>
-        <div class="flex justify-between">
-            <form [formGroup]="optionExecutions">
-                <div class="flex justify-end items-center gap-3 pl-6 mt-4"
-                    *ngIf="optionType=='option-2' || optionType=='option-3'">
-                    <div class="flex">
-                        <a class="self-center mr-2">Execution Start:</a>
-                        <spot-input-date class="w-64" formControlName="optionExecutionStart" name="optionExecutionStart"
-                            [showLabel]="true">
-                        </spot-input-date>
-                    </div>
-                    <div class="flex">
-                        <a class="self-center mr-2">Execution End:</a>
-                        <spot-input-date class="w-64" formControlName="optionExecutionEnd" name="optionExecutionEnd"
-                            [showLabel]="true">
-                        </spot-input-date>
-                    </div>
-                </div>
-            </form>
-            <div class="flex justify-end items-center gap-3 pr-6 mt-4">
-                <button mat-flat-button [color]="'primary-200'" type="button" class="min-w-26 text-primary bg-gray-200" *ngIf="mode!= 'Project-Close-Out'"
-                    (click)="openStandardMilestonesSets()">Standard Milestone Sets
-                </button>
-                <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                    (click)="baselineLogs()" *ngIf="mode== 'Normal'">
-                    Baseline Log
-                </button>
-
-                <button
-                    *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit && mode== 'Normal'"
-                    class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                    (click)="baselineProject()">
-                    Baseline Project
-                </button>
-
-
-                <!-- *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit" -->
-                <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                    (click)="addMilestoneRecord(target)" *ngIf="mode== 'Normal' || mode== 'Business-Case'">
-                    <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
-                </button>
-
-                <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                    (click)="addMilestoneRecord(target)" *ngIf="mode== 'Project-Charter'">
-                    <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
-                </button>
-            </div>
-        </div>
-        <div class="mt-3 pl-3 w-full" #target id="scheduleTableDiv">
-            <ngx-datatable  [ngClass]="getRIClass()"
-                           class="material datatable-schedule w-full font-medium text-sm text-default whitespace-nowrap cursor-pointer"
-                [rows]="schedulengxdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
-                [scrollbarV]="false" [rowClass]="getRowClass">
-                <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="0.3" *ngIf="mode== 'Normal'">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
-                            class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}"
-                            *ngIf="row.scheduleUniqueId != 'new'">
-                        </mat-icon>
-                        &nbsp;
-                        &nbsp;
-                        <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
-                            svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.1"
-                    *ngIf="optionType=='recommended-option' && mode!= 'Project-Close-Out' && mode!= 'Project-Charter' && mode!= 'Normal'">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
-                            svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="" prop="indicator" [resizeable]="false" [flexGrow]="0.1"
-                    *ngIf="mode== 'Project-Close-Out'" [sortable]="false">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-
-                        <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
-                            svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name=" " prop="indicator" [resizeable]="false" [flexGrow]="0.1"
-                    *ngIf="mode== 'Project-Charter'" [sortable]="false">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-
-                        <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
-                            svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="0.9" *ngIf="mode== 'Normal'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
-                            [ngClass]="{'closed': row.completionDate != null}">
-                            <p *ngIf="value == ''">&nbsp;</p>
-                            <strong>
-                                <p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '"
-                                    class="nostartName">{{value}}
-                                    Insert Milestone Name</p>
-                            </strong>
-                            <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
-                        </a>
-                        <form class="pr-1" [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)">
-                            <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false"
-                                [showHint]="true" [hintPostion]="'mat-hint'"
-                                [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
-                                <!--  -->
-                                <!-- [showHint]="true"
-                                [hint]="hi" [hintPosition]="'mat-hint'" -->
-                                <!-- (this.schedulengxdata.milestoneType > 0 ? (this.schedulengxdata.milestoneType == 1 ? 'Execution Start - ...' : (this.schedulengxdata.milestoneType == 2 ? 'Execution End - ...' : 'Milestone')) : ' ') -->
-                                <!-- [placeholder]="'Milestone Name'" -->
-                            </spot-textarea>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="1" *ngIf="mode== 'Project-Charter' || mode =='Business-Case'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
-                            (click)="milestoneTableEditRow(rowIndex)">
-                            <p *ngIf="value == ''">&nbsp;</p>
-                            <strong>
-                                <p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '"
-                                    class="nostartName">{{value}}
-                                    Insert Milestone Name</p>
-                            </strong>
-                            <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)">
-                            <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false"
-                            [showHint]="true" [hintPostion]="'mat-hint'"
-                                [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
-                                <!-- [placeholder]="'Milestone Name'" -->
-                            </spot-textarea>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="0.5" *ngIf="mode== 'Project-Close-Out'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <p *ngIf="value == ''">&nbsp;</p>
-                        <div class="w-full px-1">
-                            <strong>
-                                <p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '"
-                                    class="nostartName">{{value}}
-                                    Insert Milestone Name</p>
-                            </strong>
-                        </div>
-                        <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
-                    </ng-template>
-                </ngx-datatable-column>
-
-
-                <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="0.7" *ngIf="mode== 'Normal'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
-                            [ngClass]="{'closed': row.completionDate != null}">
-                            <p *ngIf="value == ''">&nbsp;</p>{{value |
-                            date:'dd-MMM-yyyy'}}
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)">
-                            <spot-input-date formControlName="plannedFinish" name="plannedFinish" [showLabel]="false">
-                            </spot-input-date>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="0.5" *ngIf="mode== 'Project-Charter' || mode =='Business-Case'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
-                            (click)="milestoneTableEditRow(rowIndex)">
-                            <p *ngIf="value == ''">&nbsp;</p>{{value |
-                            date:'dd-MMM-yyyy'}}
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)">
-                            <spot-input-date formControlName="plannedFinish" name="plannedFinish" [showLabel]="false">
-                            </spot-input-date>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-
-                <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [resizeable]="false"
-                    [sortable]="false" [flexGrow]="0.6" *ngIf="mode== 'Normal'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
-                            [ngClass]="{'closed': row.completionDate != null}">
-                            <p *ngIf="value == ''">&nbsp;</p>{{value |
-                            date:'dd-MMM-yyyy'}}
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)">
-                            <spot-input-date formControlName="baselineFinish" name="baselineFinish" [showLabel]="false">
-                            </spot-input-date>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [resizeable]="false"
-                    [sortable]="false" [flexGrow]="0.3" *ngIf="mode== 'Project-Close-Out'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <p *ngIf="value == ''">&nbsp;</p>{{value |
-                        date:'dd-MMM-yyyy'}}
-                    </ng-template>
-                </ngx-datatable-column>
-
-
-                <ngx-datatable-column name="Variance" prop="variance" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="0.4" *ngIf="mode== 'Normal'">
-                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                        <div class="variance">
-                            {{calculateVariance(row)}}
-                        </div>
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Variance" prop="variance" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="0.2" *ngIf="mode== 'Project-Close-Out'">
-                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                        <div class="variancecloseout">
-                            {{calculateVariance(row)}}
-                        </div>
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName" [resizeable]="false"
-                    [sortable]="false" [flexGrow]="0.7" *ngIf="mode== 'Normal'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
-                            [ngClass]="{'closed': row.completionDate != null}">
-                            <p *ngIf="value == ''">&nbsp;</p>{{value}}
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)">
-                            <spot-singleselect-user-autocomplete formControlName="responsiblePersonName"
-                                name="responsiblePersonName" [showLabel]="false">
-                            </spot-singleselect-user-autocomplete>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName" [resizeable]="false"
-                    [sortable]="false" [flexGrow]="0.5" *ngIf="mode== 'Project-Charter'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
-                            (click)="milestoneTableEditRow(rowIndex)">
-                            <p *ngIf="value == ''">&nbsp;</p>{{value}}
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)">
-                            <spot-singleselect-user-autocomplete formControlName="responsiblePersonName"
-                                name="responsiblePersonName" [showLabel]="false">
-                            </spot-singleselect-user-autocomplete>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-
-                <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false"
-                    [sortable]="false" [flexGrow]="0.8" *ngIf="mode== 'Normal'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
-                            [ngClass]="{'closed': row.completionDate != null}">
-                            <p *ngIf="value == ''">&nbsp;</p>
-                            {{getLookupName(value)}}
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)">
-                            <div class="w-full px-1">
-                                <spot-singleselect-autocomplete formControlName="function" [showLabel]="false"
-                                    [valuePointer]="'lookUpName'" [dropDownArray]="getFunctionOwner()">
-                                </spot-singleselect-autocomplete>
-                            </div>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false"
-                    [sortable]="false" [flexGrow]="0.5" *ngIf="mode== 'Project-Charter' || mode =='Business-Case'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
-                            (click)="milestoneTableEditRow(rowIndex)">
-                            <p *ngIf="value == ''">&nbsp;</p>
-                            {{getLookupName(value)}}
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)">
-                            <div class="w-full px-1">
-                                <spot-singleselect-autocomplete formControlName="function" [showLabel]="false"
-                                    [valuePointer]="'lookUpName'" [dropDownArray]="getFunctionOwner()">
-                                </spot-singleselect-autocomplete>
-                            </div>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-
-                <ngx-datatable-column name="Completion Date" prop="completionDate" [resizeable]="false"
-                    [sortable]="false" [flexGrow]="0.7" *ngIf="mode== 'Normal'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
-                            [ngClass]="{'closed': row.completionDate != null}">
-                            <p *ngIf="value == ''">&nbsp;</p>{{value |
-                            date:'dd-MMM-yyyy'}}
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)">
-                            <spot-input-date formControlName="completionDate" name="completionDate" [showLabel]="false"
-                                [max]="'today'"></spot-input-date>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Completion Date" prop="completionDate" [resizeable]="false"
-                    [sortable]="false" [flexGrow]="0.3" *ngIf="mode== 'Project-Close-Out'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <p *ngIf="value == ''">&nbsp;</p>{{value |
-                        date:'dd-MMM-yyyy'}}
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Missed Milestone Reason Code" prop="missedMsreasonCode" [resizeable]="false"
-                    [sortable]="false" [flexGrow]="0.65" *ngIf="mode== 'Normal'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
-                            [ngClass]="{'closed': row.completionDate != null}">
-                            <p *ngIf="value == ''">&nbsp;</p>
-                            {{getLookupName(value)}}
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)">
-                            <div class="w-full px-1">
-                                <spot-singleselect-autocomplete formControlName="missedMsreasonCode" [showLabel]="false"
-                                    [valuePointer]="'lookUpName'" [dropDownArray]="getMissedMilestoneReasonCode()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
-                                </spot-singleselect-autocomplete>
-                            </div>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Comments" prop="comments" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="0.75" *ngIf="mode== 'Normal'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
-                            [ngClass]="{'closed': row.completionDate != null}">
-                            <p *ngIf="value == ''">&nbsp;</p>{{value}}
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)">
-                            <spot-textarea [rows]="3" formControlName="comments" name="comments" [showLabel]="false">
-                            </spot-textarea>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Comment" prop="comments" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="0.5" *ngIf="mode== 'Project-Close-Out'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
-                            (click)="milestoneTableEditRow(rowIndex)">
-                            <p *ngIf="value == ''">&nbsp;</p>{{value}}
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)">
-                            <spot-textarea [rows]="3" formControlName="comments" name="comments" [showLabel]="false">
-                            </spot-textarea>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Include in Dashboard (Max 8)" prop="includeInReport" [sortable]="false"
-                    [resizeable]="false" [flexGrow]="0.6" *ngIf="mode== 'Normal'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
-                            [ngClass]="{'closed': row.completionDate != null}">
-                            <p *ngIf="!value">&nbsp;</p>
-                            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)" class="h-[45px]">
-                            <mat-slide-toggle
-                                [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInReport'].disabled ? 'Only 8 can be selected at a time in the project report' : null"
-                                (change)="disabler()" class="h-full overflow-hidden" formControlName="includeInReport">
-                            </mat-slide-toggle>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Include in Business Case (Max 8)" prop="includeInBusinessCase"
-                    [sortable]="false" [resizeable]="false" [flexGrow]="0.40" *ngIf="mode== 'Business-Case'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
-                            [ngClass]="{'closed': row.completionDate != null}">
-                            <p *ngIf="!value">&nbsp;</p>
-                            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)" class="h-[45px]">
-                            <mat-slide-toggle
-                                [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 8 can be selected at a time in the business case' : null"
-                                (change)="disabler()" class="h-full overflow-hidden"
-                                formControlName="includeInBusinessCase">
-                            </mat-slide-toggle>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Include in Close Out (Max 20)" prop="includeInCloseout" [sortable]="false"
-                    [resizeable]="false" [flexGrow]="0.25" *ngIf="mode== 'Project-Close-Out'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
-                            (click)="milestoneTableEditRow(rowIndex)">
-                            <p *ngIf="!value">&nbsp;</p>
-                            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)" class="h-[45px]">
-                            <mat-slide-toggle
-                                [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInCloseout'].disabled ? 'Only 20 can be selected at a time in the project close out report' : null"
-                                (change)="disabler()" class="h-full overflow-hidden"
-                                formControlName="includeInCloseout">
-                            </mat-slide-toggle>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Include in Charter (Max 10)" prop="includeInCharter" [sortable]="false"
-                    [resizeable]="false" [flexGrow]="0.33" *ngIf="mode== 'Project-Charter'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
-                            (click)="milestoneTableEditRow(rowIndex)">
-                            <p *ngIf="!value">&nbsp;</p>
-                            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
-                        </a>
-                        <form [formGroup]="milestoneForm.controls[rowIndex]"
-                            *ngIf="milestoneTableEditStack.includes(rowIndex)" class="h-[45px]">
-                            <mat-slide-toggle
-                                [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInCharter'].disabled ? 'Only 10 can be selected at a time in the project charter' : null"
-                                (change)="disabler()" class="h-full overflow-hidden" formControlName="includeInCharter">
-                            </mat-slide-toggle>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column [flexGrow]="0.7" [resizeable]="false" [sortable]="false" [draggable]="false"
-                    *ngIf="mode== 'Normal'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
-
-                        <div class="flex items-center justify-start gap-6">
-                            <a href="javascript:void(0)" title="Delete"
-                                (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)"
-                                *ngIf="(row.milestoneType?!row.milestoneType >=1:true && !islink(row.scheduleUniqueId)) || islink(row.scheduleUniqueId)">
-                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
-                            </a>
-                        </div>
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column [flexGrow]="0.3" [resizeable]="false" [sortable]="false" [draggable]="false"
-                    *ngIf="mode== 'Project-Charter'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
-
-                        <div class="flex items-center justify-start gap-6">
-                            <a href="javascript:void(0)" title="Delete"
-                                (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)"
-                                *ngIf="(row.milestoneType?!row.milestoneType >=1:true && !islink(row.scheduleUniqueId)) || islink(row.scheduleUniqueId)">
-                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
-                            </a>
-                        </div>
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column [flexGrow]="0.3" [resizeable]="false" [sortable]="false" [draggable]="false"
-                *ngIf="mode == 'Business-Case'">
-                <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
-
-                    <div class="flex items-center justify-start gap-6">
-                        <a href="javascript:void(0)" title="Delete"
-                            (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)"
-                            *ngIf="(row.milestoneType?!row.milestoneType >=1:true && !islink(row.scheduleUniqueId)) || islink(row.scheduleUniqueId)">
-                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
-                        </a>
-                    </div>
-                </ng-template>
-            </ngx-datatable-column>
-
-            </ngx-datatable>
-        </div>
-    </div>
-    <div class="w-full pr-4 m-2 flex items-start justify-between" *ngIf="mode== 'Normal'">
-
-        <button class="min-w-26" mat-flat-button [color]="'primary'"
-            (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
-            Cancel
-        </button>
-
-        <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="submitscheduleHandler()">
-            Submit
-        </button>
-
-    </div>
-
-    <div class="w-full pr-4 m-2 flex items-start justify-between" *ngIf="mode== 'Project-Close-Out'">
-
-        <button class="min-w-26" mat-flat-button [color]="'primary'"
-            (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
-            Cancel
-        </button>
-
-        <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="submitschedulecloseout()">
-            Submit
-        </button>
-
-    </div>
-    <div class="w-full pr-4 m-2 flex items-start justify-between" *ngIf="mode== 'Business-Case'">
-        <button class="min-w-26" mat-flat-button [color]="'primary'"
-            (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
-            Cancel
-        </button>
-        <button class="min-w-26" mat-flat-button [color]="'primary'" type="button"
-            (click)="submitScheduleBusinessCase()">
-            Submit
-        </button>
-    </div>
-
-    <div class="w-full pr-4 m-2 flex items-start justify-between" *ngIf="mode== 'Project-Charter' ">
-
-        <button class="min-w-26" mat-flat-button [color]="'primary'"
-            (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
-            Cancel
-        </button>
-
-        <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="submitschedulecharter()">
-            Submit
-        </button>
-
-    </div>
-</div>
-
-<div *ngIf="viewContent" [hidden]="!viewBaseline">
-    <div class="flex items-start justify-between bg-primary sidepanel-header">
-        <div class="text-on-primary" style="padding-top: 6px">Baseline Count Justification</div>
-        <div style="padding-top: 2px">
-            <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'')" href="javascript:void(0)" title="Close">
-                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
-            </a>
-        </div>
-    </div>
-    <form class="mt-3 p-3 overflow-y-hidden" style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)" [formGroup]="baselineForm">
-        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
-            <mat-label>Justification for (Re-)Baselining</mat-label>
-            <textarea matInput [rows]="5" [placeholder]="'Provide an explanation/justification for re-baselining'"
-                formControlName="baselineComment" name="baselineComment"></textarea>
-        </mat-form-field>
-        <spot-singleselect-autocomplete [label]="'Baseline Reason Code'" [placeholder]="'Baseline Reason Code'"
-            formControlName="baseLineReasonCode" name="baseLineReasonCode" [valuePointer]="'lookUpName'"
-            [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
-            [dropDownArray]="getBaselineReasonCode()"></spot-singleselect-autocomplete>
-
-        <div class="flex justify-between items-center">
-            <div class="flex justify-start gap-1 items-center">Do you want to increment the baseline counter?
-            </div>
-            <div>
-                <mat-slide-toggle formControlName="counter"></mat-slide-toggle>
-            </div>
-        </div>
-        &nbsp;
-        &nbsp;
-    </form>
-    <div class="w-full px-3 pr-3 flex items-start justify-between">
-        <a class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelJustification()">
-            Cancel
-        </a>
-        <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="justificationHandler()">
-            Submit
-        </button>
-    </div>
-</div>
-
-<div *ngIf="!viewContent" [hidden]="!viewBaselineLogs">
-    <div class="flex items-start justify-between bg-primary sidepanel-header">
-        <div class="text-on-primary" style="padding-top: 6px">Baseline Log</div>
-        <div style="padding-top: 2px">
-            <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'', true)" href="javascript:void(0)" title="Close">
-                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
-            </a>
-        </div>
-    </div>
-    <!-- <form class="w-full"> -->
-    <div class="overflow-x-auto mt-3 w-full" style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)">
-        <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-            class="pl-3 pt-3 datatable-bl-83 material font-medium text-sm text-default whitespace-nowrap cursor-default"
-            [rows]="baselineLogData" [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #baselinelogTable>
-
-            <!-- <ngx-datatable-column name="Include in Slip Chart" prop="includeSlipChart" [sortable]="false"
-              [resizeable]="false" [flexGrow]="0.6">
-              <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="!baselinelogTableEditStack.includes(rowIndex)" (click)="baselinelogTableEditRow(rowIndex)">
-                  <p *ngIf="!value">&nbsp;</p>
-                  <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+    <div *ngIf="viewContent" [hidden]="viewBaseline && viewBaselineLogs || viewStandardMilestonesSets">
+        <div class="flex items-start justify-between bg-primary sidepanel-header">
+            <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Milestones</div>
+            <div style="padding-top: 2px">
+                <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'', true)" href="javascript:void(0)" title="Close">
+                    <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
                 </a>
-                <form [formGroup]="baselineLogForm.controls[rowIndex]" class="p-2 overflow-hidden"
-                  *ngIf="baselinelogTableEditStack.includes(rowIndex)">
-                  <div class="flex items-center justify-between p-2 overflow-hidden">
-                    <mat-slide-toggle name="includeSlipChart" [showLabel]="false" formControlName="includeSlipChart">
-                    </mat-slide-toggle>
-                  </div>
+            </div>
+        </div>
+        <div>
+            <fuse-alert [type]="'warning'"
+                *ngIf="mode == 'Normal' && scheduleData.projectData.isSprproject && projecthubservice.roleControllerControl.roleId != '0E83F6BE-79BE-426A-A316-F523FFAECC4F'">
+                <span fuseAlertTitle>This is a SPR project, only GMS PMO can baseline SPR Projects. Please reach out to
+                    dl.SPOTSupport@takeda.com to request a baseline!</span>
+            </fuse-alert>
+            <div class="flex justify-between" *ngIf="mode== 'Normal'">
+                <div *ngIf="baselineCount.baselineCount > 0; else zero">
+                    <h6 class="font-medium text-default text-md italic ml-4 mt-2">
+                        Baseline : {{baselineCount.baselineCount}}
+                    </h6>
+                </div>
+                <ng-template #zero>
+                    <h6 class="font-medium text-default text-md italic ml-4 mt-2">
+                        Baseline : 0
+                    </h6>
+                </ng-template>
+    
+                <div *ngIf="log != ''; else null">
+    
+                    <div class="font-medium text-default text-md italic mt-2" style="margin-right:3rem !important;">
+    
+                        <h6 class="font-medium text-default text-md italic ml-4 mt-2">
+                            Last Baseline: {{log.modifiedDate | date:'dd-MMM-yyyy'}} </h6>
+                    </div>
+                </div>
+                <ng-template #null>
+                    <div class="font-medium text-default text-md italic mt-2" style="margin-right:3rem !important;">
+    
+                        <h6 class="font-medium text-default text-md italic ml-4 mt-2">
+                            Last Baseline: </h6>
+                    </div>
+                </ng-template>
+    
+                <div class="font-medium text-default text-md italic mt-2" style="margin-right:3rem !important;">
+                    <form [formGroup]="localIncludedItems">
+                        <mat-slide-toggle class="primary slider-adjust" formControlName="toggle"
+                            (checked)="projecthubservice.includeClosedItems.schedule.value"
+                            (change)="toggleSchedule($event)">
+                            Include Closed Items
+                        </mat-slide-toggle>
+                    </form>
+                </div>
+            </div>
+            <div class="flex justify-between">
+                <form [formGroup]="optionExecutions">
+                    <div class="flex justify-end items-center gap-3 pl-6 mt-4"
+                        *ngIf="optionType=='option-2' || optionType=='option-3'">
+                        <div class="flex">
+                            <a class="self-center mr-2">Execution Start:</a>
+                            <spot-input-date class="w-64" formControlName="optionExecutionStart" name="optionExecutionStart"
+                                [showLabel]="true">
+                            </spot-input-date>
+                        </div>
+                        <div class="flex">
+                            <a class="self-center mr-2">Execution End:</a>
+                            <spot-input-date class="w-64" formControlName="optionExecutionEnd" name="optionExecutionEnd"
+                                [showLabel]="true">
+                            </spot-input-date>
+                        </div>
+                    </div>
                 </form>
-              </ng-template>
-            </ngx-datatable-column> -->
-
-
-            <ngx-datatable-column name="Log ID" prop="logId" [flexGrow]="0.5" *ngIf="mode=='Normal'">
-                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                    <div *ngIf="checklogDetails(row.baselineLogId) && value != '1'" class="logID">
-                        <a (click)="baselineLogDetails(row.baselineLogId)" class="cursor-pointer">{{value}}</a>
-                    </div>
-                    <div *ngIf="!checklogDetails(row.baselineLogId) || value == '1'" class="logID1">
-                        <a>{{value}}</a>
-                    </div>
-                </ng-template>
-            </ngx-datatable-column>
-
-
-            <ngx-datatable-column name="Baseline" prop="baselineCount" [flexGrow]="0.68" *ngIf="mode=='Baseline-Log'">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <div class="countbaseline">
-                        <p>{{value}}</p>
-                    </div>
-                </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Baseline" prop="baselineCount" [flexGrow]="0.68" *ngIf="mode=='Normal'">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <div class="count">
-                        <p>{{value}}</p>
-                    </div>
-                </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column name="Baseline Date" prop="modifiedDate" [flexGrow]="1.5"
-                *ngIf="mode=='Baseline-Log'">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value | date:'dd-MMM-yyyy hh:mm:ss a'}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Baseline Date" prop="modifiedDate" [flexGrow]="1.5" *ngIf="mode=='Normal'">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value | date:'dd-MMM-yyyy hh:mm:ss a'}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-
-
-            <ngx-datatable-column name="Baseline Set By" prop="teamMemberAdId" [flexGrow]="1.5"
-                *ngIf="mode=='Baseline-Log'">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{getUserName(value)}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column name="Baseline Set By" prop="teamMemberAdId" [flexGrow]="1.5" *ngIf="mode=='Normal'">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{getUserName(value)}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Baseline Reason Code" prop="baseLineReasonCodeName" [flexGrow]="1.5"
-                *ngIf="mode=='Normal'">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Justification" prop="baselineComment" [resizeable]="false" [sortable]="false"
-                [flexGrow]="2.1" *ngIf="mode=='Baseline-Log'">
-                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                    <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-                        <p *ngIf="value == ''">&nbsp;</p>{{value}}
-                    </a>
-                    <form [formGroup]="baselineLogForm.controls[rowIndex]"
-                        *ngIf="milestoneTableEditStack.includes(rowIndex)">
-                        <spot-textarea [rows]="3" formControlName="baselineComment" name="baselineComment"
-                            [showLabel]="false">
-                        </spot-textarea>
-                    </form>
-                </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column name="Include in Close Out (Max 10)" prop="includeInCloseout" [sortable]="false"
-                [resizeable]="false" [flexGrow]="0.6" *ngIf="mode=='Baseline-Log'">
-                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                    <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-                        <p *ngIf="!value">&nbsp;</p>
-                        <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
-                    </a>
-                    <form [formGroup]="baselineLogForm.controls[rowIndex]"
-                        *ngIf="milestoneTableEditStack.includes(rowIndex)" class="p-2">
-                        <div class="flex items-center justify-between">
-                            <mat-slide-toggle
-                                [matTooltip]="this.baselineLogForm.controls[rowIndex]['controls']['includeInCloseout'].disabled ? 'Only 10 can be selected at a time in the project close out report' : null"
-                                (change)="disabler2()" class="h-full" formControlName="includeInCloseout">
-                            </mat-slide-toggle>
+                <div class="flex justify-end items-center gap-3 pr-6 mt-4">
+                    <button mat-flat-button [color]="'primary-200'" type="button" class="min-w-26 text-primary bg-gray-200" *ngIf="mode!= 'Project-Close-Out'"
+                        (click)="openStandardMilestonesSets()">Standard Milestone Sets
+                    </button>
+                    <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        (click)="baselineLogs()" *ngIf="mode== 'Normal'">
+                        Baseline Log
+                    </button>
+    
+                    <button
+                        *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit && mode== 'Normal'"
+                        class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        (click)="baselineProject()">
+                        Baseline Project
+                    </button>
+    
+    
+                    <!-- *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit" -->
+                    <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        (click)="addMilestoneRecord(target)" *ngIf="mode== 'Normal' || mode== 'Business-Case'">
+                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                    </button>
+    
+                    <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        (click)="addMilestoneRecord(target)" *ngIf="mode== 'Project-Charter'">
+                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                    </button>
+                </div>
+            </div>
+            <div class="mt-3 pl-3 w-full" #target id="scheduleTableDiv">
+                <ngx-datatable  [ngClass]="getRIClass()"
+                               class="material datatable-schedule w-screen font-medium text-sm text-default whitespace-nowrap cursor-pointer"
+                    [rows]="schedulengxdata" #scheduleTable columnMode="force" [headerHeight]="'auto'" [rowHeight]="'auto'"
+                    [scrollbarV]="false" [scrollbarH]="true" [rowClass]="getRowClass">
+                    <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false"
+                    [width]="75" *ngIf="mode== 'Normal'" [draggable]="false">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
+                                class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}"
+                                *ngIf="row.scheduleUniqueId != 'new'">
+                            </mat-icon>
+                            &nbsp;
+                            &nbsp;
+                            <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
+                                svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="" prop="indicator" [resizeable]="false" [sortable]="false" [width]="25"
+                        *ngIf="optionType=='recommended-option' && mode!= 'Project-Close-Out' && mode!= 'Project-Charter' && mode!= 'Normal'" [draggable]="false">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
+                                svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="" prop="indicator" [resizeable]="false" [width]="25"
+                        *ngIf="mode== 'Project-Close-Out'" [sortable]="false" [draggable]="false">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+    
+                            <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
+                                svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name=" " prop="indicator" [resizeable]="false" [width]="25"
+                        *ngIf="mode== 'Project-Charter'" [sortable]="false" [draggable]="false">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+    
+                            <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
+                                svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
+                    [width]="225" *ngIf="mode== 'Normal'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
+                                [ngClass]="{'closed': row.completionDate != null}">
+                                <p *ngIf="value == ''">&nbsp;</p>
+                                <strong>
+                                    <p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '"
+                                        class="nostartName">{{value}}
+                                        Insert Milestone Name</p>
+                                </strong>
+                                <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
+                            </a>
+                            <form class="pr-1" [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                                <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false"
+                                    [showHint]="true" [hintPostion]="'mat-hint'"
+                                    [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
+                                    <!--  -->
+                                    <!-- [showHint]="true"
+                                    [hint]="hi" [hintPosition]="'mat-hint'" -->
+                                    <!-- (this.schedulengxdata.milestoneType > 0 ? (this.schedulengxdata.milestoneType == 1 ? 'Execution Start - ...' : (this.schedulengxdata.milestoneType == 2 ? 'Execution End - ...' : 'Milestone')) : ' ') -->
+                                    <!-- [placeholder]="'Milestone Name'" -->
+                                </spot-textarea>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
+                    [width]="275" *ngIf="mode== 'Project-Charter' || mode =='Business-Case'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
+                                (click)="milestoneTableEditRow(rowIndex)">
+                                <p *ngIf="value == ''">&nbsp;</p>
+                                <strong>
+                                    <p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '"
+                                        class="nostartName">{{value}}
+                                        Insert Milestone Name</p>
+                                </strong>
+                                <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                                <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false"
+                                [showHint]="true" [hintPostion]="'mat-hint'"
+                                    [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
+                                    <!-- [placeholder]="'Milestone Name'" -->
+                                </spot-textarea>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
+                    [width]="225" *ngIf="mode== 'Project-Close-Out'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <p *ngIf="value == ''">&nbsp;</p>
+                            <div class="w-full px-1">
+                                <strong>
+                                    <p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '"
+                                        class="nostartName">{{value}}
+                                        Insert Milestone Name</p>
+                                </strong>
+                            </div>
+                            <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+    
+                    <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false" [sortable]="false"
+                    [flexGrow]="2" *ngIf="mode== 'Normal'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
+                                [ngClass]="{'closed': row.completionDate != null}">
+                                <p *ngIf="value == ''">&nbsp;</p>{{value |
+                                date:'dd-MMM-yyyy'}}
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                                <spot-input-date formControlName="plannedFinish" name="plannedFinish" [showLabel]="false">
+                                </spot-input-date>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false" [sortable]="false"
+                    [flexGrow]="2" *ngIf="mode== 'Project-Charter' || mode =='Business-Case'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
+                                (click)="milestoneTableEditRow(rowIndex)">
+                                <p *ngIf="value == ''">&nbsp;</p>{{value |
+                                date:'dd-MMM-yyyy'}}
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                                <spot-input-date formControlName="plannedFinish" name="plannedFinish" [showLabel]="false">
+                                </spot-input-date>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+    
+                    <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [resizeable]="false"
+                        [sortable]="false" [flexGrow]="2" *ngIf="mode== 'Normal'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
+                                [ngClass]="{'closed': row.completionDate != null}">
+                                <p *ngIf="value == ''">&nbsp;</p>{{value |
+                                date:'dd-MMM-yyyy'}}
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                                <spot-input-date formControlName="baselineFinish" name="baselineFinish" [showLabel]="false">
+                                </spot-input-date>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [resizeable]="false"
+                        [sortable]="false" [flexGrow]="1" *ngIf="mode== 'Project-Close-Out'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <p *ngIf="value == ''">&nbsp;</p>{{value |
+                            date:'dd-MMM-yyyy'}}
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+    
+                    <ngx-datatable-column name="Variance" prop="variance" [resizeable]="false" [sortable]="false"
+                    [flexGrow]="1" *ngIf="mode== 'Normal'" [draggable]="false">
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <div class="variance">
+                                {{calculateVariance(row)}}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Variance" prop="variance" [resizeable]="false" [sortable]="false"
+                    [flexGrow]="0.5" *ngIf="mode== 'Project-Close-Out'" [draggable]="false">
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <div class="variancecloseout">
+                                {{calculateVariance(row)}}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName" [resizeable]="false"
+                        [sortable]="false" [width]="200" *ngIf="mode== 'Normal'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
+                                [ngClass]="{'closed': row.completionDate != null}">
+                                <p *ngIf="value == ''">&nbsp;</p>{{value}}
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                                <spot-singleselect-user-autocomplete formControlName="responsiblePersonName"
+                                    name="responsiblePersonName" [showLabel]="false">
+                                </spot-singleselect-user-autocomplete>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName" [resizeable]="false"
+                        [sortable]="false" [width]="225" *ngIf="mode== 'Project-Charter'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
+                                (click)="milestoneTableEditRow(rowIndex)">
+                                <p *ngIf="value == ''">&nbsp;</p>{{value}}
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                                <spot-singleselect-user-autocomplete formControlName="responsiblePersonName"
+                                    name="responsiblePersonName" [showLabel]="false">
+                                </spot-singleselect-user-autocomplete>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+    
+                    <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false"
+                        [sortable]="false" [width]="225" *ngIf="mode== 'Normal'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
+                                [ngClass]="{'closed': row.completionDate != null}">
+                                <p *ngIf="value == ''">&nbsp;</p>
+                                {{getLookupName(value)}}
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                                <div class="w-full px-1">
+                                    <spot-singleselect-autocomplete formControlName="function" [showLabel]="false"
+                                        [valuePointer]="'lookUpName'" [dropDownArray]="getFunctionOwner()">
+                                    </spot-singleselect-autocomplete>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false"
+                        [sortable]="false" [width]="200" *ngIf="mode== 'Project-Charter' || mode =='Business-Case'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
+                                (click)="milestoneTableEditRow(rowIndex)">
+                                <p *ngIf="value == ''">&nbsp;</p>
+                                {{getLookupName(value)}}
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                                <div class="w-full px-1">
+                                    <spot-singleselect-autocomplete formControlName="function" [showLabel]="false"
+                                        [valuePointer]="'lookUpName'" [dropDownArray]="getFunctionOwner()">
+                                    </spot-singleselect-autocomplete>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+    
+                    <ngx-datatable-column name="Completion Date" prop="completionDate" [resizeable]="false"
+                        [sortable]="false" [flexGrow]="2" *ngIf="mode== 'Normal'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
+                                [ngClass]="{'closed': row.completionDate != null}">
+                                <p *ngIf="value == ''">&nbsp;</p>{{value |
+                                date:'dd-MMM-yyyy'}}
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                                <spot-input-date formControlName="completionDate" name="completionDate" [showLabel]="false"
+                                    [max]="'today'"></spot-input-date>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Completion Date" prop="completionDate" [resizeable]="false"
+                        [sortable]="false" [flexGrow]="1" *ngIf="mode== 'Project-Close-Out'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <p *ngIf="value == ''">&nbsp;</p>{{value |
+                            date:'dd-MMM-yyyy'}}
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Missed Milestone Reason Code" prop="missedMsreasonCode" [resizeable]="false"
+                        [sortable]="false" [width]="200" *ngIf="mode== 'Normal'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
+                                [ngClass]="{'closed': row.completionDate != null}">
+                                <p *ngIf="value == ''">&nbsp;</p>
+                                {{getLookupName(value)}}
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                                <div class="w-full px-1">
+                                    <spot-singleselect-autocomplete formControlName="missedMsreasonCode" [showLabel]="false"
+                                        [valuePointer]="'lookUpName'" [dropDownArray]="getMissedMilestoneReasonCode()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+                                    </spot-singleselect-autocomplete>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Comments" prop="comments" [resizeable]="false" [sortable]="false"
+                    [width]="225" *ngIf="mode== 'Normal'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
+                                [ngClass]="{'closed': row.completionDate != null}">
+                                <p *ngIf="value == ''">&nbsp;</p>{{value}}
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                                <spot-textarea [rows]="3" formControlName="comments" name="comments" [showLabel]="false">
+                                </spot-textarea>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Comment" prop="comments" [resizeable]="false" [sortable]="false"
+                    [width]="200" *ngIf="mode== 'Project-Close-Out'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
+                                (click)="milestoneTableEditRow(rowIndex)">
+                                <p *ngIf="value == ''">&nbsp;</p>{{value}}
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                                <spot-textarea [rows]="3" formControlName="comments" name="comments" [showLabel]="false">
+                                </spot-textarea>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Include in Dashboard (Max 8)" prop="includeInReport" [sortable]="false"
+                        [resizeable]="false"  *ngIf="mode== 'Normal'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
+                                [ngClass]="{'closed': row.completionDate != null}">
+                                <p *ngIf="!value">&nbsp;</p>
+                                <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)" class="h-[45px]">
+                                <mat-slide-toggle
+                                    [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInReport'].disabled ? 'Only 8 can be selected at a time in the project report' : null"
+                                    (change)="disabler()" class="h-full overflow-hidden" formControlName="includeInReport">
+                                </mat-slide-toggle>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Include in Business Case (Max 8)" prop="includeInBusinessCase"
+                        [sortable]="false" [resizeable]="false"  *ngIf="mode== 'Business-Case'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
+                                [ngClass]="{'closed': row.completionDate != null}">
+                                <p *ngIf="!value">&nbsp;</p>
+                                <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)" class="h-[45px]">
+                                <mat-slide-toggle
+                                    [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 8 can be selected at a time in the business case' : null"
+                                    (change)="disabler()" class="h-full overflow-hidden"
+                                    formControlName="includeInBusinessCase">
+                                </mat-slide-toggle>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Include in Close Out (Max 20)" prop="includeInCloseout" [sortable]="false"
+                        [resizeable]="false"  *ngIf="mode== 'Project-Close-Out'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
+                                (click)="milestoneTableEditRow(rowIndex)">
+                                <p *ngIf="!value">&nbsp;</p>
+                                <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)" class="h-[45px]">
+                                <mat-slide-toggle
+                                    [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInCloseout'].disabled ? 'Only 20 can be selected at a time in the project close out report' : null"
+                                    (change)="disabler()" class="h-full overflow-hidden"
+                                    formControlName="includeInCloseout">
+                                </mat-slide-toggle>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Include in Charter (Max 10)" prop="includeInCharter" [sortable]="false"
+                        [resizeable]="false"  *ngIf="mode== 'Project-Charter'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)"
+                                (click)="milestoneTableEditRow(rowIndex)">
+                                <p *ngIf="!value">&nbsp;</p>
+                                <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                            </a>
+                            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                                *ngIf="milestoneTableEditStack.includes(rowIndex)" class="h-[45px]">
+                                <mat-slide-toggle
+                                    [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInCharter'].disabled ? 'Only 10 can be selected at a time in the project charter' : null"
+                                    (change)="disabler()" class="h-full overflow-hidden" formControlName="includeInCharter">
+                                </mat-slide-toggle>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column [flexGrow]="0.6" [resizeable]="false" [sortable]="false"
+                        *ngIf="mode== 'Normal'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+    
+                            <div class="flex items-center justify-start gap-6">
+                                <a href="javascript:void(0)" title="Delete"
+                                    (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)"
+                                    *ngIf="(row.milestoneType?!row.milestoneType >=1:true && !islink(row.scheduleUniqueId)) || islink(row.scheduleUniqueId)">
+                                    <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                                </a>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.6" [resizeable]="false" [sortable]="false"
+                        *ngIf="mode== 'Project-Charter'" [draggable]="false">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+    
+                            <div class="flex items-center justify-start gap-6">
+                                <a href="javascript:void(0)" title="Delete"
+                                    (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)"
+                                    *ngIf="(row.milestoneType?!row.milestoneType >=1:true && !islink(row.scheduleUniqueId)) || islink(row.scheduleUniqueId)">
+                                    <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                                </a>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.6" [resizeable]="false" [sortable]="false"
+                    *ngIf="mode == 'Business-Case'" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+    
+                        <div class="flex items-center justify-start gap-6">
+                            <a href="javascript:void(0)" title="Delete"
+                                (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)"
+                                *ngIf="(row.milestoneType?!row.milestoneType >=1:true && !islink(row.scheduleUniqueId)) || islink(row.scheduleUniqueId)">
+                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                            </a>
                         </div>
-                    </form>
-                </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column name="Justification" prop="baselineComment" [flexGrow]="4" *ngIf="mode=='Normal'">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-
-        </ngx-datatable>
+                    </ng-template>
+                </ngx-datatable-column>
+    
+                </ngx-datatable>
+            </div>
+        </div>
+        <div class="w-full pr-4 m-2 flex items-start justify-between" *ngIf="mode== 'Normal'">
+    
+            <button class="min-w-26" mat-flat-button [color]="'primary'"
+                (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
+                Cancel
+            </button>
+    
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="submitscheduleHandler()">
+                Submit
+            </button>
+    
+        </div>
+    
+        <div class="w-full pr-4 m-2 flex items-start justify-between" *ngIf="mode== 'Project-Close-Out'">
+    
+            <button class="min-w-26" mat-flat-button [color]="'primary'"
+                (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
+                Cancel
+            </button>
+    
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="submitschedulecloseout()">
+                Submit
+            </button>
+    
+        </div>
+        <div class="w-full pr-4 m-2 flex items-start justify-between" *ngIf="mode== 'Business-Case'">
+            <button class="min-w-26" mat-flat-button [color]="'primary'"
+                (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
+                Cancel
+            </button>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+                (click)="submitScheduleBusinessCase()">
+                Submit
+            </button>
+        </div>
+    
+        <div class="w-full pr-4 m-2 flex items-start justify-between" *ngIf="mode== 'Project-Charter' ">
+    
+            <button class="min-w-26" mat-flat-button [color]="'primary'"
+                (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
+                Cancel
+            </button>
+    
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="submitschedulecharter()">
+                Submit
+            </button>
+    
+        </div>
     </div>
-
-    <!-- </form> -->
-
-    <div class="w-full pr-4 m-2 flex items-start justify-between" *ngIf="mode== 'Baseline-Log'">
-        <button class="min-w-26" mat-flat-button [color]="'primary'"
-            (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)" *ngIf="mode== 'Baseline-Log'">
-            Cancel
-        </button>
-
-        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitLog()"
-            *ngIf="mode== 'Baseline-Log'">
-            Submit
-        </button>
-    </div>
-    <div class="w-full pr-4 m-2 flex justify-end">
-        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogs()"
-            *ngIf="mode=='Normal'">
-            OK
-        </button>
-    </div>
-</div>
-<div *ngIf="!viewContent" [hidden]="!compareBaselineLogs">
-    <div class="flex items-start justify-between bg-primary sidepanel-header">
-        <div class="text-on-primary" style="padding-top: 6px">Baseline Log Details</div>
-        <div style="padding-top: 2px">
-            <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'', true)" href="javascript:void(0)" title="Close">
-                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+    
+    <div *ngIf="viewContent" [hidden]="!viewBaseline">
+        <div class="flex items-start justify-between bg-primary sidepanel-header">
+            <div class="text-on-primary" style="padding-top: 6px">Baseline Count Justification</div>
+            <div style="padding-top: 2px">
+                <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'')" href="javascript:void(0)" title="Close">
+                    <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+                </a>
+            </div>
+        </div>
+        <form class="mt-3 p-3 overflow-y-hidden" style="height: calc(100vh - 120px)" [formGroup]="baselineForm">
+            <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+                <mat-label>Justification for (Re-)Baselining</mat-label>
+                <textarea matInput [rows]="5" [placeholder]="'Provide an explanation/justification for re-baselining'"
+                    formControlName="baselineComment" name="baselineComment"></textarea>
+            </mat-form-field>
+            <spot-singleselect-autocomplete [label]="'Baseline Reason Code'" [placeholder]="'Baseline Reason Code'"
+                formControlName="baseLineReasonCode" name="baseLineReasonCode" [valuePointer]="'lookUpName'"
+                [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
+                [dropDownArray]="getBaselineReasonCode()"></spot-singleselect-autocomplete>
+    
+            <div class="flex justify-between items-center">
+                <div class="flex justify-start gap-1 items-center">Do you want to increment the baseline counter?
+                </div>
+                <div>
+                    <mat-slide-toggle formControlName="counter"></mat-slide-toggle>
+                </div>
+            </div>
+            &nbsp;
+            &nbsp;
+        </form>
+        <div class="w-full px-3 pr-3 flex items-start justify-between">
+            <a class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelJustification()">
+                Cancel
             </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="justificationHandler()">
+                Submit
+            </button>
         </div>
     </div>
-
-    <div class="flex justify-start gap-40 items-center">
-        <div class="font-medium text-default text-md italic mt-2">
-            <h6 class="font-medium text-default text-md italic ml-4 mt-2">
-                Log ID : {{baselinelogdetails.logId}}
-            </h6>
+    
+    <div *ngIf="!viewContent" [hidden]="!viewBaselineLogs">
+        <div class="flex items-start justify-between bg-primary sidepanel-header">
+            <div class="text-on-primary" style="padding-top: 6px">Baseline Log</div>
+            <div style="padding-top: 2px">
+                <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'', true)" href="javascript:void(0)" title="Close">
+                    <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+                </a>
+            </div>
         </div>
-
-        <div class="font-medium text-default text-md italic mt-2">
-
-            <h6 class="font-medium text-default text-md italic ml-2 mt-2">
-                Baseline : {{baselinelogdetails.baselineCount}} </h6>
-        </div>
-
-
-        <div class="font-medium text-default text-md italic mt-2">
-
-            <h6 class="font-medium text-default text-md italic ml-2 mt-2">
-                Baseline Date : {{baselinelogdetails.modifiedDate | date:'dd-MMM-yyyy'}} </h6>
-
-        </div>
-
-        <div class="font-medium text-default text-md italic mt-2">
-
-            <h6 class="font-medium text-default text-md italic ml-4 mt-2">
-                Baseline Set By : {{getUserName(baselinelogdetails.teamMemberAdId)}}</h6>
-
-        </div>
-
-        <div class="font-medium text-default text-md italic mt-2">
-
-            <h6 class="font-medium text-default text-md italic ml-4 mt-2">
-                Justification : {{baselinelogdetails.baselineComment}} </h6>
-
-        </div>
-
-    </div>
-    <div class="overflow-y-hidden">
-        <!-- <div class="mt-3 h-[85vh] overflow-hidden"> -->
-        <div class="mx-4 mt-8 h-[78.5vh] w-full overflow-y-scroll">
+        <!-- <form class="w-full"> -->
+        <div class="overflow-x-auto mt-3 w-screen" style="height: calc(100vh - 120px)">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                class="pr-2 material font-medium text-sm text-default whitespace-nowrap cursor-pointer"
-                [rows]="logdetailsObj" [rowClass]="getRowClass">
-
-                <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="2.8">
+                class="pl-3 pt-3 datatable-bl-83 material font-medium text-sm text-default whitespace-nowrap cursor-default"
+                [rows]="baselineLogData" [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #baselinelogTable>
+    
+                <!-- <ngx-datatable-column name="Include in Slip Chart" prop="includeSlipChart" [sortable]="false"
+                  [resizeable]="false" [flexGrow]="0.6">
+                  <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <a *ngIf="!baselinelogTableEditStack.includes(rowIndex)" (click)="baselinelogTableEditRow(rowIndex)">
+                      <p *ngIf="!value">&nbsp;</p>
+                      <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                    </a>
+                    <form [formGroup]="baselineLogForm.controls[rowIndex]" class="p-2 overflow-hidden"
+                      *ngIf="baselinelogTableEditStack.includes(rowIndex)">
+                      <div class="flex items-center justify-between p-2 overflow-hidden">
+                        <mat-slide-toggle name="includeSlipChart" [showLabel]="false" formControlName="includeSlipChart">
+                        </mat-slide-toggle>
+                      </div>
+                    </form>
+                  </ng-template>
+                </ngx-datatable-column> -->
+    
+    
+                <ngx-datatable-column name="Log ID" prop="logId" [flexGrow]="0.5" *ngIf="mode=='Normal'">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <div *ngIf="checklogDetails(row.baselineLogId) && value != '1'" class="logID">
+                            <a (click)="baselineLogDetails(row.baselineLogId)" class="cursor-pointer">{{value}}</a>
+                        </div>
+                        <div *ngIf="!checklogDetails(row.baselineLogId) || value == '1'" class="logID1">
+                            <a>{{value}}</a>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+    
+    
+                <ngx-datatable-column name="Baseline" prop="baselineCount" [flexGrow]="0.68" *ngIf="mode=='Baseline-Log'">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <div class="countbaseline">
+                            <p>{{value}}</p>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Baseline" prop="baselineCount" [flexGrow]="0.68" *ngIf="mode=='Normal'">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <div class="count">
+                            <p>{{value}}</p>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+    
+                <ngx-datatable-column name="Baseline Date" prop="modifiedDate" [flexGrow]="1"
+                    *ngIf="mode=='Baseline-Log'">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <p>{{value | date:'dd-MMM-yyyy hh:mm:ss a'}}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Baseline Date" prop="modifiedDate" [flexGrow]="1.5" *ngIf="mode=='Normal'">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <p>{{value | date:'dd-MMM-yyyy hh:mm:ss a'}}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+    
+    
+                <ngx-datatable-column name="Baseline Set By" prop="teamMemberAdId" [flexGrow]="1"
+                    *ngIf="mode=='Baseline-Log'">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <p>{{getUserName(value)}}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+    
+                <ngx-datatable-column name="Baseline Set By" prop="teamMemberAdId" [flexGrow]="1.5" *ngIf="mode=='Normal'">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <p>{{getUserName(value)}}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Baseline Reason Code" prop="baseLineReasonCodeName" [flexGrow]="1.5"
+                    *ngIf="mode=='Normal'">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p>{{value}}</p>
-
                     </ng-template>
                 </ngx-datatable-column>
-
-                <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Planned Finish"
-                    prop="prevplannedFinish" [flexGrow]="0.48">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-
-                        <div *ngIf="value == 'empty2'; else null55" class="noplanned1">
-                            &nbsp;
-                        </div>
-                        <ng-template #null55>
-
-                            <p>{{value | date:'dd-MMM-yyyy'}}</p>
-
-                        </ng-template>
-
+                <ngx-datatable-column name="Justification" prop="baselineComment" [resizeable]="false" [sortable]="false"
+                    [flexGrow]="2" *ngIf="mode=='Baseline-Log'">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
+                            <p *ngIf="value == ''">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="baselineLogForm.controls[rowIndex]"
+                            *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                            <spot-textarea [rows]="3" formControlName="baselineComment" name="baselineComment"
+                                [showLabel]="false">
+                            </spot-textarea>
+                        </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Planned Finish"
-                    prop="currplannedFinish" [flexGrow]="0.48">
-
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <div *ngIf="value == 'empty' || (value == '' && row.plannedchange); else null5"
-                            class="noplanned">
-                            &nbsp;
-                        </div>
-                        <ng-template #null5>
-                            <div *ngIf="row.plannedchange" class="plannedchange">
-                                <p>{{value | date:'dd-MMM-yyyy'}}</p>
+    
+                <ngx-datatable-column name="Include in Close Out (Max 10)" prop="includeInCloseout" [sortable]="false"
+                    [resizeable]="false" [flexGrow]="1" *ngIf="mode=='Baseline-Log'">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                        </a>
+                        <form [formGroup]="baselineLogForm.controls[rowIndex]"
+                            *ngIf="milestoneTableEditStack.includes(rowIndex)" class="p-2">
+                            <div class="flex items-center justify-between">
+                                <mat-slide-toggle
+                                    [matTooltip]="this.baselineLogForm.controls[rowIndex]['controls']['includeInCloseout'].disabled ? 'Only 10 can be selected at a time in the project close out report' : null"
+                                    (change)="disabler2()" class="h-full" formControlName="includeInCloseout">
+                                </mat-slide-toggle>
                             </div>
-                            <div *ngIf="!row.plannedchange">
-                                <p>{{value | date:'dd-MMM-yyyy'}}</p>
-                            </div>
-                        </ng-template>
+                        </form>
                     </ng-template>
-
-
                 </ngx-datatable-column>
-
-                <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Baseline Finish"
-                    prop="prevbaselineFinish" [flexGrow]="0.48">
+    
+                <ngx-datatable-column name="Justification" prop="baselineComment" [flexGrow]="4" *ngIf="mode=='Normal'">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-
-                        <div *ngIf="value == 'empty2'; else null11" class="nobaselined1">
-                            &nbsp;
-                        </div>
-                        <ng-template #null11>
-                            <p>{{value | date:'dd-MMM-yyyy'}}</p>
-
-
-                            <!-- <p *ngIf="!row.baselinechange">{{value | date:'dd-MMM-yyyy'}}</p> -->
-                        </ng-template>
-
+                        <p>{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Baseline Finish"
-                    prop="currbaselineFinish" [flexGrow]="0.5">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <div *ngIf="value == 'empty' || (value == '' && row.baselinechange); else null1"
-                            class="nobaselined">
-                            &nbsp;
-                        </div>
-                        <ng-template #null1>
-                            <p *ngIf="row.baselinechange" class="baselineChange">{{value | date:'dd-MMM-yyyy'}}</p>
-
-
-                            <p *ngIf="!row.baselinechange">{{value | date:'dd-MMM-yyyy'}}</p>
-                        </ng-template>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Completion Date"
-                    prop="prevcompletionDate" [flexGrow]="0.55">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-
-                        <div *ngIf="value == 'empty2'; else null22" class="nocompleted1">
-                            &nbsp;
-                        </div>
-                        <ng-template #null22>
-                            <p>{{value | date:'dd-MMM-yyyy'}}</p>
-                        </ng-template>
-
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Completion Date"
-                    prop="currcompletionDate" [flexGrow]="0.55">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <div *ngIf="value == 'empty' || (value == '' && row.completionchange); else null2"
-                            class="nocompleted">
-                            &nbsp;
-                        </div>
-                        <ng-template #null2>
-                            <div *ngIf="row.completionchange" class="completionchange">
-                                <p>{{value | date:'dd-MMM-yyyy'}}</p>
-                            </div>
-                            <div *ngIf="!row.completionchange">
-                                <p>{{value | date:'dd-MMM-yyyy'}}</p>
-                            </div>
-                        </ng-template>
-                    </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Indicator" prop="previndicator"
-                    [flexGrow]="0.39">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-
-                        <div *ngIf="value == 'empty2' || (value == '' && row.indicatorchange); else null33"
-                            class="noindicator1">
-                            &nbsp;
-                        </div>
-                        <ng-template #null33>
-                            <p>{{value}}</p>
-                        </ng-template>
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Indicator" prop="currindicator"
-                    [flexGrow]="0.4">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <div *ngIf="value == 'empty'; else null3" class="noindicator">
-                            &nbsp;
-                        </div>
-                        <ng-template #null3>
-                            <p *ngIf="row.indicatorchange" class="indicatorchange">{{value}}</p>
-
-                            <p *ngIf="!row.indicatorchange">{{value}}</p>
-                        </ng-template>
-                    </ng-template>
-                </ngx-datatable-column>
-
+    
             </ngx-datatable>
         </div>
+    
+        <!-- </form> -->
+    
+        <div class="w-full pr-4 m-2 flex items-start justify-between" *ngIf="mode== 'Baseline-Log'">
+            <button class="min-w-26" mat-flat-button [color]="'primary'"
+                (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)" *ngIf="mode== 'Baseline-Log'">
+                Cancel
+            </button>
+    
+            <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitLog()"
+                *ngIf="mode== 'Baseline-Log'">
+                Submit
+            </button>
+        </div>
+        <div class="w-full pr-4 m-2 flex justify-end">
+            <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogs()"
+                *ngIf="mode=='Normal'">
+                OK
+            </button>
+        </div>
     </div>
-    <div class="mt-7 pr-6 pl-6 flex justify-end items-center w-full">
-        <!-- <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogs()">
-          Cancel
-        </button> -->
-
-        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogDetails()">
-            OK
-        </button>
-
+    <div *ngIf="!viewContent" [hidden]="!compareBaselineLogs">
+        <div class="flex items-start justify-between bg-primary sidepanel-header">
+            <div class="text-on-primary" style="padding-top: 6px">Baseline Log Details</div>
+            <div style="padding-top: 2px">
+                <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'', true)" href="javascript:void(0)" title="Close">
+                    <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+                </a>
+            </div>
+        </div>
+    
+        <div class="flex justify-start gap-40 items-center">
+            <div class="font-medium text-default text-md italic mt-2">
+                <h6 class="font-medium text-default text-md italic ml-4 mt-2">
+                    Log ID : {{baselinelogdetails.logId}}
+                </h6>
+            </div>
+    
+            <div class="font-medium text-default text-md italic mt-2">
+    
+                <h6 class="font-medium text-default text-md italic ml-2 mt-2">
+                    Baseline : {{baselinelogdetails.baselineCount}} </h6>
+            </div>
+    
+    
+            <div class="font-medium text-default text-md italic mt-2">
+    
+                <h6 class="font-medium text-default text-md italic ml-2 mt-2">
+                    Baseline Date : {{baselinelogdetails.modifiedDate | date:'dd-MMM-yyyy'}} </h6>
+    
+            </div>
+    
+            <div class="font-medium text-default text-md italic mt-2">
+    
+                <h6 class="font-medium text-default text-md italic ml-4 mt-2">
+                    Baseline Set By : {{getUserName(baselinelogdetails.teamMemberAdId)}}</h6>
+    
+            </div>
+    
+            <div class="font-medium text-default text-md italic mt-2">
+    
+                <h6 class="font-medium text-default text-md italic ml-4 mt-2">
+                    Justification : {{baselinelogdetails.baselineComment}} </h6>
+    
+            </div>
+    
+        </div>
+        <div class="overflow-y-hidden">
+            <!-- <div class="mt-3 h-[85vh] overflow-hidden"> -->
+            <div class="mx-4 mt-8 h-[78.5vh] w-screen overflow-y-scroll">
+                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                    class="pr-2 material font-medium text-sm text-default whitespace-nowrap cursor-pointer"
+                    [rows]="logdetailsObj" [rowClass]="getRowClass">
+    
+                    <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="2.8">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <p>{{value}}</p>
+    
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Planned Finish"
+                        prop="prevplannedFinish" [flexGrow]="0.48">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+    
+                            <div *ngIf="value == 'empty2'; else null55" class="noplanned1">
+                                &nbsp;
+                            </div>
+                            <ng-template #null55>
+    
+                                <p>{{value | date:'dd-MMM-yyyy'}}</p>
+    
+                            </ng-template>
+    
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Planned Finish"
+                        prop="currplannedFinish" [flexGrow]="0.48">
+    
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <div *ngIf="value == 'empty' || (value == '' && row.plannedchange); else null5"
+                                class="noplanned">
+                                &nbsp;
+                            </div>
+                            <ng-template #null5>
+                                <div *ngIf="row.plannedchange" class="plannedchange">
+                                    <p>{{value | date:'dd-MMM-yyyy'}}</p>
+                                </div>
+                                <div *ngIf="!row.plannedchange">
+                                    <p>{{value | date:'dd-MMM-yyyy'}}</p>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+    
+    
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Baseline Finish"
+                        prop="prevbaselineFinish" [flexGrow]="0.48">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+    
+                            <div *ngIf="value == 'empty2'; else null11" class="nobaselined1">
+                                &nbsp;
+                            </div>
+                            <ng-template #null11>
+                                <p>{{value | date:'dd-MMM-yyyy'}}</p>
+    
+    
+                                <!-- <p *ngIf="!row.baselinechange">{{value | date:'dd-MMM-yyyy'}}</p> -->
+                            </ng-template>
+    
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Baseline Finish"
+                        prop="currbaselineFinish" [flexGrow]="0.5">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <div *ngIf="value == 'empty' || (value == '' && row.baselinechange); else null1"
+                                class="nobaselined">
+                                &nbsp;
+                            </div>
+                            <ng-template #null1>
+                                <p *ngIf="row.baselinechange" class="baselineChange">{{value | date:'dd-MMM-yyyy'}}</p>
+    
+    
+                                <p *ngIf="!row.baselinechange">{{value | date:'dd-MMM-yyyy'}}</p>
+                            </ng-template>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Completion Date"
+                        prop="prevcompletionDate" [flexGrow]="0.55">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+    
+                            <div *ngIf="value == 'empty2'; else null22" class="nocompleted1">
+                                &nbsp;
+                            </div>
+                            <ng-template #null22>
+                                <p>{{value | date:'dd-MMM-yyyy'}}</p>
+                            </ng-template>
+    
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Completion Date"
+                        prop="currcompletionDate" [flexGrow]="0.55">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <div *ngIf="value == 'empty' || (value == '' && row.completionchange); else null2"
+                                class="nocompleted">
+                                &nbsp;
+                            </div>
+                            <ng-template #null2>
+                                <div *ngIf="row.completionchange" class="completionchange">
+                                    <p>{{value | date:'dd-MMM-yyyy'}}</p>
+                                </div>
+                                <div *ngIf="!row.completionchange">
+                                    <p>{{value | date:'dd-MMM-yyyy'}}</p>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Indicator" prop="previndicator"
+                        [flexGrow]="0.39">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+    
+                            <div *ngIf="value == 'empty2' || (value == '' && row.indicatorchange); else null33"
+                                class="noindicator1">
+                                &nbsp;
+                            </div>
+                            <ng-template #null33>
+                                <p>{{value}}</p>
+                            </ng-template>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Indicator" prop="currindicator"
+                        [flexGrow]="0.4">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <div *ngIf="value == 'empty'; else null3" class="noindicator">
+                                &nbsp;
+                            </div>
+                            <ng-template #null3>
+                                <p *ngIf="row.indicatorchange" class="indicatorchange">{{value}}</p>
+    
+                                <p *ngIf="!row.indicatorchange">{{value}}</p>
+                            </ng-template>
+                        </ng-template>
+                    </ngx-datatable-column>
+    
+                </ngx-datatable>
+            </div>
+        </div>
+        <div class="mt-7 pr-6 pl-6 flex justify-end items-center w-full">
+            <!-- <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogs()">
+              Cancel
+            </button> -->
+    
+            <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogDetails()">
+                OK
+            </button>
+    
+        </div>
     </div>
-</div>
-<div *ngIf="viewContent" [hidden]="!viewStandardMilestonesSets">
-    <app-standard-milestone-sets (standardMilestonesAdded)="addStandardMilestonesToList($event)"
-        [loadContent]="viewStandardMilestonesSets" [lookup]="lookUpData"></app-standard-milestone-sets>
-</div>
-
-<!-- </div> -->
+    <div *ngIf="viewContent" [hidden]="!viewStandardMilestonesSets">
+        <app-standard-milestone-sets (standardMilestonesAdded)="addStandardMilestonesToList($event)"
+            [loadContent]="viewStandardMilestonesSets" [lookup]="lookUpData"></app-standard-milestone-sets>
+    </div>
+    
+    <!-- </div> -->
+    
