@@ -382,7 +382,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column name="Missed Milestone Reason Code" prop="missedMsreasonCode" [resizeable]="false"
-                    [sortable]="false" [flexGrow]="0.8" *ngIf="mode== 'Normal'">
+                    [sortable]="false" [flexGrow]="0.65" *ngIf="mode== 'Normal'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
                             [ngClass]="{'closed': row.completionDate != null}">
@@ -401,7 +401,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column name="Comments" prop="comments" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="0.7" *ngIf="mode== 'Normal'">
+                    [flexGrow]="0.75" *ngIf="mode== 'Normal'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
                             [ngClass]="{'closed': row.completionDate != null}">
@@ -431,7 +431,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column name="Include in Dashboard (Max 8)" prop="includeInReport" [sortable]="false"
-                    [resizeable]="false" [flexGrow]="0.40" *ngIf="mode== 'Normal'">
+                    [resizeable]="false" [flexGrow]="0.6" *ngIf="mode== 'Normal'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
                             [ngClass]="{'closed': row.completionDate != null}">
@@ -504,7 +504,7 @@
                     </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false"
+                <ngx-datatable-column [flexGrow]="0.7" [resizeable]="false" [sortable]="false" [draggable]="false"
                     *ngIf="mode== 'Normal'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
 
