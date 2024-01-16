@@ -1,4 +1,4 @@
-<div class="h-screen">
+<div class="h-screen" *ngIf="viewContent">
     <div class="flex items-start justify-between bg-primary sidepanel-header">
         <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Ask/Needs</div>
         <div style="padding-top: 2px">
@@ -111,7 +111,7 @@
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Include in Dashboard (Max 1)" prop="includeInReport"
-                                  [flexGrow]="0.6" [draggable]="false" [resizeable]="false" [sortable]="false">
+                                  [flexGrow]="0.8" [draggable]="false" [resizeable]="false" [sortable]="false">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                     <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!anTableEditStack.includes(rowIndex)"
                        (click)="anTableEditRow(rowIndex)">
@@ -127,7 +127,7 @@
                     </form>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [flexGrow]="0.5" [resizeable]="false" [sortable]="false" [draggable]="false">
+            <ngx-datatable-column [flexGrow]="0.4" [resizeable]="false" [sortable]="false" [draggable]="false">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
                              ngx-datatable-cell-template>
                     <div class="flex justify-start items-center gap-6">
