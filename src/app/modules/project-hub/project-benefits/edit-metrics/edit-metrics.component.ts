@@ -49,6 +49,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
   })
   projectData: any;
   captureLevel: boolean = false
+  empty: boolean = false
   vcLevel: any;
   disabled: boolean = false
   vcLevels = ["Capture", "Cascade"]
@@ -68,7 +69,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
     }[]; isBaseLined: boolean;
   };
   metricFormat: any;
-
+  MetricCategoryID: any;
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute,
     public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService, private decimalPipe: DecimalPipe, private changeDetectorRef: ChangeDetectorRef) {
     // this.projecthubservice.submitbutton.subscribe(res => {
@@ -121,6 +122,8 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                 if (res && res.projectsMetricsData.metricLevelId == 'd6a905be-4ff9-402e-b074-028242b6f8e0') {
                   this.captureLevel = true
                 }
+                this.MetricCategoryID = res.metricData.metricCategoryID
+
                 console.log(result)
                 this.result = res
                 console.log(res)
@@ -162,7 +165,15 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                   element.strategicActual = element.strategicActual ? element.strategicActual : '0';
                 }
                 //});
-
+                debugger
+                if((element.strategicActual == "0" || element.strategicActual == "0.00" || element.strategicActual == "0.0") 
+                && (element.strategicBaseline == "0" || element.strategicBaseline == "0.00" || element.strategicBaseline == "0.0")
+               && (element.strategicCurrent == "0" || element.strategicCurrent == "0.00" || element.strategicCurrent == "0.0")
+                && (element.strategicTarget == "0" || element.strategicTarget == "0.00" || element.strategicTarget == "0.0"))
+                {
+                  this.empty = true
+                }
+                console.log(this.empty)
                 console.log(res.projectsMetricsData)
                 this.capexAvoidanceForm.patchValue({
                   metricName: res.projectsMetricsData.metricName,
