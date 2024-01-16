@@ -44,10 +44,22 @@
         }
     }
 
-    @media screen and (max-width: 1400px) {
+    @media screen and (max-width: 1400px) and (min-width: 1300px){
         body {
             zoom: 85%;
             --custom-zoom: 0.85;
+        }
+    }
+    @media screen and (max-width: 1300px) and (min-width: 1200px){
+        body {
+            zoom: 75%;
+            --custom-zoom: 0.75;
+        }
+    }
+    @media screen and (max-width: 1200px){
+        body {
+            zoom: 70%;
+            --custom-zoom: 0.70;
         }
     }
 </style>
