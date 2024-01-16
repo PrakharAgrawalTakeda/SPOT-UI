@@ -19,8 +19,8 @@
 <div class="flex flex-col flex-auto w-full min-w-0">
 
     <!-- Header -->
-    <div class="fixed flex flex-0 items-end w-full h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-card bg-primary print:hidden"
-        [ngStyle]="{ 'visibility' : projecthubservice.drawerOpenedright ? 'hidden': 'visible' } ">
+    <div class="fixed flex flex-0 items-end w-full h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-primary print:hidden"
+        [ngStyle]="{ 'visibility' : projecthubservice.drawerOpenedright || myPreferenceService.drawerOpenedright || adminService.drawerOpenedright ? 'hidden': 'visible' } ">
         <ng-container *ngIf="!isScreenSmall">
             <!-- Logo -->
             <div class="flex items-center mx-2 pb-2 lg:mr-8">

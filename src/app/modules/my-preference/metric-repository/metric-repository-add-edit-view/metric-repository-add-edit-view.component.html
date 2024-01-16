@@ -7,7 +7,7 @@
     </div>
 </div>
 <form class="w-full overflow-hidden" [formGroup]="metricRepositoryForm">
-    <div class=" form-ask-need h-[87vh] overflow-y-scroll">
+    <div class=" form-ask-need overflow-y-scroll" style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)">
         <spot-input class="w-full" formControlName="globalLocal" [label]="'Global/Local'">
         </spot-input>
         <spot-singleselect-autocomplete
