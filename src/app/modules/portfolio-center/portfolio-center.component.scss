@@ -1,17 +1,17 @@
 @import '../../../../node_modules/@swimlane/ngx-datatable/assets/icons.css';
 .w-half {
-    width: 50vw;
+    width: 50%;
 }
 
 .w-3qua {
-    width: 75vw;
+    width: 75%;
 }
 
 .w-1qua {
-    width: 25vw;
+    width: 25%;
 }
 .w-2qua {
-    width: 55vw;
+    width: 55%;
 }
 .apply-button{
     margin: 20px 15px 175px 15px !important;
@@ -54,7 +54,9 @@
 .datatable-body{
     height: 55vh !important;
 }
-
+.reportTable .datatable-body{
+    height: 100% !important;
+}
 .datatable-row-left{
     background: white !important;
     height: 132px !important;

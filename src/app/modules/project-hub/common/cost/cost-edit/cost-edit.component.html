@@ -7,7 +7,7 @@
         </a>
         </div>
     </div>
-    <form class="m-2 overflow-auto" style="height: calc(100vh - 135px)" [formGroup]="costForm" *ngIf="mode=='Project-Charter'">
+    <form class="m-2 overflow-auto" style="height: calc(calc(100vh/ var(--custom-zoom)) - 135px)" [formGroup]="costForm" *ngIf="mode=='Project-Charter'">
         <!--Enter Element here-->
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                        class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="costData"
@@ -63,7 +63,7 @@
         </ngx-datatable>
     </form>
 
-    <form class="m-2 overflow-auto" [formGroup]="costForm" style="height: calc(100vh - 135px)"
+    <form class="m-2 overflow-auto" [formGroup]="costForm" style="height: calc(calc(100vh/ var(--custom-zoom)) - 135px)"
           *ngIf="mode!='Project-Charter' && optionType=='recommended-option'">
         <div class="h-[84vh]">
             <!--Enter Element here-->
@@ -132,7 +132,7 @@
         </div>
     </form>
 
-    <form class="m-2 overflow-auto" [formGroup]="costForm" style="height: calc(100vh - 135px)"
+    <form class="m-2 overflow-auto" [formGroup]="costForm" style="height: calc(calc(100vh/ var(--custom-zoom)) - 135px)"
           *ngIf="mode!='Project-Charter' && (optionType=='option-2' || optionType=='option-3')">
         <div class="h-[84vh]">
             <div class="w-full mt-4 mb-6">

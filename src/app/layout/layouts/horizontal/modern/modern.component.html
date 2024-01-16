@@ -19,8 +19,8 @@
 <div class="flex flex-col flex-auto w-full min-w-0">
 
     <!-- Header -->
-    <div class="fixed flex flex-0 items-end w-full h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-card bg-primary print:hidden"
-        [ngStyle]="{ 'visibility' : projecthubservice.drawerOpenedright ? 'hidden': 'visible' } ">
+    <div class="fixed flex flex-0 items-end w-full h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-primary print:hidden"
+        [ngStyle]="{ 'visibility' : projecthubservice.drawerOpenedright || myPreferenceService.drawerOpenedright || adminService.drawerOpenedright || portService.drawerOpenedPrakharTemp ? 'hidden': 'visible' } ">
         <ng-container *ngIf="!isScreenSmall">
             <!-- Logo -->
             <div class="flex items-center mx-2 pb-2 lg:mr-8">
@@ -58,7 +58,7 @@
     </div>
 
     <!-- Content -->
-    <div class="flex flex-col flex-auto w-full">
+    <div class="flex flex-col flex-auto w-full" [ngClass]="{'pb-6': !projecthubservice.drawerOpenedright && !myPreferenceService.drawerOpenedright && !adminService.drawerOpenedright}">
         <!-- *ngIf="true" hack is required here for router-outlet to work correctly.
              Otherwise, layout changes won't be registered and the view won't be updated! -->
         <router-outlet *ngIf="true"></router-outlet>
@@ -66,7 +66,7 @@
 
     <!-- Footer -->
     <div
-        class="relative flex flex-0 items-center w-full h-14 sm:h-12 px-4 md:px-6 z-49 border-t bg-card dark:bg-transparent print:hidden" *ngIf="!projecthubservice.drawerOpenedright && !myPreferenceService.drawerOpenedright && !adminService.drawerOpenedright">
+        class="fixed bottom-0 flex flex-0 items-center w-full h-14 sm:h-12 px-4 md:px-6 z-49 border-t bg-card dark:bg-transparent print:hidden" *ngIf="!projecthubservice.drawerOpenedright && !myPreferenceService.drawerOpenedright && !adminService.drawerOpenedright && !portService.drawerOpenedPrakharTemp">
         <span class="font-medium text-secondary">Takeda &copy; {{currentYear}}</span>
     </div>
 

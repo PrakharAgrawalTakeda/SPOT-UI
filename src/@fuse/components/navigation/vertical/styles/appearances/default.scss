@@ -12,9 +12,9 @@ fuse-vertical-navigation {
     width: var(--fuse-vertical-navigation-width);
     min-width: var(--fuse-vertical-navigation-width);
     max-width: var(--fuse-vertical-navigation-width);
-    height: 100vh;
-    min-height: 100vh;
-    max-height: 100vh;
+    height: 100%;
+    //min-height: 100vh;
+    //max-height: 100vh;
     z-index: 200;
 
     /* ----------------------------------------------------------------------------------------------------- */

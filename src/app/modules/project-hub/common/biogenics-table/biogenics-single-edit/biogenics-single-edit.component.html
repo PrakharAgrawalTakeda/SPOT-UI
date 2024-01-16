@@ -8,7 +8,7 @@
         </div>
     </div>
     <form class="overflow-auto m-2" [formGroup]="BiogenicsForm"
-          style="height: calc(100vh - 120px)">
+          style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)">
         <spot-select formControlName="biogenicMasterUniqueId" name="biogenicMasterUniqueId" [label]="'Emission Source'"
                      [placeholder]="'Emission Source'"
                      [dropDownArrayType]="'object'" [dropDownArray]="GetSource()" [idPointer]="'lookUpId'"

@@ -5,7 +5,7 @@
             <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
         </a></div>
 </div>
-<form class="overflow-auto m-2" [formGroup]="overallStatusform"  style="height: calc(100vh - 120px)">
+<form class="overflow-auto m-2" [formGroup]="overallStatusform"  style="height: calc(calc(100vh / var(--custom-zoom)) - 120px)">
     <div class="flex items-start justify-between">
         <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
             <mat-label>Status Through</mat-label>
