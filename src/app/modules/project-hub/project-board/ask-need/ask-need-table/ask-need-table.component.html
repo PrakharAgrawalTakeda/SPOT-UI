@@ -1,0 +1,91 @@
+<ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+    class="pr-6 material font-medium text-default text-sm whitespace-nowrap cursor-pointer" [rows]="tableData"
+    [sorts]="[{ prop: 'needByDate', dir: 'asc' }]" #askNeedTable [rowClass]="getRowClass" [selected]="selected"
+    [selectionType]="SelectionType.checkbox" [selectAllRowsOnPage]="false" (activate)="onActivate($event)"
+    (select)="onSelect($event)">
+    <ngx-datatable-column name='Status' prop="indicator" [flexGrow]="mode == 'Normal'?0.5:0.7" [resizeable]="false"
+        [sortable]="false" [draggable]="false">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
+                class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
+            </mat-icon>
+            &nbsp;
+            &nbsp;
+            <mat-icon [matTooltip]="getlinkname(row.askNeedUniqueId)" *ngIf="islink(row.askNeedUniqueId) && mode != 'Link'"
+                svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Ask Or Need" prop="askNeed1" [flexGrow]="5" [resizeable]="false"
+        [sortable]="mode == 'Normal'" [draggable]="false">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Need From" prop="needFromName" [flexGrow]="2" [resizeable]="false"
+        [sortable]="mode == 'Normal'" [draggable]="false">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Need Date" prop="needByDate" [flexGrow]="1" [resizeable]="false"
+        [sortable]="mode == 'Normal'" [draggable]="false">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column *ngIf="mode == 'Link'" name="Comments" prop="comments" [flexGrow]="2" [resizeable]="false"
+        [sortable]="mode == 'Normal'" [draggable]="false">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column *ngIf="mode == 'Link'" name="Close Date" prop="closeDate" [flexGrow]="1" [resizeable]="false"
+        [sortable]="mode == 'Normal'" [draggable]="false">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column [flexGrow]="0.5" *ngIf="mode == 'Link'" [sortable]="false" [canAutoResize]="false"
+        [draggable]="false" [resizeable]="false">
+        <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+            let-selectFn="selectFn">
+            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-slide-toggle>
+            Link
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+            let-onCheckboxChangeFn="onCheckboxChangeFn">
+            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-slide-toggle>
+        </ng-template>
+
+    </ngx-datatable-column>
+    <ngx-datatable-column *ngIf="mode == 'Normal'" [flexGrow]="1" [resizeable]="false" [sortable]="false"  [canAutoResize]="false"
+        [draggable]="false">
+        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+            <div class="flex justify-start items-center gap-6">
+                <a href="javascript:void(0)" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
+                    <mat-icon *ngIf='!expanded' svgIcon="heroicons_outline:chevron-down"></mat-icon>
+                    <mat-icon *ngIf='expanded' svgIcon="heroicons_outline:chevron-up"></mat-icon>
+                </a>
+                <a href="javascript:void(0)" title="Edit Single"
+                    *ngIf="projectHubService.roleControllerControl.projectHub.projectBoard.askNeedEdit"
+                    (click)="projectHubService.toggleDrawerOpen('AskNeed', row.askNeedUniqueId,askNeedData,projectId)">
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
+                </a>
+                <a href="javascript:void(0)" title="Delete Single"
+                    *ngIf="projectHubService.roleControllerControl.projectHub.projectBoard.askNeedEdit"
+                    (click)="deleteAskNeed(row.askNeedUniqueId)">
+                    <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                </a>
+            </div>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-row-detail [rowHeight]="'auto'" *ngIf="mode == 'Normal'" #myDetailRow>
+        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+            <div class="pb-3 pt-3">
+                <div [ngClass]="{'closed': row.closeDate != null}"><strong>Comments:</strong>
+                    {{row.comments}}</div>
+            </div>
+        </ng-template>
+    </ngx-datatable-row-detail>
+
+</ngx-datatable>

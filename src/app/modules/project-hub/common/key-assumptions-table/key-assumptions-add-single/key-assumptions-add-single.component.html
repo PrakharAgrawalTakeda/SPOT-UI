@@ -1,0 +1,39 @@
+<div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Key Assumption Add New</div>
+    <div style="padding-top: 2px"><a (click)="projecthubservice.toggleDrawerOpen('', '',[],'')"
+                                     href="javascript:void(0)" title="Close">
+        <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+    </a>
+    </div>
+</div>
+<form class="overflow-auto m-2" [formGroup]="keyAssumptionForm" style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)">
+    <spot-textarea class="w-full read-only" formControlName="keyAssumptionName" name="keyAssumptionName"
+                   *ngIf="viewElementChecker('keyAssumption')"
+                   [label]="'Key Assumption'">
+    </spot-textarea>
+    <spot-textarea class="w-full read-only" formControlName="assumptionRationale" name="assumptionRationale"
+                   *ngIf="viewElementChecker('whyIsThisAssumptionValid')"
+                   [label]="'Why Is This Assumption Valid'">
+    </spot-textarea>
+    <div class="flex items-start justify-between incuded-in-dash" *ngIf="viewElementChecker('includeInCharter')">
+        <mat-slide-toggle
+            [matTooltip]="this.keyAssumptionForm.controls['includeInCharter'].disabled ? 'Only 5 can be selected at a time for the proposal' : null"
+            formControlName="includeInCharter">Include in Charter
+        </mat-slide-toggle>
+    </div>
+    <div class="flex items-start justify-between incuded-in-dash" *ngIf="viewElementChecker('includeInBusinessCase')">
+        <mat-slide-toggle
+            [matTooltip]="this.keyAssumptionForm.controls['includeInBusinessCase'].disabled ? 'Only 4 can be selected at a time in the business case' : null"
+            formControlName="includeInBusinessCase">Include in Business Case
+        </mat-slide-toggle>
+    </div>
+</form>
+<div class="w-full px-3 pr-3 flex items-start justify-between">
+    <a class="w-25" mat-flat-button [color]="'primary'"
+       (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+        Cancel
+    </a>
+    <button class="w-25" mat-flat-button [color]="'primary'" type="submit" (click)="submitKeyAssumption()">
+        Submit
+    </button>
+</div>

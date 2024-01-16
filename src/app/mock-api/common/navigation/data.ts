@@ -9,9 +9,32 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon : 'heroicons_outline:chart-pie',
         link : '/portfolio-center'
     },
+    /*{
+        // id   : 'create-project',
+        title: 'Create Project',
+        type: 'collapsable',
+        link: '/create-project',
+        children: [
+            {
+                title: 'Create a Standard/Simple Project/Program',
+                type: 'basic',
+                link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
+            },
+            {
+                title: 'Copy an existing Project',
+                type: 'basic',
+                link: '/create-project/copy-project'
+            }
+        ],
+    },*/
     {
         id   : 'spot-documents',
-        title: 'SPOT Documents',
+        title: 'SPOT Supporting Documents',
         type : 'basic',
         icon : 'heroicons_outline:document-text',
         link : '/spot-documents'
@@ -25,6 +48,29 @@ export const compactNavigation: FuseNavigationItem[] = [
         icon : 'heroicons_outline:chart-pie',
         link : '/portfolio-center'
     },
+    /*{
+        // id   : 'create-project',
+        title: 'Create Project',
+        type: 'collapsable',
+        link: '/create-project',
+        children: [
+            {
+                title: 'Create a Standard/Simple Project/Program',
+                type: 'basic',
+                link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
+            },
+            {
+                title: 'Copy an existing Project',
+                type: 'basic',
+                link: '/create-project/copy-project'
+            }
+        ],
+    },*/
     {
         id   : 'spot-documents',
         title: 'SPOT Documents',
@@ -41,6 +87,29 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         icon : 'heroicons_outline:chart-pie',
         link : '/portfolio-center'
     },
+    /*{
+        // id   : 'create-project',
+        title: 'Create Project',
+        type: 'collapsable',
+        link: '/create-project',
+        children: [
+            {
+                title: 'Create a Standard/Simple Project/Program',
+                type: 'basic',
+                link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
+            },
+            {
+                title: 'Copy an existing Project',
+                type: 'basic',
+                link: '/create-project/copy-project'
+            }
+        ],
+    },*/
     {
         id   : 'spot-documents',
         title: 'SPOT Documents',
@@ -56,9 +125,32 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         type : 'basic',
         link : '/portfolio-center'
     },
+    /*{
+        // id   : 'create-project',
+        title: 'Create Project',
+        type: 'collapsable',
+        link: '/create-project',
+        children: [
+            {
+                title: 'Create a Standard/Simple Project/Program',
+                type: 'basic',
+                link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
+            },
+            {
+                title: 'Copy an existing Project',
+                type: 'basic',
+                link: '/create-project/copy-project'
+            }
+        ],
+    },*/
     {
         id   : 'spot-documents',
-        title: 'SPOT Resources',
+        title: 'SPOT Supporting Documents',
         type : 'basic',
         externalLink : true,
         link : 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',

@@ -1,0 +1,25 @@
+.custom{
+    width: 96% !important;
+}
+
+.customButtom{
+    bottom: 65px !important;
+    position: relative !important;
+}
+
+:host {
+    ::ng-deep .ngx-datatable .datatable-HF-80 .datatable-body .datatable-scroll {
+        height: 30vh !important;
+        width: 100vw !important;
+        overflow-x: scroll !important;
+        overflow-y: scroll !important;
+    }
+}
+
+:host{
+    ::ng-deep .datatable-HF-80{
+        ::ng-deep .datatable-body {
+    height: 33vh !important;
+        }
+}
+}

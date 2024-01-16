@@ -21,12 +21,14 @@ export class SpotTextareaComponent implements OnInit, ControlValueAccessor {
   @Input() hint: string = ''
   @Input() hintPostion: 'tooltip'|'mat-hint' = 'tooltip'
   @Input() rows: number = 5
-  
+  @Input() maxLength = 100000000
+  @Input() Required: boolean = false
   
 
   formFieldHelpers: any
   onTouch: any = () => { };
   onChange: any = () => { };
+  selected: any = () => { };
   form: FormGroup;
   disabled = false;
 

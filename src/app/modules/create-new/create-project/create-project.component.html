@@ -1,0 +1,544 @@
+<div class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10" *ngIf="!viewContent">
+    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12" style="min-height: 680px;">
+        <spot-global-message [callLocation]="'CreateNew'"></spot-global-message>
+        <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl">
+            <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full">
+                <div>
+                    <div>
+                        <mat-stepper linear #stepper (animationDone)="selectionChange(stepper)">
+                            <mat-step *ngIf="!viewContent">
+                                <div >
+                                <form style="margin-left: 420px;display: inline-block;width: 50%;">
+                                    <div style="overflow-y: scroll;height: 65vh;">
+                                    <ng-template 
+                                        matStepLabel><span>Basics</span></ng-template>
+                                        <app-general-info-single-edit *ngIf="SIP" [callLocation]="'CreateNewSIP'" [viewType]="'Form'" (formValue)="captureValue(0,$event)"
+                                            [viewElements]="['problemTitle', 'portfolioOwner', 'excecutionScope', 'owningOrganization', 'SubmittedBy', 'primaryProduct', 'otherImpactedProducts', 'projectDescription', 'problemType1','sponsor','valueCaptureStart']"></app-general-info-single-edit>
+                                        <app-general-info-single-edit *ngIf="!SIP" [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(0,$event)" [viewElements]="['problemTitle', 'portfolioOwner', 'excecutionScope', 'owningOrganization', 'SubmittedBy', 'primaryProduct', 'otherImpactedProducts', 'projectDescription', 'targetGoalSituation', 'localCurrency', 'problemType1']"></app-general-info-single-edit>
+                                    </div>
+                                    <p style="margin-top: 20px; font-style:italic;color: red;">*Required</p>
+                                    <div style="text-align: right;">
+                                        <!-- <label (click)="RouteBack()"
+                                            style="color: rgba(76,155,207);margin-right: 10px">Cancel</label> -->
+                                        <button (click)="RouteBack()" style="background-color: rgba(76,155,207);color: white" mat-button>Cancel</button>
+                                        &nbsp;
+                                        <button (click)="CheckMandatory(1)" style="background-color: rgba(76,155,207);color: white" mat-button
+                                            >Next</button>
+                                    </div>
+                                </form>
+                                </div>
+                            </mat-step>
+                            <mat-step *ngIf="!viewContent">
+                                <div >
+                                <form style="margin-left: 420px;display: inline-block;width: 50%;">
+                                    <div style="overflow-y: scroll;height: 65vh;">
+                                    <ng-template matStepLabel>Details</ng-template>
+                                    <h2 style="color: rgba(76,155,207);font-size: 20px;"><b>Project Details</b></h2>
+                                    <app-general-info-single-edit *ngIf="SIP" [callLocation]="'CreateNewSIP'" [viewType]="'Form'" (formValue)="captureValue(1,$event)"
+                                        [viewElements]="['isConfidential','parentProject']"></app-general-info-single-edit>
+                                    <app-general-info-single-edit *ngIf="!SIP" [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(1,$event)"
+                                        [viewElements]="['isConfidential','enviornmentalPortfolio', 'isCapsProject', 'parentProject']"
+                                        [portfolio]="envPortfolio"></app-general-info-single-edit>
+                                    <div *ngIf="!SIP" style="margin-left: 2px;margin-right: 4px;padding-right: 5px;margin-bottom: 12px;"class="flex flex-col flex-auto bg-card shadow rounded-2xl">
+                                        <app-oe-project-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueOE)="captureValue(2,$event)"></app-oe-project-single-edit>
+                                    </div>
+                                    <div *ngIf="!SIP" style="margin-left: 2px;margin-right: 4px;padding-right: 5px;margin-bottom: 12px;" class="flex flex-col flex-auto bg-card shadow rounded-2xl">
+                                    <app-tech-transfer-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueTech)="captureValue(3,$event)"></app-tech-transfer-single-edit>
+                                    </div>
+                                    <div *ngIf="!SIP" style="margin-left: 2px;margin-right: 4px;padding-right: 5px;margin-bottom: 12px;" class="flex flex-col flex-auto bg-card shadow rounded-2xl">
+                                    <app-quality-ref-bulk-edit [qualityType] = "qualityType" [callLocation]="'CreateNew'" [viewType]="'Form'" (QualityValue) = "captureValue(6,$event)" (formValueQuality)="captureValue(4,$event)"></app-quality-ref-bulk-edit>
+                                    </div>
+                                    <hr>
+                                    <h2 style="color: rgba(76,155,207);font-size: 20px;"><b>Strategic Drivers</b></h2>
+                                    <app-strategic-drivers *ngIf="SIP" [callLocation]="'CreateNewSIP'" [viewType]="'Form'" (formValueStrategic)="captureValue(5,$event)"></app-strategic-drivers>
+                                    <app-strategic-drivers *ngIf="!SIP" [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueStrategic)="captureValue(5,$event)"></app-strategic-drivers>
+                                    <!-- <div id="comp-render" *ngIf="showLocalAttributes"> -->
+                                    <hr>
+                                    <h2 *ngIf="showLocalAttributesTitle" style="color: rgba(76,155,207);font-size: 20px;"><b>Local Attributes</b></h2>
+                                    <app-local-attribute-single-edit [viewType]="'Form'" *ngIf="showLocalAttributes" (formValueLA)="captureValueLA(1,$event)" [callLocation]="'CreateNew'" [PortfolioOwner]="portfolioOwners" [ExecutionScope]="executionScope"></app-local-attribute-single-edit>
+                                    <!-- </div> -->
+                                    </div>
+                                    <p style="margin-top: 20px; font-style:italic;color: red;">*Required</p>
+                                    <div style="text-align: right;">
+                                        <button (click)="RouteBack()" style="background-color: rgba(76,155,207);color: white; margin-right: 10px;" mat-button>Cancel</button>
+                                        <button mat-button matStepperPrevious
+                                            style="background-color: rgba(76,155,207);color: white; margin-right: 10px;">Back</button>
+                                        <button mat-button matStepperNext class="Primary"
+                                            style="background-color: rgb(76,155,207);color: white">Next</button>
+                                    </div>
+                                </form>
+                            </div>
+                            </mat-step>
+
+                            <mat-step *ngIf="!viewContent">
+                                <div>
+                                <form style="margin-right: 400px;margin-left: 350px;">
+                                    <div >
+                                    <ng-template matStepLabel>Review</ng-template>
+                                    <div class="row" style="overflow-y: scroll;height: 65vh;margin-top: 30px;">
+                                        <label style="color: rgba(76,155,207);font-size: 16px;"><b>Basic Info</b></label>
+                                        <br />
+                                        <div class="test">
+                                            <div class="parent">
+                                                <label><label style="color:red">*</label>Submitted By </label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.SubmittedBy?.userDisplayName}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="test">
+                                            <div class="parent">
+                                                <label *ngIf="!SIP"><label style="color:red">* </label>Project Name </label>
+                                                <label *ngIf="SIP"><label style="color:red">* </label>Strategic Initiative Name </label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.problemTitle}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="test">
+                                            <div class="parent">
+                                                <label><label style="color:red">*</label>Project Type </label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.problemType}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="test">
+                                            <div class="parent">
+                                                <label><label style="color:red">*</label>Portfolio Owner  </label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.portfolioOwner?.portfolioOwner}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="test">
+                                            <div class="parent">
+                                                <label><label style="color:red">*</label>Execution Scope  </label>
+                                            </div>
+                                            <div class="child">
+                                                <span *ngFor="let item of createProjectForm.value.excecutionScope; let i = index">
+                                                    <label class="reviewText" *ngIf="i > 0 && i<createProjectForm.value.excecutionScope.length">,</label>
+                                                    <label class="reviewText">{{item.portfolioOwner}}</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="test">
+                                            <div class="parent">
+                                                <label><label style="color:red">*</label>Owning Organization  </label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.owningOrganization}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="test" *ngIf="SIP">
+                                            <div class="parent">
+                                                <label><label style="color:red">*</label>Strategic Initiative Owner/Sponsor  </label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.sponsor?createProjectForm.value.sponsor.userDisplayName:''}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="test" *ngIf="SIP">
+                                            <div class="parent">
+                                                <label><label style="color:red">*</label>Value Capture Start  </label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.valueCaptureStart | date : 'dd-MMM-yyyy'}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="test" *ngIf="!SIP">
+                                            <div class="parent">
+                                                <label><label style="color:red">*</label>Local Currency  </label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.localCurrency}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="test">
+                                            <div class="parent">
+                                                <label><label style="color:red">*</label>Primary Product  </label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.primaryProduct?.fullProductName}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="test">
+                                            <div class="parent">
+                                                <label>Other Impacted Products</label>
+                                            </div>
+                                            <div class="child">
+                                                <span *ngFor="let item of createProjectForm.value.otherImpactedProducts; let i = index">
+                                                    <label class="reviewText"
+                                                        *ngIf="i > 0 && i<createProjectForm.value.otherImpactedProducts.length">,</label>
+                                                    <label class="reviewText">{{item.fullProductName}}</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="test">
+                                            <div class="parent">
+                                                <label *ngIf="SIP"><label style="color:red">*</label>Strategic Initiative Description</label>
+                                                <label *ngIf="!SIP"><label style="color:red">*</label>Problem Description/Present Situation/Submission Description</label>
+                                            </div>
+                                            <div class="child">
+                                                <label style="white-space: pre-wrap;" class="reviewText">{{createProjectForm.value.projectDescription}}</label>
+                                            </div>
+                                        </div>
+                                        <div *ngIf='!SIP' class="test">
+                                            <div class="parent">
+                                                <label>Target End State</label>
+                                            </div>
+                                            <div class="child">
+                                                <label style="white-space: pre-wrap;" class="reviewText">{{createProjectForm.value.targetGoalSituation}}</label>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <label style="color: rgba(76,155,207);font-size: 16px;"><b>Project Details</b></label>
+                                        <br />
+                                        <div class="test" *ngIf="projectHubService.roleControllerControl.generalInfo.confidentialEdit">
+                                            <div class="parent">
+                                                <label>Confidential</label>
+                                            </div>
+                                            <div class="child" *ngIf="createProjectForm.value.isConfidential">
+                                                <label class="reviewText">Yes</label>
+                                            </div>
+                                            <div class="child" *ngIf="!createProjectForm.value.isConfidential">
+                                                <label class="reviewText">No</label>
+                                            </div>
+                                        </div>
+                                        <div class="test">
+                                            <div class="parent">
+                                                <label>Parent Program</label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.projectsingle}}</label>
+                                            </div>
+                                        </div>
+                                        <div *ngIf='!SIP' class="test">
+                                            <div class="parent">
+                                                <label>Environmental Portfolio</label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.enviornmentalPortfolio?.portfolioOwner}}</label>
+                                            </div>
+                                        </div>
+                                        <div *ngIf='!SIP' class="test">
+                                            <div class="parent">
+                                                <label>CAPS Project</label>
+                                            </div>
+                                            <div class="child" *ngIf="createProjectForm.value.isCapsProject">
+                                                <label class="reviewText">Yes</label>
+                                            </div>
+                                            <div class="child" *ngIf="!createProjectForm.value.isCapsProject">
+                                                <label class="reviewText">No</label>
+                                            </div>
+                                        </div>
+                                        <div *ngIf='!SIP' class="test">
+                                            <div class="parent">
+                                                <label>OE Project</label>
+                                            </div>
+                                            <div class="child" *ngIf="createProjectForm.value.isOeproject">
+                                                <label class="reviewText">Yes</label>
+                                            </div>
+                                            <div class="child" *ngIf="!createProjectForm.value.isOeproject">
+                                                <label class="reviewText">No</label>
+                                            </div>
+                                        </div>
+                                        <div class="test" *ngIf="createProjectForm.controls['isOeproject'].value && !SIP">
+                                            <div class="parent">
+                                                <label>OE Project Type</label>
+                                            </div>
+                                            <div class="child">
+                                                <span *ngFor="let item of createProjectForm.value.oeProjectType; let i = index">
+                                                    <label class="reviewText" *ngIf="i > 0 && i<createProjectForm.value.oeProjectType.length">,</label>
+                                                    <label class="reviewText">{{item.lookUpName}}</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="test" *ngIf='!SIP'>
+                                            <div class="parent">
+                                                <label>Tech Transfer or Clinical Campaign</label>
+                                            </div>
+                                            <div class="child" *ngIf="createProjectForm.value.isTechTransfer">
+                                                <label class="reviewText">Yes</label>
+                                            </div>
+                                            <div class="child" *ngIf="!createProjectForm.value.isTechTransfer">
+                                                <label class="reviewText">No</label>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="createProjectForm.controls['isTechTransfer'].value && !SIP">
+                                            <div class="test">
+                                                <div class="parent">
+                                                    <label>Campaign Type</label>
+                                                </div>
+                                                <div class="child">
+                                                    <label class="reviewText">{{campaingTypeName}}</label>
+                                                </div>
+                                            </div>
+                                            <div class="test">
+                                                <div class="parent">
+                                                    <label>Campaign Phase</label>
+                                                </div>
+                                                <div class="child">
+                                                    <label class="reviewText">{{campaingPhaseName}}</label>
+                                                </div>
+                                            </div>
+                                            <div class="test">
+                                                <div class="parent">
+                                                    <label>Production Step</label>
+                                                </div>
+                                                <div class="child">
+                                                    <label class="reviewText">{{productionStepName}}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="test" *ngIf='!SIP'>
+                                            <div class="parent">
+                                                <label>Quality Reference #</label>
+                                            </div>
+                                            <div class="child" *ngIf="createProjectForm.value.qualityReference">
+                                                <label class="reviewText">Yes</label>
+                                            </div>
+                                            <div class="child" *ngIf="!createProjectForm.value.qualityReference">
+                                                <label class="reviewText">No</label>
+                                            </div>
+                                        </div>
+                                        <div class="test" *ngIf='!SIP'>
+                                            <div class="parent">
+                                                <label></label>
+                                            </div>
+                                        <div class="child" *ngIf="createProjectForm.controls['qualityReference'].value"
+                                            class="flex justify-between items-start gap-6">
+                                            <div style="padding-left: 10px; margin-left: 10px;margin-right: 10px;" class="flex flex-col flex-auto w-2/5 bg-card shadow rounded-2xl overflow-hidden">
+                                                <div class="">
+                                                    <ngx-datatable [headerHeight]="'10px'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="force"
+                                                        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="qualityForm" style="width: 432px;">
+                                                        <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
+                                                            [sortable]="false" [width]="20">
+                                                            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                                                                <p>{{getLookUpName(value)}}</p>
+                                                            </ng-template>
+                                                        </ngx-datatable-column>
+                                                        <ngx-datatable-column name="Quality Reference #" prop="qualityReference1" [resizeable]="false"
+                                                            [sortable]="false" [width]="20">
+                                                            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                                                                <!-- <p>&nbsp;</p> -->
+                                                                <p>{{value}}</p>
+                                                            </ng-template>
+                                                        </ngx-datatable-column>
+                                                    </ngx-datatable>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        <br />
+                                        <label style="color: rgba(76,155,207);font-size: 16px;"><b>Strategic Drivers</b></label>
+                                        <br />
+                                        <div class="test">
+                                            <div class="parent">
+                                                <label>Primary Value Driver</label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.primaryKPI?.lookUpName}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="test">
+                                            <div class="parent">
+                                                <label>AGILE Project</label>
+                                            </div>
+                                            <div class="child" *ngIf="createProjectForm.value.isAgile">
+                                                <label class="reviewText">Yes</label>
+                                            </div>
+                                            <div class="child" *ngIf="!createProjectForm.value.isAgile">
+                                                <label class="reviewText">No</label>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="createProjectForm.controls['isAgile'].value">
+                                            <div class="test">
+                                                <div class="parent">
+                                                    <label>AGILE Primary Workstream</label>
+                                                </div>
+                                                <div class="child">
+                                                    <label class="reviewText">{{createProjectForm.value.agilePrimaryWorkstream?.lookUpName}}</label>
+                                                </div>
+                                            </div>
+                                            <div class="test">
+                                                <div class="parent">
+                                                    <label>AGILE Secondary Workstream</label>
+                                                </div>
+                                                <div class="child">
+                                                    <span *ngFor="let item of createProjectForm.value.agileSecondaryWorkstream; let i = index">
+                                                        <label class="reviewText" *ngIf="i > 0 && i<createProjectForm.value.agileSecondaryWorkstream.length">,</label>
+                                                        <label class="reviewText">{{item.lookUpName}}</label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="test">
+                                                <div class="parent">
+                                                    <label>AGILE Wave</label>
+                                                </div>
+                                                <div class="child">
+                                                    <label class="reviewText">{{createProjectForm.value.agileWave?.lookUpName}}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="test" *ngIf="!SIP">
+                                            <div class="parent">
+                                                <label>POBOS</label>
+                                            </div>
+                                            <div class="child" *ngIf="createProjectForm.value.isPobos">
+                                                <label class="reviewText">Yes</label>
+                                            </div>
+                                            <div class="child" *ngIf="!createProjectForm.value.isPobos">
+                                                <label class="reviewText">No</label>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="createProjectForm.controls['isPobos'].value && !SIP" class="test">
+                                            <div class="parent">
+                                                <label>POBOS Type</label>
+                                            </div>
+                                            <div class="child">
+                                                <span *ngFor="let item of createProjectForm.value.pobosCategory; let i = index">
+                                                    <label class="reviewText" *ngIf="i > 0 && i<createProjectForm.value.pobosCategory.length">,</label>
+                                                    <label class="reviewText">{{item.lookUpName}}</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="test" *ngIf="!SIP">
+                                            <div class="parent">
+                                                <label>Strategic Deployment Annual Initiative</label>
+                                            </div>
+                                            <div class="child" *ngIf="createProjectForm.value.isGmsgqltannualMustWin">
+                                                <label class="reviewText">Yes</label>
+                                            </div>
+                                            <div class="child" *ngIf="!createProjectForm.value.isGmsgqltannualMustWin">
+                                                <label class="reviewText">No</label>
+                                            </div>
+                                        </div>
+                                        <div class="test" *ngIf="createProjectForm.controls['isGmsgqltannualMustWin'].value && !SIP">
+                                            <div class="parent">
+                                                <label>Strategic Year</label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.strategicYear?.lookUpName}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="test" *ngIf="createProjectForm.controls['isGmsgqltannualMustWin'].value && !SIP">
+                                            <div class="parent">
+                                                <label>GMSGQ LT Annual Must Win?</label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.annualMustWinID?.lookUpName}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="test" *ngIf="!SIP">
+                                            <div class="parent">
+                                                <label>Site Assessment</label>
+                                            </div>
+                                            <div class="child" *ngIf="createProjectForm.value.isSiteAssessment">
+                                                <label class="reviewText">Yes</label>
+                                            </div>
+                                            <div class="child" *ngIf="!createProjectForm.value.isSiteAssessment">
+                                                <label class="reviewText">No</label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="test" *ngIf="createProjectForm.controls['isSiteAssessment'].value && !SIP">
+                                            <div class="parent">
+                                                <label>Site Assessment Type</label>
+                                            </div>
+                                            <div class="child">
+                                                <span *ngFor="let item of createProjectForm.value.siteAssessmentCategory; let i = index">
+                                                    <label class="reviewText"
+                                                        *ngIf="i > 0 && i<createProjectForm.value.siteAssessmentCategory.length">,</label>
+                                                    <label class="reviewText">{{item.lookUpName}}</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div *ngIf="showLocalAttributesTitle">
+                                        <label style="color: rgba(76,155,207);font-size: 16px;"><b>Local Attributes</b></label>
+                                        <br />
+                                        <div class="test" *ngFor="let item of LAData; let i = index">
+                                            <div class="parent">
+                                                <label>{{item.name}}</label>
+                                            </div>
+                                            <div class="child" *ngIf="item.dataType == 6 || item.dataType == 4">
+                                                <label class="reviewText">{{localAttribute.localAttributeForm.controls[item.uniqueId].value}}</label>
+                                            </div>
+                                            <div class="child" *ngIf="item.dataType == 1">
+                                                <label class="reviewText"><mat-icon svgIcon="heroicons_outline:x-circle"
+                                                    *ngIf="!localAttribute.localAttributeForm.controls[item.uniqueId].value"></mat-icon>
+                                                <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                                    *ngIf="localAttribute.localAttributeForm.controls[item.uniqueId].value">
+                                                </mat-icon></label>
+                                            </div>
+                                            
+                                            <div class="child" *ngIf="item.dataType == 2">
+                                                <label class="reviewText">{{localAttribute.localAttributeForm.controls[item.uniqueId].value | date : 'dd-MMM-yyyy'}}</label>
+                                            </div>
+                                            <div class="child" *ngIf="item.dataType == 5 && !item.isMulti">
+                                                <label class="reviewText">{{localAttribute.localAttributeForm.controls[item.uniqueId].value.userDisplayName}}</label>
+                                            </div>
+                                            <div class="child" *ngIf="item.dataType == 3 && !item.isMulti">
+                                                <label class="reviewText">{{localAttribute.localAttributeForm.controls[item.uniqueId].value.lookUpName}}</label>
+                                            </div>
+                                            <div class="child" *ngIf="item.dataType == 3 && item.isMulti">
+                                                <span *ngFor="let data1 of localAttribute.localAttributeForm.controls[item.uniqueId].value; let i = index">
+                                                    <label class="reviewText" *ngIf="i > 0 && i<localAttribute.localAttributeForm.controls[item.uniqueId].value.length">,</label>
+                                                    <label class="reviewText">{{data1.lookUpName}}</label>
+                                                </span>
+                                            </div>
+                                            <div class="child" *ngIf="item.dataType == 5 && item.isMulti">
+                                                <span *ngFor="let data1 of localAttribute.localAttributeForm.controls[item.uniqueId].value; let i = index">
+                                                    <label class="reviewText"
+                                                        *ngIf="i > 0 && i<localAttribute.localAttributeForm.controls[item.uniqueId].value.length">,</label>
+                                                    <label class="reviewText">{{data1.userDisplayName}}</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        
+                                        </div>
+                                    </div>
+                                    <p style="margin-top: 20px; font-style:italic;color: red;">*Required</p>
+                                    <div style="text-align: right;">
+                                        <button (click)="RouteBack()" style="background-color: rgba(76,155,207);color: white; margin-right: 10px;" mat-button>Cancel</button>
+                                        <button style="background-color: rgba(76,155,207);color: white; margin-right: 10px;" mat-button
+                                            matStepperPrevious>Back</button>
+                                        <button matStepperNext style="background-color: rgba(76,155,207);color: white" mat-button (click)="
+                                            createProject()" type="button">Submit</button>
+                                    </div>
+                                </form>
+                            </div>                            
+                            </mat-step>                           
+                            </mat-stepper>                            
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10" *ngIf="viewContent">
+    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12" style="min-height: auto;">
+        <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl">
+            <div class="flex flex-col flex-auto overflow-hidden p-6">
+                <div>
+                    <div style="margin-right: 13vw;margin-left: 16vw;">
+                        <label style="font-size: 16px;display: flex;justify-content: center;margin-bottom: 10px; margin-top: 42px;"><b
+                                style="margin-right: 58px;">Please select the next page</b></label>
+                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;"
+                                (click)="RoutetoProposal()" mat-button>Project Proposal</button></div>
+                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;"
+                                (click)="RoutetoBC()" mat-button>Business Case</button></div>
+                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;"
+                                (click)="RoutetoCharter()" mat-button>Project Charter</button></div>
+                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;"
+                                (click)="RoutetoBoard()" mat-button>Project Board</button></div>
+                        <!-- <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;"
+                                (click)="RouteCreateProject()" mat-button>Create another Project</button></div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

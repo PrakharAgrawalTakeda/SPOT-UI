@@ -1,0 +1,185 @@
+<div class="flex flex-col min-w-0 p-3 pt-3 w-full ml-3">
+    <div class="p-6 bg-card rounded-2xl shadow w-full mb-6">
+        <div>
+            <div class="flex justify-between items-center pb-6">
+                <h3 class="text-xl text-primary font-medium tracking-tight leading-6 truncate ">e-Mail
+                    Notifications
+                </h3>
+                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                    (click)="preferenceservice.toggleDrawerOpen(emailNotiEditType, '' , emailNoti , id)">
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <form class="w-full read-only p-[20px] text-default" [formGroup]="emailNotiForm" (ngSubmit)="submitnotifications()">
+                    <div>
+                        <!-- class="h-[80vh]" -->
+                        <div class="flex justify-start items-center gap-3 pb-6 font-medium">
+                            Receive e-Mail Notifications
+                            <mat-icon svgIcon="heroicons_outline:x-circle"
+                                *ngIf="!emailNotiForm.controls.recieveEmailNotification.value"
+                                >
+                            </mat-icon>
+                            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                *ngIf="emailNotiForm.controls.recieveEmailNotification.value"
+                                >
+                            </mat-icon>
+                            <mat-icon class="pe icon-size-4"
+                                    matTooltip="Receive a summary report of alerts and reminders based on the scope, events and frequency you define below">
+                                    help</mat-icon>
+
+                        </div>
+                        <div *ngIf="emailNotiForm.controls['recieveEmailNotification'].value">
+                            <!-- *ngIf="emailNotiForm.controls['recieveEmailNotification'].value" -->
+
+                            <spot-singleselect-autocomplete formControlName="reportFrequencyId" class="w-full read-only"
+                                name="reportFrequencyId" [label]="'Report Frequency'" [placeholder]="''"
+                                [valuePointer]="'lookUpName'" [dropDownArray]="lookUpData" [sortByType]="'custom'"
+                                [customSortPointer]="'lookUpOrder'"
+                                [showHint]="true"
+                                [hint]="'Frequency determines how often you will receive a report summarizing the notifications/events you turn on below'">
+                            </spot-singleselect-autocomplete>
+
+                            <spot-singleselect-autocomplete formControlName="emailNotifcationNotifcationReportScopeIds"
+                            class="w-full read-only" name="emailNotifcationNotifcationReportScopeIds"
+                                [label]="'Notification Report Scope'" [placeholder]="''"
+                                [valuePointer]="'lookUpName'" [dropDownArray]="lookUpData2" [sortByType]="'custom'"
+                                [customSortPointer]="'lookUpOrder'"
+                                [showHint]="true"
+                                [hint]="'Select if you want a notification based on Portfolio Ownership or Execution Scopes, Roles, Products or Individual Projects'">
+                            </spot-singleselect-autocomplete>
+
+                            <!-- *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == 'ecbe5dae-7278-4b2f-906d-ec9aaa77d868'" -->
+                            <spot-multiselect-autocomplete formControlName="portfolioOwner" class="w-full read-only"
+                                name="portfolioOwner" [label]="'Portfolio Owner(s)'" [placeholder]="''"
+                                [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
+                                [dropDownArray]="getPortfolioOwner()" [sortByType]="'custom'"
+                                [customSortPointer]="'pfid'"
+                                *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'ecbe5dae-7278-4b2f-906d-ec9aaa77d868'">
+                            </spot-multiselect-autocomplete>
+                            <spot-singleselect-autocomplete formControlName="emailNotifcationPortfolioReportTypes" class="w-full read-only"
+                                name="emailNotifcationPortfolioReportTypes" [label]="'Project Type'" [placeholder]="''"
+                                [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                                [dropDownArray]="lookUpData3" [sortByType]="'custom'"
+                                [customSortPointer]="'lookUpOrder'"
+                                [showHint]="true"
+                                [hint]="'Select if you would like to limit the types of projects within the selected Portfolios-Execution Scopes'"
+                                *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'ecbe5dae-7278-4b2f-906d-ec9aaa77d868'">
+                            </spot-singleselect-autocomplete>
+                            <!-- *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == '11336470-8b35-4c7a-abe4-d62d58d33fca'" -->
+                            <spot-multiselect-autocomplete formControlName="excecutionScope" class="w-full read-only"
+                                name="excecutionScope" [label]="'Execution Scope(s)'" [placeholder]="''"
+                                [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
+                                [dropDownArray]="getExcecutionScope()" [sortByType]="'custom'"
+                                [customSortPointer]="'pfid'"
+                                *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == '11336470-8b35-4c7a-abe4-d62d58d33fca'">
+                            </spot-multiselect-autocomplete>
+                            <spot-singleselect-autocomplete formControlName="emailNotifcationPortfolioReportTypes" class="w-full read-only"
+                                name="emailNotifcationPortfolioReportTypes" [label]="'Project Type'" [placeholder]="''"
+                                [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                                [dropDownArray]="lookUpData3" [sortByType]="'custom'"
+                                [customSortPointer]="'lookUpOrder'"
+                                [showHint]="true"
+                                [hint]="'Select if you would like to limit the types of projects within the selected Portfolios-Execution Scopes'"
+                                *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == '11336470-8b35-4c7a-abe4-d62d58d33fca'">
+                            </spot-singleselect-autocomplete>
+                            <!-- *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == '897633cf-3516-49b0-9f45-a6ddc9374c0e'" -->
+                            <spot-multiselect-autocomplete formControlName="role" name="role" [label]="'Role(s)'"
+                                 [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                                [dropDownArray]="getRoles()"
+                                [showHint]="true"
+                                [hint]="'Selections here will generte a summary report based on projects where you are documented in the Project Team as the identified role(s)'"
+                                *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == '897633cf-3516-49b0-9f45-a6ddc9374c0e'">
+                            </spot-multiselect-autocomplete>
+                            <!-- *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == 'd290915b-cda2-4ba3-87a3-ce504fd6f15c'" -->
+                            <spot-multiselect-autocomplete formControlName="products"
+                                name="products" [label]="'Product(s)'" [valuePointer]="'fullProductName'"
+                                [idPointer]="'productId'" [dropDownArray]="filterCriteria.products" [showHint]="true"
+                                [hint]="'Selections here will generate a summary report based on projects where the selected Product(s) are either the documented Primary or Impacted Product'"
+                                *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'd290915b-cda2-4ba3-87a3-ce504fd6f15c'">
+                            </spot-multiselect-autocomplete>
+
+                            <div  *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c'">
+                                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
+                                    columnMode="flex"
+                                    class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+                                    [rows]="projects">
+                                    <ngx-datatable-column name="Projects" prop="problemTitle" [flexGrow]="9" [resizeable]="false" [draggable]="false">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                          <div class="flex items-center justify-start gap-6">
+                                            {{ value ? ( row.problemId + " - " + row.problemTitle) : ''}}
+                                          </div>
+                                        </ng-template>
+                                      </ngx-datatable-column>
+                                </ngx-datatable>
+                            </div>
+                            <div class="flex justify-start items-center gap-3 pb-6 mt-4" *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c'">
+                                Include Children Records
+                                <mat-icon svgIcon="heroicons_outline:x-circle"
+                                    *ngIf="!emailNotiForm.controls.includeChild.value">
+                                </mat-icon>
+                                <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                    *ngIf="emailNotiForm.controls.includeChild.value">
+                                </mat-icon>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ---------------------------------------------------------------------------------------- -->
+
+    <div class="p-6 bg-card rounded-2xl shadow w-full mb-6"
+        *ngIf="emailNotiForm.controls['recieveEmailNotification'].value">
+        <div class="flex justify-between items-center pb-6">
+            <h3 class="text-xl text-primary font-medium tracking-tight leading-6 truncate ">
+              Report Content
+            </h3>
+            <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                (click)="preferenceservice.toggleDrawerOpen(emailNotiTableEditType, '' , emailNotiTable , id, true)">
+                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
+            </button>
+        </div>
+        <div class="overflow-x-auto">
+            <form class="w-full p-[20px]" [formGroup]="emailNotiTableForm" (ngSubmit)="submitnotificationsTable()">
+              <div class="h-[85vh]">
+                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                  class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="eventsData"
+                  #emailNotiTable>
+
+                  <ngx-datatable-column name="Priority" prop="priority" [flexGrow]="0.4">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      {{ row.priority }}
+                    </ng-template>
+                  </ngx-datatable-column>
+
+                  <ngx-datatable-column name="Event" prop="event" [flexGrow]="0.4">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      {{ row.event }}
+                    </ng-template>
+                  </ngx-datatable-column>
+
+                  <ngx-datatable-column name="Description" prop="description" [flexGrow]="0.8">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      {{ row.description }}
+                    </ng-template>
+                  </ngx-datatable-column>
+
+                  <ngx-datatable-column name="On/Off" prop="onoff" [resizeable]="false" [sortable]="false" [flexGrow]="0.4">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                      <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="row.onOff == false"></mat-icon>
+                      <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="row.onOff == true"></mat-icon>
+                    </ng-template>
+                  </ngx-datatable-column>
+
+                </ngx-datatable>
+              </div>
+            </form>
+          </div>
+
+
+
+    </div>
+</div>

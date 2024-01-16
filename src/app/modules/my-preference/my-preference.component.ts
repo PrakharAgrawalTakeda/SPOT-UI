@@ -1,46 +1,181 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MyPreferenceService } from "./my-preference.service";
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
-import { MsalService } from '@azure/msal-angular';
-import { AuthService } from 'app/core/auth/auth.service';
-import { RoleService } from 'app/core/auth/role.service';
-import { MyPreferenceApiService } from './my-preference-api.service';
-
+import { MyPreferenceApiService } from "./my-preference-api.service";
+import { MsalService } from "@azure/msal-angular";
+import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
+import moment from 'moment';
 @Component({
-  selector: 'app-my-preference',
-  templateUrl: './my-preference.component.html',
-  styleUrls: ['./my-preference.component.scss']
+    selector: 'app-my-preference',
+    templateUrl: './my-preference.component.html',
+    styleUrls: ['./my-preference.component.scss']
 })
 export class MyPreferenceComponent implements OnInit {
+    milestoneAccess = false;
+    checkAccessError = false;
+    activeaccount: any;
+    newmainnav: any = [];
+    constructor(private _Activatedroute: ActivatedRoute,
+        private router: Router,
+        public myPreferenceService: MyPreferenceService,
+        public myPreferenceApiService: MyPreferenceApiService,
+        private msalService: MsalService,
+        private titleService: Title, private snack: MatSnackBar, private _fuseNavigationService: FuseNavigationService) {
+        // this.myPreferenceService.successSave.subscribe(res => {
+        //     if (res == true) {
+        //         this.snack.open("The information has been saved successfully", "", {
+        //             duration: 2000,
+        //             panelClass: ["bg-primary", "text-on-primary"]
+        //         })
+        //     }
+        // })
+        // this.myPreferenceService.successSave.subscribe(res => {
+        //     if (res == true) {
+        //         this.snack.open("The information has been saved successfully", "", {
+        //             duration: 2000,
+        //             panelClass: ["bg-primary", "text-on-primary"]
+        //         })
+        //     }
+        // })
+        const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
+        this.activeaccount = this.msalService.instance.getActiveAccount();
+        this.newmainnav = [
+            {
+                id: 'portfolio-center',
+                title: 'Portfolio Center',
+                type: 'basic',
+                link: '/portfolio-center'
+            },
+            {
+                // id: 'create-project',
+                title: 'Create Project',
+                type: 'collapsable',
+                link: '/create-project',
+                children: [
+                    {
+                        title: 'Create a Standard/Simple Project/Program',
+                        type: 'basic',
+                        link: '/create-project/create-new-project'
+                    },
+                    {
+                        title: 'Create a Strategic Initiative/Program',
+                        type: 'basic',
+                        link: '/create-project/create-strategic-initiative-project'
+                    },
+                    {
+                        title: 'Copy an existing Project',
+                        type: 'basic',
+                        link: '/create-project/copy-project'
+                    }
+                ],
+            },
+            {
+                id: 'spot-documents',
+                title: 'SPOT Supporting Documents',
+                type: 'basic',
+                externalLink: true,
+                link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+                target: '_blank'
+            },
+            {
+                id: 'report-navigator',
+                title: 'Report Navigator',
+                type: 'basic',
+                link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+                externalLink: true,
+                target: "_blank"
 
-  preferenceForm = new FormGroup({
-    role: new FormControl('')
-  })
-  lookupdata: any = []
-  constructor(private titleService: Title, public auth: AuthService, private roleService: RoleService, private apiService: MyPreferenceApiService, private msalService: MsalService) { }
+            },
+            {
+                id: 'spot-support',
+                title: 'Need Help or Propose a Change',
+                type: 'basic',
+                link: 'mailto:DL.SPOTSupport@takeda.com?Subject=SPOT Support Request ' + this.activeaccount.name + ' (Logged on ' + moment().format('llll') + ')',
+                externalLink: true,
+                target: "_blank"
 
-  ngOnInit(): void {
+            }
+        ]
+        mainNavComponent.navigation = this.newmainnav
+        mainNavComponent.refresh()
+        this.myPreferenceService.successSave.subscribe(res => {
+            if (res == true) {
+                this.snack.open("The information has been saved successfully", "", {
+                    duration: 2000,
+                    panelClass: ["bg-primary", "text-on-primary"]
+                })
+            }
+        })
+        this.router.events.subscribe(res => {
 
-    this.auth.lookupMaster().then(res=>{
-      this.lookupdata =  res
-      this.preferenceForm.patchValue({
-        role: this.roleService.roleMaster.securityGroupId
-      })
-      this.titleService.setTitle("My Preferences")
-    })
-    
-  }
-  getRoles(): any{
-    return this.lookupdata.filter(x => x.lookUpParentId == '3FF934A4-D5FC-4F92-AE75-78A5EBC64A1B' &&   !['C005FB71-C1FF-44D3-8779-5CA37643D794','BDC4DF5A-14D6-4468-9238-B933CA6C1B46','500ee862-3878-43d9-9378-53feb1832cef'].includes(x.lookUpId)  ).sort((a, b) => {
-      return a.lookUpOrder - b.lookUpOrder;
-    })
-  }
+            if (this.viewContent) {
+                this.navItem = null
+                this.reloadName()
+            }
+        })
+    }
 
-  updateRole(value: any){
-    console.log(this.msalService.instance.getActiveAccount().localAccountId)
-    console.log(value.value)
-    this.apiService.updateRole(this.msalService.instance.getActiveAccount().localAccountId,value.value).then(res=>{
-      location.reload()
-    })
-  }
+    id: string = ''
+    viewContent: boolean = false
+    navItem: any
+
+    ngOnInit(): void {
+        this.dataloader()
+    }
+
+    dataloader() {
+        this.titleService.setTitle("My Preferences")
+        this.checkMilestoneSetsAccess();
+        this.viewContent = true
+        if (this.checkAccessError == false) {
+            this.checkMilestoneSetsAccess();
+        }
+    }
+
+    isNavActive(link: string): boolean {
+        return this.router.url.includes(link)
+    }
+
+    checkMilestoneSetsAccess() {
+        this.myPreferenceApiService.checkAccess(this.msalService.instance.getActiveAccount().localAccountId).then((res: any) => {
+            if (res.HasAccess == true) {
+                this.milestoneAccess = true;
+            } else {
+                this.milestoneAccess = false;
+            }
+            this.reloadName()
+        }).catch(err => {
+            this.checkAccessError = true;
+        }
+        )
+    }
+
+    reloadName() {
+        this.navItem = {
+            title: 'My Preferences',
+            children: [
+                {
+                    title: 'Settings',
+                    link: 'my-preference/settings'
+                },
+                {
+                    title: 'e-mail Notifications',
+                    link: 'my-preference/email-notifications'
+                }
+            ]
+        }
+        if (this.milestoneAccess) {
+            this.navItem.children.push({
+                title: 'Milestone Sets',
+                link: 'my-preference/milestone-sets'
+            })
+            this.navItem.children.push({
+                title: 'Metric Repository',
+                link: 'my-preference/metric-repository'
+            })
+        }
+
+    }
 }

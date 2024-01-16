@@ -1,0 +1,66 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Edit Email Notifications</div>
+        <div style="padding-top: 2px"><a (click)="preferenceservice.toggleDrawerOpen('', '',[],'',true, true)"
+                href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="overflow-x-auto">
+        <form class="w-full p-[20px]" [formGroup]="emailNotiTableForm" (ngSubmit)="submitnotificationsTable()">
+            <div class="overflow-y-scroll" style="height: calc(calc(100vh/ var(--custom-zoom)) - 140px)">
+                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                  class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="eventsData"
+                  #emailNotiTable>
+          
+                  <ngx-datatable-column name="Priority" prop="priority" [flexGrow]="0.4">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      {{ row.priority }}
+                    </ng-template>
+                  </ngx-datatable-column>
+          
+                  <ngx-datatable-column name="Event" prop="event" [flexGrow]="0.4">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      {{ row.event }}
+                    </ng-template>
+                  </ngx-datatable-column>
+          
+                  <ngx-datatable-column name="Description" prop="description" [flexGrow]="0.8">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      {{ row.description }}
+                    </ng-template>
+                  </ngx-datatable-column>
+          
+                  <ngx-datatable-column name="On/Off" prop="onoff" [resizeable]="false" [sortable]="false"
+                        [flexGrow]="0.4">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
+                            <a *ngIf="!emailTableEditStack.includes(rowIndex)" (click)="emailTableEditRow(rowIndex)">
+                                <p *ngIf="!value">&nbsp;</p>
+                                <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="row.onOff == true"></mat-icon>
+                              </a>
+                              <form [formGroup]="emailNotiTableForm.controls[rowIndex]" *ngIf="emailTableEditStack.includes(rowIndex)"
+                                class="p-2">
+                                <div class="flex items-center justify-between">
+                                  <mat-slide-toggle  class="h-full" formControlName="onoff">
+                                  </mat-slide-toggle>
+                                </div>
+                              </form>
+                        </ng-template>
+                    </ngx-datatable-column>
+          
+                </ngx-datatable>
+            </div>
+            <div class="flex items-start justify-between mt-6">
+                <a class="min-w-26" mat-flat-button [color]="'primary'"
+                    (click)="preferenceservice.toggleDrawerOpen('', '',[],'',true, true)">
+                    Cancel
+                </a>
+                <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

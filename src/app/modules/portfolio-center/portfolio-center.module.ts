@@ -20,16 +20,38 @@ import { FuseDrawerModule } from '@fuse/components/drawer';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
+import { ForecastComponent } from './budget-spend/forecast/forecast.component';
+import { BudgetSpendComponent } from './budget-spend/budget-spend.component';
+import { ProjectHubModule } from '../project-hub/project-hub.module';
+import { PortfolioPerformanceComponent } from './budget-spend/portfolio-performance/portfolio-performance.component';
+import { ProjectPerformanceComponent } from './budget-spend/project-performance/project-performance.component';
+import { ProjectHub } from 'app/shared/role-controller';
+import { FxRateComponent } from './budget-spend/fx-rate/fx-rate.component';
+import { ForecastExcelUpdateComponent } from './budget-spend/forecast-excel-update/forecast-excel-update.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { SpreadsheetModule } from '@progress/kendo-angular-spreadsheet';
+import { SpotGlobalMessageModule } from 'app/layout/common/spot-global-message/spot-global-message.module';
 
 export const projectRoutes: Route[] = [
   {
     path: '',
-    component: PortfolioCenterComponent,
-  }
-];
+    component: PortfolioCenterComponent
+  }];
+
+
 @NgModule({
   declarations: [
-    PortfolioCenterComponent
+    PortfolioCenterComponent,
+    ForecastComponent,
+    BudgetSpendComponent,
+    PortfolioPerformanceComponent,
+    ProjectPerformanceComponent,
+    FxRateComponent,
+    ForecastExcelUpdateComponent,
   ],
   imports: [
     RouterModule.forChild(projectRoutes),
@@ -51,8 +73,15 @@ export const projectRoutes: Route[] = [
     FuseDrawerModule,
     MatChipsModule,
     MatAutocompleteModule,
-    MatFormFieldModule
-
-  ]
+    MatFormFieldModule,
+    SpotFormsModule,
+    NgScrollbarModule,
+    NgxDatatableModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    SpreadsheetModule,
+    SpotGlobalMessageModule
+  ],
+  exports: [RouterModule]
 })
 export class PortfolioCenterModule { }

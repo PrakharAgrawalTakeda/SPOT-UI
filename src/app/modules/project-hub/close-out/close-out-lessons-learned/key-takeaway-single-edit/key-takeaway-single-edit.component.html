@@ -1,0 +1,21 @@
+<div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Key Takeaways</div>
+    <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
+            href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+    </div>
+</div>
+<form class="overflow-auto m-2"  style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)" [formGroup]="KeyTakeawayForm">
+        <spot-textarea class="w-full read-only" formControlName="keyTakeaways" name="keyTakeaways" [label]="'Key Takeaways'">
+        </spot-textarea>
+</form>
+<div class="w-full px-3 pr-3 flex items-start justify-between">
+    <a class="min-w-26" mat-flat-button [color]="'primary'"
+       (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+        Cancel
+    </a>
+    <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit"  (click)="submitkTA()">
+        Submit
+    </button>
+</div>

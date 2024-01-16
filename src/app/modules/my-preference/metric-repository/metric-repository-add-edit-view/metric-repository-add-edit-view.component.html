@@ -1,0 +1,48 @@
+<div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Metric Repository View</div>
+    <div style="padding-top: 2px"><a (click)="this.myPreferenceService.toggleDrawerOpen('', '',[],'')"
+                                     href="javascript:void(0)" title="Close">
+        <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+    </a>
+    </div>
+</div>
+<form class="w-full overflow-hidden" [formGroup]="metricRepositoryForm">
+    <div class=" form-ask-need overflow-y-scroll" style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)">
+        <spot-input class="w-full" formControlName="globalLocal" [label]="'Global/Local'">
+        </spot-input>
+        <spot-singleselect-autocomplete
+            formControlName="managingPortfolio" class="w-full" Required
+            [label]="'Managing Portfolio'"
+            [placeholder]="'Managing Portfolio'" [valuePointer]="'portfolioOwner'"
+            [dropDownArray]="portfolioOwnerList" [sortByType]="'custom'"
+            [customSortPointer]="'portfolioOwner'">
+        </spot-singleselect-autocomplete>
+        <div>
+            <spot-select formControlName="category" [label]="'Category'" [placeholder]="'Category'" Required
+                         [dropDownArrayType]="'object'" [dropDownArray]="getCategory()" [idPointer]="'lookUpId'" [showNoneOption]="false"
+                         [valuePointer]="'lookUpName'"  [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+            </spot-select>
+        </div>
+        <spot-input class="w-full" formControlName="metricName" [label]="'Metric Name'" Required>
+        </spot-input>
+        <spot-textarea [rows]="1" formControlName="unit" [showLabel]="true" [label]="'Unit'" [maxLength]="20" Required>
+        </spot-textarea>
+        <div>
+            <spot-select formControlName="metricFormat" [label]="'Metric Format'" [placeholder]="'Metric Format'" Required
+                         [dropDownArrayType]="'object'" [dropDownArray]="getMetricFormat()" [idPointer]="'lookUpId'" [showNoneOption]="false"
+                         [valuePointer]="'lookUpName'"  [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+            </spot-select>
+        </div>
+        <spot-input class="w-full" formControlName="metricDescription" [label]="'Metric Description'">
+        </spot-input>
+    </div>
+    <div class="flex items-start justify-between  form-ask-need">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+           (click)="this.myPreferenceService.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitMetricRepository()">
+            Submit
+        </button>
+    </div>
+</form>

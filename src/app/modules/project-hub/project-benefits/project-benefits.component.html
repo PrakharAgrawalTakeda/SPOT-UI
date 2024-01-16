@@ -1,26 +1,232 @@
 <div class="flex flex-col flex-auto w-full px-8" *ngIf="viewContent">
-    <div class="flex bg-card rounded-2xl p-3 pb-0 justify-between items-center">
-        <div class="w-full">
-            <form class="w-full p-6 pb-3 pt-0" [formGroup]="primaryKPIForm">
-                <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full" name="primaryKpi"
-                    [label]="'Primary KPI'" [placeholder]="'Primary KPI'" [valuePointer]="'kpiname'"
-                    [dropDownArray]="kpiMasters">
-                </spot-singleselect-autocomplete>
-            </form>
-        </div>
-        <div class="w-10">
-            <a href="javascript:void(0)" *ngIf="projecthubservice.roleControllerControl.projectBenefits" title="Edit Single"
-                (click)="projecthubservice.toggleDrawerOpen('PrimaryKPISingleEdit',this.projectViewDetails.projectData.primaryKpi , [], id)">
-                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
-            </a>
-        </div>
-    </div>
-    <div class="xl:col-span-6 flex flex-col mt-6 p-3 bg-card shadow rounded-2xl overflow-hidden">
-        <app-operational-performance-table [kpi]="kpiMasters" [lookup]="lookupMasters"
-            [projectViewDetails]="projectViewDetails" [projectid]="id"
-            [editable]="projecthubservice.roleControllerControl.projectBenefits">
-        </app-operational-performance-table>
-    </div>
+    <form [formGroup]="ValueCaptureForm" class="space-y-6 pb-4" [hidden]="viewHisOpPerformance">
 
+        <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
+            <div class=" pb-3 pt-0 flex items-center justify-between">
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Value Capture
+                    Fields</div>
+                <div class="flex items-start justify-between">
+                    <div style="padding-right: 5px;">
+                        <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                            (click)="projecthubservice.toggleDrawerOpen(bulkEditType, 'new', [], id, true)">
+                            Historical Operational Performance Metrics
+                        </button>
+
+                        <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                            *ngIf="projecthubservice.roleControllerControl.projectBenefits"
+                            (click)="projecthubservice.toggleDrawerOpen('PrimaryKPISingleEdit',this.valueCreation , [], id)">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
+                <spot-input-date class="w-full read-only" formControlName="valueCaptureStart"
+                    [label]="'Value Capture Start Date'" [showHint]="true"
+                    [hint]="'‘Value Capture Start’ defines the first fiscal year in which value will be captured.'">
+                </spot-input-date>
+                <!-- <spot-input class="w-full read-only" formControlName="primaryKpi" [label]="'Primary Value Driver'">
+            </spot-input> -->
+                <spot-input class="w-full read-only" formControlName="primaryValueDriver" name="primaryValueDriver"
+                    [label]="'Primary Value Driver'">
+                </spot-input>
+                <spot-input class="w-full read-only" formControlName="valueCommentary" [label]="'Value Commentary'">
+                </spot-input>
+            </div>
+        </div>
+    </form>
+    <!-- <div class="flex justify-between items-start gap-6 w-full" >
+        <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden"> -->
+    <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
+        <div class="pb-3 pt-0 flex items-center justify-between">
+            <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary"></div>
+
+            <div class="flex items-start justify-between">
+                <div style="padding-right: 5px;">
+                    <button class="min-w-26 ml-4 text-primary bg-gray-200 " mat-flat-button [color]="'primary-200'"
+                        (click)="baselinePlans()"
+                        [matTooltip]="'Baselining plans will copy all `Current Plan` values and set them as Baseline. This will overwrite any previous baseline plans.'">
+                        Baseline Plans
+                    </button>
+                    <!-- <button class="min-w-26 ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                            *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.askNeedEdit"
+                            (click)="projecthubservice.toggleDrawerOpen(valueCreationBulkEditType, 'new', [], projectid, true)">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
+                        </button> -->
+                    <button class="mx-4 text-primary bg-gray-200 " mat-flat-button [color]="'primary-200'"
+                        (click)="projecthubservice.toggleDrawerOpen('addnewmetrics', [], valuecreationngxdata, projectid)"
+                        [matTooltip]="'A metric is a unit of measure to measure the incremental improvement or impact a project will contribute to a given strategic initiative.'">
+                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                    </button>
+                </div>
+                <!-- <div>
+        <form [formGroup]="localIncludedItems">
+            <mat-slide-toggle class="primary slider-adjust" formControlName="toggle" (checked)="projecthubservice.includeClosedItems.riskIssue.value"  (change)="toggleBaselinePlans($event)" >
+                Baseline Plans</mat-slide-toggle>
+        </form>
+    </div> -->
+            </div>
+        </div>
+        <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
+            columnMode="force" class="datatable-VC-80 pr-6 material font-medium text-sm text-default whitespace-nowrap"
+            [rows]="valuecreationngxdata" #valuecreationTable [sorts]="[{prop: 'PO', dir: 'desc'}, { prop: 'metricName', dir: 'asc' }, { prop: 'sortOrder', dir: 'asc'}]" [rowClass]="getRowClass" class="custom-ngx-table">
+            <ngx-datatable-column [resizeable]="false" [sortable]="false" [width]="30" [frozenLeft]="true">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div style="height: 92px !important;">
+                        <mat-icon svgIcon="{{(indicator.getIndicators(getLookup(row.statusId), 'circle')).icontype}}"
+                            class="{{(indicator.getIndicators(getLookup(row.statusId), 'circle')).iconcolor}}">
+                        </mat-icon>
+                    </div>
+                    <!-- <mat-icon *ngIf="row.statusId == '' || row.statusId == null" svgIcon="{{(indicator.getIndicators('', 'circle')).icontype}}"
+                    class="{{(indicator.getIndicators('', 'circle')).iconcolor}}" style="height: 110px !important;">
+                </mat-icon> -->
+                    <!-- <span *ngIf="row.statusId == '' || row.statusId == null" style="background-color: rgb(175, 175, 175) !important; height: 110px;width: 20px; display: flex;"></span>
+                <span *ngIf="getLookup(row.statusId) == 'Will Not Meet'" style="background-color: red !important; height: 110px; width: 20px;display: flex;"></span>
+                <span *ngIf="getLookup(row.statusId) == 'At Risk'" style="background-color: #FFCC00 !important; height: 110px;width: 20px; display: flex;"></span>
+                <span *ngIf="getLookup(row.statusId) == 'On Track'" style="background-color: green !important; height: 110px; width: 20px;display: flex;"></span> -->
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Status" prop="statusId" [resizeable]="false" [sortable]="false" [width]="100"
+                [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Portfolio Owner" prop="metricPortfolioID" [width]="130" [frozenLeft]="true"
+                [headerClass]="getFrozenHeaderClass" [resizeable]="false" [sortable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p style="margin-bottom: 68px;">{{getOwner(value, row.metricTypeID ? row.metricTypeID : row.metricID)}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Category" prop="metricCategoryID" [width]="120" [frozenLeft]="true"
+                [headerClass]="getFrozenHeaderClass" [resizeable]="false" [sortable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Metric Name" prop="metricName" [width]="160" [frozenLeft]="true"
+                [headerClass]="getFrozenClass" [resizeable]="false" [sortable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p style="margin-bottom: 72px;"><mat-icon *ngIf="row.parentProjectId != null"
+                        style="top: 7px;position: relative;" svgIcon="heroicons_outline:link"
+                        [matTooltip]=row.parentName></mat-icon><mat-icon *ngIf="value!= '' && row.helpText && row.helpText != ''"
+                        class="pe" style="font-size: 17px;top: 3px;position: relative;"
+                        [matTooltip]=row.helpText>help</mat-icon>{{value}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Units" prop="metricUnit" [width]="100" [frozenLeft]="true"
+                [headerClass]="columnstyle" [resizeable]="false" [sortable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p style="margin-bottom: 68px;">{{value}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Value Capture Level" prop="metricLevelId" [width]="100" [frozenLeft]="true"
+                [headerClass]="getFrozenID" [resizeable]="false" [sortable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [width]="30" [frozenLeft]="true" [sortable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div *ngIf="row.temporaryImpact" style="height: 92px !important;"><mat-icon style="color: red;"
+                            svgIcon="heroicons_outline:clock"></mat-icon></div>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [width]="180" [frozenLeft]="true" [resizeable]="false" [sortable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p *ngIf="row.metricFormat != 'Currency (local)' && isStrategicInitiative">{{ row.FianncialType1 }} <br>
+                        {{row.FianncialType2}} <br> {{row.FianncialType3}} <br> {{row.FianncialType4}}</p>
+                    <p *ngIf="row.metricFormat == 'Currency (local)' && isStrategicInitiative">{{ row.FianncialType1 }} ({{localCurrency}}) <br>
+                        {{row.FianncialType2}} ({{localCurrency}}) <br> {{row.FianncialType3}} ({{localCurrency}}) <br>
+                        {{row.FianncialType4}} ({{localCurrency}})</p>
+                        <p style="margin-bottom: 26px;" *ngIf="row.metricFormat != 'Currency (local)' && !isStrategicInitiative">
+                            {{row.FianncialType2}} <br> {{row.FianncialType3}} <br> {{row.FianncialType4}}</p>
+                        <p style="margin-bottom: 26px;" *ngIf="row.metricFormat == 'Currency (local)' && !isStrategicInitiative">
+                            {{row.FianncialType2}} ({{localCurrency}}) <br> {{row.FianncialType3}} ({{localCurrency}}) <br>
+                            {{row.FianncialType4}} ({{localCurrency}})</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column *ngFor="let col of columnYear; let i = index" [name]=col.year [prop]=col.year
+                [width]="190" [resizeable]="false" [sortable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <ng-template ngFor let-obj [ngForOf]="value">
+                        <p style="margin-bottom: -27px;" *ngIf="(row.metricFormat == 'Time (HH:MM)' || row.metricFormat == '') && isStrategicInitiative">{{ obj.target }} <br>
+                            {{ obj.baseline }}<br>
+                            {{ obj.current }}<br>
+                            {{ obj.actual }}</p>
+                        <p style="margin-bottom: -27px;" *ngIf="(row.metricFormat == 'Whole Number' || row.metricFormat == 'Currency (local)') && isStrategicInitiative">{{
+                            obj.target | number:'1.0-0' }} <br> {{obj.baseline | number:'1.0-0' }} <br> {{obj.current |
+                            number:'1.0-0' }} <br> {{obj.actual | number:'1.0-0' }}</p>
+                        <p style="margin-bottom: -27px;" *ngIf="(row.metricFormat == 'Decimal (1 decimal)') && isStrategicInitiative">{{ obj.target | number:'1.0-1' }} <br>
+                            {{obj.baseline | number:'1.0-1' }} <br> {{obj.current | number:'1.0-1' }} <br> {{obj.actual
+                            | number:'1.0-1' }}</p>
+                        <p style="margin-bottom: -27px;"
+                            *ngIf="(row.metricFormat == 'Percentage (2 decimal)' || row.metricFormat == 'Decimal (2 decimals)' || row.metricFormat == 'Number (2 decimal)') && isStrategicInitiative">
+                            {{ obj.target | number:'1.0-2' }} <br> {{obj.baseline | number:'1.0-2' }} <br> {{obj.current
+                            | number:'1.0-2' }} <br> {{obj.actual | number:'1.0-2' }}</p>
+                        <br />
+                        <p style="margin-bottom: 22px;" *ngIf="(row.metricFormat == 'Time (HH:MM)' || row.metricFormat == '') && !isStrategicInitiative">
+                            {{ obj.baseline }}<br>
+                            {{ obj.current }}<br>
+                            {{ obj.actual }}</p>
+                        <p style="margin-bottom: 22px;" *ngIf="(row.metricFormat == 'Whole Number' || row.metricFormat == 'Currency (local)') && !isStrategicInitiative"> {{obj.baseline | number:'1.0-0' }} <br> {{obj.current |
+                            number:'1.0-0' }} <br> {{obj.actual | number:'1.0-0' }}</p>
+                        <p style="margin-bottom: 22px;" *ngIf="(row.metricFormat == 'Decimal (1 decimal)') && !isStrategicInitiative">
+                            {{obj.baseline | number:'1.0-1' }} <br> {{obj.current | number:'1.0-1' }} <br> {{obj.actual
+                            | number:'1.0-1' }}</p>
+                        <p style="margin-bottom: 22px;"
+                            *ngIf="(row.metricFormat == 'Percentage (2 decimal)' || row.metricFormat == 'Decimal (2 decimals)' || row.metricFormat == 'Number (2 decimal)') && !isStrategicInitiative">
+                            {{obj.baseline | number:'1.0-2' }} <br> {{obj.current
+                            | number:'1.0-2' }} <br> {{obj.actual | number:'1.0-2' }}</p>
+                        <br />
+                    </ng-template>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Total" prop="strategicTarget" [width]="150" [resizeable]="false"
+                [sortable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p style="margin-bottom: 25px;" *ngIf="(row.metricFormat == 'Time (HH:MM)' || row.metricFormat == '') && isStrategicInitiative">{{ value }} <br>
+                        {{row.strategicBaseline }} <br> {{row.strategicCurrent }} <br> {{row.strategicActual }}</p>
+                    <p style="margin-bottom: 25px;" *ngIf="(row.metricFormat == 'Whole Number' || row.metricFormat == 'Currency (local)') && isStrategicInitiative">{{ value |
+                        number:'1.0-0' }} <br> {{row.strategicBaseline | number:'1.0-0' }} <br> {{row.strategicCurrent |
+                        number:'1.0-0' }} <br> {{row.strategicActual | number:'1.0-0' }}</p>
+                    <p style="margin-bottom: 25px;" *ngIf="(row.metricFormat == 'Decimal (1 decimal)') && isStrategicInitiative">{{ value | number:'1.0-1' }} <br>
+                        {{row.strategicBaseline | number:'1.0-1' }} <br> {{row.strategicCurrent | number:'1.0-1' }} <br>
+                        {{row.strategicActual | number:'1.0-1' }}</p>
+                    <p style="margin-bottom: 25px;"
+                        *ngIf="(row.metricFormat == 'Percentage (2 decimal)' || row.metricFormat == 'Decimal (2 decimals)' || row.metricFormat == 'Number (2 decimal)') && isStrategicInitiative">
+                        {{ value | number:'1.0-2' }} <br> {{row.strategicBaseline | number:'1.0-2' }} <br>
+                        {{row.strategicCurrent | number:'1.0-2' }} <br> {{row.strategicActual | number:'1.0-2' }}</p>
+
+                        <p style="margin-bottom: 21px;" *ngIf="(row.metricFormat == 'Time (HH:MM)' || row.metricFormat == '') && !isStrategicInitiative">
+                            {{row.strategicBaseline }} <br> {{row.strategicCurrent }} <br> {{row.strategicActual }}</p>
+                        <p style="margin-bottom: 21px;" *ngIf="(row.metricFormat == 'Whole Number' || row.metricFormat == 'Currency (local)') && !isStrategicInitiative"> {{row.strategicBaseline | number:'1.0-0' }} <br> {{row.strategicCurrent |
+                            number:'1.0-0' }} <br> {{row.strategicActual | number:'1.0-0' }}</p>
+                        <p style="margin-bottom: 21px;" *ngIf="(row.metricFormat == 'Decimal (1 decimal)') && !isStrategicInitiative">
+                            {{row.strategicBaseline | number:'1.0-1' }} <br> {{row.strategicCurrent | number:'1.0-1' }} <br>
+                            {{row.strategicActual | number:'1.0-1' }}</p>
+                        <p style="margin-bottom: 21px;"
+                            *ngIf="(row.metricFormat == 'Percentage (2 decimal)' || row.metricFormat == 'Decimal (2 decimals)' || row.metricFormat == 'Number (2 decimal)') && !isStrategicInitiative">
+                             {{row.strategicBaseline | number:'1.0-2' }} <br>
+                            {{row.strategicCurrent | number:'1.0-2' }} <br> {{row.strategicActual | number:'1.0-2' }}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [width]="30" [resizeable]="false" [sortable]="false"
+                [headerClass]="getFrozenHeaderClass2">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+
+                    <div class="flex items-center justify-start gap-6" style="margin-bottom: 55px;">
+                        <a href="javascript:void(0)" title="Edit Single"
+                            (click)="projecthubservice.toggleDrawerOpen('valueCreation', row.metricId, [], id, true)">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
+
+                        </a>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
 
 </div>

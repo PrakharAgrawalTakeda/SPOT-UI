@@ -1,0 +1,167 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header" style="margin-bottom: 10px">
+        <div class="text-on-primary" style="padding-top: 6px">Phase/State</div>
+        <div style="padding-top: 2px">
+            <a (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                            " href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="grid grid-cols-9 overflow-auto m-2"  style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)">
+        <div class="col-span-5 m-3 ">
+            <form class="flex w-full " [formGroup]="phaseForm">
+                <div class="basis-1/4">
+                    <div class="flex-auto mr-3">
+                        <spot-select class="w-full" formControlName="phase" name="phase" [label]="'Phase'"
+                                     [dropDownArrayType]="'object'" [placeholder]="'Phase'" [showNoneOption]="false"
+                                     [dropDownArray]="getPhase()" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                                     [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+                        </spot-select>
+                    </div>
+                </div>
+                <div class="basis-1/4">
+                    <div class="flex-auto mr-3">
+                        <spot-select class="w-full" formControlName="capitalPhase" name="capitalPhase"
+                                     [label]="'Capital Phase'"
+                                     [dropDownArrayType]="'object'" [placeholder]="'Select the capital phase'" [showNoneOption]="true"
+                                     [dropDownArray]="filteredPhaseArray" [valuePointer]="'capitalPhaseName'" [idPointer]="'capitalPhaseID'"
+                                     [sortByType]="'custom'" [customSortPointer]="'capitalPhaseOrder'">
+                        </spot-select>
+                    </div>
+                </div>
+                <div class="basis-1/4">
+                    <div class="flex-auto mr-3">
+                        <spot-select class="w-full" formControlName="oePhase" name="oePhase" [label]="'OE Phase'"
+                                     [dropDownArrayType]="'object'" [placeholder]="'Select the oe phase'" [showNoneOption]="true"
+                                     [dropDownArray]="oePhaseArray" [valuePointer]="'capitalPhaseName'" [idPointer]="'capitalPhaseID'"
+                                     [sortByType]="'custom'" [customSortPointer]="'capitalPhaseOrder'">
+                        </spot-select>
+                    </div>
+                </div>
+                <div class="basis-1/4">
+                    <div class="flex-auto mr-3">
+                        <spot-input class="w-full" formControlName="phaseComment" name="phaseComment"
+                                    [label]="'Comment'"
+                                    [showHint]="true"
+                                    [hint]="'Comment will only be saved if at least one phase has been changed'"
+                        >
+                        </spot-input>
+                    </div>
+                </div>
+            </form>
+            <div class="mr-4 mt-2 mb-3 text-xl font-medium tracking-tight leading-6 truncate text-primary">
+                Phase Change Log
+            </div>
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                           class="ml-3  datatable-ps material font-medium text-sm text-default whitespace-nowrap cursor-default"
+                           [rows]="phaseRows">
+                <ngx-datatable-column name="From Phase" prop="previous" [flexGrow]="1">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <div *ngIf="row.previous;then previousPhase else emptyPreviousPhase"></div>
+                        <ng-template #previousPhase class="flex items-center justify-start gap-6">
+                            {{ row.previous}} - {{row.prvCapitalPhaseAbbreviation}}
+                            - {{row.prvOEPhaseAbbreviation}}
+                        </ng-template>
+                        <ng-template #emptyPreviousPhase class="flex items-center justify-start gap-6">
+
+                        </ng-template>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="To Phase" prop="current" [flexGrow]="0.8">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <div *ngIf="row.current;then currentPhase else emptyCurrentPhase"></div>
+                        <ng-template #currentPhase class="flex items-center justify-start gap-6">
+                            {{ row.current}} - {{row.curCapitalPhaseAbbreviation}}
+                            - {{row.curOEPhaseAbbreviation}}
+                        </ng-template>
+                        <ng-template #emptyCurrentPhase class="flex items-center justify-start gap-6">
+                        </ng-template>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Change Date" prop="modificationDate" [flexGrow]="0.7">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{ row.modificationDate.split('T')[0] | date:'dd-MMM-yyyy' }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Changed By" prop="modifiedByName" [flexGrow]="1">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{ row.modifiedByName }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Phase Comment" prop="currentComment" [flexGrow]="1">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{ row.currentComment }}
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+        <div class="col-span-4 m-3 ">
+            <form class="flex w-full" [formGroup]="stateForm">
+                <div class="basis-2/4">
+                    <div class="flex-auto mr-3">
+                        <spot-select class="w-full" formControlName="state" name="state" [label]="'Project State'"
+                                     [dropDownArrayType]="'object'" [placeholder]="'State'" [showNoneOption]="false"
+                                     [dropDownArray]="getState()" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                                     [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+                        </spot-select>
+                    </div>
+                </div>
+                <div class="basis-2/4">
+                    <div class="flex-auto mr-3">
+                        <spot-input class="w-full" formControlName="stateComment" name="stateComment"
+                                    [label]="'Comment'"
+                                    [showHint]="true"
+                                    [hint]="'Comment will only be saved if the state has been changed'"
+                        >
+                        </spot-input>
+                    </div>
+                </div>
+            </form>
+            <div class="mr-4 mt-2 mb-3 text-xl font-medium tracking-tight leading-6 truncate text-primary">
+                State Change Log
+            </div>
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" columnMode="flex"
+                           class="ml-3 datatable-ps material font-medium text-sm text-default whitespace-nowrap cursor-default"
+                           [rows]="stateRows">
+                <ngx-datatable-column name="From State" prop="previous" [flexGrow]="0.8">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <div class="flex items-center justify-start gap-6">
+                            {{ value }}
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="To State" prop="current" [flexGrow]="0.7">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{ value }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Change Date" prop="modificationDate" [flexGrow]="0.9">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{ value.split('T')[0] | date:'dd-MMM-yyyy' }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Changed By" prop="modifiedByName" [flexGrow]="1">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{ value }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="State Comment" prop="currentComment" [flexGrow]="1">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{ value }}
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+    </div>
+    <div class="w-full px-3 pr-3 flex items-start justify-between">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+           (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit"
+                (click)="onSubmit()">
+            Submit
+        </button>
+    </div>
+</div>

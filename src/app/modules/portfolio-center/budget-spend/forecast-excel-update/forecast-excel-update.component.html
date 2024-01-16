@@ -1,0 +1,58 @@
+<div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12">
+    <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl" style="margin-right: 10px; margin-left: 10px;height: 110vh;">
+        <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full">
+            <div>
+                <div class="pb-3 pt-2.5 flex items-center justify-between overflow-hidden bg-card shadow rounded-2xl" *ngIf="showContent">
+                    <form class="grid-cols-2 grid" style="width: 80vw;" [formGroup]="ForecastForm">
+                        <spot-multiselect-autocomplete class="custom" formControlName="Reference"
+                            name="Reference" [label]="'Reference'" [placeholder]="'Reference'"
+                            [valuePointer]="'periodName'" [dropDownArray]="LookupDataLBE" [idPointer]="'periodName'">
+                        </spot-multiselect-autocomplete>
+                        <spot-select class="custom" formControlName="DataType" name="DataType" [showNoneOption]="false" [label]="'Data For'" [placeholder]="'Data For'" [dropDownArrayType]="'string'"
+                        [dropDownArray]="Type"></spot-select>
+                        <spot-input class="custom" formControlName="ProjectId" name="ProjectId"
+                            [label]="'Project Ids'" [placeholder]="'Project Ids'">
+                        </spot-input>
+                        <spot-input class="custom" formControlName="BudgetId" name="BudgetId"
+                            [label]="'Budget Ids'" [placeholder]="'Budget Ids'">
+                        </spot-input>
+                    </form>
+                    <div class="flex items-center justify-center" style="bottom: 45px; position: relative;">
+                        <button style="margin-right: 10px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="getData()"> Get Data
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mxflex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden datatable"
+                            *ngIf="showData || showDataForecast || showDataForecastOpex || showDataOpex" #HistoricalTable>
+                            <form class="grid" [formGroup]="ForecastForm">
+                                <spot-singleselect-autocomplete style="margin-left: 4px; width: 20vw;" formControlName="ForecastType"
+                                    name="ForecastType" [label]="'Forecast Type'" [placeholder]="'Forecast Type'"
+                                    [valuePointer]="'lookUpName'" [dropDownArray]="forecastType" [sortByType]="'custom'"
+                                    [customSortPointer]="'lookUpOrder'">
+                                </spot-singleselect-autocomplete>
+                                <button style="margin-left: 1521px;width: 10%;top: -65px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="SubmitData()"> Save Changes
+                                </button>
+                            </form>
+
+                            <div *ngIf="showData" style="width: 100%;">
+                                <kendo-spreadsheet #spreadsheet [sheets]="finalDatatoSheetHistorical" style="width: 100%" >
+                                </kendo-spreadsheet>
+                            </div>
+                            <div *ngIf="showDataOpex" style="width: 100%;">+
+                                <kendo-spreadsheet #spreadsheet [sheets]="finalDatatoSheetHistorical" style="width: 100%" >
+                                </kendo-spreadsheet>
+                            </div>
+                            <div *ngIf="showDataForecast" style="width: 100%;">
+                                <kendo-spreadsheet #Forecastspreadsheet [sheets]="finalDatatoSheet" style="width: 100%" >
+                                </kendo-spreadsheet>
+                            </div>
+                            <div *ngIf="showDataForecastOpex" style="width: 100%;">
+                                <kendo-spreadsheet #Forecastspreadsheet [sheets]="finalDatatoSheet" style="width: 100%" >
+                                </kendo-spreadsheet>
+                            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,151 @@
+<div class="overflow-y-scroll h-screen">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Edit Metric</div>
+        <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
+                href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <form *ngIf="capexAvoidanceForm" class="pl-4 flex-grow overflow-y-auto" [formGroup]="capexAvoidanceForm">
+        <!-- First row with 3 fields -->
+        <div class="flex justify-start gap-3 pt-4">
+            <spot-input class="flex-1" [ngClass]="{'read-only': disabled}" formControlName="metricCategoryId" [label]="'Metric Category'"
+                [placeholder]="'Metric Category'"></spot-input>
+            <spot-input class="flex-1" [ngClass]="{'read-only': disabled}" formControlName="metricName" [label]="'Metric Name'"
+                [placeholder]="'Metric Name'"></spot-input>
+            <spot-input class="flex-1" [ngClass]="{'read-only': disabled}" formControlName="metricUnit" [label]="'Metric Unit'"
+                [placeholder]="'Metric Unit'"></spot-input>
+        </div>
+
+        <!-- Second row with 2 fields -->
+        <div class="flex justify-start gap-3 mt-3">
+            <spot-textarea class="flex-1" [ngClass]="{'read-only': disabled}" formControlName="metricDescription" [label]="'Metric Description'"
+                [placeholder]="'Metric Description'"></spot-textarea>
+            <spot-input class="flex-1" [ngClass]="{'read-only': disabled}" formControlName="metricFormat" [label]="'Metric Format'"
+                [placeholder]="'Metric Format'"></spot-input>
+        </div>
+        <!-- Heading for Metric Value Capture -->
+        <div class="mt-3">
+            <h3 class="font-medium tracking-tight leading-6 truncate text-xl text-primary">Metric Value Capture</h3>
+        </div>
+        <!-- Third row with 2 fields -->
+        <div class="flex justify-start gap-3 mt-3 mb-4">
+            <spot-select class="flex-1" [ngClass]="{'read-only': captureLevel}" formControlName="metricLevelId" name="metricLevelId"
+                        [label]="'Value Capture Level'" [showNoneOption]="false"
+                        [dropDownArrayType]="'string'" [dropDownArray]="vcLevels"></spot-select>
+
+                        <spot-select class="flex-1" [ngClass]="{'read-only': captureLevel}" formControlName="statusId" name="statusId"
+                        [label]="'Metric Status'" [showNoneOption]="false"
+                        [dropDownArrayType]="'string'" [dropDownArray]="status"></spot-select>
+
+        </div>
+    </form>
+    <div class="relative px-0">
+        <div class="flex justify-between items-center mt-2 pb-3">
+            <div></div>
+            <div class="flex justify-between items-center gap-3">
+                <div class="pr-2">
+                    <form [formGroup]="includeinForm">
+                        <mat-slide-toggle class="primary slider-adjust" formControlName="toggleIncludeIn"
+                            (change)="toggleIncludeIn($event)" (checked)="projectData.includePerformanceDashboard">
+                        Include in Project Dashboard
+                        </mat-slide-toggle>
+                    </form>
+                </div>
+                <div class="pr-2">
+                    <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
+                        [color]="'primary-200'" (click)="baselinePlans()"
+                        [matTooltip]="'Baselining plans will copy all `Current Plan` values and set them as Baseline. This will overwrite any previous baseline plans.'">
+                        Baseline Plans
+                    </button>
+                </div>
+                <div class="pr-2">
+                    <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
+                        [color]="'primary-200'" (click)="addYear()"> + Year
+                    </button>
+                </div>
+                <div class="pr-2">
+                    <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
+                        [color]="'primary-200'" (click)="removeYear()"> - Year
+                    </button>
+                </div>
+                <div class="pr-2">
+                    <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
+                        [color]="'primary-200'" (click)="deleteMetric()"
+                        *ngIf="captureLevel || !captureLevel  && MetricCategoryID == '8681a5a9-5a00-48f2-b60f-21f0422ba90d' && empty"> Delete Metric
+                    </button>
+                </div>
+                <div class="pr-2">
+                    <form [formGroup]="tempImpactForm">
+                        <mat-slide-toggle class="primary slider-adjust" formControlName="temporaryImpact"
+                            (change)="toggleTemporaryImpact($event)" (checked)="projectData.temporaryImpact"
+                            [disabled]="!captureLevel"
+                            [matTooltip]="'Select Temporary Impact if the realized value is a One-Time event which is not considered continuous or annualized. This can not be selected if metric is Cascaded.'">
+                            Temporary Impact
+                        </mat-slide-toggle>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="w-full ml-3  gap-3">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
+                class="font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata" [rowClass]="getRowClass">
+
+                <ngx-datatable-column name="Financial Type" [width]="120" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass" [resizeable]="false">
+                    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                        <!-- Check if metricFormat is 'Currency (local)' and append the local currency abbreviation -->
+                        <p>{{ row.displayFinancialType }}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+                
+
+                <ngx-datatable-column *ngFor="let col of columnYear" [name]="col.year" [width]="90">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <!-- Display the value and make it clickable for editing if allowed -->
+                        <div [ngClass]="getRowClass(row.financialType)" *ngIf="!ptTableEditStack.includes(rowIndex) || !canEditRow(row.financialType)" (click)="ptTableEditRow(rowIndex)" style="padding-left:30px;">
+                            {{ formatValue(row.values['FY' + col.year.slice(-2)], row.metricFormat) }}
+                        </div>
+                
+                        <!-- Form field for editing, shown only if editing is allowed -->
+                        <form *ngIf="ptTableEditStack.includes(rowIndex) && canEditRow(row.financialType)" [formGroup]="bulkEditFormArray.at(rowIndex)" (click)="preventDefault($event)">
+                            <spot-input class="w-full" [formControlName]="getControlName(col.year)"
+                            [inputType]="getInputType(row.metricFormat)"
+                                        [autoAddDecimal]="getDecimalProperties(row.metricFormat).autoAddDecimal" 
+                                        
+                                        [decimalCount]="getDecimalProperties(row.metricFormat).decimalCount"
+                                        (change)="onValueChange(rowIndex, col.year, $event.target.value)">
+                            </spot-input>
+                            <!-- [inputType]="'Number'" -->
+                          </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                
+                 
+                <ngx-datatable-column name="Total" [width]="120">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                     
+                      <div>
+                        {{ row.total }} <!-- Format the number as needed -->
+                      </div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  
+                
+            </ngx-datatable>
+
+        </div>
+        <div class="px-4 py-3 pt-20"> <!-- Footer with padding -->
+            <div class="flex justify-between">
+                <a class="min-w-26" mat-flat-button [color]="'primary'"
+                    (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'',true)">
+                    Cancel
+                </a>
+                <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitnewmetric()">
+                    Submit
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>

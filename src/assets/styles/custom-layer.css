@@ -40,6 +40,7 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
     padding-bottom: 6px;
     font-size: 0.875rem;
     overflow-wrap: break-word;
+    overflow: visible;
     white-space: pre-line;
     align-items: center;
     border-bottom-width: 1px;
@@ -66,7 +67,7 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
 
 .closed {
     font-style: italic !important;
-    --tw-text-opacity: 0.5 !important;
+    --tw-text-opacity: 0.6 !important;
     color: rgba(var(--fuse-text-secondary-rgb),var(--tw-text-opacity))!important;
 }
 
@@ -95,6 +96,9 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
 .form-ask-need {
     padding: 20px 20px;
 }
+.sliding-panel-padding {
+    padding: 10px 10px;
+}
 
 .sidepanel-header {
     padding: 10px;
@@ -113,4 +117,8 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
 }
 .ngx-datatable .datatable-body-row, .ngx-datatable .datatable-header-inner, .ngx-datatable .datatable-row-center {
 align-items: flex-end;
+}
+
+.mat-primary.mdc-button{
+    color:white !important
 }

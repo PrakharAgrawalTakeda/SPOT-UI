@@ -1,0 +1,143 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header" *ngIf="viewType == 'SidePanel'">
+        <div class="text-on-primary" style="padding-top: 6px">Strategic Drivers Edit</div>
+        <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
+                href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <form class="px-2 pt-2 overflow-y-scroll overflow-x-hidden"
+        [style]="viewType === 'SidePanel' ? 'height: calc(calc(100vh/ var(--custom-zoom)) - 105px)' : null" [formGroup]="strategicDriversForm">
+        <div [ngClass]="{'customPrimary': viewType == 'Form'}">
+            <spot-singleselect-autocomplete *ngIf="viewElementChecker('primaryKPI')" formControlName="primaryKPI"
+                class="w-full" name="primaryKPI" [label]="'Primary Value Driver'" [placeholder]="'Primary Value Driver'"
+                [valuePointer]="'lookUpName'" [dropDownArray]="kpiMasters">
+            </spot-singleselect-autocomplete>
+        </div>
+        <!--AGILE START-->
+        <div [ngClass]="{'flex-col flex-auto bg-card shadow rounded-2xl custom': viewType == 'Form'}">
+            <div class="w-full mt-4 mb-6">
+                <spot-toggle class="w-full" *ngIf="viewElementChecker('isAgile')" formControlName="isAgile"
+                    [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'" [label]="'AGILE Project'">
+                </spot-toggle>
+            </div>
+            <spot-singleselect-autocomplete
+                *ngIf="strategicDriversForm.controls['isAgile'].value && viewElementChecker('agilePrimaryWorkstream')"
+                formControlName="agilePrimaryWorkstream" class="w-full" name="agilePrimaryWorkstream"
+                [label]="'AGILE Primary Workstream'" [placeholder]="'AGILE Primary Workstream'"
+                [valuePointer]="'lookUpName'" [dropDownArray]="getAgileWorkstream()" [sortByType]="'custom'"
+                [customSortPointer]="'lookUpOrder'">
+            </spot-singleselect-autocomplete>
+            <spot-multiselect-autocomplete class="w-full"
+                *ngIf="strategicDriversForm.controls['isAgile'].value && viewElementChecker('agileSecondaryWorkstream')"
+                formControlName="agileSecondaryWorkstream" name="agileSecondaryWorkstream"
+                [label]="'AGILE Secondary Workstream'" [placeholder]="'AGILE Secondary Workstream'"
+                [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" [customSortPointer]="'lookUpOrder'"
+                [dropDownArray]="getAgileWorkstream()" [sortByType]="'custom'">
+            </spot-multiselect-autocomplete>
+            <spot-singleselect-autocomplete
+                *ngIf="strategicDriversForm.controls['isAgile'].value && viewElementChecker('agileWave')"
+                formControlName="agileWave" class="w-full" name="agileWave" [label]="'AGILE Wave'"
+                [placeholder]="'AGILE Wave'" [valuePointer]="'lookUpName'" [dropDownArray]="getAgileWave()"
+                [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+            </spot-singleselect-autocomplete>
+        </div>
+        <!--AGILE END-->
+        <!--POBOS START-->
+        <div *ngIf="callLocation != 'CreateNewSIP'"
+            [ngClass]="{'flex-col flex-auto bg-card shadow rounded-2xl custom': viewType == 'Form'}">
+            <div class="w-full mt-4 mb-2">
+                <spot-toggle class="w-full" *ngIf="viewElementChecker('isPobos')" formControlName="isPobos"
+                    [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'" [label]="'POBOS'">
+                </spot-toggle>
+            </div>
+            <spot-multiselect-autocomplete class="w-full"
+                *ngIf="strategicDriversForm.controls['isPobos'].value && viewElementChecker('pobosCategory')"
+                formControlName="pobosCategory" name="pobosCategory" [placeholder]="'POBOS Category'"
+                [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" [customSortPointer]="'lookUpName'"
+                [dropDownArray]="getPOBOSCategory()" [sortByType]="'custom'" [showLabel]="false">
+            </spot-multiselect-autocomplete>
+        </div>
+        <!--POBOS END-->
+        <!--Strategy Deployment Annual Initiative START-->
+        <div *ngIf="callLocation != 'CreateNewSIP'"
+            [ngClass]="{'flex-col flex-auto bg-card shadow rounded-2xl custom': viewType == 'Form'}">
+            <div class="w-full mt-4 mb-6">
+                <spot-toggle class="w-full" *ngIf="viewElementChecker('isGmsgqltannualMustWin')"
+                    formControlName="isGmsgqltannualMustWin" [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'"
+                    [label]="'Strategic Deployment Annual Initiative'">
+                </spot-toggle>
+            </div>
+            <spot-singleselect-autocomplete
+                *ngIf="strategicDriversForm.controls['isGmsgqltannualMustWin'].value && viewElementChecker('strategicYear')"
+                formControlName="strategicYear" class="w-full" name="strategicYear" [label]="'Strategic Year'"
+                [placeholder]="'Strategic Year'" [valuePointer]="'lookUpName'" [dropDownArray]="getStrategicYear()"
+                [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+            </spot-singleselect-autocomplete>
+            <spot-singleselect-autocomplete
+                *ngIf="strategicDriversForm.controls['isGmsgqltannualMustWin'].value && viewElementChecker('annualMustWinID')"
+                formControlName="annualMustWinID" class="w-full" name="annualMustWinID"
+                [label]="'GMSGQ LT Annual Must Win'" [placeholder]="'GMSGQ LT Annual Must Win'"
+                [valuePointer]="'lookUpName'" [dropDownArray]="getActualMustWin()" [sortByType]="'custom'"
+                [customSortPointer]="'lookUpOrder'" [showHint]="true"
+                [hint]="'Select from this drop down if your project is associated with one of the GMSGQLT Annual Must Wins'">
+            </spot-singleselect-autocomplete>
+        </div>
+        <!--Strategy Deployment Annual Initiative END-->
+        <!--Site Assessment START-->
+        <div *ngIf="callLocation != 'CreateNewSIP'"
+            [ngClass]="{'flex-col flex-auto bg-card shadow rounded-2xl custom': viewType == 'Form'}">
+            <div class="w-full mt-4 mb-2">
+                <spot-toggle class="w-full" *ngIf="viewElementChecker('isSiteAssessment')"
+                    formControlName="isSiteAssessment" [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'"
+                    [label]="'Site Assessment'">
+                </spot-toggle>
+            </div>
+            <spot-multiselect-autocomplete class="w-full"
+                *ngIf="strategicDriversForm.controls['isSiteAssessment'].value && viewElementChecker('siteAssessmentCategory')"
+                formControlName="siteAssessmentCategory" name="siteAssessmentCategory"
+                [placeholder]="'Site Assessment Category'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                [customSortPointer]="'lookUpOrder'" [dropDownArray]="getSiteCategory()" [sortByType]="'custom'"
+                [showLabel]="false">
+            </spot-multiselect-autocomplete>
+        </div>
+        <!--Site Assessment END-->
+        <div class="w-full mt-4 mb-6" *ngIf="callLocation == 'ProjectHub'">
+            <spot-toggle class="w-full" *ngIf="viewElementChecker('isGoodPractise')" formControlName="isGoodPractise"
+                [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'" [label]="'Good Practice'">
+            </spot-toggle>
+        </div>
+        <div *ngIf="callLocation == 'ProjectHub' && projectHubService.roleControllerControl.generalInfo.SPREdit"
+            [ngClass]="{'flex-col flex-auto bg-card shadow rounded-2xl custom': viewType == 'Form'}">
+            <div class="w-full mt-4 mb-6">
+                <spot-toggle class="w-full" *ngIf="viewElementChecker('isSprproject')"
+                    formControlName="isSprproject" [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'"
+                    [label]="'SPR Project'">
+                </spot-toggle>
+            </div>
+            <spot-singleselect-autocomplete
+                *ngIf="strategicDriversForm.controls['isSprproject'].value && viewElementChecker('sprprojectCategory')"
+                formControlName="sprprojectCategory" class="w-full" name="sprprojectCategory" [label]="'SPR Project Category'"
+                [placeholder]="'SPR Project Category'" [valuePointer]="'lookUpName'" [dropDownArray]="getSPRProjectCategory()"
+                [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+            </spot-singleselect-autocomplete>
+            <spot-singleselect-autocomplete
+                *ngIf="strategicDriversForm.controls['isSprproject'].value && viewElementChecker('sprprojectGrouping')"
+                formControlName="sprprojectGrouping" class="w-full" name="sprprojectGrouping"
+                [label]="'SPR Project Grouping'" [placeholder]="'SPR Project Grouping'"
+                [valuePointer]="'lookUpName'" [dropDownArray]="getSPRProjectGrouping()" [sortByType]="'custom'"
+                [customSortPointer]="'lookUpOrder'">
+            </spot-singleselect-autocomplete>
+        </div>
+    </form>
+    <div class="w-full px-3 pr-3 flex items-start justify-between" *ngIf="viewType == 'SidePanel'">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+            (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitSD()">
+            Submit
+        </button>
+    </div>
+</div>

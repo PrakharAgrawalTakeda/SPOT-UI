@@ -15,15 +15,16 @@ import { appRoutes } from 'app/app.routing';
 import { MsalModule, MsalService, MSAL_INSTANCE } from '@azure/msal-angular';
 import { IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
 import { GlobalVariables } from './shared/global-variables';
-import { MyPreferenceComponent } from './modules/my-preference/my-preference.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
+import { OldUrlRedirectResolver } from './core/auth/old-url-redirect.resolver';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 export function MsalInstanceFactory(): IPublicClientApplication {
     return new PublicClientApplication({
         auth: {
             authority: 'https://login.microsoftonline.com/57fdf63b-7e22-45a3-83dc-d37003163aae',
             clientId: '1457c97b-39c4-4789-9ac6-1c7a39211d9a',
-            redirectUri: GlobalVariables.spotui,            
+            redirectUri: GlobalVariables.spotui,
         }
     });
 }
@@ -35,7 +36,7 @@ const routerConfig: ExtraOptions = {
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
     ],
     imports: [
         BrowserModule,
@@ -55,7 +56,8 @@ const routerConfig: ExtraOptions = {
 
         // 3rd party modules that require global configuration via forRoot
         MarkdownModule.forRoot({}),
-        MsalModule
+        MsalModule,
+        MatSnackBarModule
 
     ],
     bootstrap: [
@@ -72,7 +74,8 @@ const routerConfig: ExtraOptions = {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,
             multi: true
-        }
+        },
+        OldUrlRedirectResolver
     ]
 })
 export class AppModule {

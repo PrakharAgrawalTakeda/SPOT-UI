@@ -1,0 +1,56 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header" style="margin-bottom: 10px">
+        <div class="text-on-primary" style="padding-top: 6px">Project Data Quality</div>
+        <div style="padding-top: 2px">
+            <a (click)="
+                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                " href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="p-6 pb-3 pt-0 flex items-center justify-between">
+        <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
+            SPOT ID: {{ spotId }}
+        </div>
+        <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
+            {{ projectName }}
+        </div>
+        <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
+            Data Quality:
+            <a [ngStyle]="{ color: getColor(dataQualityPercentage) }">{{ dataQualityPercentageString }}</a>
+            (Target {{ targetPercentage }}%)
+        </div>
+    </div>
+        <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+            [rowClass]="rowClass" style="height: calc(calc(100vh/ var(--custom-zoom)) - 155px); overflow-y:visible"
+            class="ml-3 material font-medium text-sm text-default whitespace-nowrap cursor-default"
+            [rows]="rows" #dataQualityTable>
+            <ngx-datatable-column name="Phase/State" prop="phase" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div class="flex items-center justify-start gap-6">
+                        {{ value }}
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Requirement" prop="requirement" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Hit/Miss" prop="hitMiss" [flexGrow]="1" [cellClass]="getCellClass">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Detailed Description" prop="detailedDescription" [flexGrow]="3">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    <div class="p-6 pb-3 pt-3 flex items-center justify-end w-full">
+        <button mat-flat-button [color]="'primary'" type="button" class="min-w-26"
+            (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '')">Ok</button>
+    </div>
+</div>

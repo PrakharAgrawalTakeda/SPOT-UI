@@ -42,12 +42,12 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
   askneedform = new FormGroup({
     askNeed1: new FormControl(''),
     comments: new FormControl(''),
-    logDate: new FormControl(''),
+    logDate: new FormControl(null),
     needByDate: new FormControl(''),
     closeDate: new FormControl(''),
     usersingle: new FormControl(''),
     usersingleid: new FormControl(''),
-    includeInReport: new FormControl('')
+    includeInReport: new FormControl(false)
   })
   constructor(public projecthubservice: ProjectHubService, private apiService: ProjectApiService) {
   }
@@ -64,11 +64,11 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
           closeDate: res.closeDate,
           usersingle: res.needFromName,
           usersingleid: res.needFromId,
-          includeInReport: res.includeInReport
+          includeInReport: this.projecthubservice.all.find(x=>x.askNeedUniqueId == res.askNeedUniqueId).includeInReport
         })
         console.log(this.askneed.needFromName)
         this.askneedform.controls['logDate'].disable()
-        if (this.projecthubservice.all != []) {
+        if (this.projecthubservice.all.length != 0) {
           if (this.projecthubservice.all.some(x => x.includeInReport == true)) {
             if (this.askneedform.value.includeInReport != true) {
               this.askneedform.controls['includeInReport'].disable()
@@ -203,8 +203,9 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
 
         console.log("final object")
         console.log(mainObj)
-        this.apiService.editAskNeed(mainObj).then(res => {
+        this.apiService.editAskNeed(this.projecthubservice.projectid,mainObj).then(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.isNavChanged.next(true)
           this.projecthubservice.submitbutton.next(true)
         })
       }

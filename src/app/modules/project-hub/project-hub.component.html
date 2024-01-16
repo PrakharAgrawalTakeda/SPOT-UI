@@ -1,23 +1,252 @@
 <fuse-drawer [name]="'rightDrawer'" [opened]="projecthubservice.drawerOpenedright"
     (openedChanged)="projecthubservice.drawerOpenedChanged($event)" [mode]="'over'" #myDiv [position]="'right'"
-    [ngClass]="projecthubservice.isBulkEdit?'bulkEdit':''">
+    [ngClass]="{'bulkEdit':projecthubservice.isBulkEdit , 'fuse-drawer-small':projecthubservice.fuseDrawerSmall}">
     <div>
         <app-ask-need-view-edit *ngIf="projecthubservice.itemtype == 'AskNeed'"></app-ask-need-view-edit>
+        <app-ask-need-bulk-edit *ngIf="projecthubservice.itemtype == 'AskNeedBulkEdit'"></app-ask-need-bulk-edit>
+        <app-ask-need-link *ngIf="projecthubservice.itemtype == 'LinkAskNeeds'"></app-ask-need-link>
         <app-overall-status-edit *ngIf="projecthubservice.itemtype == 'Overall'"></app-overall-status-edit>
         <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'RiskIssue'"></app-risk-issue-view-edit>
+        <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterRiskIssueAddSingle'"
+            [mode]="'Project-Charter'"
+            [viewElements]="['ifThisHappens','thisIsTheResult','mitigation','type','includeInCharter']"></app-risk-issue-view-edit>
+        <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseRiskIssueAddSingle'"
+            [mode]="'Business-Case'"
+            [viewElements]="['ifThisHappens','probability','thisIsTheResult','impact','mitigation','type','function']"></app-risk-issue-view-edit>
         <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'Schedule'"></app-schedule-view-edit>
-        <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEdit'">
-        </app-schedule-view-bulk-edit>
-        <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingle'"></app-project-team-add-single>
-        <app-project-team-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectTeamBulkEdit'"></app-project-team-bulk-edit>
-        <app-operational-performance-edit *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEdit'"></app-operational-performance-edit>
-        <app-operational-performance-bulk-edit *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
-        <app-primary-kpi-single-edit *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
+        <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseScheduleAddNew'"
+            [viewElements]="['milestone','plannedFinish','functionOwner','includeInBusinessCase']"></app-schedule-view-edit>
+        <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'CharterScheduleAddNew'"
+            [viewElements]="['milestone','plannedFinish','responsiblePerson','functionOwner','includeInCharter']"></app-schedule-view-edit>
+        <app-schedule-view-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'scheduleBulkEdit'"></app-schedule-view-bulk-edit>
+        <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBaselineEdit'"
+            [mode]="'Baseline-Log'"></app-schedule-view-bulk-edit>
+        <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEditCloseOut'"
+            [mode]="'Project-Close-Out'"></app-schedule-view-bulk-edit>
+        <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEditCharter'"
+            [mode]="'Project-Charter'"></app-schedule-view-bulk-edit>
+        <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'TimelineEditOptionO1'"
+            [optionType]="'recommended-option'" [mode]="'Business-Case'"></app-schedule-view-bulk-edit>
+        <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'TimelineEditOptionO2'"
+            [optionType]="'option-2'" [mode]="'Business-Case'"></app-schedule-view-bulk-edit>
+        <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'TimelineEditOptionO3'"
+            [optionType]="'option-3'" [mode]="'Business-Case'"></app-schedule-view-bulk-edit>
+        <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEditBusinessCase'"
+            [mode]="'Business-Case'"></app-schedule-view-bulk-edit>
+        <app-schedule-link *ngIf="projecthubservice.itemtype == 'LinkMilestones'"></app-schedule-link>
+        <app-project-team-add-single
+            *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingle'"></app-project-team-add-single>
+        <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingleProjectProposal'"
+            [mode]="'Project-Proposal'"></app-project-team-add-single>
+        <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingleProjectCharter'"
+            [mode]="'Project-Charter'"></app-project-team-add-single>
+        <app-project-team-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'ProjectTeamBulkEdit'"></app-project-team-bulk-edit>
+        <app-project-team-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectTeamBulkEditProjectProposal'"
+            [mode]="'Project-Proposal'"></app-project-team-bulk-edit>
+        <app-project-team-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectTeamBulkEditProjectCharter'"
+            [mode]="'Project-Charter'"></app-project-team-bulk-edit>
+        <app-project-charter-scope-single-edit
+            *ngIf="projecthubservice.itemtype == 'Project-Charter-Scope'"></app-project-charter-scope-single-edit>
+
+        <app-operational-performance-edit
+            *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEdit'"></app-operational-performance-edit>
+        <app-funding-edit *ngIf="projecthubservice.itemtype == 'FundingSingleEdit'"
+            [mode]="'Project-Charter'"></app-funding-edit>
+        <app-funding-edit *ngIf="projecthubservice.itemtype == 'BCFundingSingleEdit'"
+            [optionType]="'recommended-option'"></app-funding-edit>
+        <app-funding-edit *ngIf="projecthubservice.itemtype == 'BC2FundingSingleEdit'"
+            [optionType]="'option-2'"></app-funding-edit>
+        <app-funding-edit *ngIf="projecthubservice.itemtype == 'BC3FundingSingleEdit'"
+            [optionType]="'option-3'"></app-funding-edit>
+        <app-operational-performance-edit
+            *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEditCloseOut'"
+            [mode]="'Project-Close-Out'"></app-operational-performance-edit>
+        <app-operational-performance-edit
+            *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEditCharter'"
+            [mode]="'Project-Charter'"></app-operational-performance-edit>
+        <app-operational-performance-edit
+            *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEditProposal'"
+            [mode]="'Project-Proposal'"></app-operational-performance-edit>
+        <app-data-quality-page *ngIf="projecthubservice.itemtype == 'DataQuality'"></app-data-quality-page>
+        <app-operational-performance-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
+        <app-funding-bulk-edit *ngIf="projecthubservice.itemtype == 'FundingBulkEdit'"
+            [mode]="'Project-Charter'"></app-funding-bulk-edit>
+        <app-cost-edit *ngIf="projecthubservice.itemtype == 'CostEdit'" [mode]="'Project-Charter'"></app-cost-edit>
+        <app-email-notifications-edit
+            *ngIf="projecthubservice.itemtype == 'EmailNotiEdit'"></app-email-notifications-edit>
+        <app-email-notifications-edit
+            *ngIf="projecthubservice.itemtype == 'EmailNotiTableEdit'"></app-email-notifications-edit>
+        <app-funding-bulk-edit *ngIf="projecthubservice.itemtype == 'FundingBCBulkEdit'"
+            [optionType]="'recommended-option'"></app-funding-bulk-edit>
+        <app-funding-bulk-edit *ngIf="projecthubservice.itemtype == 'FundingBCEditO2'"
+            [optionType]="'option-2'"></app-funding-bulk-edit>
+        <app-funding-bulk-edit *ngIf="projecthubservice.itemtype == 'FundingBCEditO3'"
+            [optionType]="'option-3'"></app-funding-bulk-edit>
+        <app-cost-edit *ngIf="projecthubservice.itemtype == 'CostBCEdit'"
+            [optionType]="'recommended-option'"></app-cost-edit>
+        <app-cost-edit *ngIf="projecthubservice.itemtype == 'CostBCEdit02'" [optionType]="'option-2'"></app-cost-edit>
+        <app-cost-edit *ngIf="projecthubservice.itemtype == 'CostBCEdit03'" [optionType]="'option-3'"></app-cost-edit>
+        <app-operational-performance-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEditCloseOut'"
+            [mode]="'Project-Close-Out'"></app-operational-performance-bulk-edit>
+        <app-operational-performance-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEditCharter'"
+            [mode]="'Project-Charter'"></app-operational-performance-bulk-edit>
+        <app-operational-performance-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEditProposal'"
+            [mode]="'Project-Proposal'"></app-operational-performance-bulk-edit>
+        <app-primary-kpi-single-edit
+            *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
+            <app-new-metrics *ngIf="projecthubservice.itemtype == 'addnewmetrics'"></app-new-metrics>
+            <app-edit-metrics *ngIf="projecthubservice.itemtype == 'valueCreation'"></app-edit-metrics>
+        <app-link-project *ngIf="projecthubservice.itemtype == 'LinkProject'"></app-link-project>
+        <app-update-parent *ngIf="projecthubservice.itemtype == 'UpdateParent'"></app-update-parent>
+        <app-general-info-single-edit
+            *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEdit'"></app-general-info-single-edit>
+        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditStrategicInitiative'"
+            [viewElements]="['isConfidential', 'isArchived', 'problemTitle', 'parentProject', 'portfolioOwner', 'excecutionScope', 'owningOrganization', 'primaryProduct', 'otherImpactedProducts', 'problemType', 'projectDescription']"></app-general-info-single-edit>
+        <app-close-out-outcomes-single-edit
+            *ngIf="projecthubservice.itemtype == 'Close-Out-Outcome'"></app-close-out-outcomes-single-edit>
+        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditCloseOut'"
+            [subCallLocation]="'CloseOut'"
+            [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','closeOutApprovedDate','parentProject','sponsor', 'projectManager']"></app-general-info-single-edit>
+        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditProjectCharter'"
+            [subCallLocation]="'ProjectCharter'"
+            [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','approvedDate']"></app-general-info-single-edit>
+        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditProjectProposal'"
+            [subCallLocation]="'ProjectProposal'"
+            [viewElements]='["problemTitle", "portfolioOwner", "owningOrganization", "opU", "primaryProduct", "otherImpactedProducts", "projectDescription","projectProposalApprovedDate", "functionGroupID", "whynotgoforNextBestAlternative", "proposalStatement", "projectReviewedYN"]'></app-general-info-single-edit>
+        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditBusinessCase'"
+            [subCallLocation]="'BusinessCase'"
+            [viewElements]='["problemTitle", "portfolioOwner", "owningOrganization", "opU", "primaryProduct", "otherImpactedProducts", "projectDescription", "excecutionScope", "sponsor", "BCAuthor", "StrategicRationale","RiskImpact","AdditionalAuthor","businessCaseApprovedDate"]'></app-general-info-single-edit>
+        <app-quality-ref-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'QualityRefBulkEdit'"></app-quality-ref-bulk-edit>
+        <app-oe-project-single-edit
+            *ngIf="projecthubservice.itemtype == 'OEProjectSingleEdit'"></app-oe-project-single-edit>
+        <app-tech-transfer-single-edit
+            *ngIf="projecthubservice.itemtype == 'TechTransferSingleEdit'"></app-tech-transfer-single-edit>
+        <app-strategic-drivers
+            *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEdit'"></app-strategic-drivers>
+        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditStrategicInitiative'"
+            [viewElements]="['primaryKPI', 'isAgile', 'agilePrimaryWorkstream', 'agileSecondaryWorkstream', 'agileWave']"></app-strategic-drivers>
+        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditCloseOut'"
+            [subCallLocation]="'CloseOut'" [viewElements]="['isGoodPractise']"></app-strategic-drivers>
+        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditCloseOutStrategicInitiative'"
+            [subCallLocation]="'CloseOut'" [viewElements]="['isGoodPractise','isAgile', 'agilePrimaryWorkstream', 'agileSecondaryWorkstream', 'agileWave']"></app-strategic-drivers>
+        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditProjectCharter'"
+            [subCallLocation]="'ProjectCharter'"
+            [viewElements]="['primaryKPI','isAgile','agilePrimaryWorkstream','agileSecondaryWorkstream','agileWave']"></app-strategic-drivers>
+        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditProjectProposal'"
+            [subCallLocation]="'ProjectProposal'"
+            [viewElements]='["primaryKPI", "isAgile", "agilePrimaryWorkstream", "agileSecondaryWorkstream", "agileWave", "isPobos", "pobosCategory", "isGmsgqltannualMustWin", "strategicYear", "annualMustWinID", "isSiteAssessment", "siteAssessmentCategory"]'></app-strategic-drivers>
+        <app-strategic-drivers
+            *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditProjectProposalStrategicInitiative'"
+            [subCallLocation]="'ProjectProposal'"
+            [viewElements]='["primaryKPI", "isAgile", "agilePrimaryWorkstream", "agileSecondaryWorkstream", "agileWave"]'></app-strategic-drivers>
+        <app-phase-state *ngIf="projecthubservice.itemtype == 'PhaseState'"></app-phase-state>
+        <app-state-check *ngIf="projecthubservice.itemtype == 'StateCheck'"></app-state-check>
+        <app-risk-issue-view-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'RiskIssuesBulkEdit'"></app-risk-issue-view-bulk-edit>
+        <app-risk-issue-view-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterRiskIssueBulkEdit'"
+            [viewElements]="['ifThisHappens','thisIsTheResult','mitigation','type','includeInCharter', 'status','isLink']"
+            [mode]="'Project-Charter'"></app-risk-issue-view-bulk-edit>
+        <app-risk-issue-view-bulk-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseIssueBulkEdit'"
+            [mode]="'Business-Case'"
+            [viewElements]="['ifThisHappens','probability','thisIsTheResult','impact', 'mitigation','type','function']"></app-risk-issue-view-bulk-edit>
+        <app-risk-issues-link *ngIf="projecthubservice.itemtype == 'LinkRiskIssues'"></app-risk-issues-link>
+        <app-key-assumptions-add-single
+            *ngIf="projecthubservice.itemtype == 'KeyAsssumptionsAddSingle'"></app-key-assumptions-add-single>
+        <app-key-assumptions-add-single *ngIf="projecthubservice.itemtype == 'BusinessCaseKeyAssumptionAddSingle'"
+            [mode]="'Business-Case'"
+            [viewElements]="['keyAssumption', 'whyIsThisAssumptionValid','includeInBusinessCase']"></app-key-assumptions-add-single>
+        <app-key-assumptions-add-single *ngIf="projecthubservice.itemtype == 'ProjectCharterKeyAssumptionAddSingle'"
+            [mode]="'Project-Charter'"
+            [viewElements]="['keyAssumption', 'whyIsThisAssumptionValid','includeInCharter']"></app-key-assumptions-add-single>
+        <app-key-assumptions-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'KeyAsssumptionsBulkEdit'"></app-key-assumptions-bulk-edit>
+        <app-key-assumptions-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterKeyAssumptionBulkEdit'"
+            [mode]="'Project-Charter'"
+            [viewElements]="['keyAssumption', 'whyIsThisAssumptionValid','includeInCharter']"></app-key-assumptions-bulk-edit>
+        <app-key-assumptions-bulk-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseKeyAssumptionBulkEdit'"
+            [mode]="'Business-Case'"
+            [viewElements]="['keyAssumption', 'whyIsThisAssumptionValid','includeInBusinessCase']"></app-key-assumptions-bulk-edit>
+        <app-standard-milestone-sets
+            *ngIf="projecthubservice.itemtype == 'StandardMilestoneSets'"></app-standard-milestone-sets>
+        <app-option-info-edit *ngIf="projecthubservice.itemtype == 'OptionInfoEditRC'"
+            [optionType]="'recommended-option'"></app-option-info-edit>
+        <app-option-info-edit *ngIf="projecthubservice.itemtype == 'OptionInfoEditO2'"
+            [optionType]="'option-2'"></app-option-info-edit>
+        <app-option-info-edit *ngIf="projecthubservice.itemtype == 'OptionInfoEditO3'"
+            [optionType]="'option-3'"></app-option-info-edit>
+        <app-feasibility-edit *ngIf="projecthubservice.itemtype == 'FeasibilityEditRC'"
+            [optionType]="'recommended-option'"></app-feasibility-edit>
+        <app-feasibility-edit *ngIf="projecthubservice.itemtype == 'FeasibilityEditO2'"
+            [optionType]="'option-2'"></app-feasibility-edit>
+        <app-feasibility-edit *ngIf="projecthubservice.itemtype == 'FeasibilityEditO3'"
+            [optionType]="'option-3'"></app-feasibility-edit>
+        <app-lesson-learned-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'LessonLearnedBulkEdit'"></app-lesson-learned-bulk-edit>
+        <app-lesson-learned-single-edit
+            *ngIf="projecthubservice.itemtype == 'LessonLearnedSingleEdit'"></app-lesson-learned-single-edit>
+        <app-key-takeaway-single-edit
+            *ngIf="projecthubservice.itemtype == 'keyTakeawaysSingleEdit'"></app-key-takeaway-single-edit>
+        <app-local-attribute-single-edit
+            *ngIf="projecthubservice.itemtype == 'localAttributeSingleEdit'"></app-local-attribute-single-edit>
+        <app-carbon-bulk-edit *ngIf="projecthubservice.itemtype == 'CarbonBulkEdit'"></app-carbon-bulk-edit>
+        <app-caps-single-edit *ngIf="projecthubservice.itemtype == 'CAPS'"></app-caps-single-edit>
+        <app-project-requirements-edit
+            *ngIf="projecthubservice.itemtype == 'ProjectRequirementsEditPage'"></app-project-requirements-edit>
+        <app-biogenics-single-edit
+            *ngIf="projecthubservice.itemtype == 'BiogenicsSingleEdit'"></app-biogenics-single-edit>
+        <app-biogenics-bulk-edit *ngIf="projecthubservice.itemtype == 'BiogenicsBulkEdit'"></app-biogenics-bulk-edit>
+        <app-transportation-single-edit
+            *ngIf="projecthubservice.itemtype == 'TransportationSingleEdit'"></app-transportation-single-edit>
+        <app-transportation-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'TransportationBulkEdit'"></app-transportation-bulk-edit>
+        <app-warehousing-single-edit
+            *ngIf="projecthubservice.itemtype == 'WarehousingSingleEdit'"></app-warehousing-single-edit>
+        <app-warehousing-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'WarehousingBulkEdit'"></app-warehousing-bulk-edit>
+        <app-shipping-single-edit *ngIf="projecthubservice.itemtype == 'ShippingSingleEdit'"></app-shipping-single-edit>
+        <app-shipping-bulk-edit *ngIf="projecthubservice.itemtype == 'ShippingBulkEdit'"></app-shipping-bulk-edit>
+        <app-benefits-page-edit *ngIf="projecthubservice.itemtype == 'BenefitsPageEdit'"></app-benefits-page-edit>
+        <app-budget-performance-edit
+            *ngIf="projecthubservice.itemtype == 'BudgetPerformanceEdit'"></app-budget-performance-edit>
+        <app-operational-benefits-add-new
+            *ngIf="projecthubservice.itemtype == 'OperationalBenefitsAddNew'"></app-operational-benefits-add-new>
+        <app-operational-benefits-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'OperationalBenefitsBulkEdit'"></app-operational-benefits-bulk-edit>
+        <app-water-waste-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'WaterWasteBulkEdit'"></app-water-waste-bulk-edit>
+        <app-water-waste-single-edit
+            *ngIf="projecthubservice.itemtype == 'WaterWasteSingleEdit'"></app-water-waste-single-edit>
+        <app-budget-general-edit
+            *ngIf="projecthubservice.itemtype == 'BudgetRequiredForCapexEdit'"></app-budget-general-edit>
+        <app-budget-additional-edit *ngIf="projecthubservice.itemtype == 'BudgetAssetPlacedServiceEdit'"
+            [mode]="'Asset-In-Service'"></app-budget-additional-edit>
+        <app-budget-additional-edit *ngIf="projecthubservice.itemtype == 'BudgetOPEXEdit'"
+            [mode]="'OPEX'"></app-budget-additional-edit>
+        <app-budget-additional-edit *ngIf="projecthubservice.itemtype == 'BudgetDeviationCodeEdit'"
+            [mode]="'Deviation'"></app-budget-additional-edit>
+        <app-budget-additional-edit *ngIf="projecthubservice.itemtype == 'BudgetCommentaryEdit'"
+            [mode]="'Budget-Commentary'"></app-budget-additional-edit>
+        <app-budget-funding-information-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'BudgetFundingBulkEdit'"></app-budget-funding-information-bulk-edit>
+        <app-budget-funding-add-view
+            *ngIf="projecthubservice.itemtype == 'BudgetFundingAddNew'"></app-budget-funding-add-view>
+        <app-budget-fxrate *ngIf="projecthubservice.itemtype == 'BudgetFxRates'"></app-budget-fxrate>
+        <app-budget-forecast-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'BudgetForecastCapexBulkEdit'" [mode]="'Capex'"></app-budget-forecast-bulk-edit>
+        <app-budget-forecast-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'BudgetForecastOpexBulkEdit'" [mode]="'Opex'"></app-budget-forecast-bulk-edit>
     </div>
 </fuse-drawer>
-<fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"
-    [name]="'projecthub-navigation'" [opened]="true" class=" fixed mt-0 bg-card print:hidden"
-    style="margin-top: 4rem !important; z-index: 48;">
+<fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projectHubNavigation" [mode]="'side'"
+    [name]="'projecthub-navigation'" [autoCollapse]="true" [opened]="true" class=" fixed mt-16 bg-card print:hidden"
+    style="z-index: 48;">
     <ng-container fuseVerticalNavigationContentHeader>
         <!-- Logo -->
         <div class="flex items-center justify-end mt-3 mr-5" #container>
@@ -42,12 +271,16 @@
 <div class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
     [ngClass]="navigationAppearance=='default'?'project-hub-default':'project-hub-dense'"
     [ngStyle]="{ 'position' : projecthubservice.drawerOpenedright ? 'fixed' : 'relative'}">
-    <div class="p-8 pb-6 pt-2">
+    <div class="p-8 pb-6 pt-2" *ngIf="viewContent">
+        <spot-global-message [callLocation]="'ProjectHub'"></spot-global-message>
         <div class="w-full bg-card shadow rounded-2xl">
             <div class="flex-1 min-w-0 p-6 pt-1" [ngClass]="{'text-gray-400': projectDetails.isArchived}">
                 <!-- Title -->
                 <div class="flex justify-between gap-8 mt-2">
                     <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10">
+
+                        <span
+                            *ngIf="projectDetails.problemType == 'Strategic Initiative / Program'">Strategic Initiative -&nbsp;</span>
                         <span
                             *ngIf="projectDetails.isArchived && !projectDetails.isConfidential">[ARCHIVED]&nbsp;</span>
                         <span *ngIf="projectDetails.isConfidential && !projectDetails.isArchived">[CONF]&nbsp;</span>
@@ -56,73 +289,77 @@
                         {{projectDetails.problemId}} - {{projectDetails.problemTitle}}
                     </h2>
                     <div class=" flex items-center">
-                        <div class="w-full pr-3 text-right whitespace-pre">
+                        <div class="w-full pr-3 text-right whitespace-pre" [ngClass]="isCursorPointer()"
+                            (click)="openPhaseStateDrawer()">
                             <p>Project State</p>
-                            <span class="font-bold text-primary">{{portfolioDetails.projStatus}}</span>
+                            <span
+                                [ngClass]="getStateClass(portfolioDetails.projStatus)">{{portfolioDetails.projStatus}}</span>
                         </div>
-                        <div class="p-3"
-                            [ngClass]="portfolioDetails.phase == 'Initiate'?'pointer-start':'pointer-start-unselect'"
-                            style="z-index: 10;">Initiate</div>
-                        <div class="p-3" [ngClass]="portfolioDetails.phase == 'Define'?'pointer':'pointer-unselect'"
-                            style="z-index: 9;">Define</div>
-                        <div class="p-3" [ngClass]="portfolioDetails.phase == 'Plan'?'pointer':'pointer-unselect'"
-                            style="z-index: 8;">Plan</div>
-                        <div class="p-3" [ngClass]="portfolioDetails.phase == 'Execute'?'pointer':'pointer-unselect'"
-                            style="z-index: 7;">Execute</div>
-                        <div class="p-3" [ngClass]="portfolioDetails.phase == 'Close'?'pointer':'pointer-unselect'"
-                            style="z-index: 6;">Close</div>
-                        <div class="p-3"
-                            [ngClass]="portfolioDetails.phase == 'Track'?'pointer-last':'pointer-last-unselect'"
-                            style="z-index: 5;">Track</div>
+                        <div class="p-3" [ngClass]="getStartPhaseClass()" style="z-index: 10;"
+                            (click)="openPhaseStateDrawer()">Initiate</div>
+                        <div class="p-3" [ngClass]="getPhaseClass('Define')" style="z-index: 9;"
+                            (click)="openPhaseStateDrawer()">Define</div>
+                        <div class="p-3" [ngClass]="getPhaseClass('Plan')" style="z-index: 8;"
+                            (click)="openPhaseStateDrawer()">Plan</div>
+                        <div class="p-3" [ngClass]="getPhaseClass('Execute')" style="z-index: 7;"
+                            (click)="openPhaseStateDrawer()">Execute</div>
+                        <div class="p-3" [ngClass]="getPhaseClass('Close')" style="z-index: 6;"
+                            (click)="openPhaseStateDrawer()">Close</div>
+                        <div class="p-3" [ngClass]="getEndPhaseClass()" style="z-index: 5;"
+                            (click)="openPhaseStateDrawer()">Track</div>
                     </div>
                 </div>
                 <!-- Actions -->
                 <div class="flex items-start justify-between py-4">
-                    <div class="flex justify-between items-center gap-12 text-xl">
+                    <div class="flex justify-between items-center gap-4 xl_custom:gap-12 text-xl">
                         <div class="flex items-center gap-4">
                             <p>Overall Status</p>
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).icontype}}"
-                                class="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).iconcolor}} icon-size-12">
-                            </mat-icon>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <p> Budget</p>
-                            <mat-icon
-                                svgIcon="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).icontype}}"
-                                class="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).iconcolor}} icon-size-12">
-                            </mat-icon>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <p> Spend </p>
-                            <mat-icon
-                                svgIcon="{{(indicator.getIndicators(portfolioDetails.budgetSpendIndicator, '')).icontype}}"
-                                class="{{(indicator.getIndicators(portfolioDetails.budgetSpendIndicator, '')).iconcolor}} icon-size-12">
+                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.overallIndicator, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(spotLightIndicator.overallIndicator, 'overall')).iconcolor}} icon-size-12">
                             </mat-icon>
                         </div>
                         <div class="flex items-center gap-4">
                             <p> Schedule</p>
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).icontype}}"
-                                class="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).iconcolor}} icon-size-12">
+                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.scheduleIndicator, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(spotLightIndicator.scheduleIndicator, 'overall')).iconcolor}} icon-size-12">
                             </mat-icon>
                         </div>
                         <div class="flex items-center gap-4">
                             <p> Risk/Issues</p>
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).icontype}}"
-                                class="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).iconcolor}} icon-size-12">
+                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.riskIndicator, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(spotLightIndicator.riskIndicator, 'overall')).iconcolor}} icon-size-12">
                             </mat-icon>
                         </div>
                         <div class="flex items-center gap-4">
                             <p> Ask/Needs </p>
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).icontype}}"
-                                class="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).iconcolor}} icon-size-12">
+                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.askNeedIndicator, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(spotLightIndicator.askNeedIndicator, 'overall')).iconcolor}} icon-size-12">
+                            </mat-icon>
+                        </div>
+                        <div class="flex items-center gap-4" *ngIf="!projecthubservice.isStrategicIniative">
+                            <p> Budget</p>
+                            <mat-icon
+                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.budgetIndicator, 'circle')).icontype}}"
+                                class="{{(indicator.getIndicators(spotLightIndicator.budgetIndicator, 'overall')).iconcolor}} icon-size-12">
+                            </mat-icon>
+                        </div>
+                        <div class="flex items-center gap-4" *ngIf="!projecthubservice.isStrategicIniative">
+                            <p> Spend </p>
+                            <mat-icon
+                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.spendIndicator, 'circle')).icontype}}"
+                                class="{{(indicator.getIndicators(spotLightIndicator.spendIndicator, 'overall')).iconcolor}} icon-size-12">
                             </mat-icon>
                         </div>
                     </div>
-                    <div></div>
+                    <button class="min-w-26 ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        (click)="projecthubservice.toggleDrawerOpen('DataQuality', 'new', [] , '',true,false)">
+                        <b>Data Quality:&nbsp;</b><a
+                            [ngStyle]="{color:getColor(dataQualityPercentage)}">{{dataQualityPercentageString}}</a>
+                    </button>
                 </div>
                 <div class="flex shrink-0 items-center justify-between sm:mt-0">
 

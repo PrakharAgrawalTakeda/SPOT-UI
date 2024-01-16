@@ -1,0 +1,67 @@
+<div class="flex flex-col min-w-0 p-3 pt-3 w-full ml-3">
+    <div class="p-6 bg-card rounded-2xl shadow w-full mb-6">
+        <div>
+            <div class="p-6 pb-3 pt-0 flex items-center justify-between">
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Milestone Sets</div>
+                <div class="text-primary" *ngIf="projecthubservice.roleControllerControl.projectTeam">
+                    <div class="flex items-start justify-between">
+                        <div >
+                            <button class="mx-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                                    (click)="myPreferenceService.toggleDrawerOpen('MilestoneSetsAddNew', 'new', '', '', true)">
+                                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; New Milestone Set
+                            </button>
+                        </div>
+                        <!-- <div>
+                            Table&nbsp;&nbsp;<mat-slide-toggle class="primary slider-adjust"></mat-slide-toggle>
+                            &nbsp;&nbsp;Grid
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'"  columnMode="flex"
+                               class="ml-3 datatable-sms material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="miestoneSetsData">
+                    <ngx-datatable-column name="Portfolio Owner" prop="portfolioOwner" [flexGrow]="1">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <p>{{value}}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Milestone Set" prop="milestoneSet" [flexGrow]="1">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <!-- <p [ngClass]="{'closed': row.completionDate != null}">{{value}}</p> -->
+                            <strong><p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName">{{value}} Insert Milestone Name</p></strong>
+                            <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Template Owner" prop="templateOwnerName" [flexGrow]="1">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <p>{{value}}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Creation Date" prop="createdDate" [flexGrow]="1" [resizeable]="false" [draggable]="false">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <p>{{value | date:'dd-MMM-yyyy'}}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.4" [resizeable]="false" [sortable]="false" [draggable]="false">
+                        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                            <div class="flex items-center justify-start gap-6">
+                                <a href="javascript:void(0)" title="Edit Single"
+                                   (click)="myPreferenceService.toggleDrawerOpen('MilestoneSetsAddNew', row.milestoneTemplateId, '', '', true)">
+                                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
+                                </a>
+                                <a href="javascript:void(0)" title="Delete Single"
+                                   (click)="deleteMilestoneSet(row.milestoneTemplateId)">
+                                    <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                                </a>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                </ngx-datatable>
+            </div>
+        </div>
+
+    </div>
+
+</div>

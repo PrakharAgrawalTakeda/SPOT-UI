@@ -1,13 +1,45 @@
-<div class="flex min-w-0 overflow-hidden p-6 pt-20 w-full">
-    <div class="p-6 bg-card rounded-2xl shadow w-full">
-        <form class="w-full" [formGroup]="preferenceForm">
-            <mat-form-field class="flex-auto w-full gt-xs:pl-3" [floatLabel]="'always'">
-                <mat-label>Role</mat-label>
-                <mat-select [placeholder]="'Role'" formControlName="role" name="role" (selectionChange)="updateRole($event)">
-                    <mat-option *ngFor="let option of getRoles()" value="{{option.lookUpId}}">{{option.lookUpName}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </form>
+<fuse-drawer [name]="'rightDrawer'" [opened]="myPreferenceService.drawerOpenedright"
+             (openedChanged)="myPreferenceService.drawerOpenedChanged($event)" [mode]="'over'" [position]="'right'"
+             [ngClass]="{'fuse-drawer-large':myPreferenceService.fuseDrawerLarge}">
+    <div>
+        <app-milestone-set-view-edit *ngIf="myPreferenceService.itemtype == 'MilestoneSetsAddNew'"></app-milestone-set-view-edit>
+        <app-email-notifications-edit
+            *ngIf="myPreferenceService.itemtype == 'EmailNotiEdit'"></app-email-notifications-edit>
+        <app-email-notifications-table-edit
+            *ngIf="myPreferenceService.itemtype == 'EmailNotiTableEdit'"></app-email-notifications-table-edit>
+        <app-metric-repository-add-edit-view
+            *ngIf="myPreferenceService.itemtype == 'MetricRepositoryAddNew'"></app-metric-repository-add-edit-view>
+        <app-metric-repository-add-edit-view
+            *ngIf="myPreferenceService.itemtype == 'MetricRepositoryEdit'"></app-metric-repository-add-edit-view>
+    </div>
+</fuse-drawer>
+
+<div *ngIf="viewContent" class="w-full pt-20">
+    <spot-global-message [callLocation]="'MyPreference'"></spot-global-message>
+    <div class="flex flex-col bg-card p-6 pt-3 pb-4 m-6 mb-5 mt-0 shadow rounded-2xl">
+        <div class="flex justify-between items-start w-full">
+            <div class="w-[73%]">
+                <span class="font-bold text-primary text-2xl">My Preferences
+                    <!-- <ng-container *ngIf="navItem"> -
+                        {{navItem?.title}}
+                    </ng-container> -->
+                </span>
+            </div>
+        </div>
+        <div class="flex justify-between items-center w-full">
+            <div class="w-5/6">
+                <div class="pt-3 flex w-full justify-start gap-3 items-center" *ngIf="navItem?.children.length>0">
+                    <button *ngFor="let item of  navItem.children" mat-flat-button
+                        [ngClass]="isNavActive(item.link)?'bg-primary text-on-primary':'bg-gray-200 text-primary'"
+                        routerLink="{{'../'+item.link}}">
+                        {{item.title}}
+                    </button>
+                </div>
+            </div>
+            </div>
+    </div>
+    <div class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
+    [ngStyle]="{ 'position' : myPreferenceService.drawerOpenedright ? 'fixed' : 'relative'}">
+        <router-outlet></router-outlet>
     </div>
 </div>

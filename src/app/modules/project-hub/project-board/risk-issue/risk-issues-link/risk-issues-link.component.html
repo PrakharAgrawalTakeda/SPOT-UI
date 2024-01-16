@@ -1,0 +1,49 @@
+<div *ngIf="viewContent" class="h-[100vh] bg-default">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Link Risk/Issues</div>
+        <div style="padding-top: 2px">
+            <a (click)="projectHubService.toggleDrawerOpen('', '',[],'', true)" href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="overflow-auto m-2"  style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)">
+        <div class="mx-6">
+            <div class="flex justify-end items-center">
+                <form [formGroup]="localIncludedItems">
+                    <mat-slide-toggle class="primary slider-adjust" formControlName="toggle"
+                                      (change)="toggleClosedItems($event)">
+                        Include Closed Items
+                    </mat-slide-toggle>
+                </form>
+            </div>
+            <mat-accordion multi>
+                <div *ngFor="let linkDatum of linkData;let i = index;">
+                    <mat-expansion-panel class="my-6" [expanded]="true">
+                        <mat-expansion-panel-header class="pt-10 pb-10">
+                            <mat-panel-title class="font-bold">
+                                {{"&nbsp;".repeat(linkDatum.level*2)}}{{linkDatum.projectId}} -
+                                {{linkDatum.projectName}}
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <app-risk-issue-table [tableIndex]="i" [riskIssueData]="linkDatum.riskIssues"
+                                            [tableData]="linkDatum.riskIssues" [linksProblemCapture]="linkDatum.riskIssuesLinkProjectDetails"
+                                            [links]="linkDatum.riskIssuesLink" [mode]="'Link'" [projectId]="linkDatum.projectUId" [lookupdata] ="this.projectHubService.lookUpMaster"
+                                            [parentProjectId]="projectHubService.projectid" (toggleChange)="toggleRiskIssue($event)">
+                        </app-risk-issue-table>
+                    </mat-expansion-panel>
+                </div>
+            </mat-accordion>
+        </div>
+    </div>
+    <div class="w-full px-3 pr-3 flex items-start justify-between">
+        <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+           (click)="projectHubService.toggleDrawerOpen('', '',[],'',true)">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitRILink()" type="button">
+            Submit
+        </button>
+    </div>
+</div>

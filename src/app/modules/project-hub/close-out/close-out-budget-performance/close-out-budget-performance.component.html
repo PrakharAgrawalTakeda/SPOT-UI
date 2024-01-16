@@ -1,0 +1,112 @@
+<div class="w-full min-w-0 p-8 pt-0 space-y-6"  *ngIf="viewContent" #container >
+    <div class="flex justify-between items-start gap-6 w-full" >
+    </div>
+    <div class="flex justify-between items-start gap-6 w-full">
+        <div class="flex flex-col w-full flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden" #container>
+            <ng-container>
+                <div class="w-full min-w-0 pt-0" >
+                    <!-- Enter Content here-->
+                    <form class="w-full" [formGroup]="budgetPerformnceForm" >
+                        <div class="pb-6 pt-0 flex items-center justify-between">
+                            <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Budget Performance</div>
+                            <div class="text-primary">
+                                <div class="flex items-start justify-between">
+                                    <div style="padding-right: 5px;">
+                                        <button class="ml-4 text-primary bg-gray-200"
+                                                *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
+                                                [color]="'primary-200'"
+                                                (click)="projectHubService.toggleDrawerOpen('BudgetPerformanceEdit', '', '' , this.projectHubService.projectid)">
+                                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 px-3">
+                            <div>
+                                <div class="text-secondary">NOTE: In addition to the data below, a graph showing Plan vs. Actual over the life of the project will be included in the report</div>
+                                <div class="text-primary pt-8 text-xl">Final Requirements</div>
+                                <div *ngFor="let fr of finalRequirements | keyvalue">
+                                    <div class="flex items-center my-4">
+                                        <mat-icon svgIcon="heroicons_outline:x-circle"
+                                                  *ngIf="fr.value.isSelected == false"></mat-icon>
+                                        <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                                  *ngIf="fr.value.isSelected == true">
+                                        </mat-icon>
+                                        &nbsp;
+                                        <mat-label class="items-center">{{fr.value.fieldDisplayName}}</mat-label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col space-y-4 pt-8">
+                                <div class="text-primary text-xl">Budget Performance Detail</div>
+                                <div class="flex flex-col min-[1600px]:flex-row">
+                                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                                               class="font-medium text-sm text-default whitespace-nowrap w-8/12 min-[1600px]:w-3/5" [rows]="budgetPerformanceDetailCapexOpex">
+                                    <ngx-datatable-column name="Type" prop="type" [flexGrow]="0.5" [resizeable]="false" [draggable]="false">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            <p>{{value}}</p>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <ngx-datatable-column name="Total Approved"  prop="totalApproved" [flexGrow]="1" [headerClass]="getHeaderClass" [resizeable]="false" [draggable]="false" >
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            <p class="text-right">{{value | number: '1.' }}</p>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <ngx-datatable-column name="Actual Spend" prop="actualSpend"  [flexGrow]="1" [headerClass]="getHeaderClass" [resizeable]="false" [draggable]="false">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            <p class="text-right">{{value | number: '1.' }}</p>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <ngx-datatable-column name="Remaining Spend (Forecast)" prop="forecast"  [flexGrow]="1.5" [headerClass]="getHeaderClass" [resizeable]="false" [draggable]="false">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            <p class="text-right">{{value | number:'1.0-0'  }}</p>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <ngx-datatable-column name="Variance" prop="variance"   [flexGrow]="0.75" [headerClass]="getHeaderClass" [resizeable]="false" [draggable]="false">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            <p class="text-right">{{value}}</p>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                </ngx-datatable>
+                                    <div class="hidden md:block border-l mx-4"></div>
+                                    <br class="block min-[1600px]:hidden">
+                                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                                               class="font-medium text-sm text-default whitespace-nowrap w-6/12 min-[1600px]:w-2/5" [rows]="budgetPerformanceDetailEvents">
+                                    <ngx-datatable-column name="Event" prop="event" [flexGrow]="1.5">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            <p>{{value}}</p>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <ngx-datatable-column name="Target"  prop="target" [flexGrow]="0.75">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            <p >{{value | date:'dd-MMM-yyyy'}}</p>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+<!--                                    <ngx-datatable-column name="Approved" prop="approved" [flexGrow]="0.75">-->
+<!--                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>-->
+<!--                                            <p >{{value | date:'dd-MMM-yyyy'}}</p>-->
+<!--                                        </ng-template>-->
+<!--                                    </ngx-datatable-column>-->
+<!--                                    <ngx-datatable-column name="Variance (Days)" prop="variance"  [flexGrow]="1" [headerClass]="getHeaderClass">-->
+<!--                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>-->
+<!--                                            <p class="text-right">{{value}}</p>-->
+<!--                                        </ng-template>-->
+<!--                                    </ngx-datatable-column>-->
+                                </ngx-datatable>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-primary pt-8 text-xl -mb-4">Budget Commentary</div>
+                                <spot-textarea class="w-full read-only " formControlName="budgetCommentary" >
+                                </spot-textarea>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </ng-container>
+
+        </div>
+    </div>
+</div>

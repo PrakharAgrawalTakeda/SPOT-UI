@@ -1,0 +1,26 @@
+.Unit{
+    margin-top: 38px;
+    font-weight: 500;
+    color: rgba(var(--fuse-text-default-rgb), var(--tw-text-opacity)) !important;
+    --tw-text-opacity: 1 !important;
+    margin-left: 12px;
+}
+
+.label{
+    display: flex;
+}
+
+.mat-mdc-slide-toggle.ng-dirty{
+    border-left: 5px solid #fff !important;
+}
+
+.custom{
+    width: 60% !important;
+    margin-left: 40px !important;
+}
+
+.customCost{
+        width: 60% !important;
+        // margin-left: -107px !important;
+        margin-left: -6px !important;
+    }

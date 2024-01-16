@@ -5,11 +5,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
 import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import * as moment from 'moment';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from '../project-hub.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-general-info',
@@ -18,12 +19,22 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
   encapsulation: ViewEncapsulation.None,
   providers: [],
 })
-export class GeneralInfoComponent implements OnInit {
+export class GeneralInfoComponent implements OnInit, OnDestroy {
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
+  @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' | 'BusinessCase' = 'ProjectHub'
+  @Input() viewElements: any = ["isConfidential", "isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "projectManager", "sponsor", "topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription", "isTechTransfer", "isOeproject", "isQualityRef", "StrategicDrivers", "primaryKPI", "isAgile", "isPobos", "isGmsgqltannualMustWin", "isSiteAssessment", "isGoodPractise", "isSprproject","sprprojectCategory","sprprojectGrouping"]
+  generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' | 'GeneralInfoSingleEditBusinessCase' | 'GeneralInfoSingleEditStrategicInitiative' = 'GeneralInfoSingleEdit'
+  strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' | 'StrategicDriversSingleEditStrategicInitiative' | 'StrategicDriversSingleEditProjectProposalStrategicInitiative' | 'StrategicDriversSingleEditCloseOutStrategicInitiative' = 'StrategicDriversSingleEdit'
   viewContent: boolean = false
+  isWizzard: boolean = false
+  projectNameLabel:string = "Project Name"
   lookUpData: any = []
+  kpiData: any = []
   id: string = ""
   generalInfoData: any = {}
   filterCriteria: any = {}
+  wizzardApprovedDate: string = ""
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
     parentProgram: new FormControl(''),
@@ -34,25 +45,62 @@ export class GeneralInfoComponent implements OnInit {
     sponsor: new FormControl(''),
     projectManager: new FormControl(''),
     projectDescription: new FormControl(''),
-    primaryProduct: new FormControl({}),
+    primaryProduct: new FormControl(null),
     otherImpactedProducts: new FormControl([]),
-    portfolioOwner: new FormControl({}),
+    portfolioOwner: new FormControl(null),
     excecutionScope: new FormControl([]),
-    enviornmentalPortfolio: new FormControl({}),
+    enviornmentalPortfolio: new FormControl(null),
     isOeproject: new FormControl(false),
-    oeprojectType: new FormControl({}),
+    oeprojectType: new FormControl(null),
     isCapsProject: new FormControl(false),
     isTechTransfer: new FormControl(false),
     productionStepId: new FormControl(''),
     campaignPhaseId: new FormControl(''),
     campaignTypeId: new FormControl(''),
     isQualityRef: new FormControl(false),
-    isArchived: new FormControl(false)
+    isArchived: new FormControl(false),
+    isConfidential: new FormControl(false),
+    owningOrganization: new FormControl(''),
+    closeOutApprovedDate: new FormControl(''),
+    approvedDate: new FormControl(''),
+    opU: new FormControl(''),
+    projectId: new FormControl(''),
+    //
+    projectProposalApprovedDate: new FormControl(''),
+    functionGroupID: new FormControl(''),
+    whynotgoforNextBestAlternative: new FormControl(''),
+    proposalStatement: new FormControl(''),
+    projectReviewedYN: new FormControl(''),
+    //Stategic Drivers
+    primaryKPI: new FormControl(''),
+    isAgile: new FormControl(false),
+    agilePrimaryWorkstream: new FormControl(''),
+    agileSecondaryWorkstream: new FormControl([]),
+    agileWave: new FormControl(''),
+    isPobos: new FormControl(false),
+    pobosCategory: new FormControl([]),
+    isGmsgqltannualMustWin: new FormControl(false),
+    strategicYear: new FormControl(''),
+    annualMustWinID: new FormControl(''),
+    isSiteAssessment: new FormControl(false),
+    siteAssessmentCategory: new FormControl([]),
+    isGoodPractise: new FormControl(false),
+    StrategicRationale: new FormControl(''),
+    BCAuthor: new FormControl(null),
+    RiskImpact: new FormControl(''),
+    AdditionalAuthor: new FormControl([]),
+    problemId: new FormControl(''),
+    businessCaseApprovedDate: new FormControl(''),
+    isSprproject: new FormControl(false),
+    sprprojectCategory: new FormControl(''),
+    sprprojectGrouping: new FormControl('')
   })
   qrTableEditStack: any = []
   qualityRefForm = new FormArray([])
-  projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
+  projectTypeDropDrownValues = ["Standard Project / Program", "SimpleProject", "Strategic Initiative / Program"]
+  isStrategicInitiative: boolean = false
   formFieldHelpers: any
+  lookUpPVD: any;
   constructor(private apiService: ProjectApiService,
     private _Activatedroute: ActivatedRoute,
     private portApiService: PortfolioApiService,
@@ -60,203 +108,96 @@ export class GeneralInfoComponent implements OnInit {
     private projectHubService: ProjectHubService,
     private router: Router,
     public fuseAlert: FuseConfirmationService) {
-    this.projectHubService.submitbutton.subscribe(res => {
+
+
+    this.projectHubService.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (this.viewContent == true) {
-        this.tableAlter()
+        this.dataloader()
       }
     })
-
-    this.generalInfoForm.controls.isTechTransfer.valueChanges.subscribe(res => {
-      if (this.viewContent == true) {
-        if (res == false) {
-          var comfirmConfig: FuseConfirmationConfig = {
-            "title": "Are you sure?",
-            "message": "Are you sure you want to remove the Tech Transfer Information?",
-            "icon": {
-              "show": true,
-              "name": "heroicons_outline:exclamation",
-              "color": "warn"
-            },
-            "actions": {
-              "confirm": {
-                "show": true,
-                "label": "Remove",
-                "color": "warn"
-              },
-              "cancel": {
-                "show": true,
-                "label": "Cancel"
-              }
-            },
-            "dismissible": true
-          }
-          const alert = this.fuseAlert.open(comfirmConfig)
-          alert.afterClosed().subscribe(close => {
-            if (close == 'confirmed') {
-              this.generalInfoForm.controls.campaignTypeId.patchValue('')
-              this.generalInfoForm.controls.campaignPhaseId.patchValue('')
-              this.generalInfoForm.controls.productionStepId.patchValue('')
-            }
-            else {
-              this.generalInfoForm.controls.isTechTransfer.patchValue(true)
-            }
-          })
-        }
-      }
-    })
-
-
-    this.generalInfoForm.controls.isOeproject.valueChanges.subscribe(res => {
-      if (this.viewContent == true) {
-        if (res == false) {
-          var comfirmConfig: FuseConfirmationConfig = {
-            "title": "Are you sure?",
-            "message": "Are you sure you want to remove the OE Project Type Information?",
-            "icon": {
-              "show": true,
-              "name": "heroicons_outline:exclamation",
-              "color": "warn"
-            },
-            "actions": {
-              "confirm": {
-                "show": true,
-                "label": "Remove",
-                "color": "warn"
-              },
-              "cancel": {
-                "show": true,
-                "label": "Cancel"
-              }
-            },
-            "dismissible": true
-          }
-          const alert = this.fuseAlert.open(comfirmConfig)
-          alert.afterClosed().subscribe(close => {
-            if (close == 'confirmed') {
-              this.generalInfoForm.controls.oeprojectType.patchValue({})
-            }
-            else {
-              this.generalInfoForm.controls.isOeproject.patchValue(true)
-            }
-          })
-        }
-      }
-    })
-
-    this.generalInfoForm.controls.isQualityRef.valueChanges.subscribe(res => {
-      if (this.viewContent == true) {
-        if (res == false) {
-          var comfirmConfig: FuseConfirmationConfig = {
-            "title": "Are you sure?",
-            "message": "Are you sure you want to remove the Quality Reference Information?",
-            "icon": {
-              "show": true,
-              "name": "heroicons_outline:exclamation",
-              "color": "warn"
-            },
-            "actions": {
-              "confirm": {
-                "show": true,
-                "label": "Remove",
-                "color": "warn"
-              },
-              "cancel": {
-                "show": true,
-                "label": "Cancel"
-              }
-            },
-            "dismissible": true
-          }
-          const alert = this.fuseAlert.open(comfirmConfig)
-          alert.afterClosed().subscribe(close => {
-            if (close == 'confirmed') {
-              this.qrTableEditStack = []
-              this.qualityRefForm = new FormArray([])
-              this.generalInfoData.qualityReferences = []
-            }
-            else {
-              this.generalInfoForm.controls.isQualityRef.patchValue(true)
-              this.tableAlter()
-            }
-          })
-        }
-      }
-    })
-  }
-
-  tableAlter() {
-    if (this.generalInfoData.qualityReferences.length > 0) {
-      this.generalInfoData.qualityReferences = []
-      var qr = []
-      var genQRFORM = this.qualityRefForm.getRawValue()
-      for (var quality of genQRFORM) {
-        qr.push({
-          qualityUniqueId: quality.qualityUniqueId,
-          qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
-          qualityReference1: quality.qualityReference1,
-          problemUniqueId: quality.problemUniqueId
-        })
-      }
-      this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences, ...qr]
-    }
   }
   ngOnInit(): void {
     this.dataloader()
   }
   dataloader(): void {
-    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    this.apiService.getGeneralInfoData(this.id).then((res: any) => {
-      this.portApiService.getfilterlist().then(filterres => {
-        this.authService.lookupMaster().then((lookup: any) => {
+    if (this.callLocation != 'ProjectHub') {
+      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+      if (this.callLocation == 'CloseOut') {
+        this.generalInfoType = 'GeneralInfoSingleEditCloseOut';
+        this.strategicDriversType = 'StrategicDriversSingleEditCloseOut'
+      }
+      if (this.callLocation == 'ProjectCharter') {
+        this.generalInfoType = 'GeneralInfoSingleEditProjectCharter';
+        this.strategicDriversType = 'StrategicDriversSingleEditProjectCharter'
+      }
+      if (this.callLocation == 'ProjectProposal') {
+        this.generalInfoType = 'GeneralInfoSingleEditProjectProposal';
+        this.strategicDriversType = 'StrategicDriversSingleEditProjectProposal'
+      }
+      if (this.callLocation == 'BusinessCase') {
+        this.generalInfoType = 'GeneralInfoSingleEditBusinessCase'
+      }
+    } else {
+      this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    }
+    this.portApiService.getfilterlist().then(filterres => {
+      this.authService.lookupMaster().then((lookup: any) => {
+        this.authService.KPIMaster().then((kpi: any) => {
           console.log('LookUp Data', lookup)
           this.lookUpData = lookup
+          this.lookUpPVD = lookup.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474")
+          this.projectHubService.lookUpMaster = lookup
           console.log('Filter Criteria:', filterres)
           this.filterCriteria = filterres
-          console.log("General Info:", res)
-          this.generalInfoData = res
-          this.generalInfoForm.patchValue({
-            problemTitle: res.projectData.problemTitle,
-            problemType: res.projectData.problemType,
-            topsGroup: res.topsData ? res.topsData.topsgroup : '',
-            recordCreationDate: res.projectData.createdDate,
-            parentProgram: res.parentProject ? res.parentProject.problemTitle : '',
-            submittedBy: res.projectData.problemOwnerName,
-            projectManager: res.portfolioCenterData.pm,
-            sponsor: res.portfolioCenterData.sponsor,
-            projectDescription: res.projectData.projectDescription,
-            primaryProduct: res.primaryProduct?res.primaryProduct.fullProductName:'',
-            otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
-            portfolioOwner: res.portfolioOwner ? res.portfolioOwner.portfolioOwner : '',
-            excecutionScope: res.excecutionScope ? res.excecutionScope : [],
-            enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio.portfolioOwner : '',
-            isOeproject: res.projectData.isOeproject,
-            oeprojectType: res.projectData.oeprojectType ? {} : lookup.find(x => x.lookUpId == res.projectData.oeprojectType),
-            isCapsProject: res.projectData.isCapsProject,
-            isTechTransfer: res.projectData.isTechTransfer,
-            productionStepId: res.projectData.productionStepId,
-            campaignPhaseId: res.projectData.campaignPhaseId,
-            campaignTypeId: res.projectData.campaignTypeId,
-            isQualityRef: res.qualityReferences.length != 0,
-            isArchived: res.projectData.isArchived
-          })
-          if (res.qualityReferences.length != 0) {
-            for (var i of res.qualityReferences) {
-              this.qualityRefForm.push(new FormGroup({
-                qualityUniqueId: new FormControl(i.qualityUniqueId),
-                qualityReferenceTypeId: new FormControl(this.lookUpData.find(x => x.lookUpId == i.qualityReferenceTypeId)),
-                qualityReference1: new FormControl(i.qualityReference1),
-                problemUniqueId: new FormControl(this.id)
-              }))
-            }
+          this.kpiData = kpi
+          console.log(this.kpiData)
+          console.log(this.lookUpPVD.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474"))
+          this.projectHubService.kpiMasters = kpi
+          if (this.callLocation == 'CloseOut') {
+            this.apiService.getGeneralInfoDataWizzard(this.id, 'ProjectCloseOut').then((res: any) => {
+              this.wizzardApprovedDate = res.projectData.closeOutApprovedDate
+              this.generalInfoPatchValue(res)
+              this.viewContent = true
+            })
           }
-          console.log(this.qualityRefForm.getRawValue())
-          this.viewContent = true
+          if (this.callLocation == 'ProjectCharter') {
+            this.apiService.getGeneralInfoDataWizzard(this.id, 'ProjectCharter').then((res: any) => {
+              this.wizzardApprovedDate = res.projectData.approvedDate
+              this.generalInfoPatchValue(res)
+              this.viewContent = true
+            })
+          }
+          if (this.callLocation == 'ProjectProposal') {
+            this.apiService.getGeneralInfoDataWizzard(this.id, 'ProjectProposal').then((res: any) => {
+              this.wizzardApprovedDate = res.projectData.projectProposalApprovedDate
+              this.generalInfoPatchValue(res)
+              this.viewContent = true
+            })
+          }
+          if (this.callLocation == 'ProjectHub') {
+            this.apiService.getGeneralInfoData(this.id).then((res: any) => {
+              this.generalInfoData = res
+              this.generalInfoPatchValue(res)
+              this.viewContent = true
+            })
+          }
+          if (this.callLocation == 'BusinessCase') {
+            this.apiService.getGeneralInfoDataWizzard(this.id, 'BusinessCase').then((res: any) => {
+              // this.wizzardApprovedDate = res.projectData.closeOutApprovedDate
+              this.generalInfoPatchValue(res)
+              this.viewContent = true
+            })
+          }
         })
       })
     })
     this.disabler()
   }
-
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
 
   disabler() {
     this.generalInfoForm.disable()
@@ -279,41 +220,133 @@ export class GeneralInfoComponent implements OnInit {
   getQRType(): any {
     return this.lookUpData.filter(x => x.lookUpParentId == "A4C55F7E-C213-401E-A777-3BA741FF5802")
   }
+  getOwningOrganization(): any {
+    return this.generalInfoData.defaultOwningOrganizations;
+  }
   getLookUpName(id: string): string {
     return id && id != '' ? this.lookUpData.find(x => x.lookUpId == id).lookUpName : ''
   }
-  qrTableEditRow(row: number) {
-    if (!this.qrTableEditStack.includes(row)) {
-      this.qrTableEditStack.push(row)
-    }
+  viewElementChecker(element: string): boolean {
+    return this.viewElements.some(x => x == element)
   }
-  deleteQR(rowIndex: number) {
-    this.generalInfoData.qualityReferences.splice(rowIndex, 1)
-    this.qualityRefForm.removeAt(rowIndex)
-    if (this.qrTableEditStack.includes(rowIndex)) {
-      this.qrTableEditStack.splice(this.qrTableEditStack.indexOf(rowIndex), 1)
+   removeDuplicates(array1, array2): any {
+    const result = [];
+    for (const element of array1) {
+      if (!array2.includes(element)) {
+        result.push(element);
+      }
     }
-    this.qrTableEditStack = this.qrTableEditStack.map(function (value) {
-      return value > rowIndex ? value - 1 : value;
-    })
-    this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences]
-    
+    return result;
   }
-  addQR() {
-    this.qualityRefForm.push(new FormGroup({
-      qualityUniqueId: new FormControl(''),
-      qualityReferenceTypeId: new FormControl({}),
-      qualityReference1: new FormControl(''),
-      problemUniqueId: new FormControl(this.id)
-    }))
-    var j = [{
-      qualityUniqueId: '',
-      qualityReferenceTypeId: '',
-      qualityReference1: '',
-      problemUniqueId: ''
-    }]
-    this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences, ...j]
-    this.qrTableEditStack.push(this.generalInfoData.qualityReferences.length - 1)
+  
+  generalInfoPatchValue(response) {
+    this.isStrategicInitiative = response.projectData.problemType == "Strategic Initiative / Program"
+    if (this.isStrategicInitiative) {
+      this.projectNameLabel = "Initiaitive Name"
+      if (this.callLocation == "ProjectHub") {
+        this.viewElements = ["isConfidential", "isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "sponsor", "topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription", "StrategicDrivers", "primaryKPI", "isAgile"]
+        this.strategicDriversType = "StrategicDriversSingleEditStrategicInitiative"
+        this.generalInfoType = "GeneralInfoSingleEditStrategicInitiative"
+      }
+      if(this.callLocation == "ProjectProposal"){
+        this.viewElements = this.removeDuplicates(this.viewElements, ["isPobos", "isGmsgqltannualMustWin", "isSiteAssessment"])
+        this.viewElements.push("problemType")
+        this.strategicDriversType = "StrategicDriversSingleEditProjectProposalStrategicInitiative"
+      }
+      if(this.callLocation == "BusinessCase"){
+        this.viewElements.push("problemType")
+        this.projectNameLabel = "Initiative Title/ Project Name"
+      }
+      if(this.callLocation == "ProjectCharter"){
+        this.viewElements.push("problemType")
+        this.projectNameLabel = "Initiative Title/ Project Name"
+      }
+      if(this.callLocation == "CloseOut"){
+        this.viewElements.push(...["problemType", "isAgile"])
+        this.strategicDriversType = "StrategicDriversSingleEditCloseOutStrategicInitiative"
+        this.projectNameLabel = "Initiative Title/ Project Name"
+      }
+    }
 
+    var oeprojectypelist = response.projectData.oeprojectType && response.projectData.oeprojectType != '' ? response.projectData.oeprojectType.split(',') : []
+    console.log(response)
+    console.log(response.projectData.primaryKpi)
+    this.generalInfoForm.patchValue({
+      problemTitle: response.projectData.problemTitle,
+      problemType: response.projectData.problemType,
+      topsGroup: response.topsData ? response.topsData.topsgroup : '',
+      recordCreationDate: response.projectData.createdDate,
+      parentProgram: response.parentProject ? response.parentProject.problemId + ' - ' + response.parentProject.problemTitle : '',
+      submittedBy: response.projectData.problemOwnerName,
+      projectManager: response.portfolioCenterData.pm,
+      sponsor: response.sponsor?.teamMemberName,
+      projectDescription: response.projectData.projectDescription,
+      primaryProduct: response.primaryProduct ? response.primaryProduct.fullProductName : '',
+      otherImpactedProducts: response.otherImpactedProducts ? response.otherImpactedProducts : [],
+      portfolioOwner: response.portfolioOwner ? response.portfolioOwner.portfolioOwner : '',
+      excecutionScope: response.excecutionScope ? response.excecutionScope : [],
+      enviornmentalPortfolio: response.enviornmentalPortfolio ? response.enviornmentalPortfolio.portfolioOwner : '',
+      isOeproject: response.projectData.isOeproject,
+      oeprojectType: oeprojectypelist.length > 0 ? this.projectHubService.lookUpMaster.filter(x => response.projectData.oeprojectType.includes(x.lookUpId)) : [],
+      isCapsProject: response.projectData.isCapsProject,
+      isTechTransfer: response.projectData.isTechTransfer,
+      productionStepId: response.projectData.productionStepId,
+      campaignPhaseId: response.projectData.campaignPhaseId,
+      campaignTypeId: response.projectData.campaignTypeId,
+      isQualityRef: response.qualityReferences.length != 0,
+      isArchived: response.projectData.isArchived,
+      isConfidential: response.projectData.isConfidential,
+      owningOrganization: response.projectData.defaultOwningOrganizationId ? response.projectData.defaultOwningOrganizationId : [],
+      projectId: response.projectData.problemId,
+      opU: this.filterCriteria.opuMasters.find(
+        x => x.lookUpId == response.portfolioOwner?.opU?.toLowerCase())?.lookUpName,
+      isGoodPractise: response.projectData.isGoodPractise,
+      approvedDate: this.wizzardApprovedDate,
+      //
+      functionGroupID: this.lookUpData.find(x => x.lookUpId == response.projectData.functionGroupID?.toLowerCase())?.lookUpName,
+      whynotgoforNextBestAlternative: response.projectData.whynotgoforNextBestAlternative,
+      proposalStatement: response.projectData.proposalStatement,
+      projectReviewedYN: this.lookUpData.find(x => x.lookUpId == response.projectData.projectReviewedYN?.toLowerCase())?.lookUpName,
+      projectProposalApprovedDate: response.projectData.projectProposalApprovedDate,
+      //Stategic Drivers
+      //primaryKPI: response.projectData.primaryKpi && this.lookUpData.find(x => x.lookUpId == response.projectData.primaryKpi) ? this.lookUpData.find(x => x.lookUpId == response.projectData.primaryKpi).lookUpName : '',
+      primaryKPI: (() => {
+        if (response.projectData.primaryKpi) {
+            const lookUpResult = this.lookUpPVD.find(x => x.lookUpId == response.projectData.primaryKpi);
+            if (lookUpResult) {
+                return lookUpResult.lookUpName;
+            } else {
+                const kpiResult = this.kpiData.find(x => x.kpiid == response.projectData.primaryKpi);
+                if (kpiResult) {
+                    return kpiResult.kpiname;
+                }
+            }
+        }
+        else{
+          return '';
+        }
+        
+    })(),
+      isAgile: response.agilePrimaryWorkstream || response.agileWave || response.agileSecondaryWorkstream,
+      agilePrimaryWorkstream: response.agilePrimaryWorkstream ? response.agilePrimaryWorkstream.lookUpName : '',
+      agileSecondaryWorkstream: response.agileSecondaryWorkstream ? response.agileSecondaryWorkstream : [],
+      agileWave: response.agileWave ? response.agileWave.lookUpName : '',
+      isPobos: response.projectData.isPobos,
+      pobosCategory: response.pobosCategory ? response.pobosCategory : [],
+      isGmsgqltannualMustWin: response.projectData.isGmsgqltannualMustWin,
+      strategicYear: response.strategicYearID ? response.strategicYearID.lookUpName : '',
+      annualMustWinID: response.annualMustWinID ? response.annualMustWinID.lookUpName : '',
+      isSiteAssessment: response.projectData.isSiteAssessment,
+      siteAssessmentCategory: response.siteAssessmentCategory ? response.siteAssessmentCategory : [],
+      StrategicRationale: response.projectData.strategicRationale,
+      BCAuthor: response.businessCaseAuthor == null ? '' : response.businessCaseAuthor.userDisplayName,
+      RiskImpact: response.businessCaseImpactOfDoingNothing,
+      AdditionalAuthor: response.businessCaseAdditionalAuthorsContributors == null ? [] : response.businessCaseAdditionalAuthorsContributors,
+      problemId: response.projectData.problemId,
+      businessCaseApprovedDate: response.businessCaseApprovedDate,
+      isSprproject: response.projectData.isSprproject,
+      sprprojectCategory: this.getLookUpName(response.projectData.sprprojectCategory),
+      sprprojectGrouping: this.getLookUpName(response.projectData.sprprojectGrouping)
+    })
   }
 }

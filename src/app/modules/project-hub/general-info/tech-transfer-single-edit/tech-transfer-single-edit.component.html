@@ -1,1 +1,49 @@
-<p>tech-transfer-single-edit works!</p>
+<div *ngIf="viewContent">
+    <div *ngIf="viewType == 'SidePanel'" class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Tech Transfer Edit</div>
+        <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
+                                         href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+        </div>
+    </div>
+    <form class="pl-3 w-full overflow-hidden mt-2" [formGroup]="generalInfoForm">
+        <div [style]="viewType === 'SidePanel' ? 'height: calc(calc(100vh/ var(--custom-zoom)) - 105px)' : null">
+            <!-- <div class="w-full mt-4 mb-6"> -->
+            <spot-toggle class="w-full" formControlName="isTechTransfer"
+                         [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'"
+                         [label]="viewType == 'SidePanel'?'Tech Transfer':'Tech Transfer or Clinical Campaign'">
+            </spot-toggle>
+            <!-- </div> -->
+            <div class="mt-6" *ngIf="generalInfoForm.controls['isTechTransfer'].value">
+                <spot-select class="w-full" formControlName="campaignTypeId" name="campaignTypeId"
+                             [label]="'Campaign Type'"
+                             [placeholder]="'Campaign Type'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                             [showNoneOption]="true" [dropDownArrayType]="'object'" [dropDownArray]="getCampaignType()"
+                             [customSortPointer]="'lookUpOrder'" [sortByType]="'custom'">
+                </spot-select>
+                <spot-select class="w-full" formControlName="campaignPhaseId" name="campaignPhaseId"
+                             [label]="'Campaign Phase'" [placeholder]="'Campaign Phase'" [valuePointer]="'lookUpName'"
+                             [idPointer]="'lookUpId'" [showNoneOption]="true" [dropDownArrayType]="'object'"
+                             [dropDownArray]="getCampaignPhase()" [customSortPointer]="'lookUpOrder'"
+                             [sortByType]="'custom'">
+                </spot-select>
+                <spot-select class="w-full" formControlName="productionStepId" name="productionStepId"
+                             [label]="'Production Step'" [placeholder]="'Production Step'" [valuePointer]="'lookUpName'"
+                             [idPointer]="'lookUpId'" [showNoneOption]="true" [dropDownArrayType]="'object'"
+                             [customSortPointer]="'lookUpOrder'" [sortByType]="'custom'"
+                             [dropDownArray]="getProductionStep()">
+                </spot-select>
+            </div>
+        </div>
+    </form>
+    <div *ngIf="viewType == 'SidePanel'" class="w-full px-3 pr-3 flex items-start justify-between">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+           (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="techTransfer()">
+            Submit
+        </button>
+    </div>
+</div>

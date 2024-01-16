@@ -1,0 +1,34 @@
+<div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Add New Metric</div>
+    <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
+            href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+    </div>
+</div>
+<form class="w-full p-[20px]" [formGroup]="newMetricForm">
+    <div class="overflow-hidden" style = "height: calc(calc(100vh/ var(--custom-zoom)) - 140px)">
+
+        <spot-singleselect-autocomplete formControlName="metricName" class="w-full" name="metricName"
+        [label]="'Choose an Existing Metric'" [placeholder]="'Metric Name'" [valuePointer]="'displayMetricName'"
+        [dropDownArray]="metricName" [showHint]="true"
+        [hint]="'Use an already existing metric local to your portfolio. Inclusive of default global metrics (i.e. FTE Hrs, Operational Cost Savings, etc.).'">
+    </spot-singleselect-autocomplete>
+    
+
+
+    <button class="min-w-26 ml-4 text-primary bg-gray-200 " mat-flat-button [color]="'primary-200'" (click)="OpenMetricRepo()"
+    [matTooltip]="'Create a new metric to capture value (Once created, metrics will be saved to local metric repository for future use).'">
+        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp;Create New Metric
+    </button>
+</div>
+    <div class="flex items-start justify-between mt-6">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitnewmetric()">
+            Submit
+        </button>
+    </div>
+</form>

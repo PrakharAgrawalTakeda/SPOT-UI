@@ -1,0 +1,89 @@
+<div *ngIf="dataIntialized">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Funding</div>
+        <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
+                                         href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+        </div>
+    </div>
+    <div *ngIf="mode== 'Project-Charter'">
+        <form [formGroup]="FundingForm" class="overflow-auto m-2" style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)">
+            <spot-select formControlName="fundingTypeId" name="fundingTypeId" [placeholder]="'Funding Type'"
+                         [dropDownArrayType]="'object'" [dropDownArray]="getfundingtype()" [idPointer]="'lookUpId'"
+                         [valuePointer]="'lookUpName'" [showNoneOption]="false" [label]="'Funding Type'">
+            </spot-select>
+            <spot-select formControlName="fundingSourceId" name="fundingSourceName" [placeholder]="'Funding Source'"
+                         [idPointer]="'portfolioOwnerId'" [valuePointer]="'portfolioOwner'" [dropDownArray]="getPO()"
+                         [dropDownArrayType]="'object'" [showNoneOption]="false" [sortByType]="'custom'"
+                         [customSortPointer]="'pfid'" [label]="'Funding Source'">
+            </spot-select>
+            <spot-toggle class="h-full overflow-hidden" formControlName="fundingIntheplan" [mode]="'dropDown'"
+                         [label]="'In the Plan'">
+            </spot-toggle>
+            <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="2"
+                        [callLocation]="'funding'"
+                        [label]="labelText">
+            </spot-input>
+            <spot-textarea formControlName="fundingNotes" [showLabel]="true" [placeholder]="'Notes'" [rows]="3"
+                           [showHint]="false" [label]="'Notes'">
+            </spot-textarea>
+            <mat-slide-toggle
+                [matTooltip]="this.FundingForm.controls['includeInCharter'].disabled ? 'Only 3 can be selected at a time for charter' : null"
+                class="flex items-start justify-between incuded-in-dash" formControlName="includeInCharter">Include in
+                Charter
+            </mat-slide-toggle>
+        </form>
+        <div class="w-full px-3 pr-3 flex items-start justify-between">
+            <a class="min-w-26" mat-flat-button [color]="'primary'"
+               (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+                Cancel
+            </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitfunding()">
+                Submit
+            </button>
+        </div>
+    </div>
+
+    <div
+        *ngIf="mode!= 'Project-Charter' && (optionType== 'option-3' || optionType== 'option-2' || optionType== 'recommended-option')">
+        <form class="overflow-auto m-2" [formGroup]="FundingBCForm" style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)">
+            <spot-select formControlName="fundingTypeId" name="fundingTypeId" [placeholder]="'Funding Type'"
+                         [dropDownArrayType]="'object'" [dropDownArray]="getfundingtype()" [idPointer]="'lookUpId'"
+                         [valuePointer]="'lookUpName'" [showNoneOption]="false" [label]="'Funding Type'">
+            </spot-select>
+            <spot-select formControlName="fundingSourceId" name="fundingSourceName" [placeholder]="'Funding Source'"
+                         [idPointer]="'portfolioOwnerId'" [valuePointer]="'portfolioOwner'"
+                         [dropDownArray]="getPO()"
+                         [dropDownArrayType]="'object'" [showNoneOption]="false" [sortByType]="'custom'"
+                         [customSortPointer]="'pfid'" [label]="'Funding Source'">
+            </spot-select>
+            <spot-toggle class="h-full overflow-hidden" formControlName="fundingIntheplan" [mode]="'dropDown'"
+                         [label]="'In the Plan'">
+            </spot-toggle>
+            <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="0"
+                        [callLocation]="'funding'"
+                        [label]="labelText" [autoAddDecimal]="false">
+            </spot-input>
+            <spot-textarea formControlName="fundingNotes" [showLabel]="true" [placeholder]="'Notes'" [rows]="3"
+                           [showHint]="false" [label]="'Notes'">
+            </spot-textarea>
+            <mat-slide-toggle
+                [matTooltip]="this.FundingBCForm.controls['includeInBusinessCase'].disabled ? 'Only 2 can be selected at a time for business case' : null"
+                class="flex items-start justify-between incuded-in-dash" formControlName="includeInBusinessCase">
+                Include
+                in Business Case
+            </mat-slide-toggle>
+        </form>
+        <div class="w-full px-3 pr-3 flex items-start justify-between">
+            <a class="min-w-26" mat-flat-button [color]="'primary'"
+               (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+                Cancel
+            </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitfunding()">
+                Submit
+            </button>
+        </div>
+    </div>
+
+</div>

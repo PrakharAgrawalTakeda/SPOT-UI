@@ -31,50 +31,95 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseAlertModule } from '@fuse/components/alert';
 import { MyPreferenceComponent } from './my-preference.component';
+import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
+import { ProjectSettingsComponent } from './project-settings/project-settings.component';
+import { MilestoneSetsComponent } from './milestone-sets/milestone-sets.component';
+import { MilestoneSetViewEditComponent } from './milestone-sets/milestone-set-view-edit/milestone-set-view-edit.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { EmailNotificationsComponent } from './email-notifications/email-notifications.component';
+import { EmailNotificationsEditComponent } from './email-notifications/email-notifications-edit/email-notifications-edit.component';
+import { EmailNotificationsTableEditComponent } from './email-notifications/email-notifications-table-edit/email-notifications-table-edit.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MetricRepositoryComponent } from './metric-repository/metric-repository.component';
+import { MetricRepositoryAddEditViewComponent } from './metric-repository/metric-repository-add-edit-view/metric-repository-add-edit-view.component';
+import { SpotGlobalMessageModule } from 'app/layout/common/spot-global-message/spot-global-message.module';
 export const projectRoutes: Route[] = [
   {
     path: '',
     component: MyPreferenceComponent,
+ children: [
+
+  {
+    path: 'settings',
+    component: ProjectSettingsComponent,
+  },
+  {
+      path: 'metric-repository',
+      component: MetricRepositoryComponent,
+  },
+  {
+      path: 'milestone-sets',
+      component: MilestoneSetsComponent,
+  },
+  {
+      path: 'email-notifications',
+      component: EmailNotificationsComponent,
   }
-];
+]
+}];
 
 
 @NgModule({
-  declarations: [
-    MyPreferenceComponent
-  ],
-  imports: [
-    RouterModule.forChild(projectRoutes),
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatDividerModule,
-    MatIconModule,
-    MatMenuModule,
-    MatProgressBarModule,
-    MatRippleModule,
-    MatSidenavModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatExpansionModule,
-    NgApexchartsModule,
-    TranslocoModule,
-    SharedModule,
-    CommonModule,
-    FuseDrawerModule,
-    FuseNavigationModule,
-    NgScrollbarModule,
-    MatChipsModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    NgxDatatableModule,
-    MatSlideToggleModule,
-    MatDatepickerModule,
-    MatMomentDateModule,
-    MatAutocompleteModule,
-    MatTooltipModule,
-    FuseAlertModule
-  ]
+    declarations: [
+        MyPreferenceComponent,
+        ProjectSettingsComponent,
+        MilestoneSetsComponent,
+        MilestoneSetViewEditComponent,
+        EmailNotificationsComponent,
+        EmailNotificationsEditComponent,
+        EmailNotificationsTableEditComponent,
+        MetricRepositoryComponent,
+        MetricRepositoryAddEditViewComponent
+    ],
+    exports: [
+        MilestoneSetViewEditComponent
+    ],
+    imports: [
+        RouterModule.forChild(projectRoutes),
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatDividerModule,
+        MatIconModule,
+        MatMenuModule,
+        MatProgressBarModule,
+        MatRippleModule,
+        MatSidenavModule,
+        MatSortModule,
+        MatTableModule,
+        MatTabsModule,
+        MatExpansionModule,
+        NgApexchartsModule,
+        TranslocoModule,
+        SharedModule,
+        CommonModule,
+        FuseDrawerModule,
+        FuseNavigationModule,
+        NgScrollbarModule,
+        MatChipsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        NgxDatatableModule,
+        MatSlideToggleModule,
+        MatDatepickerModule,
+        MatMomentDateModule,
+        MatAutocompleteModule,
+        MatTooltipModule,
+        FuseAlertModule,
+        SpotFormsModule,
+        DragDropModule,
+        SpotGlobalMessageModule,
+        MatSnackBarModule
+    ]
 })
 export class MyPreferenceModule { }

@@ -17,11 +17,11 @@ const customPalettes = {
  * Themes
  */
 const themes = {
-    // Default theme is required for theming system to work correctly
+    // Default theme is required for theming system to work correctly!
     'default': {
         primary  : {
-            ...colors.rose,
-            DEFAULT: colors.rose[600]
+            ...colors.indigo,
+            DEFAULT: colors.indigo[600]
         },
         accent   : {
             ...colors.slate,
@@ -35,8 +35,8 @@ const themes = {
             500: colors.red['50']
         }
     },
-    // Rest of the themes will use the 'default' as the base theme
-    // and extend them with their given configuration
+    // Rest of the themes will use the 'default' as the base
+    // theme and will extend it with their given configuration.
     'brand' : {
         primary: customPalettes.brand
     },
@@ -89,7 +89,8 @@ const config = {
             sm: '600px',
             md: '960px',
             lg: '1280px',
-            xl: '1440px'
+            xl: '1440px',
+            xl_custom: '1600px'
         },
         extend  : {
             animation               : {
@@ -288,7 +289,6 @@ const config = {
 
         // Other third party and/or custom plugins
         require('@tailwindcss/typography')({modifiers: ['sm', 'lg']}),
-        require('@tailwindcss/aspect-ratio'),
         require('@tailwindcss/line-clamp')
     ]
 };

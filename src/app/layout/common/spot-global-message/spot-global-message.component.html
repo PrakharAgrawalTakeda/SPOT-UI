@@ -1,0 +1,10 @@
+<fuse-alert *ngIf="globalMessage && !dismissed" [ngClass]="{'py-3 pt-[0px]': callLocation == 'PortfolioCenter' && !dismissed,
+                'py-4 pt-0': callLocation == 'CreateNew' && !dismissed, 
+                'px-6 pb-4': callLocation == 'MyPreference' && !dismissed,
+                'pb-[1rem]':callLocation == 'ProjectHub' && !dismissed}" 
+            [type]="'primary'" [appearance]="'border'"
+    [dismissible]="true" (dismissedChanged)="afterDismissed($event)">
+    <mat-icon class="icon-size-5" fuseAlertIcon [svgIcon]="'heroicons_solid:information-circle'">
+    </mat-icon>
+    {{globalMessage}}
+</fuse-alert>

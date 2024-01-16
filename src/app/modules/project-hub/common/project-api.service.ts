@@ -1,12 +1,11 @@
-import { GlobalPositionStrategy } from '@angular/cdk/overlay';
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { MsalService } from '@azure/msal-angular';
-import { GlobalVariables } from 'app/shared/global-variables';
-import { lastValueFrom } from 'rxjs';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {MsalService} from '@azure/msal-angular';
+import {GlobalVariables} from 'app/shared/global-variables';
+import {lastValueFrom} from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class ProjectApiService {
 
@@ -29,6 +28,36 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async getKeyAssumptionsByProject(projectid) {
+      var url = GlobalVariables.apiurl + "KeyAssumption/" + projectid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async getBudgetPerformanceById(projectid) {
+      var url = GlobalVariables.apiurl + "BudgetPerformance/GetByProjectId/" + projectid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async getKeyAssumptionsByOption(projectid, optionId) {
+      var url = GlobalVariables.apiurl + "BusinessCase/KeyAssumption/" + projectid+ "/"+ optionId
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async getRiskIssuesByOption(projectid, optionId) {
+      var url = GlobalVariables.apiurl + "BusinessCase/RiskIssue/" + projectid+ "/"+ optionId
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async getTimelineByOption(projectid, optionId) {
+      var url = GlobalVariables.apiurl + "BusinessCase/Timeline/" + projectid+ "/"+ optionId
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async getportfolioData(projectid) {
     var url = GlobalVariables.apiurl + "PortfolioCenterData/" + projectid
     const abc$ = this.http.get(url)
@@ -36,11 +65,60 @@ export class ProjectApiService {
     return response
   }
   async getGeneralInfoData(projectid) {
-    var url = GlobalVariables.apiurl + "ProjectHubData/GeneralInfo/" + projectid
+    var url = GlobalVariables.apiurl + "GeneralInfo/" + projectid
     const abc$ = this.http.get(url)
     const response = await lastValueFrom(abc$)
     return response
   }
+  async getProjectRequirements(projectid) {
+      var url = GlobalVariables.apiurl + "BenefitsAndRequirements/" + projectid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async getBusinessCaseBenefits(projectid, optionId) {
+      var url = GlobalVariables.apiurl + "BusinessCaseBenefits/GetByProjectIdAndOptionId/" + projectid + "/" + optionId
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async getGeneralInfoDataWizzard(projectid, callLocation) {
+      var url = GlobalVariables.apiurl + "GeneralInfo/" + projectid + "?wizard="+callLocation
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+    async getBudgetPageInfo(projectId) {
+        var url = GlobalVariables.apiurl + "Budget/BudgetPageInfo/"+projectId
+        const abc$ = this.http.get(url)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+    async getBudgetPerformancePageInfo(projectId) {
+        var url = GlobalVariables.apiurl + "StrategicInitiativeBudgetPerformance/GetByProjectId/"+projectId
+        const abc$ = this.http.get(url)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+
+    async checkBudgetIdPrefix(budgetId) {
+        var url = GlobalVariables.apiurl + "Budget/ValidateBudgetId/"+budgetId
+        const abc$ = this.http.get(url)
+         const response = await lastValueFrom(abc$)
+        return response
+    }
+    async updateBudgetPageInfo(projectId,body) {
+        var link = GlobalVariables.apiurl + "Budget/BudgetPageInfo/"+projectId
+        const abc$ = this.http.put(link,body)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+    async getNewBudgetId(projectId, gmsBudgetOwnerId) {
+        var url = GlobalVariables.apiurl + "Budget/GenerateNewBudgetId/"+projectId+"/"+gmsBudgetOwnerId
+        const abc$ = this.http.get(url)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
   async getfilterlist(){
     var userid = GlobalVariables.apiurl+"FilterProjects/FilterCriteria"
     const abc$ = this.http.get(userid)
@@ -53,12 +131,38 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-  async editAskNeed(body){
-    var link = GlobalVariables.apiurl+"AskNeed/" + body.askNeedUniqueId
+  async getUserByName(name: string){
+      var userid = GlobalVariables.apiurl+`ProjectTeams/UserSearch?${name.toString()}`
+      const abc$ = this.http.get(userid)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async askNeedGetLinkData(projectid: string){
+    var userid = GlobalVariables.apiurl+"AskNeed/GetAskNeedLinkData/"+projectid
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async riskIssueGetLinkData(projectid: string){
+      var userid = GlobalVariables.apiurl+"RiskIssue/GetRiskIssuesLinkData/"+projectid
+      const abc$ = this.http.get(userid)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async editAskNeed(projectId: string,body){
+    var link = GlobalVariables.apiurl+"AskNeed/"+projectId+"/" + body.askNeedUniqueId
     const abc$ = this.http.put(link,body)
     const response = await lastValueFrom(abc$)
     return response
   }
+
+  async bulkeditFunding(body,projectId){
+    var link = GlobalVariables.apiurl+"Funding/BulkEditFunding/" + projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
   async addAskNeed(body){
     var link = GlobalVariables.apiurl+"AskNeed"
     const abc$ = this.http.post(link,body)
@@ -72,7 +176,7 @@ export class ProjectApiService {
     return response
   }
   async editOverallStatus(body){
-    var link = GlobalVariables.apiurl+"OverAllStatus/" + body.statusUnquieId
+    var link = GlobalVariables.apiurl+"OverAllStatus"
     const abc$ = this.http.put(link,body)
     const response = await lastValueFrom(abc$)
     return response
@@ -82,6 +186,33 @@ export class ProjectApiService {
     const abc$ = this.http.put(url, body)
     const response = await lastValueFrom(abc$)
     return response
+  }
+  async editProjectRequirements(userId, body) {
+      var url = GlobalVariables.apiurl + "BenefitsAndRequirements/UpdateProjectProposal/" + userId
+      const abc$ = this.http.post(url, body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async editBusinessCaseBenefits( body) {
+      var url = GlobalVariables.apiurl + "BusinessCaseBenefits"
+      const abc$ = this.http.post(url, body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async editBudgetPerformance(body) {
+      var url = GlobalVariables.apiurl + "BudgetPerformance"
+      const abc$ = this.http.post(url, body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async editGeneralInfoWizzard(projectid, body, wizzard) {
+      if(wizzard =="CloseOut"){
+          wizzard = "ProjectCloseOut";
+      }
+    var url = GlobalVariables.apiurl + "GeneralInfo/" + projectid + "?wizard=" + wizzard
+      const abc$ = this.http.put(url, body)
+      const response = await lastValueFrom(abc$)
+      return response
   }
   async getHubSettings(projectid: string){
     var userid = GlobalVariables.apiurl+"HubSetting/"+projectid
@@ -107,9 +238,9 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-  async editRiskIssue(body){
-    var link = GlobalVariables.apiurl+"RiskIssue/" + body.riskIssueUniqueId
-    const abc$ = this.http.put(link,body)
+  async editRiskIssue(projectId: string,body){
+    var link = GlobalVariables.apiurl+"RiskIssue/"+projectId+"/" + body.riskIssueUniqueId
+    var abc$ = this.http.put(link,body)
     const response = await lastValueFrom(abc$)
     return response
   }
@@ -126,8 +257,8 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-  async editSchedule(body){
-    var link = GlobalVariables.apiurl+"Schedule/" + body.scheduleUniqueId
+  async editSchedule(projectId: string,body){
+    var link = GlobalVariables.apiurl+"Schedule/"+projectId+"/" + body.scheduleUniqueId
     const abc$ = this.http.put(link,body)
     const response = await lastValueFrom(abc$)
     return response
@@ -144,20 +275,20 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-  async deleteAskNeed(id: string){
-    var link = GlobalVariables.apiurl+"AskNeed/"+id
+  async deleteAskNeed(projectId:string, id: string){
+    var link = GlobalVariables.apiurl+"AskNeed/"+projectId+"/"+id
     const abc$ = this.http.delete(link)
     const response = await lastValueFrom(abc$)
     return response
   }
-  async deleteSchedule(id: string){
-    var link = GlobalVariables.apiurl+"Schedule/"+id
+  async deleteSchedule(projectId:string, id: string){
+    var link = GlobalVariables.apiurl+"Schedule/"+projectId+"/"+id
     const abc$ = this.http.delete(link)
     const response = await lastValueFrom(abc$)
     return response
   }
-  async deleteRiskIssue(id: string){
-    var link = GlobalVariables.apiurl+"RiskIssue/"+id
+  async deleteRiskIssue(projectId:string, id: string){
+    var link = GlobalVariables.apiurl+"RiskIssue/"+projectId+"/"+id
     const abc$ = this.http.delete(link)
     const response = await lastValueFrom(abc$)
     return response
@@ -167,6 +298,31 @@ export class ProjectApiService {
     const abc$ = this.http.delete(link)
     const response = await lastValueFrom(abc$)
     return response
+  }
+   async deleteKeyAssumption(id: string){
+    console.log("inside delete api")
+      var link = GlobalVariables.apiurl+"KeyAssumption/"+id
+      const abc$ = this.http.delete(link)
+      const response = await lastValueFrom(abc$)
+      return response
+   }
+  async deleteKeyAssumptionByOption(id: string, optionId: string, projectId: string) {
+      var link = GlobalVariables.apiurl + "BusinessCase/KeyAssumption/"+ projectId+ "/"  +optionId+"/" + id
+      const abc$ = this.http.delete(link)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async deleteRiskIssueByOption(id: string, optionId: string, projectId: string) {
+      var link = GlobalVariables.apiurl + "BusinessCase/RiskIssue/"+ projectId+ "/"  +optionId+"/" + id
+      const abc$ = this.http.delete(link)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async deleteScheduleForOption(id: string, optionId: string, projectId: string) {
+      var link = GlobalVariables.apiurl+"BusinessCase/Timeline/"+ projectId+ "/"  +optionId+"/" + id
+      const abc$ = this.http.delete(link)
+      const response = await lastValueFrom(abc$)
+      return response
   }
   async getOperationalPerformanceSingle(itemid: string){
     var userid = GlobalVariables.apiurl+"ProjectCharterKeySuccesses/"+itemid
@@ -192,11 +348,92 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  getDataCompleteness(projectId){
+    var url = GlobalVariables.apiurl + "ProjectHubData/DataCompleteness/"+ projectId
+    const abc$ = this.http.get(url)
+    const response =  lastValueFrom(abc$)
+    return response
+  }
+  getPhaseState(projectId){
+      var url = GlobalVariables.apiurl + "ProjectHubData/PhaseState/"+ projectId
+      const abc$ = this.http.get(url)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  postPhaseState(body){
+      var url = GlobalVariables.apiurl + "ProjectHubData/PhaseState"
+      const abc$ = this.http.post(url,body)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  getCapitalPhase(){
+      var url = GlobalVariables.apiurl + "ProjectHubData/CapitalPhase"
+      const abc$ = this.http.get(url)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  getIncompleteItems(projectId){
+      var url = GlobalVariables.apiurl + "ProjectHubData/IncompleteItems/"+ projectId
+      const abc$ = this.http.get(url)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  getDataCompletenessPercent(projectId){
+    var url = GlobalVariables.apiurl + "ProjectHubData/DataCompletenessPercent/"+ projectId
+    const abc$ = this.http.get(url)
+    const response =  lastValueFrom(abc$)
+    return response
+  }
   async addProjectTeam(body){
     var link = GlobalVariables.apiurl+"ProjectTeams"
     const abc$ = this.http.post(link,body)
     const response = await lastValueFrom(abc$)
     return response
+  }
+  async addKeyAssumption(body){
+      var link = GlobalVariables.apiurl+"KeyAssumption"
+      const abc$ = this.http.post(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async addKeyAssumptionForOption(body){
+      var link = GlobalVariables.apiurl+"BusinessCase/KeyAssumption"
+      const abc$ = this.http.post(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async addSingleOperationalBenefit(body, optionId,projectId){
+      var link = GlobalVariables.apiurl+"BusinessCaseBenefits/AddNew/"+ optionId + "/" + projectId
+      const abc$ = this.http.post(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+
+  async addFunding(body){
+    var link = GlobalVariables.apiurl+"Funding"
+    const abc$ = this.http.post(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+}
+
+async addBCFunding(body,optionId,projectId){
+  var link = GlobalVariables.apiurl+"BusinessCaseCostFunding/BusinessFunding/" + optionId + "/" + projectId
+  const abc$ = this.http.post(link,body)
+  const response = await lastValueFrom(abc$)
+  return response
+}
+
+  async addRiskIssueForOption(body) {
+      var link = GlobalVariables.apiurl + "BusinessCase/RiskIssue"
+      const abc$ = this.http.post(link, body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async addTimelineForOption(body) {
+      var link = GlobalVariables.apiurl + "BusinessCase/Timeline"
+      const abc$ = this.http.post(link, body)
+      const response = await lastValueFrom(abc$)
+      return response
   }
   async bulkeditQualityReference(body,projectId){
     var link = GlobalVariables.apiurl+"QualityReference/BulkEditQualityRef/" + projectId
@@ -215,6 +452,42 @@ export class ProjectApiService {
     const abc$ = this.http.put(link,body)
     const response = await lastValueFrom(abc$)
     return response
+  }
+  async bulkEditKeyAssumptions(body,projectId){
+      var link = GlobalVariables.apiurl+"KeyAssumption/BulkEdit/" + projectId
+      const abc$ = this.http.put(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async bulkEditFundingRequests(body,projectId){
+      var link = GlobalVariables.apiurl+"Budget/BulkEditFundingInfo/" + projectId
+      const abc$ = this.http.put(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async bulkEditTimelineForOption(body,optionId,projectId){
+      var link = GlobalVariables.apiurl+"BusinessCase/Timeline/BulkEdit/"+optionId + "/" + projectId;
+      const abc$ = this.http.put(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async bulkEditKeyAssumptionsForOption(body,projectId){
+      var link = GlobalVariables.apiurl+"BusinessCase/KeyAssumption/BulkEdit/" + projectId
+      const abc$ = this.http.put(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async bulkEditBusinessCaseOperationalBenefits(body){
+      var link = GlobalVariables.apiurl+"BusinessCaseBenefits"
+      const abc$ = this.http.post(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async bulkEditRiskIssuesForOption(body,projectId){
+      var link = GlobalVariables.apiurl+"BusinessCase/RiskIssue/BulkEdit/" + projectId
+      const abc$ = this.http.put(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
   }
   async bulkeditKeySuccess(body,projectId){
     var link = GlobalVariables.apiurl+"ProjectCharterKeySuccesses/BulkEdit/" + projectId
@@ -240,5 +513,441 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async getprojectTeams(projectid, teamMemberAdId) {
+    const params = new HttpParams().set('id',teamMemberAdId)
+    var link = GlobalVariables.apiurl + "ProjectTeams/" + projectid + `?${params.toString()}`
+    const abc$ = this.http.get(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 
+  async patchBaselineLogs(body){
+    var link = GlobalVariables.apiurl+"ProjectBaselineLogs/BulkEditProjectBaselineLog"
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getProjectHubData(projectid) {
+    var url = GlobalVariables.apiurl + "ProjectHubData/ProjectHubData/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getProjectBaselineLogDetails(projectId){
+    var userid = GlobalVariables.apiurl+"ProjectBaselineLogs/GetProjectBaselineLogDetails/" + projectId
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async bulkeditAskNeeds(body,projectId){
+    var link = GlobalVariables.apiurl+"AskNeed/BulkEdit/" + projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async bulkeditAskNeedLinks(body,projectId){
+    var link = GlobalVariables.apiurl+"AskNeed/BulkEditAskNeedLinks/" + projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async bulkeditRiskIssueLinks(body,projectId){
+      var link = GlobalVariables.apiurl+"RiskIssue/BulkEditRiskIssuesLinks/" + projectId
+      const abc$ = this.http.put(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async bulkeditScheduleLinks(body,projectId){
+    var link = GlobalVariables.apiurl+"Schedule/BulkEditScheduleLinks/" + projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  getProjectTree(projectId){
+    var url = GlobalVariables.apiurl + "ProjectHubData/ProjectTree/"+ projectId
+    const abc$ = this.http.get(url)
+    const response =  lastValueFrom(abc$)
+    return response
+  }
+  async updateParent(projectId:string, parentId: string){
+      var url = GlobalVariables.apiurl + "ProjectHubData/UpdateParent/"+ projectId + "/" +parentId
+      var body = [];
+      const abc$ = this.http.put(url, body)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  async linkProject(projectId:string, parentId: string){
+      var url = GlobalVariables.apiurl + "ProjectHubData/LinkProject/"+ projectId + "/" +parentId
+      var body = [];
+      const abc$ = this.http.put(url, body)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  async getChildren(projectId:string){
+      var url = GlobalVariables.apiurl + "ProjectHubData/GetChildren/"+ projectId
+      const abc$ = this.http.get(url)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  async DeleteLink(projectId:string){
+      var url = GlobalVariables.apiurl + "ProjectHubData/DeleteLink/"+ projectId
+      const abc$ = this.http.delete(url,)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  async programReport(body){
+     var link = GlobalVariables.apiurl+"Report/GeneratePortfolioReport"
+     const abc$ = this.http.post(link,body)
+     const response = await lastValueFrom(abc$)
+     return response
+  }
+  async isParent(projectId:string){
+      var url = GlobalVariables.apiurl + "ProjectHubData/IsParent/"+ projectId
+      const abc$ = this.http.get(url)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+
+    async milestoneGetLinkData(projectid: string){
+      var userid = GlobalVariables.apiurl+"Schedule/GetScheduleLinkData/"+ projectid
+      const abc$ = this.http.get(userid)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
+    async getStandardMilestoneSets(projectid: string){
+        var userid = GlobalVariables.apiurl+"StandardMilestoneSet/GetTemplates/"+ projectid
+        const abc$ = this.http.get(userid)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+    async bulkeditRiskIssue(body,projectId){
+        var link = GlobalVariables.apiurl+"RiskIssue/BulkEdit/" + projectId
+        const abc$ = this.http.put(link,body)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+    async projectCharterSingle(itemid: string){
+      var userid = GlobalVariables.apiurl+"ProjectCharter/"+itemid
+      const abc$ = this.http.get(userid)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
+    async getProjectDashboard(projectid) {
+      var url = GlobalVariables.apiurl + "ProjectDashboard/GetProjectDashboard/" + projectid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
+
+    async getReportInfoData(projectid) {
+      var url = GlobalVariables.apiurl + "ProjectHubData/ReportPageInfo/" + projectid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
+
+    async updateReportDates(projectid:string ,itemid: string){
+      var userid = GlobalVariables.apiurl+"ProjectCharter/UpdateDate/"+projectid+"/"+itemid
+      const abc$ = this.http.patch(userid,itemid)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
+    async getBusinessCaseOptionInfoData(projectid, optionid) {
+      var url = GlobalVariables.apiurl + "BusinessCaseOptionDetail/GetByProjectIdAndOptionId/"+optionid+"/" + projectid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
+    async updateBusinessCaseOptionInfoDetails(body,projectId){
+      var link = GlobalVariables.apiurl+"BusinessCaseOptionDetail/" + projectId
+      const abc$ = this.http.put(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
+    async deleteBusinessCaseOptionDetail(projectId: string, optionId:string,id: string) {
+        var link = GlobalVariables.apiurl + "BusinessCaseBenefits/" + projectId + "/" + optionId + "/" + id;
+        const abc$ = this.http.delete(link)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+
+  async updateCost(body,projectId){
+    var link = GlobalVariables.apiurl+"TOPS/" + projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
 }
+
+async updateBusinessCaseCost(body, projectId, optionid){
+  var url = GlobalVariables.apiurl+"BusinessCaseCostFunding/BusinessCaseCost/"+optionid+"/" + projectId
+  const abc$ = this.http.put(url,body)
+  const response = await lastValueFrom(abc$)
+  return response
+}
+
+
+async updateBusinessCaseFunding(body, projectId, optionid){
+  var url = GlobalVariables.apiurl+"BusinessCaseCostFunding/BulkEditBusinessCaseFunding/"+optionid+"/" + projectId
+  const abc$ = this.http.put(url,body)
+  const response = await lastValueFrom(abc$)
+  return response
+}
+  async BulkEditProjectCharter(data, projectid: string) {
+    var url = GlobalVariables.apiurl + "ProjectCharter/" + projectid
+    const abc$ = this.http.put(url, data)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getLessonLearnedbyProjectId(projectid) {
+    var url = GlobalVariables.apiurl + "LessonsLearned/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async bulkEditLessonLearned(body, projectid) {
+    var url = GlobalVariables.apiurl + "LessonsLearned/" + projectid
+    const abc$ = this.http.put(url, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async editLessonLearnedTakeaway( projectid, takeaway) {
+      var url = GlobalVariables.apiurl + "LessonsLearned/" + projectid + "?takeaways=" + takeaway
+      const abc$ = this.http.patch(url, projectid)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async getTOPS(projectid: string) {
+    var url = GlobalVariables.apiurl + "TOPS/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getFunding(projectid: string) {
+    var url = GlobalVariables.apiurl + "Funding/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async getCostFunding(projectid: string) {
+    var url = GlobalVariables.apiurl + "CostFunding/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async deleteFunding(id: string) {
+    var link = GlobalVariables.apiurl + "Funding/" + id
+    const abc$ = this.http.delete(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+    async deleteFundingBusinessCase(projectId: string, optionId: string,id: string) {
+        var link = GlobalVariables.apiurl + "BusinessCaseCostFunding/BusinessCaseFunding/" + projectId + '/' + optionId + '/'+ id
+        const abc$ = this.http.delete(link)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+
+  async getLocalAttributes(projectid: string) {
+    var url = GlobalVariables.apiurl + "LocalAttributes/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async editLocalAttributes(projectid, body) {
+    var url = GlobalVariables.apiurl + "LocalAttributes/" + projectid
+    const abc$ = this.http.put(url, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async getBusinessCaseCostFunding(projectid, optionid) {
+    var url = GlobalVariables.apiurl + "BusinessCaseCostFunding/"+optionid+"/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async deleteBusinessCaseFunding(projectId: string,optionId: string,id: string) {
+    var link = GlobalVariables.apiurl + "BusinessCaseCostFunding/BusinessCaseFunding/" +projectId+ "/"+optionId +"/" + id;
+    const abc$ = this.http.delete(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async getCAPSbyProjectID(projectid) {
+    var url = GlobalVariables.apiurl + "CAPS/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async deleteWW(id: string) {
+    var link = GlobalVariables.apiurl + "CAPS/WaterWaste/" + id;
+    const abc$ = this.http.delete(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async addWW(body) {
+    var link = GlobalVariables.apiurl + "CAPS/WaterWaste"
+    const abc$ = this.http.post(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async deleteBiogenics(id: string) {
+    var link = GlobalVariables.apiurl + "CAPS/Biogenics/" + id;
+    const abc$ = this.http.delete(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async deleteDistribution(id: string) {
+    var link = GlobalVariables.apiurl + "CAPS/Distribution/" + id;
+    const abc$ = this.http.delete(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async addDistribution(body) {
+    var link = GlobalVariables.apiurl + "CAPS/Distribution"
+    const abc$ = this.http.post(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async addBiogenics(body) {
+    var link = GlobalVariables.apiurl + "CAPS/Biogenics"
+    const abc$ = this.http.post(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async bulkeditWW(body, projectId) {
+    var link = GlobalVariables.apiurl + "CAPS/BulkEditWaterWaste/" + projectId
+    const abc$ = this.http.put(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async bulkeditD(body, projectId, environmentalSourceTypeId) {
+    var link = GlobalVariables.apiurl + "CAPS/BulkEditDistribution/" + projectId+ "/"+environmentalSourceTypeId
+    const abc$ = this.http.put(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async bulkeditBiogenics(body, projectId) {
+    var link = GlobalVariables.apiurl + "CAPS/BulkEditBiogenics/" + projectId
+    const abc$ = this.http.put(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async bulkeditCarbon(body, projectId) {
+    var link = GlobalVariables.apiurl + "CAPS/BulkEditCarbon/" + projectId
+    const abc$ = this.http.put(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async editCAPSData(projectid, body) {
+    var url = GlobalVariables.apiurl + "CAPS/" + projectid
+    const abc$ = this.http.put(url, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getLocalAttributesByOwner(portfolioOwners: string, executionScope: string) {
+    var url = GlobalVariables.apiurl + "LocalAttributes/ByOwners" + "?portfolioOwners=" + portfolioOwners + "&executionScopes=" + executionScope
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async generateReports(projectid, reporttype) {
+    var link = GlobalVariables.apiurl + "Report/Generate/" + projectid + "/" + reporttype
+    const abc$ = this.http.put(link, null)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async addProjectDocumentLibrary(body,id) {
+    var link = GlobalVariables.apiurl + "ProjectDocuments/CreateLibrary/"+id
+    const abc$ = this.http.post(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async getvalueCreation(projectid) {
+    var url = GlobalVariables.apiurl + "MetricProjectData/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async getmetricRepo(projectid) {
+    var url = GlobalVariables.apiurl + "MetricRepository"
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  // async editValueCreation(body,projectid){
+  //   var link = GlobalVariables.apiurl+"ValueCreation/ValueCaptureFields/" + projectid
+  //   const abc$ = this.http.put(link,body)
+  //   const response = await lastValueFrom(abc$)
+  //   return response
+  // }
+
+  async getMetricProjectData(projectid) {
+    var url = GlobalVariables.apiurl + "MetricProjectData/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async singleEditMetricProjectData(projectId, metricUID) {
+    var link = GlobalVariables.apiurl + "MetricProjectData/" + projectId+ "/"+metricUID
+    const abc$ = this.http.get(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async submitMetricProjectData(body, projectid, metricUID) {
+    var url = GlobalVariables.apiurl + "MetricProjectData/" + projectid+"/"+metricUID
+    const abc$ = this.http.put(url, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async baselineProjectMetricData(projectid) {
+    var url = GlobalVariables.apiurl + "MetricProjectData/Baseline/" + projectid
+    const abc$ = this.http.put(url, null)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async deleteMetric(projectId, metricUID){
+    var link = GlobalVariables.apiurl+"MetricProjectData/"+projectId+"/"+metricUID
+    const abc$ = this.http.delete(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async addNewMetric(projectId, metricUID){
+    var link = GlobalVariables.apiurl+"MetricProjectData/AddMetricToProject/"+projectId+"/"+metricUID
+    const abc$ = this.http.put(link,null)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async putProjectData(body, projectId){
+    var link = GlobalVariables.apiurl+"GeneralInfo/"+projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  }
+

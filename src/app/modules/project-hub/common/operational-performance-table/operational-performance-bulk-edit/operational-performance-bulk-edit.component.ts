@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -12,6 +12,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./operational-performance-bulk-edit.component.scss']
 })
 export class OperationalPerformanceBulkEditComponent implements OnInit {
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Project-Proposal' = 'Normal'
   projectViewDetails: any = {}
   opDb = []
   submitObj = []
@@ -42,6 +43,20 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
     this.apiService.getprojectviewdata(this.projecthubservice.projectid).then((res: any) => {
       this.projectViewDetails = res
       for (var i of this.projectViewDetails.overallPerformace) {
+        i.kpiname = this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid).kpiname : ''
+        if(i.ptrbid){
+            i.ptrb = i.ptrbid.split(',');
+            i.ptrbid =i.ptrb.map(x => {
+                return  this.getLookup(x);
+            })
+        }else{
+            i.ptrb = "";
+            i.ptrbid = [];
+        }
+      }
+      this.projectViewDetails.overallPerformace = this.sortbyKPIName(this.projectViewDetails.overallPerformace)
+      console.log(this.projectViewDetails.overallPerformace)
+      for (var i of this.projectViewDetails.overallPerformace) {
         this.opDb.push(i)
         this.operationalPerformanceForm.push(new FormGroup({
           keySuccessUniqueId: new FormControl(i.keySuccessUniqueId),
@@ -57,16 +72,36 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
           includeInCloseOut: new FormControl(i.includeInCloseOut),
           ptrbid: new FormControl(i.ptrbid),
           benefitDescriptionJustification: new FormControl(i.benefitDescriptionJustification),
-          includeinProposal: new FormControl(i.includeinProposal)
+          includeinProposal: new FormControl(i.includeinProposal),
+          kpiname: new FormControl(i.kpiname),
         }))
       }
+
       this.disabler()
       this.viewContent = true
     })
   }
 
+  sortbyKPIName(array: any): any {
+    return array.length > 1 ? array.sort((a, b) => {
+      if (a.kpiname === null) {
+        return -1;
+      }
+
+      if (b.kpiname === null) {
+        return 1;
+      }
+
+      if (a.kpiname === b.kpiname) {
+        return 0;
+      }
+
+      return a.kpiname < b.kpiname ? -1 : 1;
+    }) : array
+  }
+
   getLookUpName(lookUpId: string): string {
-    return lookUpId && lookUpId != '' ? this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId).lookUpName : ''
+    return lookUpId && lookUpId != '' && this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId) ? this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId).lookUpName : ''
   }
   getKPIName(kpiid: string): string {
     return this.projecthubservice.kpiMasters.find(x => x.kpiid == kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == kpiid).kpiname : ''
@@ -101,8 +136,48 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
           }
         }
       }
+
+      if (formValue.filter(x => x.includeInCharter == true).length < 3) {
+        for (var i of this.operationalPerformanceForm.controls) {
+          i['controls']['includeInCharter'].enable()
+        }
+      }
+      else {
+        for (var i of this.operationalPerformanceForm.controls) {
+          if (i['controls']['includeInCharter'].value != true) {
+            i['controls']['includeInCharter'].disable()
+          }
+        }
+      }
+
+      if (formValue.filter(x => x.includeInCloseOut == true).length < 3) {
+        for (var i of this.operationalPerformanceForm.controls) {
+          i['controls']['includeInCloseOut'].enable()
+        }
+      }
+      else {
+        for (var i of this.operationalPerformanceForm.controls) {
+          if (i['controls']['includeInCloseOut'].value != true) {
+            i['controls']['includeInCloseOut'].disable()
+          }
+        }
+      }
+
+      if (formValue.filter(x => x.includeinProposal == true).length < 3) {
+          for (var i of this.operationalPerformanceForm.controls) {
+             i['controls']['includeinProposal'].enable()
+          }
+      }
+      else {
+          for (var i of this.operationalPerformanceForm.controls) {
+              if (i['controls']['includeinProposal'].value != true) {
+                  i['controls']['includeinProposal'].disable()
+              }
+          }
+      }
     }
   }
+
 
   changeChecker() {
     var formValue = this.operationalPerformanceForm.getRawValue()
@@ -114,7 +189,7 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
         currentState: x.currentState,
         targetPerformance: x.targetPerformance,
         includeInCharter: x.includeInCharter,
-        kpiid: Object.keys(x.kpiid).length > 0 ? x.kpiid.kpiid : '',
+        kpiid: Object.keys(x.kpiid || {}).length > 0 ? x.kpiid.kpiid : '',
         actualPerformance: x.actualPerformance,
         includeInProjectDashboard: x.includeInProjectDashboard,
         status: x.status,
@@ -136,7 +211,7 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
   deleteOP(rowIndex: number) {
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Are you Sure?",
-      "message": "Are you sure you want to Delete this Record? ",
+      "message": "Are you sure you want to delete this record? ",
       "icon": {
         "show": true,
         "name": "heroicons_outline:exclamation",
@@ -186,8 +261,10 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
         status: '',
         includeInCloseOut: '',
         ptrbid: '',
+        ptrb: '',
         benefitDescriptionJustification: '',
-        includeinProposal: ''
+        includeinProposal: '',
+        kpiname: ''
       }]
       this.operationalPerformanceForm.push(new FormGroup({
         keySuccessUniqueId: new FormControl(''),
@@ -196,35 +273,87 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
         currentState: new FormControl(''),
         targetPerformance: new FormControl(''),
         includeInCharter: new FormControl(false),
-        kpiid: new FormControl({}),
+        kpiid: new FormControl(null),
         actualPerformance: new FormControl(''),
         includeInProjectDashboard: new FormControl(false),
         status: new FormControl(''),
         includeInCloseOut: new FormControl(false),
         ptrbid: new FormControl(''),
+        ptrb: new FormControl(''),
         benefitDescriptionJustification: new FormControl(''),
-        includeinProposal: new FormControl(false)
+        includeinProposal: new FormControl(false),
+        kpiname: new FormControl('')
       }))
       this.projectViewDetails.overallPerformace = [...this.projectViewDetails.overallPerformace, ...j]
       this.disabler()
       this.operationalPerformanceEditStack.push(this.projectViewDetails.overallPerformace.length - 1)
+      var div = document.getElementsByClassName('datatable-scroll')[0]
+      setTimeout(() => {
+        div.scroll({
+          top: div.scrollHeight,
+          left: 0,
+          behavior: 'smooth'
+        });
+      }, 100);
     }
   }
   submitOP() {
     this.changeChecker()
     if (JSON.stringify(this.submitObj) == JSON.stringify(this.opDb)) {
-      //this.projecthubservice.submitbutton.next(true)
-      //this.projecthubservice.successSave.next(true)
-      this.projecthubservice.toggleDrawerOpen('', '',[],'',true)
+      this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
     }
     else {
+        this.submitObj.forEach((x,index) =>{
+            if(x.ptrbid){
+                this.submitObj[index].ptrbid = x.ptrbid.length > 0 ? x.ptrbid.map(x => x.lookUpId).join() : '';
+            }
+        })
       this.apiService.bulkeditKeySuccess(this.submitObj, this.projecthubservice.projectid).then(resp => {
-        this.projecthubservice.isFormChanged = false
-        this.projecthubservice.submitbutton.next(true)
-        this.projecthubservice.successSave.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '',[],'',true)
+        if (this.mode == 'Project-Proposal') {
+            this.apiService.updateReportDates(this.projecthubservice.projectid, "ProjectProposalModifiedDate").then(secondRes => {
+                this.projecthubservice.isFormChanged = false
+                this.projecthubservice.submitbutton.next(true)
+                this.projecthubservice.successSave.next(true)
+                this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+            })
+        }else if(this.mode == 'Project-Close-Out'){
+            this.apiService.updateReportDates(this.projecthubservice.projectid, "CloseoutModifiedDate").then(secondRes => {
+                this.projecthubservice.isFormChanged = false
+                this.projecthubservice.submitbutton.next(true)
+                this.projecthubservice.successSave.next(true)
+                this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+            })
+        }else{
+            this.projecthubservice.isFormChanged = false
+            this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.successSave.next(true)
+            this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+        }
+
       })
     }
+  }
+  getPTRB(): any {
+      return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == 'f48236da-2436-4403-a054-918313159c6e')
+  }
+  showPtrbNames(ptrbArray): any {
+      let ptrbNames =  "";
+      if(ptrbArray != ""){
+          ptrbArray.forEach((x, index, array) =>{
+              if (index + 1 === array.length) {
+                  ptrbNames = ptrbNames + this.getLookUpName(x);
+              }else{
+                  ptrbNames = ptrbNames + this.getLookUpName(x)+ ", ";
+              }
+          })
+          return ptrbNames;
+      }else{
+          return [];
+      }
+
+  }
+  getLookup(lookUpId: string): any {
+      return lookUpId && lookUpId != '' ? this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId) : null
   }
 
 

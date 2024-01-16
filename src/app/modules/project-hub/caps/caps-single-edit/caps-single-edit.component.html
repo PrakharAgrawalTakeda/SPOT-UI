@@ -1,0 +1,41 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">CAPS Edit</div>
+        <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
+                href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <form class="m-2 overflow-hidden" [formGroup]="CAPSform" >
+        <div [style]="viewType === 'SidePanel' ? 'height: calc(calc(100vh/ var(--custom-zoom)) - 110px)' : null">
+            <div class="w-25">
+                <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+                    <mat-label>Impact Realization Date</mat-label>
+                    <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
+                        formControlName="impactRealizationDate" name="impactRealizationDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <spot-input *ngIf="this.showDefault" class="w-full" formControlName="EnergyCost" name="EnergyCost" [decimalCount]="0" [inputType]="'Number'"
+                [autoAddDecimal]="false" [placeholder]="'0'" [label]="energyLabel" [allowNegativeValues]="true">
+            </spot-input>
+            <spot-input *ngIf="this.showDefault" class="w-full" formControlName="WaterCost" name="WaterCost" [decimalCount]="0" [inputType]="'Number'"
+                [autoAddDecimal]="false" [placeholder]="'0'" [label]="waterLabel" [allowNegativeValues]="true">
+            </spot-input>
+            <spot-input *ngIf="this.showDefault" class="w-full" formControlName="WasteCost" name="WasteCost" [decimalCount]="0" [inputType]="'Number'"
+                [autoAddDecimal]="false" [placeholder]="'0'" [label]="wasteLabel" [allowNegativeValues]="true">
+            </spot-input>
+        </div>
+    </form>
+    <div *ngIf="viewType == 'SidePanel'" class="w-full px-3 pr-3 flex items-start justify-between">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+           (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitCAPS()">
+            Submit
+        </button>
+    </div>
+</div>

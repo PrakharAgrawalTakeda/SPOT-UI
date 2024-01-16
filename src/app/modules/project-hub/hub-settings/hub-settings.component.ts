@@ -47,6 +47,7 @@ export class HubSettingsComponent implements OnInit {
           lookUpId: "2bd2e8a6-a605-4c38-817a-b266f2442ed1",
           projectId: this.projectid
         }
+        this.hubsettingsform.controls['overallStatus'].markAsPristine()
         this.apiService.editHubSetting(newobj)
       }
     })
@@ -60,6 +61,7 @@ export class HubSettingsComponent implements OnInit {
           lookUpId: "5259bc84-1485-4861-b73b-b83603b825b1",
           projectId: this.projectid
         }
+        this.hubsettingsform.controls['milestones'].markAsPristine()
         this.apiService.editHubSetting(newobj)
       }
     })
@@ -73,6 +75,7 @@ export class HubSettingsComponent implements OnInit {
           lookUpId: "f84a8e82-de59-46d5-8b84-f4c32a1018e1",
           projectId: this.projectid
         }
+        this.hubsettingsform.controls['risks'].markAsPristine()
         this.apiService.editHubSetting(newobj)
       }
     })
@@ -86,6 +89,7 @@ export class HubSettingsComponent implements OnInit {
           lookUpId: "b4db29e9-d47a-4f4d-abbc-a5ed6cf0705d",
           projectId: this.projectid
         }
+        this.hubsettingsform.controls['asks'].markAsPristine()
         this.apiService.editHubSetting(newobj)
       }
     })
@@ -99,6 +103,7 @@ export class HubSettingsComponent implements OnInit {
           lookUpId: "24f44e4b-60cc-4af8-9c42-21c83ca8a1e3",
           projectId: this.projectid
         }
+        this.hubsettingsform.controls['budgetTracking'].markAsPristine()
         this.apiService.editHubSetting(newobj).then(()=>{
           this.projecthubservice.isNavChanged.next(true)
         })
@@ -114,6 +119,7 @@ export class HubSettingsComponent implements OnInit {
           lookUpId: "9500d3fa-3eff-4179-a5d3-94100e92b644",
           projectId: this.projectid
         }
+        this.hubsettingsform.controls['projectDocuments'].markAsPristine()
         this.apiService.editHubSetting(newobj).then(()=>{
           this.projecthubservice.isNavChanged.next(true)
         })
@@ -129,6 +135,7 @@ export class HubSettingsComponent implements OnInit {
           lookUpId: "6937fd4c-db74-4412-8749-108b0d356ed1",
           projectId: this.projectid
         }
+        this.hubsettingsform.controls['projectTeams'].markAsPristine()
         this.apiService.editHubSetting(newobj).then(()=>{
           this.projecthubservice.isNavChanged.next(true)
         })

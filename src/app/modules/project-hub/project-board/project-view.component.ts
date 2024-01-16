@@ -126,6 +126,18 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
     this.apiService.getprojectviewdata(this.id).then((res) => {
       this.apiService.getProjectBaseline(this.id).then((response: any) => {
         this.projectViewDetails = res
+        if (this.projectViewDetails.statusData == null) {
+          this.projectViewDetails.statusData = {
+            nextSteps: null,
+            overallStatusDescription: "",
+            overallStatusId: null,
+            projectId: this.id,
+            recentAccomplishments: null,
+            statusLastUpdated: null,
+            statusThrough: null,
+            statusUnquieId: "",
+          }
+        }
         this.baselineLog = response
         this.hubsetting = {
           overallStatus: this.projectViewDetails.hubSettings.some(x => x.lookUpId == '2bd2e8a6-a605-4c38-817a-b266f2442ed1') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == '2bd2e8a6-a605-4c38-817a-b266f2442ed1').hubValue : true,
@@ -138,12 +150,6 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
 
         this.riskIssues.data = this.projectViewDetails.riskIssuesData
         this.riskIssues.sort = this.riskIssuesMatSort
-        if (this.isclosedaskneedtoggle == false) {
-          this.onlyopenAskNeeds()
-        }
-        else {
-          this.allAskNeeds()
-        }
 
         console.log(this.projectViewDetails)
 
@@ -161,87 +167,11 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
       }
     })
   }
-  islink(uid: string): boolean {
-    return this.projectViewDetails.links.some(x => x.linkItemId == uid)
-  }
-  getlinkname(uid: string): string {
-    let temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
-    temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
-    return "This ask/need is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
 
-  }
-  allAskNeeds() {
-    this.isclosedaskneedtoggle = true
-    this.askneedngxdata = this.projectViewDetails.askNeedData
-  }
-  onlyopenAskNeeds() {
-    this.isclosedaskneedtoggle = false
-    this.askneedngxdata = this.projectViewDetails.askNeedData.filter(row => row.closeDate == null)
-  }
-  changeaskneed(event: any) {
-    if (event.checked == true) {
-      this.allAskNeeds()
-    }
-    else {
-      this.onlyopenAskNeeds()
-    }
-  }
-  toggleExpandRow(row) {
-    console.log('Toggled Expand Row!', this.table);
-    this.table.rowDetail.toggleExpandRow(row);
-  }
-  test(): string {
-    return "hello"
-  }
-  onDetailToggle(event) {
-    console.log('Detail Toggled', event);
-  }
-  trackByFnRI(index: number, item: any): any {
-    return item.riskIssueUniqueId || index;
-  }
-  trackByFnAN(index: number, item: any): any {
-    return item.askNeedUniqueId || index;
-  }
-  trackByFnS(index: number, item: any): any {
-    return item.scheduleUniqueId || index;
-  }
   getlookup(key) {
     return this.lookupmaster.get(key)
   }
 
-  deleteAskNeed(id: string) {
-    var comfirmConfig: FuseConfirmationConfig = {
-      "title": "Remove Ask Need?",
-      "message": "Are you sure you want to remove this record permanently? ",
-      "icon": {
-        "show": true,
-        "name": "heroicons_outline:exclamation",
-        "color": "warn"
-      },
-      "actions": {
-        "confirm": {
-          "show": true,
-          "label": "Remove",
-          "color": "warn"
-        },
-        "cancel": {
-          "show": true,
-          "label": "Cancel"
-        }
-      },
-      "dismissible": true
-    }
-    const askNeedAlert = this.fuseAlert.open(comfirmConfig)
-
-    askNeedAlert.afterClosed().subscribe(close => {
-      if (close == 'confirmed') {
-        this.apiService.deleteAskNeed(id).then(res => {
-          this.projecthubservice.submitbutton.next(true)
-        })
-      }
-    })
-
-  }
 
   ngOnDestroy(): void {
     if (this.projecthubservice.drawerOpenedright == true) {

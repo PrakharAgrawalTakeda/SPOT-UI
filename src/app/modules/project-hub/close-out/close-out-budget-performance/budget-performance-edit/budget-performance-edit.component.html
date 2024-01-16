@@ -1,0 +1,35 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Budget Performance Edit</div>
+        <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
+                                         href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+        </div>
+    </div>
+    <form class="overflow-auto m-2"  style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)"  [formGroup]="budgetPerformanceForm" >
+        <div class=" form-ask-need h-[87vh] overflow-y-scroll">
+            <div  *ngFor="let fr of finalRequirements | keyvalue" [formGroup]="finalRequirementsValueForm.controls[fr.key]">
+                <div class="flex justify-between">
+                    <div class="flex items-center my-4"
+                         [formGroup]="budgetPerformanceForm">
+                        <mat-label class="items-center">{{fr.value.fieldDisplayName}}</mat-label>
+                    </div>
+                    <mat-slide-toggle
+                        formControlName="isSelected" (change)="onSlideToggleChange()"></mat-slide-toggle>
+                </div>
+            </div>
+            <spot-textarea class="pt-2" [label]="'Budget Commentary'" formControlName="budgetCommentary">
+            </spot-textarea>
+        </div>
+    </form>
+    <div class="w-full px-3 pr-3 flex items-start justify-between">
+        <a class="w-25" mat-flat-button [color]="'primary'"
+           (click)="this.projectHubService.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="w-25" mat-flat-button [color]="'primary'" type="submit" (click)="submitBudgetPerformance()">
+            Submit
+        </button>
+    </div>
+</div>

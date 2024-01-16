@@ -1,11 +1,16 @@
-<form [formGroup]="form" class="form w-full">
+<form [formGroup]="form" class="form w-full"
+      [ngClass]="{'custom-label-with-hint': showHint && hintPostion == 'tooltip'}">
     <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
-        <mat-label class="flex items-center" *ngIf="showLabel">{{label}}<mat-icon class="pe" *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}" >help</mat-icon></mat-label>
-        <input matInput formControlName="control"
-        [placeholder]="placeholder"
-        (input)="onChange($event.target.value)"
-        (blur)="onTouch()"
-        >
+        <mat-label class="items-center flex" *ngIf="showLabel">
+            <ng-container *ngIf="isLabelStrong; then strongLabel else plainLabel"></ng-container>
+            <mat-icon class="pe" *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}">help</mat-icon>
+        </mat-label>
+        <ng-template #strongLabel><strong>{{ label }}</strong></ng-template>
+        <ng-template #plainLabel>{{ label }}</ng-template>
+        <input matInput formControlName="control" [placeholder]="placeholder"
+               (blur)="onBlur($event)" [required]=Required (focus)="formatInput($event)"
+               (input)="formatInput($event)"
+               [ngClass]="{'text-right': inputType == 'Number' && callLocation == 'Edit'}">
         <mat-hint *ngIf="showHint && hintPostion == 'mat-hint'">{{hint}}</mat-hint>
     </mat-form-field>
 </form>

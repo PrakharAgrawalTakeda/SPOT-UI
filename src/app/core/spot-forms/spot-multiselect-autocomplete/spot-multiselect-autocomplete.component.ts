@@ -27,6 +27,9 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   @Input() idPointer: string = ''
   @Input() sortByType: 'valuePointer' | 'custom' = 'valuePointer'
   @Input() customSortPointer: string = ''
+  @Input() Required: boolean = false
+  @Input() sortSelected: boolean = false
+  @Input() sortSelectedValuePointer: string
 
   @ViewChild('input', { static: false }) input: ElementRef<HTMLInputElement>;
 
@@ -42,23 +45,16 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   });
 
   constructor(private fb: FormBuilder) {
-    this.form.controls.control.valueChanges.subscribe((res: any) => {
-      if (this.form.controls.control.value == "") {
-        //this.onChange({})
-        //this.selectedOption = {}
-      }
-
-    })
     this.filteredDropDownValues = this.form.controls.control.valueChanges.pipe(
       startWith(''),
       map(value => {
         var filterValue = value ? value.toString().toLowerCase() : ''
         if (this.dropDownArray != null) {
           if (filterValue == "") {
-            return this.dropDownArray.sort(this.sortByType == 'valuePointer' ? (a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0) : (a, b) => (a[this.customSortPointer] > b[this.customSortPointer]) ? 1 : ((b[this.customSortPointer] > a[this.customSortPointer]) ? -1 : 0))
+            return this.dropDownArray.sort(this.sortByType == 'valuePointer' ? (a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0) : (a, b) => (a[this.customSortPointer] > b[this.customSortPointer]) ? 1 : ((b[this.customSortPointer] > a[this.customSortPointer]) ? -1 : 0)).filter((obj) => obj.isActive!=false);
           }
           else {
-            return this.dropDownArray.filter(x => x[this.valuePointer].toLowerCase().includes(filterValue)).sort(this.sortByType == 'valuePointer' ? (a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0) : (a, b) => (a[this.customSortPointer] > b[this.customSortPointer]) ? 1 : ((b[this.customSortPointer] > a[this.customSortPointer]) ? -1 : 0))
+            return this.dropDownArray.filter(x => x[this.valuePointer].toLowerCase().includes(filterValue)).sort(this.sortByType == 'valuePointer' ? (a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0) : (a, b) => (a[this.customSortPointer] > b[this.customSortPointer]) ? 1 : ((b[this.customSortPointer] > a[this.customSortPointer]) ? -1 : 0)).filter((obj) => obj.isActive!=false);
           }
         }
         else {
@@ -72,14 +68,23 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
     this.input.nativeElement.value = ''
   }
   ngOnInit() {
+    console.log(this.valuePointer)
   }
   get control() {
     return this.form.get('control');
   }
+  onBlur() {
+    if (this.form.controls.chipList.value.length > 0) {
+        this.Required = false;
+    } else {
+        this.Required = true;
+    }
+}
   onFunctionSelect(event: any) {
     console.log(this.selectedOption)
     this.selectedOption.push(event.option.value)
     this.onChange(this.selectedOption)
+    this.form.controls.chipList.patchValue(this.selectedOption)
     this.form.controls.chipList.markAsDirty()
     this.input.nativeElement.blur()
     this.form.controls.control.patchValue('')
@@ -87,11 +92,14 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   }
   removeOption(item: any) {
     this.selectedOption = this.selectedOption.filter(x => x[this.idPointer] != item[this.idPointer])
+    // this.form.controls.chipList.patchValue(this.selectedOption)
     this.form.controls.chipList.markAsDirty()
+    this.form.controls.chipList.patchValue(this.selectedOption)
     this.onChange(this.selectedOption)
+    this.onBlur()
   }
   isOptionSelected(option: any): boolean {
-    if (this.selectedOption) {
+    if (this.selectedOption && this.selectedOption.length > 0) {
       if (this.selectedOption.some(x => x[this.idPointer] == option[this.idPointer])) {
         return false
       }
@@ -100,6 +108,7 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   }
   registerOnTouched(fn: any): void {
     this.onTouch = fn;
+    this.form.valueChanges.subscribe(fn)
   }
 
   registerOnChange(fn: any): void {
@@ -108,18 +117,23 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
 
   writeValue(val: any) {
     if (val) {
-      this.selectedOption = val
+      console.log(val)
+      console.log(typeof val)
+        this.selectedOption = val.sort((a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0))
+        console.log(this.selectedOption)
+        this.form.controls.chipList.patchValue(this.selectedOption)
+        console.log(this.form.getRawValue())
     }
   }
 
   setDisabledState(isDisabled: boolean) {
     if (isDisabled == true) {
       this.isDisabled = true
-      this.form.controls.chipList.disable()
+      this.form.disable()
     }
     else{
       this.isDisabled = false
-      this.form.controls.chipList.enable()
+      this.form.enable()
     }
   }
 }

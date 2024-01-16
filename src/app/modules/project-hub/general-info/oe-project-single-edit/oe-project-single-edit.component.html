@@ -1,1 +1,37 @@
-<p>oe-project-single-edit works!</p>
+<div *ngIf="viewContent">
+    <div *ngIf="viewType == 'SidePanel'" class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">OE Project Edit</div>
+        <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
+                                         href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+        </div>
+    </div>
+    <form class="pl-3 w-full overflow-hidden mt-2" [formGroup]="generalInfoForm">
+        <div [style]="viewType === 'SidePanel' ? 'height: calc(calc(100vh/ var(--custom-zoom)) - 105px)' : null">
+            <!-- <div class="w-full mt-4 mb-6"> -->
+            <spot-toggle class="w-full" formControlName="isOeproject"
+                         [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'" [label]="'OE Project'">
+            </spot-toggle>
+            <!-- </div> -->
+            <div class="mt-6" *ngIf="generalInfoForm.controls['isOeproject'].value">
+                <spot-multiselect-autocomplete formControlName="oeprojectType" name="oeprojectType"
+                                               [label]="'OE Project Type'" [placeholder]="'OE Project Type'"
+                                               [valuePointer]="'lookUpName'"
+                                               [idPointer]="'lookUpId'" [customSortPointer]="'lookUpOrder'"
+                                               [sortByType]="'custom'"
+                                               [dropDownArray]="getoeprojectType()">
+                </spot-multiselect-autocomplete>
+            </div>
+        </div>
+    </form>
+    <div *ngIf="viewType == 'SidePanel'" class="w-full px-3 pr-3 flex items-start justify-between">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+           (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="OE()">
+            Submit
+        </button>
+    </div>
+</div>

@@ -1,9 +1,20 @@
-<form [formGroup]="form" class="form w-full">
+<form [formGroup]="form" class="form w-full" [ngClass]="{'custom-label-with-hint': showHint && hintPostion == 'tooltip'}">
     <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
-        <mat-label class="flex items-center" *ngIf="showLabel">{{label}}<mat-icon class="pe"
+        <mat-label class="items-center flex" *ngIf="showLabel">{{label}}<mat-icon class="pe"
                 *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}">help</mat-icon>
         </mat-label>
-        <input #input matInput (focus)="changeInput()" formControlName="control" [placeholder]="placeholder" [matAutocomplete]="singleSelect">
+        <!-- <h1 *ngIf="Required; then ifBlock else elseBlock"></h1>
+        <ng-template #ifBlock>
+            <input #input (onChange)="onFocusout($event.target.value)" (focusout)="onFocusout($event.target.value)" matInput [required]=Required (focus)="changeInput()" 
+                formControlName="control" [placeholder]="placeholder" [matAutocomplete]="singleSelect"> -->
+                <input #input matInput
+                    [required]=Required (focus)="changeInput()" formControlName="control" [placeholder]="placeholder"
+                    [matAutocomplete]="singleSelect">
+        <!-- </ng-template>
+        <ng-template #elseBlock>
+            <input #input matInput (onChange)="onFocusout($event.target.value)" (focus)="changeInput()" formControlName="control" [placeholder]="placeholder"
+                [matAutocomplete]="singleSelect">
+        </ng-template> -->
         <mat-autocomplete autoActiveFirstOption #singleSelect="matAutocomplete"
             (optionSelected)="onFunctionSelect($event)">
             <mat-option *ngFor="let function of filteredDropDownValues | async" [value]="function">
