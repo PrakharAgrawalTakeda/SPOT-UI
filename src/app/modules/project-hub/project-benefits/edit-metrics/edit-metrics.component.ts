@@ -70,6 +70,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
   };
   metricFormat: any;
   MetricCategoryID: any;
+  MetricTypeID: any;
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute,
     public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService, private decimalPipe: DecimalPipe, private changeDetectorRef: ChangeDetectorRef) {
     // this.projecthubservice.submitbutton.subscribe(res => {
@@ -123,6 +124,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                   this.captureLevel = true
                 }
                 this.MetricCategoryID = res.metricData.metricCategoryID
+                this.MetricTypeID = res.metricData.metricTypeID
 
                 console.log(result)
                 this.result = res
@@ -165,7 +167,6 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                   element.strategicActual = element.strategicActual ? element.strategicActual : '0';
                 }
                 //});
-                debugger
                 if((element.strategicActual == "0" || element.strategicActual == "0.00" || element.strategicActual == "0.0") 
                 && (element.strategicBaseline == "0" || element.strategicBaseline == "0.00" || element.strategicBaseline == "0.0")
                && (element.strategicCurrent == "0" || element.strategicCurrent == "0.00" || element.strategicCurrent == "0.0")
@@ -908,8 +909,12 @@ formatValue(value: string, metricFormat: string): string {
 
   canEditRow(financialType: string): boolean {
     // If the value capture level is 'Capture', disable editing for 'Baseline Plan' row
-    if (this.captureLevel) {
-      return !(financialType == 'Baseline Plan');
+    if (this.captureLevel && this.MetricTypeID == 'e7a9e055-1319-4a4f-b929-cd7777599e39' && this.MetricCategoryID == '8681a5a9-5a00-48f2-b60f-21f0422ba90d') {
+      return !(financialType == 'Baseline Plan' || financialType == 'Current Plan');
+    }
+    else if(this.captureLevel && (this.MetricTypeID != 'e7a9e055-1319-4a4f-b929-cd7777599e39' || this.MetricCategoryID != '8681a5a9-5a00-48f2-b60f-21f0422ba90d'))
+    {
+      return !(financialType == 'Baseline Plan')
     } else {
       // When value capture level is not 'Capture', disable editing for 'Baseline Plan', 'Current Plan', and 'Actual'
       return !(financialType == 'Baseline Plan' || financialType == 'Current Plan' || financialType == 'Actual');
@@ -917,6 +922,11 @@ formatValue(value: string, metricFormat: string): string {
   }
 
   getRowClass(financialType: string): string {
+    //debugger
+    if (this.MetricTypeID == 'e7a9e055-1319-4a4f-b929-cd7777599e39' && this.MetricCategoryID == '8681a5a9-5a00-48f2-b60f-21f0422ba90d' && financialType == 'Current Plan')
+    {
+      return 'non-editable-row';
+    }
     // If the value capture level is 'Capture', disable editing for 'Baseline Plan' row
     if (this.captureLevel && financialType == 'Baseline Plan') {
       return 'non-editable-row';
