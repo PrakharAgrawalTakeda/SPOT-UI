@@ -17,8 +17,8 @@ export class AppComponent
     {
         this.appService.errorSave.subscribe(res => {
             if (res == true) {
-                this.snack.open("An Error has Occured, Please contact the SPOT Support Team by sending an e-mail to DL.SPOTSupport@takeda.com", "", {
-                    duration: 3000,
+                this.snack.open("An Error has Occured, Please contact the SPOT Support Team by sending an e-mail to DL.SPOTSupport@takeda.com", "Dismiss", {
+                    duration: 180000,
                     panelClass: ["bg-warn", "text-on-warn"]
                 })
             }

@@ -6,7 +6,7 @@
                     <form class="grid-cols-2 grid" style="width: 80vw;" [formGroup]="ForecastForm">
                         <spot-multiselect-autocomplete class="custom" formControlName="Reference"
                             name="Reference" [label]="'Reference'" [placeholder]="'Reference'"
-                            [valuePointer]="'periodName'" [dropDownArray]="LookupDataLBE" [idPointer]="'periodName'">
+                            [valuePointer]="'periodName'" [dropDownArray]="LookupDataLBE" [idPointer]="'periodName'" [sort]="false">
                         </spot-multiselect-autocomplete>
                         <spot-select class="custom" formControlName="DataType" name="DataType" [showNoneOption]="false" [label]="'Data For'" [placeholder]="'Data For'" [dropDownArrayType]="'string'"
                         [dropDownArray]="Type"></spot-select>

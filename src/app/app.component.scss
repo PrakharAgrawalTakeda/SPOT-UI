@@ -4,7 +4,7 @@
     width: 100%;
     height: 100%;
 }
-::ng-deep #cdk-overlay-0.cdk-overlay-pane{
+::ng-deep .cdk-overlay-pane:has(.user-panel-custom){
     top: 50px !important;
     right: 35px !important;
     left: unset !important;
