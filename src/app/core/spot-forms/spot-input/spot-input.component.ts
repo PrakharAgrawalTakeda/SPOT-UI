@@ -148,7 +148,7 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
 
     // Utility method to check if a string is a valid time format (HH:MM)
     isValidTimeFormat(timeStr) {
-      const regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+      const regex = /^(\d+):[0-5][0-9]$/; // Allows for hours greater than 24
       return regex.test(timeStr);
     }
 
@@ -187,21 +187,23 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
   
   formatTimeOnBlur(value: string): string {
     let [hours, minutes] = value.split(':');
-
-    // Format hours
-    hours = this.formatHours(hours);
-
-    // Format minutes
+  
+    // Format hours - allow any positive integer
+    hours = this.formatHoursAsDuration(hours);
+  
+    // Format minutes - ensure they are between 00 and 59
     minutes = this.formatMinutes(minutes);
-
+  
     return `${hours}:${minutes}`;
-}
-formatHours(hours: string): string {
-  if (!hours) return '00';
-  let hoursInt = parseInt(hours, 10);
-  if (isNaN(hoursInt) || hoursInt > 23) hoursInt = 23;
-  return hoursInt.toString().padStart(2, '0');
-}
+  }
+  
+  formatHoursAsDuration(hours: string): string {
+    if (!hours) return '00';
+    let hoursInt = parseInt(hours, 10);
+    if (isNaN(hoursInt) || hoursInt < 0) hoursInt = 0; // Check for non-negative integers
+    return hoursInt.toString().padStart(2, '0');
+  }
+  
 
 formatMinutes(minutes: string): string {
   if (!minutes) return '00';

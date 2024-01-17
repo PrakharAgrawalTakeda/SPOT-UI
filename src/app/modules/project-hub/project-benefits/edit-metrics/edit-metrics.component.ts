@@ -608,8 +608,8 @@ getFiscalYearFromDate = (dateString: string): number => {
 }
 
 isValidTimeFormat(timeStr: string): boolean {
-    const regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
-    return regex.test(timeStr);
+  const regex = /^(\d+):[0-5][0-9]$/; // Updated regex
+  return regex.test(timeStr);
 }
 
 
@@ -771,13 +771,13 @@ formatValue(value: string, metricFormat: string): string {
   switch (metricFormat) {
     case 'Time (HH:MM)':
       // Adjusted regex to be more flexible
-      const regex = /^(\d{1,2}):(\d{2})$/;
+      const regex = /^(\d+):(\d{2})$/;
       if (regex.test(value)) {
         const [hours, minutes] = value.split(':').map(Number);
         // Ensure hours are within 0-23 and minutes within 0-59
-        if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
+        //if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
           return value;
-        }
+        //}
       }
       return '00:00'; // or return the original value or a specific error message
     case '':
