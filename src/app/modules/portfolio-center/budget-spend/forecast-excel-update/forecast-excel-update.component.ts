@@ -202,14 +202,14 @@ export class ForecastExcelUpdateComponent {
         for (var i of this.forecastExcel) {
           var formula = '=SUM(G' + z + ':R' + z + ')'
           var formula1 = '=SUM(S' + z + ':AD' + z + ')'
-          var formula2 = '=SUM(G' + z + ':AD' + z + ')'
+          var formula2 = '=SUM(F' + z + ',AE' + z + ',AF' + z + ',AG' + z + ',AH' + z + ',AI' + z + ',AJ' + z + ')'
           rowData={cells: [
-            { value: i.budgetData, textAlign: "center"},
-            { value: i.capitalBudgetID, textAlign: "right"},
-            { value: i.problemID, textAlign: "center"},
-            { value: i.problemTitle, textAlign: "right"},
-            { value: i.periodName, textAlign: "right"},
-            { value: i.historicalActual, textAlign: "right"},
+            { value: i.budgetData, textAlign: "center", enable: false},
+            { value: i.capitalBudgetID, textAlign: "right", enable: false},
+            { value: i.problemID, textAlign: "center", enable: false},
+            { value: i.problemTitle, textAlign: "right", enable: false},
+            { value: i.periodName, textAlign: "right", enable: false},
+            { value: i.historicalActual, textAlign: "right", enable: false},
             { value: i.apr, textAlign: "center"},
             { value: i.may, textAlign: "center"},
             { value: i.jun, textAlign: "center"},
@@ -285,16 +285,16 @@ export class ForecastExcelUpdateComponent {
         var secondrowhis = {
           cells: [
             {
-            value: "problemTitle", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+            value: "Budget Data Type", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
             },
             {
-            value: 'Budget Data Type', bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+            value: 'Capital Budget Id', bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
             },
             {
             value: "Problem Id", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
             },
             {
-            value: "Capital Budget Id", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+            value: "Problem Title", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
             },
             {
             value: "Historical Actual", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
@@ -322,6 +322,33 @@ export class ForecastExcelUpdateComponent {
             },
             {
             value: "historicalActualFY21", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+            },
+            {
+            value: "historicalActualFY22", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+            },
+            {
+            value: "historicalActualFY23", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+            },
+            {
+            value: "historicalActualFY24", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+            },
+            {
+            value: "historicalActualFY25", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+            },
+            {
+            value: "historicalActualFY26", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+            },
+            {
+            value: "historicalActualFY27", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+            },
+            {
+            value: "historicalActualFY28", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+            },
+            {
+            value: "historicalActualFY29", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+            },
+            {
+            value: "historicalActualFY30", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
             }
             ]
         }
@@ -333,11 +360,11 @@ export class ForecastExcelUpdateComponent {
         for (var i of this.forecastExcelHistorical) {
           var formula = '=SUM(F' + z + ':J' + z + ')'
           rowData={cells: [
-            { value: i.budgetDataType, textAlign: "center"},
-            { value: i.capitalBudgetID, textAlign: "center"},
-            { value: i.problemID, textAlign: "center"},
-            { value: i.problemTitle, textAlign: "center"},
-            { value: i.historicalActual, textAlign: "center", formula: formula},
+            { value: i.budgetDataType, textAlign: "center", enable: false},
+            { value: i.capitalBudgetID, textAlign: "center", enable: false},
+            { value: i.problemID, textAlign: "center", enable: false},
+            { value: i.problemTitle, textAlign: "center", enable: false},
+            { value: i.historicalActual, textAlign: "center", formula: formula, enable: false},
             { value: i.historicalActualFY14, textAlign: "right"},
             { value: i.historicalActualFY15, textAlign: "center"},
             { value: i.historicalActualFY16, textAlign: "right"},
@@ -345,7 +372,16 @@ export class ForecastExcelUpdateComponent {
             { value: i.historicalActualFY18, textAlign: "right"},
             { value: i.historicalActualFY19, textAlign: "center"},
             { value: i.historicalActualFY20, textAlign: "center"},
-            { value: i.historicalActualFY21, textAlign: "center"}
+            { value: i.historicalActualFY21, textAlign: "center"},
+            { value: i.historicalActualFY22, textAlign: "center"},
+            { value: i.historicalActualFY23, textAlign: "center"},
+            { value: i.historicalActualFY24, textAlign: "center"},
+            { value: i.historicalActualFY25, textAlign: "center"},
+            { value: i.historicalActualFY26, textAlign: "center"},
+            { value: i.historicalActualFY27, textAlign: "center"},
+            { value: i.historicalActualFY28, textAlign: "center"},
+            { value: i.historicalActualFY29, textAlign: "center"},
+            { value: i.historicalActualFY30, textAlign: "center"}
             ]
           }
           finaldata.push(rowData)
@@ -355,6 +391,15 @@ export class ForecastExcelUpdateComponent {
           name: "Budget",
           mergedCells: ["A1:M1"],
           columns: [
+            { width: 150 },
+            { width: 150 },
+            { width: 150 },
+            { width: 150 },
+            { width: 150 },
+            { width: 150 },
+            { width: 150 },
+            { width: 150 },
+            { width: 150 },
             { width: 150 },
             { width: 150 },
             { width: 150 },
@@ -384,6 +429,7 @@ export class ForecastExcelUpdateComponent {
     })
   }
   ngOnInit(): void {
+    console.log("Component begin")
     this.dataloader()
   }
 
@@ -395,6 +441,11 @@ export class ForecastExcelUpdateComponent {
       if (this.ForecastForm.controls.ForecastType.value == null) {
         this.ForecastForm.patchValue({
           ForecastType: this.forecastType.filter(x => x.lookUpId == 'ec313be6-353d-413b-9805-b7519f2ede18')[0]
+        })
+      }
+      if (this.ForecastForm.controls.DataType.value == null) {
+        this.ForecastForm.patchValue({
+          DataType: "Forecast"
         })
       }
       this.LookupDataLBE = LBE
@@ -462,10 +513,16 @@ export class ForecastExcelUpdateComponent {
         this.portfoliService.getHistoricalExcelData(projectId, budgetId).then((historicalData : any) => {
           this.showData = false
           this.showDataForecast = false
+          this.showDataOpex = false
+          this.showDataForecastOpex = false
           this.ExcelData = historicalData
           this.forecastExcelHistorical = historicalData.filter(x => x.budgetDataType == this.ForecastForm.controls.ForecastType.value.lookUpName)
-
-          this.showData = true
+          if(this.ForecastForm.controls.ForecastType.value.lookUpName == "OpEx Forecast"){
+            this.showDataOpex = true
+          }
+          else{
+            this.showData = true
+          }
           var firstrow={
             height: 30,
             cells: [
@@ -477,16 +534,16 @@ export class ForecastExcelUpdateComponent {
           var secondrow = {
             cells: [
               {
-              value: "problemTitle", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              value: "Budget Data Type", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
               },
               {
-              value: 'Budget Data Type', bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              value: 'Capital Budget Id', bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
               },
               {
               value: "Problem Id", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
               },
               {
-              value: "Capital Budget Id", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              value: "Problem Title", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
               },
               {
               value: "Historical Actual", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
@@ -514,6 +571,33 @@ export class ForecastExcelUpdateComponent {
               },
               {
               value: "historicalActualFY21", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY22", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY23", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY24", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY25", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY26", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY27", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY28", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY29", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
+              },
+              {
+              value: "historicalActualFY30", bold: true, background: "rgb(236,239,241)", color: "black", textAlign: "center"
               }
               ]
           }
@@ -523,13 +607,13 @@ export class ForecastExcelUpdateComponent {
           var rowData
           var z=3
           for (var i of this.forecastExcelHistorical) {
-            var formula = '=SUM(F' + z + ':J' + z + ')'
+            var formula = '=SUM(F' + z + ':V' + z + ')'
             rowData={cells: [
-              { value: i.budgetDataType, textAlign: "center"},
-              { value: i.capitalBudgetID, textAlign: "center"},
-              { value: i.problemID, textAlign: "center"},
-              { value: i.problemTitle, textAlign: "center"},
-              { value: i.historicalActual, textAlign: "center", formula: formula},
+              { value: i.budgetDataType, textAlign: "center", enable: false},
+              { value: i.capitalBudgetID, textAlign: "center", enable: false},
+              { value: i.problemID, textAlign: "center", enable: false},
+              { value: i.problemTitle, textAlign: "center", enable: false},
+              { value: i.historicalActual, textAlign: "center", formula: formula, enable: false},
               { value: i.historicalActualFY14, textAlign: "right"},
               { value: i.historicalActualFY15, textAlign: "center"},
               { value: i.historicalActualFY16, textAlign: "right"},
@@ -537,7 +621,16 @@ export class ForecastExcelUpdateComponent {
               { value: i.historicalActualFY18, textAlign: "right"},
               { value: i.historicalActualFY19, textAlign: "center"},
               { value: i.historicalActualFY20, textAlign: "center"},
-              { value: i.historicalActualFY21, textAlign: "center"}
+              { value: i.historicalActualFY21, textAlign: "center"},
+              { value: i.historicalActualFY22, textAlign: "center"},
+              { value: i.historicalActualFY23, textAlign: "center"},
+              { value: i.historicalActualFY24, textAlign: "center"},
+              { value: i.historicalActualFY25, textAlign: "center"},
+              { value: i.historicalActualFY26, textAlign: "center"},
+              { value: i.historicalActualFY27, textAlign: "center"},
+              { value: i.historicalActualFY28, textAlign: "center"},
+              { value: i.historicalActualFY29, textAlign: "center"},
+              { value: i.historicalActualFY30, textAlign: "center"}
               ]
             }
             finaldata.push(rowData)
@@ -545,8 +638,17 @@ export class ForecastExcelUpdateComponent {
           }
           this.finalDatatoSheetHistorical = [{
             name: "Budget",
-            mergedCells: ["A1:M1"],
+            mergedCells: ["A1:V1"],
             columns: [
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
               { width: 150 },
               { width: 150 },
               { width: 150 },
@@ -569,6 +671,8 @@ export class ForecastExcelUpdateComponent {
         this.portfoliService.getForecastExcelData(LBEPeriod, projectId, budgetId).then((LBE : any) => {
           this.showData = false
           this.showDataForecast = false
+          this.showDataOpex = false
+          this.showDataForecastOpex = false
           this.ExcelData = LBE
           const d = new Date();
           let year = d.getFullYear();
@@ -584,8 +688,12 @@ export class ForecastExcelUpdateComponent {
           this.y4Label= 'FY' + year6 + '+';
 
           this.forecastExcel = LBE.filter(x => x.budgetData == this.ForecastForm.controls.ForecastType.value.lookUpName)
-          
-          this.showDataForecast = true
+          if(this.ForecastForm.controls.ForecastType.value.lookUpName == "OpEx Forecast"){
+            this.showDataForecastOpex = true
+          }
+          else{
+            this.showDataForecast = true
+          }
           var firstrow={
             height: 30,
             cells: [
@@ -717,14 +825,14 @@ export class ForecastExcelUpdateComponent {
           for (var i of this.forecastExcel) {
             var formula = '=SUM(G' + z + ':R' + z + ')'
             var formula1 = '=SUM(S' + z + ':AD' + z + ')'
-            var formula2 = '=SUM(G' + z + ':AD' + z + ')'
+            var formula2 = '=SUM(F' + z + ',AE' + z + ',AF' + z + ',AG' + z + ',AH' + z + ',AI' + z + ',AJ' + z + ')'
             rowData={cells: [
-              { value: i.budgetData, textAlign: "center"},
-              { value: i.capitalBudgetID, textAlign: "right"},
-              { value: i.problemID, textAlign: "center"},
-              { value: i.problemTitle, textAlign: "right"},
-              { value: i.periodName, textAlign: "right"},
-              { value: i.historicalActual, textAlign: "right"},
+              { value: i.budgetData, textAlign: "center", enable: false},
+              { value: i.capitalBudgetID, textAlign: "right", enable: false},
+              { value: i.problemID, textAlign: "center", enable: false},
+              { value: i.problemTitle, textAlign: "right", enable: false},
+              { value: i.periodName, textAlign: "right", enable: false},
+              { value: i.historicalActual, textAlign: "right", enable: false},
               { value: i.apr, textAlign: "center"},
               { value: i.may, textAlign: "center"},
               { value: i.jun, textAlign: "center"},
@@ -765,6 +873,34 @@ export class ForecastExcelUpdateComponent {
             name: "Budget",
             mergedCells: ["A1:AK1"],
             columns: [
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
+              { width: 150 },
               { width: 150 },
               { width: 150 },
               { width: 150 },
@@ -852,6 +988,15 @@ SubmitData(){
         element.historicalActualFY19 = jsonData[i].cells[10].value
         element.historicalActualFY20 = jsonData[i].cells[11].value
         element.historicalActualFY21 = jsonData[i].cells[12].value
+        element.historicalActualFY22 = jsonData[i].cells[13].value
+        element.historicalActualFY23 = jsonData[i].cells[14].value
+        element.historicalActualFY24 = jsonData[i].cells[15].value
+        element.historicalActualFY25 = jsonData[i].cells[16].value
+        element.historicalActualFY26 = jsonData[i].cells[17].value
+        element.historicalActualFY27 = jsonData[i].cells[18].value
+        element.historicalActualFY28 = jsonData[i].cells[19].value
+        element.historicalActualFY29 = jsonData[i].cells[20].value
+        element.historicalActualFY30 = jsonData[i].cells[21].value
         i++
       })
       var dataToSend = this.forecastExcelHistorical
