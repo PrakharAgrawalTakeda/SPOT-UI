@@ -28,9 +28,11 @@ export class AssociatedProjectsComponent implements OnInit {
         private msalService: MsalService,
         private portApiService: PortfolioApiService
     ) {
-        // this.projecthubservice.submitbutton.subscribe(res => {
-        //     this.dataloader()
-        // })
+        this.projecthubservice.submitbutton.subscribe(res => {
+            if (this.viewContent) {
+                this.dataloader();
+            }
+        })
     }
     id: string = '';
     rows = [];
@@ -41,7 +43,6 @@ export class AssociatedProjectsComponent implements OnInit {
     count:number = 0
     ngOnInit(): void {
         this.dataloader();
-        window.dispatchEvent(new Event('resize'));
     }
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get('id');
@@ -89,8 +90,8 @@ export class AssociatedProjectsComponent implements OnInit {
                 this.rows = this.projecthubservice.projects.filter(row => row.problemUniqueId !== row.parentId);
             })
         });
-
         this.viewContent = true;
+        window.dispatchEvent(new Event('resize'));
     }
     getHeaderClass(): any {
         return ' vertical-header-class';
@@ -172,9 +173,9 @@ export class AssociatedProjectsComponent implements OnInit {
                 problemIds.push(this.problemID.toString());
                 console.log(typeof this.allprojects)
                 problemIds = this.allprojects.values.map(project => project.problemId.toString());
-    
+
                 const problemIdsString = ',' + problemIds.join(',');
-    
+
                 console.log(problemIdsString);
             this.apiService.generateReports(problemIdsString,'Portfolio Report').then((res: any) => {
                 // handle response
