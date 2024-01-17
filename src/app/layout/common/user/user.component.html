@@ -10,7 +10,8 @@
 
 <mat-menu
     [xPosition]="'before'"
-    #userActions="matMenu">
+    #userActions="matMenu"
+    class="user-panel-custom">
     <button mat-menu-item (click)="routeMyPreference()">
         <mat-icon [svgIcon]="'heroicons_outline:cog'"></mat-icon>
         <span>My Preferences</span>
