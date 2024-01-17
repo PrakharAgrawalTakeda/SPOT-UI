@@ -72,7 +72,8 @@
                 </div>
                 <div class="pr-2">
                     <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
-                        [color]="'primary-200'" (click)="deleteMetric()"> Delete Metric
+                        [color]="'primary-200'" (click)="deleteMetric()"
+                        *ngIf="captureLevel || !captureLevel  && MetricCategoryID == '8681a5a9-5a00-48f2-b60f-21f0422ba90d' && empty"> Delete Metric
                     </button>
                 </div>
                 <div class="pr-2">
@@ -87,7 +88,7 @@
                 </div>
             </div>
         </div>
-        <div class="w-screen ml-3  gap-3">
+        <div class="w-full ml-3  gap-3">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
                 class="font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata" [rowClass]="getRowClass">
 

@@ -1528,10 +1528,18 @@ export class PortfolioCenterComponent implements OnInit {
     localStorage.setItem('spot-localattribute', JSON.stringify([]))
   }
     this.filterDrawer.close()
+    this.PortfolioCenterService.drawerOpenedPrakharTemp = false
     this.resetpage()
     this.showFilter = false
   }
-
+  captureClose(event){
+    if(event){
+      this.PortfolioCenterService.drawerOpenedPrakharTemp = true
+    }
+    else{
+      this.PortfolioCenterService.drawerOpenedPrakharTemp = false
+    }
+  }
   resetpage() {
     this.ngOnInit()
   }
@@ -1628,6 +1636,7 @@ export class PortfolioCenterComponent implements OnInit {
     else {
       this.filterDrawer.close()
     }
+    this.PortfolioCenterService.drawerOpenedPrakharTemp = false
   }
 
   Close() {
@@ -1676,12 +1685,14 @@ export class PortfolioCenterComponent implements OnInit {
               });
             }
           }
+          this.PortfolioCenterService.drawerOpenedPrakharTemp = false
           this.resetpage()
         }
       })
     }
     else {
       this.filterDrawer.close()
+      this.PortfolioCenterService.drawerOpenedPrakharTemp = false
       this.resetpage()
     }
   }
@@ -2922,6 +2933,7 @@ export class PortfolioCenterComponent implements OnInit {
     window.open('/portfolio-center/forecast', "_blank")
   }
   openDrawer(type) {
+    this.PortfolioCenterService.drawerOpenedPrakharTemp = true
     if (type == 'Filter') {
       this.showFilter = true
       console.log(this.PortfolioFilterForm)

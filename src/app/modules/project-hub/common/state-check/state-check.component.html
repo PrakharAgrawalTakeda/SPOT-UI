@@ -8,7 +8,7 @@
             </a>
         </div>
     </div>
-    <div class="overflow-auto m-2"  style="height: calc(100vh - 120px)">
+    <div class="overflow-auto m-2"  style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)">
         <a style="color:red" > Before the project can be set to completed, all milestones, ask/needs and risk/issues need to be closed!</a>
         <div *ngIf="showMilestoneTable" class="w-full overflow-hidden mt-3 max-h-[30vh]">
             <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">

@@ -7,7 +7,7 @@
     </div>
 </div>
 <form [formGroup]="LessonLearnedForm"
-      class="overflow-auto m-2" style="height: calc(100vh - 120px)">
+      class="overflow-auto m-2" style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)">
     <div class="flex items-start justify-between incuded-in-dash">
         <mat-slide-toggle
             [matTooltip]="this.LessonLearnedForm.controls['includeInCloseOutReport'].disabled ? 'Only 4 can be selected at a time for close out report display' : null"

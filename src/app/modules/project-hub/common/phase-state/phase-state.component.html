@@ -8,7 +8,7 @@
             </a>
         </div>
     </div>
-    <div class="grid grid-cols-9 overflow-auto m-2"  style="height: calc(100vh - 120px)">
+    <div class="grid grid-cols-9 overflow-auto m-2"  style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)">
         <div class="col-span-5 m-3 ">
             <form class="flex w-full " [formGroup]="phaseForm">
                 <div class="basis-1/4">

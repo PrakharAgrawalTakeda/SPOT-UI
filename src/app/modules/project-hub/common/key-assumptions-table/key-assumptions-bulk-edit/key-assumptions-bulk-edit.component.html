@@ -16,7 +16,7 @@
             </button>
         </div>
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
-                           columnMode="flex" style="height: calc(100vh - 175px); overflow-y:visible"
+                           columnMode="flex" style="height: calc(calc(100vh/ var(--custom-zoom)) - 175px); overflow-y:visible"
                            class="material pl-3 font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
                            [rows]="keyAssumptions"
                            #keyAssumptionsTable>
