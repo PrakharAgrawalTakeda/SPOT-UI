@@ -30,6 +30,7 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   @Input() Required: boolean = false
   @Input() sortSelected: boolean = false
   @Input() sortSelectedValuePointer: string
+  @Input() sort: true | false = true
 
   @ViewChild('input', { static: false }) input: ElementRef<HTMLInputElement>;
 
@@ -50,12 +51,17 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
       map(value => {
         var filterValue = value ? value.toString().toLowerCase() : ''
         if (this.dropDownArray != null) {
+          if(this.sort == true){
           if (filterValue == "") {
             return this.dropDownArray.sort(this.sortByType == 'valuePointer' ? (a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0) : (a, b) => (a[this.customSortPointer] > b[this.customSortPointer]) ? 1 : ((b[this.customSortPointer] > a[this.customSortPointer]) ? -1 : 0)).filter((obj) => obj.isActive!=false);
           }
           else {
             return this.dropDownArray.filter(x => x[this.valuePointer].toLowerCase().includes(filterValue)).sort(this.sortByType == 'valuePointer' ? (a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0) : (a, b) => (a[this.customSortPointer] > b[this.customSortPointer]) ? 1 : ((b[this.customSortPointer] > a[this.customSortPointer]) ? -1 : 0)).filter((obj) => obj.isActive!=false);
           }
+        }
+        else{
+          return this.dropDownArray
+        }
         }
         else {
           return []
@@ -73,6 +79,13 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   get control() {
     return this.form.get('control');
   }
+  onBlur() {
+    if (this.form.controls.chipList.value.length > 0) {
+        this.Required = false;
+    } else {
+        this.Required = true;
+    }
+}
   onFunctionSelect(event: any) {
     console.log(this.selectedOption)
     this.selectedOption.push(event.option.value)
@@ -89,6 +102,7 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
     this.form.controls.chipList.markAsDirty()
     this.form.controls.chipList.patchValue(this.selectedOption)
     this.onChange(this.selectedOption)
+    this.onBlur()
   }
   isOptionSelected(option: any): boolean {
     if (this.selectedOption && this.selectedOption.length > 0) {

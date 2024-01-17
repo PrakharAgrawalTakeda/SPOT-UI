@@ -37,7 +37,7 @@ export class ProjectBenefitsComponent implements OnInit {
     localCurrency: string = ""
   valueCreation: any;
   projectsMetricsData = []
-  constructor(public projectApiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, 
+  constructor(public projectApiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute,
     public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService) {
       this.projecthubservice.submitbutton.subscribe(res => {
         if (res) {
@@ -50,7 +50,7 @@ export class ProjectBenefitsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
      // Clear the arrays before populating
      this.columnYear = [];
@@ -110,11 +110,11 @@ console.log(problemCapture)
             valueCommentary: problemCapture.valueCommentary
       })
       this.isStrategicInitiative = problemCapture.problemType == 'Strategic Initiative / Program' ? true : false
-          
+
           console.log(this.ValueCaptureForm.getRawValue())
           var year = []
           var yearList=[]
-          
+
           if(res.length > 0){
             for(var z=0;z<res.length;z++){
               if(res[z].projectsMetricsDataYearly.length > 0){
@@ -226,19 +226,32 @@ console.log(problemCapture)
       }
     });
   }
-  
-  
+
+
 
   private getFiscalYearFromDate(dateString: string): string {
-    let date = dateString ? new Date(dateString) : new Date();
-    let year = date.getFullYear();
-    if (date.getMonth() < 3) { // January, February, March
-      year--; // Fiscal year is the previous year
+    let date;
+    let year;
+
+    if (dateString != null) {
+      date = new Date(dateString);
+      year = date.getFullYear();
+      if (date.getMonth() < 3) { // January, February, March
+        year--; // Fiscal year is the previous year
+      }
+    } else {
+      date = new Date();
+      year = date.getFullYear();
+      if (date.getMonth() < 3) { // For consistency, also consider the fiscal year in the current year
+        year--;
+      }
     }
+
     return `FY ${year}`;
   }
-  
-  
+
+
+
 
   getLookup(id: any){
     return id && id.lookUpId != '' ? this.lookupData.find(x => x.lookUpId == id)?.lookUpName : ''

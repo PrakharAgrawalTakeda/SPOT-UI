@@ -17,9 +17,9 @@
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
             </button>
         </div>
-        <div class="w-screen pl-3">
+        <div class="w-full pl-3">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
-                class="font-medium datatable-ll-80 text-sm text-default whitespace-nowrap" style="height: calc(100vh - 175px); overflow-y:visible"
+                class="font-medium datatable-ll-80 text-sm text-default whitespace-nowrap" style="height: calc(calc(100vh/ var(--custom-zoom)) - 175px); overflow-y:visible"
                 [rows]="lessonsLearned" #lessonLearnedTable>
                 <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Include In Single Slide Summary (Max 4)"
                     prop="includeInCloseOutReport" [width]="195" >

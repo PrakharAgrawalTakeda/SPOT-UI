@@ -8,7 +8,7 @@
         </div>
     </div>
     <form class="px-2 pt-2 overflow-y-scroll overflow-x-hidden"
-        [style]="viewType === 'SidePanel' ? 'height:calc(100vh - 105px)' : null" [formGroup]="strategicDriversForm">
+        [style]="viewType === 'SidePanel' ? 'height: calc(calc(100vh/ var(--custom-zoom)) - 105px)' : null" [formGroup]="strategicDriversForm">
         <div [ngClass]="{'customPrimary': viewType == 'Form'}">
             <spot-singleselect-autocomplete *ngIf="viewElementChecker('primaryKPI')" formControlName="primaryKPI"
                 class="w-full" name="primaryKPI" [label]="'Primary Value Driver'" [placeholder]="'Primary Value Driver'"

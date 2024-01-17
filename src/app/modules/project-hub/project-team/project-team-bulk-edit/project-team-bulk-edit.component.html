@@ -19,10 +19,10 @@
                 </div>
             </div>
         </div>
-        <div class="overflow-hidden w-screen ml-3" id="projectTeamTableDiv">
+        <div class="overflow-hidden w-full ml-3" id="projectTeamTableDiv">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="font-medium text-sm text-default whitespace-nowrap" [rows]="teamMembers"
-                #projectTeamsTable style="height: calc(100vh - 150px); overflow-y:visible">
+                #projectTeamsTable style="height: calc(calc(100vh/ var(--custom-zoom)) - 150px); overflow-y:visible">
                 <ngx-datatable-column [sortable]="false" name="Role" prop="roleName" [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
@@ -135,6 +135,26 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column [flexGrow]="0.1" [resizeable]="false" [sortable]="false" [draggable]="false"
                     [flexGrow]="0.25">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                        ngx-datatable-cell-template>
+                        <a href="javascript:void(0)" *ngIf="deleteShowLogic(rowIndex)" title="Delete Single"
+                            (click)="deletePT(rowIndex)">
+                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                        </a>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [flexGrow]="0.1" [resizeable]="false" [sortable]="false" [draggable]="false"
+                    [flexGrow]="0.3" *ngIf="mode == 'Project-Charter'">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                        ngx-datatable-cell-template>
+                        <a href="javascript:void(0)" *ngIf="deleteShowLogic(rowIndex)" title="Delete Single"
+                            (click)="deletePT(rowIndex)">
+                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                        </a>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [flexGrow]="0.1" [resizeable]="false" [sortable]="false" [draggable]="false"
+                    [flexGrow]="0.3" *ngIf="mode == 'Project-Proposal'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
                         ngx-datatable-cell-template>
                         <a href="javascript:void(0)" *ngIf="deleteShowLogic(rowIndex)" title="Delete Single"

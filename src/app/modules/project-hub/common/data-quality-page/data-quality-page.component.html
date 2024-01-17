@@ -23,7 +23,7 @@
         </div>
     </div>
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-            [rowClass]="rowClass" style="height: calc(100vh - 155px); overflow-y:visible"
+            [rowClass]="rowClass" style="height: calc(calc(100vh/ var(--custom-zoom)) - 155px); overflow-y:visible"
             class="ml-3 material font-medium text-sm text-default whitespace-nowrap cursor-default"
             [rows]="rows" #dataQualityTable>
             <ngx-datatable-column name="Phase/State" prop="phase" [flexGrow]="1">

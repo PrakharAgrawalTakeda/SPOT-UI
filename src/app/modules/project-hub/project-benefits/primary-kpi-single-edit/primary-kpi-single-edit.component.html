@@ -7,7 +7,7 @@
     </div>
 </div>
 <form class="w-full p-[20px]" [formGroup]="primaryKPIForm" (ngSubmit)="submitpkpi()">
-    <div class=" h-[84vh] overflow-hidden">
+    <div class="overflow-hidden" style="height: calc(calc(100vh/ var(--custom-zoom)) - 140px)">
         <spot-input-date class="w-full read-only" formControlName="vcdate"
                              [label]="'Value Capture Start Date'" [placeholder]="'Value Capture Start Date'"
                              [showHint]="true" [hint]="'Value Capture Start defines the first fiscal year in which value will be captured.'">

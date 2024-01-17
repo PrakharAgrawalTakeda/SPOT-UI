@@ -170,20 +170,20 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         this.generalInfoForm.controls.projectManager.enable()
       }
     }
-    this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
-      if (this.viewContent) {
-        if (res != 'Strategic Initiative / Program') {
-          if (res == 'Standard Project / Program') {
-            if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
-              this.generalInfoForm.controls.portfolioOwner.disable({emitEvent : false})
-            }
-          }
-          else {
-            this.generalInfoForm.controls.portfolioOwner.enable({emitEvent : false})
-          }
-        }
-      }
-    })
+    // this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
+    //   if (this.viewContent) {
+    //     if (res != 'Strategic Initiative / Program') {
+    //       if (res == 'Standard Project / Program') {
+    //         if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
+    //           this.generalInfoForm.controls.portfolioOwner.disable({emitEvent : false})
+    //         }
+    //       }
+    //       else {
+    //         this.generalInfoForm.controls.portfolioOwner.enable({emitEvent : false})
+    //       }
+    //     }
+    //   }
+    // })
 
     this.generalInfoForm.controls.portfolioOwner.valueChanges.subscribe(res => {
       if (this.viewContent) {
@@ -331,7 +331,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         });
         this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
         this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'SimpleProject' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-        //this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.problemType.enable() : this.generalInfoForm.controls.problemType.disable()
+        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.problemType.enable() : this.generalInfoForm.controls.problemType.disable()
         if (this.isStrategicInitiative) {
           this.projectNameLabel = "Initiaitive Name"
           if (['ProjectCharter', 'CloseOut', 'BusinessCase'].includes(this.subCallLocation)) {

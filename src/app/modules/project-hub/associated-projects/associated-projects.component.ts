@@ -17,6 +17,7 @@ export class AssociatedProjectsComponent implements OnInit {
     single: any[];
     localCurrency: any = [];
     filterCriteria: any = {};
+    allprojects: any;
     constructor(
         private apiService: ProjectApiService,
         private _Activatedroute: ActivatedRoute,
@@ -27,18 +28,21 @@ export class AssociatedProjectsComponent implements OnInit {
         private msalService: MsalService,
         private portApiService: PortfolioApiService
     ) {
-        // this.projecthubservice.submitbutton.subscribe(res => {
-        //     this.dataloader()
-        // })
+        this.projecthubservice.submitbutton.subscribe(res => {
+            if (this.viewContent) {
+                this.dataloader();
+            }
+        })
     }
     id: string = '';
     rows = [];
     view: any[] = [700, 400];
     lastIndex = 15;
     viewContent = false;
+    problemID = ''
+    count:number = 0
     ngOnInit(): void {
         this.dataloader();
-        window.dispatchEvent(new Event('resize'));
     }
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get('id');
@@ -51,7 +55,12 @@ export class AssociatedProjectsComponent implements OnInit {
         this.apiService.getProjectTree(this.id).then((res: any) => {
             this.apiService.getfilterlist().then((filterCriteria: any) => {
                 this.filterCriteria = filterCriteria
+                console.log(res)
+                this.allprojects = res
                 res.values.forEach(project => {
+                    if(project.problemUniqueId == this.projecthubservice.projectid){
+                        this.problemID = project.problemId
+                    }
                     ids.push(project.problemUniqueId);
                     if (project.parentId == this.id) {
                         children.push(project)
@@ -81,8 +90,8 @@ export class AssociatedProjectsComponent implements OnInit {
                 this.rows = this.projecthubservice.projects.filter(row => row.problemUniqueId !== row.parentId);
             })
         });
-
         this.viewContent = true;
+        window.dispatchEvent(new Event('resize'));
     }
     getHeaderClass(): any {
         return ' vertical-header-class';
@@ -159,18 +168,39 @@ export class AssociatedProjectsComponent implements OnInit {
 
         reportAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
+                //debugger
                 let problemIds: string[] = [];
-                this.projecthubservice.projectChildren.map(x => {
-                    problemIds.push(x.problemId.toString())
-                });
-                this.apiService.programReport(problemIds).then((res: any) => {
-                });
-            }
-        })
+                problemIds.push(this.problemID.toString());
+                console.log(typeof this.allprojects)
+                problemIds = this.allprojects.values.map(project => project.problemId.toString());
+
+                const problemIdsString = ',' + problemIds.join(',');
+
+                console.log(problemIdsString);
+            this.apiService.generateReports(problemIdsString,'Portfolio Report').then((res: any) => {
+                // handle response
+            });
+        }
+    });
     }
+    // tootlipFormatter(value, series) {
+    //     return value.toString();
+    // }
     tootlipFormatter(value, series) {
-        return value.toString();
-    }
+        this.count = this.count == undefined ? 0 : this.count
+        if(this.count == 0){
+          this.count++
+          return value.toString();
+        }
+        else if(this.count == 1){
+          this.count++
+          return '<div style="color: #775DD0;">'+value.toString()+'</div>';
+        }
+        else{
+          this.count = 0
+          return '<div style="color: rgba(0,143,251,0.85);">'+value.toString()+'</div>';
+        }
+      }
 }
 function percentTickFormatting(val: any) {
     return val.toLocaleString() + '%';

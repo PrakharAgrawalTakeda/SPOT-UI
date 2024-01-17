@@ -18,6 +18,7 @@ import { GlobalVariables } from './shared/global-variables';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
 import { OldUrlRedirectResolver } from './core/auth/old-url-redirect.resolver';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 export function MsalInstanceFactory(): IPublicClientApplication {
     return new PublicClientApplication({
         auth: {
@@ -55,7 +56,8 @@ const routerConfig: ExtraOptions = {
 
         // 3rd party modules that require global configuration via forRoot
         MarkdownModule.forRoot({}),
-        MsalModule
+        MsalModule,
+        MatSnackBarModule
 
     ],
     bootstrap: [

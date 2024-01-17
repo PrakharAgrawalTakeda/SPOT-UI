@@ -18,7 +18,7 @@
         </div>
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="w-full material font-medium text-sm text-default whitespace-nowrap cursor-default"
-                [rows]="fundingdata" #fundingTable style="height: calc(100vh - 155px); overflow-y:visible">
+                [rows]="fundingdata" #fundingTable style="height: calc(calc(100vh/ var(--custom-zoom)) - 155px); overflow-y:visible">
                 <ngx-datatable-column name="Funding Type" prop="fundingTypeId" [resizeable]="false" [sortable]="false"
                     [draggable]="false" [flexGrow]="0.5" *ngIf="mode=='Project-Charter'" >
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
