@@ -209,6 +209,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                 }
                 console.log(res.projectsMetricsData.metricLevelId)
                 console.log(this.capexAvoidanceForm.get('metricLevelId').value)
+
                 //Status is disabled for 'Cascade' level
                 if (!this.captureLevel) {
                   this.capexAvoidanceForm?.get('statusId')?.disable();
