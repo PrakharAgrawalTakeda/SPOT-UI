@@ -829,6 +829,7 @@ SubmitData(){
       var dataToSend = this.forecastExcel
       this.portfoliService.putForecastExcelData(dataToSend).then((forecastData : any) => {
         this.showDataForecast = false
+        this.showDataForecastOpex = false
         this.getData()
         this.PortfolioCenterService.successSave.next(true)
       })
@@ -856,6 +857,7 @@ SubmitData(){
       var dataToSend = this.forecastExcelHistorical
       this.portfoliService.putHistoricalExcelData(dataToSend).then((historicalData : any) => {
         this.showData = false
+        this.showDataOpex = false
         this.getData()
         this.PortfolioCenterService.successSave.next(true)
       })
