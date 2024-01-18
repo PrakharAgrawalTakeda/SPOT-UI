@@ -1168,7 +1168,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             this.milestoneTableEditRow(this.schedulengxdata.length - 1)
             var div = document.getElementsByClassName('datatable-scroll')[0]
             setTimeout(() => {
-                div.scroll({
+                div?.scroll({
                     top: div.scrollHeight,
                     left: 0,
                     behavior: 'smooth'
@@ -2818,7 +2818,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             }
             var div = document.getElementsByClassName('datatable-scroll')[0]
             setTimeout(() => {
-                div.scroll({
+                div?.scroll({
                     top: div.scrollHeight,
                     left: 0,
                     behavior: 'smooth'
