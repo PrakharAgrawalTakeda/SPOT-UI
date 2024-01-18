@@ -738,6 +738,7 @@ export class BudgetForecastBulkEditComponent {
         this.recalculateMtdp()
         this.budgetForecastForm.patchValue({
             totalApprovedCapex: budget.totalApprovedCapEx ? budget.totalApprovedCapEx : 0,
+            committedSpend: forecast.find(x => x.active == 'Current').committedSpend
         })
         this.budgetForecastForm.controls.totalApprovedCapex.disable()
         this.budgetService.setTextColors();
