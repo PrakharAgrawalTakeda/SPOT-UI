@@ -154,6 +154,7 @@ export class BudgetGeneralEditComponent {
             this.budgetInfo = res
             this.generalInfoPatchValue(res)
             if(this.capexRequired.value == true) {
+                this.required = true;
                 if(this.isBudgetAdmin){
                     if(this.budgetId.disabled){
                         this.budgetId.enable({emitEvent : false})
@@ -170,6 +171,7 @@ export class BudgetGeneralEditComponent {
                     }
                 }
             }else{
+                this.required = false;
                 this.budgetId.disable()
                 this.gmsBudgetOwnerBasicSetup()
             }
