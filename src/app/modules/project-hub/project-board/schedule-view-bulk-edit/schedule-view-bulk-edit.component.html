@@ -105,7 +105,7 @@
                     [rows]="schedulengxdata" #scheduleTable columnMode="force" [headerHeight]="'auto'" [rowHeight]="'auto'"
                     [scrollbarV]="false" [scrollbarH]="true" [rowClass]="getRowClass">
                     <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false"
-                    [width]="75" *ngIf="mode== 'Normal'" [draggable]="false">
+                    [width]="50" *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
                                 class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}"
@@ -212,7 +212,7 @@
     
     
                     <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="2" *ngIf="mode== 'Normal'" [draggable]="false">
+                    [width]="175" *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
                                 [ngClass]="{'closed': row.completionDate != null}">
@@ -245,7 +245,7 @@
     
     
                     <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [resizeable]="false"
-                        [sortable]="false" [flexGrow]="2" *ngIf="mode== 'Normal'" [draggable]="false">
+                        [sortable]="false" [width]="175" *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
                                 [ngClass]="{'closed': row.completionDate != null}">
@@ -358,7 +358,7 @@
     
     
                     <ngx-datatable-column name="Completion Date" prop="completionDate" [resizeable]="false"
-                        [sortable]="false" [flexGrow]="2" *ngIf="mode== 'Normal'" [draggable]="false">
+                        [sortable]="false" [width]="175" *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
                                 [ngClass]="{'closed': row.completionDate != null}">
@@ -401,7 +401,7 @@
                     </ngx-datatable-column>
     
                     <ngx-datatable-column name="Comments" prop="comments" [resizeable]="false" [sortable]="false"
-                    [width]="225" *ngIf="mode== 'Normal'" [draggable]="false">
+                    [width]="250" *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
                                 [ngClass]="{'closed': row.completionDate != null}">
