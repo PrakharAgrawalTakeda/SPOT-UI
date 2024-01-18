@@ -25,23 +25,23 @@
                         Baseline : 0
                     </h6>
                 </ng-template>
-    
+
                 <div *ngIf="log != ''; else null">
-    
+
                     <div class="font-medium text-default text-md italic mt-2" style="margin-right:3rem !important;">
-    
+
                         <h6 class="font-medium text-default text-md italic ml-4 mt-2">
                             Last Baseline: {{log.modifiedDate | date:'dd-MMM-yyyy'}} </h6>
                     </div>
                 </div>
                 <ng-template #null>
                     <div class="font-medium text-default text-md italic mt-2" style="margin-right:3rem !important;">
-    
+
                         <h6 class="font-medium text-default text-md italic ml-4 mt-2">
                             Last Baseline: </h6>
                     </div>
                 </ng-template>
-    
+
                 <div class="font-medium text-default text-md italic mt-2" style="margin-right:3rem !important;">
                     <form [formGroup]="localIncludedItems">
                         <mat-slide-toggle class="primary slider-adjust" formControlName="toggle"
@@ -78,21 +78,21 @@
                         (click)="baselineLogs()" *ngIf="mode== 'Normal'">
                         Baseline Log
                     </button>
-    
+
                     <button
                         *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit && mode== 'Normal'"
                         class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                         (click)="baselineProject()">
                         Baseline Project
                     </button>
-    
-    
+
+
                     <!-- *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit" -->
                     <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                         (click)="addMilestoneRecord(target)" *ngIf="mode== 'Normal' || mode== 'Business-Case'">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                     </button>
-    
+
                     <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                         (click)="addMilestoneRecord(target)" *ngIf="mode== 'Project-Charter'">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
@@ -100,7 +100,7 @@
                 </div>
             </div>
             <div class="mt-3 pl-3 w-full" #target id="scheduleTableDiv">
-                <ngx-datatable  [ngClass]="getRIClass()"
+                <ngx-datatable  [ngClass]="getRIClass()" style="height: calc(calc(100vh/ var(--custom-zoom)) - 230px)"
                                class="material datatable-schedule w-screen font-medium text-sm text-default whitespace-nowrap cursor-pointer"
                     [rows]="schedulengxdata" #scheduleTable columnMode="force" [headerHeight]="'auto'" [rowHeight]="'auto'"
                     [scrollbarV]="false" [scrollbarH]="true" [rowClass]="getRowClass">
@@ -124,25 +124,25 @@
                                 svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="" prop="indicator" [resizeable]="false" [width]="25"
                         *ngIf="mode== 'Project-Close-Out'" [sortable]="false" [draggable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-    
+
                             <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
                                 svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name=" " prop="indicator" [resizeable]="false" [width]="25"
                         *ngIf="mode== 'Project-Charter'" [sortable]="false" [draggable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-    
+
                             <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
                                 svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
                     [width]="225" *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -170,7 +170,7 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
                     [width]="275" *ngIf="mode== 'Project-Charter' || mode =='Business-Case'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -194,7 +194,7 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
                     [width]="225" *ngIf="mode== 'Project-Close-Out'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -209,8 +209,8 @@
                             <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
                         </ng-template>
                     </ngx-datatable-column>
-    
-    
+
+
                     <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false" [sortable]="false"
                     [flexGrow]="2" *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -226,7 +226,7 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false" [sortable]="false"
                     [flexGrow]="2" *ngIf="mode== 'Project-Charter' || mode =='Business-Case'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -242,8 +242,8 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
-    
+
+
                     <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [resizeable]="false"
                         [sortable]="false" [flexGrow]="2" *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -259,7 +259,7 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [resizeable]="false"
                         [sortable]="false" [flexGrow]="1" *ngIf="mode== 'Project-Close-Out'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -267,8 +267,8 @@
                             date:'dd-MMM-yyyy'}}
                         </ng-template>
                     </ngx-datatable-column>
-    
-    
+
+
                     <ngx-datatable-column name="Variance" prop="variance" [resizeable]="false" [sortable]="false"
                     [flexGrow]="1" *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
@@ -300,7 +300,7 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName" [resizeable]="false"
                         [sortable]="false" [width]="225" *ngIf="mode== 'Project-Charter'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -316,8 +316,8 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
-    
+
+
                     <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false"
                         [sortable]="false" [width]="225" *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -336,7 +336,7 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false"
                         [sortable]="false" [width]="200" *ngIf="mode== 'Project-Charter' || mode =='Business-Case'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -355,8 +355,8 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
-    
+
+
                     <ngx-datatable-column name="Completion Date" prop="completionDate" [resizeable]="false"
                         [sortable]="false" [flexGrow]="2" *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -372,7 +372,7 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Completion Date" prop="completionDate" [resizeable]="false"
                         [sortable]="false" [flexGrow]="1" *ngIf="mode== 'Project-Close-Out'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -380,7 +380,7 @@
                             date:'dd-MMM-yyyy'}}
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Missed Milestone Reason Code" prop="missedMsreasonCode" [resizeable]="false"
                         [sortable]="false" [width]="200" *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -399,7 +399,7 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Comments" prop="comments" [resizeable]="false" [sortable]="false"
                     [width]="225" *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -414,7 +414,7 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Comment" prop="comments" [resizeable]="false" [sortable]="false"
                     [width]="200" *ngIf="mode== 'Project-Close-Out'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -429,7 +429,7 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Include in Dashboard (Max 8)" prop="includeInReport" [sortable]="false"
                         [resizeable]="false"  *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -447,7 +447,7 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Include in Business Case (Max 8)" prop="includeInBusinessCase"
                         [sortable]="false" [resizeable]="false"  *ngIf="mode== 'Business-Case'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -466,7 +466,7 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Include in Close Out (Max 20)" prop="includeInCloseout" [sortable]="false"
                         [resizeable]="false"  *ngIf="mode== 'Project-Close-Out'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -485,7 +485,7 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Include in Charter (Max 10)" prop="includeInCharter" [sortable]="false"
                         [resizeable]="false"  *ngIf="mode== 'Project-Charter'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -503,11 +503,11 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column [flexGrow]="0.6" [resizeable]="false" [sortable]="false"
                         *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
-    
+
                             <div class="flex items-center justify-start gap-6">
                                 <a href="javascript:void(0)" title="Delete"
                                     (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)"
@@ -520,7 +520,7 @@
                     <ngx-datatable-column [flexGrow]="0.6" [resizeable]="false" [sortable]="false"
                         *ngIf="mode== 'Project-Charter'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
-    
+
                             <div class="flex items-center justify-start gap-6">
                                 <a href="javascript:void(0)" title="Delete"
                                     (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)"
@@ -533,7 +533,7 @@
                     <ngx-datatable-column [flexGrow]="0.6" [resizeable]="false" [sortable]="false"
                     *ngIf="mode == 'Business-Case'" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
-    
+
                         <div class="flex items-center justify-start gap-6">
                             <a href="javascript:void(0)" title="Delete"
                                 (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)"
@@ -543,34 +543,34 @@
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
-    
+
                 </ngx-datatable>
             </div>
         </div>
         <div class="w-full pr-4 m-2 flex items-start justify-between" *ngIf="mode== 'Normal'">
-    
+
             <button class="min-w-26" mat-flat-button [color]="'primary'"
                 (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
                 Cancel
             </button>
-    
+
             <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="submitscheduleHandler()">
                 Submit
             </button>
-    
+
         </div>
-    
+
         <div class="w-full pr-4 m-2 flex items-start justify-between" *ngIf="mode== 'Project-Close-Out'">
-    
+
             <button class="min-w-26" mat-flat-button [color]="'primary'"
                 (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
                 Cancel
             </button>
-    
+
             <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="submitschedulecloseout()">
                 Submit
             </button>
-    
+
         </div>
         <div class="w-full pr-4 m-2 flex items-start justify-between" *ngIf="mode== 'Business-Case'">
             <button class="min-w-26" mat-flat-button [color]="'primary'"
@@ -582,21 +582,21 @@
                 Submit
             </button>
         </div>
-    
+
         <div class="w-full pr-4 m-2 flex items-start justify-between" *ngIf="mode== 'Project-Charter' ">
-    
+
             <button class="min-w-26" mat-flat-button [color]="'primary'"
                 (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
                 Cancel
             </button>
-    
+
             <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="submitschedulecharter()">
                 Submit
             </button>
-    
+
         </div>
     </div>
-    
+
     <div *ngIf="viewContent" [hidden]="!viewBaseline">
         <div class="flex items-start justify-between bg-primary sidepanel-header">
             <div class="text-on-primary" style="padding-top: 6px">Baseline Count Justification</div>
@@ -616,7 +616,7 @@
                 formControlName="baseLineReasonCode" name="baseLineReasonCode" [valuePointer]="'lookUpName'"
                 [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
                 [dropDownArray]="getBaselineReasonCode()"></spot-singleselect-autocomplete>
-    
+
             <div class="flex justify-between items-center">
                 <div class="flex justify-start gap-1 items-center">Do you want to increment the baseline counter?
                 </div>
@@ -636,7 +636,7 @@
             </button>
         </div>
     </div>
-    
+
     <div *ngIf="!viewContent" [hidden]="!viewBaselineLogs">
         <div class="flex items-start justify-between bg-primary sidepanel-header">
             <div class="text-on-primary" style="padding-top: 6px">Baseline Log</div>
@@ -651,7 +651,7 @@
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="pl-3 pt-3 datatable-bl-83 material font-medium text-sm text-default whitespace-nowrap cursor-default"
                 [rows]="baselineLogData" [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #baselinelogTable>
-    
+
                 <!-- <ngx-datatable-column name="Include in Slip Chart" prop="includeSlipChart" [sortable]="false"
                   [resizeable]="false" [flexGrow]="0.6">
                   <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -668,8 +668,8 @@
                     </form>
                   </ng-template>
                 </ngx-datatable-column> -->
-    
-    
+
+
                 <ngx-datatable-column name="Log ID" prop="logId" [flexGrow]="0.5" *ngIf="mode=='Normal'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <div *ngIf="checklogDetails(row.baselineLogId) && value != '1'" class="logID">
@@ -680,8 +680,8 @@
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
-    
-    
+
+
                 <ngx-datatable-column name="Baseline" prop="baselineCount" [flexGrow]="0.68" *ngIf="mode=='Baseline-Log'">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <div class="countbaseline">
@@ -696,7 +696,7 @@
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
-    
+
                 <ngx-datatable-column name="Baseline Date" prop="modifiedDate" [flexGrow]="1"
                     *ngIf="mode=='Baseline-Log'">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
@@ -708,15 +708,15 @@
                         <p>{{value | date:'dd-MMM-yyyy hh:mm:ss a'}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-    
-    
+
+
                 <ngx-datatable-column name="Baseline Set By" prop="teamMemberAdId" [flexGrow]="1"
                     *ngIf="mode=='Baseline-Log'">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p>{{getUserName(value)}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-    
+
                 <ngx-datatable-column name="Baseline Set By" prop="teamMemberAdId" [flexGrow]="1.5" *ngIf="mode=='Normal'">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p>{{getUserName(value)}}</p>
@@ -742,7 +742,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-    
+
                 <ngx-datatable-column name="Include in Close Out (Max 10)" prop="includeInCloseout" [sortable]="false"
                     [resizeable]="false" [flexGrow]="1" *ngIf="mode=='Baseline-Log'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -761,24 +761,24 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-    
+
                 <ngx-datatable-column name="Justification" prop="baselineComment" [flexGrow]="4" *ngIf="mode=='Normal'">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p>{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-    
+
             </ngx-datatable>
         </div>
-    
+
         <!-- </form> -->
-    
+
         <div class="w-full pr-4 m-2 flex items-start justify-between" *ngIf="mode== 'Baseline-Log'">
             <button class="min-w-26" mat-flat-button [color]="'primary'"
                 (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)" *ngIf="mode== 'Baseline-Log'">
                 Cancel
             </button>
-    
+
             <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitLog()"
                 *ngIf="mode== 'Baseline-Log'">
                 Submit
@@ -800,42 +800,42 @@
                 </a>
             </div>
         </div>
-    
+
         <div class="flex justify-start gap-40 items-center">
             <div class="font-medium text-default text-md italic mt-2">
                 <h6 class="font-medium text-default text-md italic ml-4 mt-2">
                     Log ID : {{baselinelogdetails.logId}}
                 </h6>
             </div>
-    
+
             <div class="font-medium text-default text-md italic mt-2">
-    
+
                 <h6 class="font-medium text-default text-md italic ml-2 mt-2">
                     Baseline : {{baselinelogdetails.baselineCount}} </h6>
             </div>
-    
-    
+
+
             <div class="font-medium text-default text-md italic mt-2">
-    
+
                 <h6 class="font-medium text-default text-md italic ml-2 mt-2">
                     Baseline Date : {{baselinelogdetails.modifiedDate | date:'dd-MMM-yyyy'}} </h6>
-    
+
             </div>
-    
+
             <div class="font-medium text-default text-md italic mt-2">
-    
+
                 <h6 class="font-medium text-default text-md italic ml-4 mt-2">
                     Baseline Set By : {{getUserName(baselinelogdetails.teamMemberAdId)}}</h6>
-    
+
             </div>
-    
+
             <div class="font-medium text-default text-md italic mt-2">
-    
+
                 <h6 class="font-medium text-default text-md italic ml-4 mt-2">
                     Justification : {{baselinelogdetails.baselineComment}} </h6>
-    
+
             </div>
-    
+
         </div>
         <div class="overflow-y-hidden">
             <!-- <div class="mt-3 h-[85vh] overflow-hidden"> -->
@@ -843,32 +843,32 @@
                 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                     class="pr-2 material font-medium text-sm text-default whitespace-nowrap cursor-pointer"
                     [rows]="logdetailsObj" [rowClass]="getRowClass">
-    
+
                     <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="2.8">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <p>{{value}}</p>
-    
+
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Planned Finish"
                         prop="prevplannedFinish" [flexGrow]="0.48">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-    
+
                             <div *ngIf="value == 'empty2'; else null55" class="noplanned1">
                                 &nbsp;
                             </div>
                             <ng-template #null55>
-    
+
                                 <p>{{value | date:'dd-MMM-yyyy'}}</p>
-    
+
                             </ng-template>
-    
+
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Planned Finish"
                         prop="currplannedFinish" [flexGrow]="0.48">
-    
+
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <div *ngIf="value == 'empty' || (value == '' && row.plannedchange); else null5"
                                 class="noplanned">
@@ -883,24 +883,24 @@
                                 </div>
                             </ng-template>
                         </ng-template>
-    
-    
+
+
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Baseline Finish"
                         prop="prevbaselineFinish" [flexGrow]="0.48">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-    
+
                             <div *ngIf="value == 'empty2'; else null11" class="nobaselined1">
                                 &nbsp;
                             </div>
                             <ng-template #null11>
                                 <p>{{value | date:'dd-MMM-yyyy'}}</p>
-    
-    
+
+
                                 <!-- <p *ngIf="!row.baselinechange">{{value | date:'dd-MMM-yyyy'}}</p> -->
                             </ng-template>
-    
+
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Baseline Finish"
@@ -912,24 +912,24 @@
                             </div>
                             <ng-template #null1>
                                 <p *ngIf="row.baselinechange" class="baselineChange">{{value | date:'dd-MMM-yyyy'}}</p>
-    
-    
+
+
                                 <p *ngIf="!row.baselinechange">{{value | date:'dd-MMM-yyyy'}}</p>
                             </ng-template>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Completion Date"
                         prop="prevcompletionDate" [flexGrow]="0.55">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-    
+
                             <div *ngIf="value == 'empty2'; else null22" class="nocompleted1">
                                 &nbsp;
                             </div>
                             <ng-template #null22>
                                 <p>{{value | date:'dd-MMM-yyyy'}}</p>
                             </ng-template>
-    
+
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Completion Date"
@@ -949,11 +949,11 @@
                             </ng-template>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                     <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Indicator" prop="previndicator"
                         [flexGrow]="0.39">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-    
+
                             <div *ngIf="value == 'empty2' || (value == '' && row.indicatorchange); else null33"
                                 class="noindicator1">
                                 &nbsp;
@@ -971,12 +971,12 @@
                             </div>
                             <ng-template #null3>
                                 <p *ngIf="row.indicatorchange" class="indicatorchange">{{value}}</p>
-    
+
                                 <p *ngIf="!row.indicatorchange">{{value}}</p>
                             </ng-template>
                         </ng-template>
                     </ngx-datatable-column>
-    
+
                 </ngx-datatable>
             </div>
         </div>
@@ -984,17 +984,16 @@
             <!-- <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogs()">
               Cancel
             </button> -->
-    
+
             <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogDetails()">
                 OK
             </button>
-    
+
         </div>
     </div>
     <div *ngIf="viewContent" [hidden]="!viewStandardMilestonesSets">
         <app-standard-milestone-sets (standardMilestonesAdded)="addStandardMilestonesToList($event)"
             [loadContent]="viewStandardMilestonesSets" [lookup]="lookUpData"></app-standard-milestone-sets>
     </div>
-    
+
     <!-- </div> -->
-    
