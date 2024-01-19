@@ -76,7 +76,6 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
         this.projectApiService.getfilterlist().then(filterres => {
           this.auth.KPIMaster().then((kpi: any) => {
             this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
-debugger
               console.log(res)
               console.log(currency)
               this.localCurrency = currency ? currency.localCurrencyAbbreviation : ''
