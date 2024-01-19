@@ -260,6 +260,15 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                 }
             }
         } else {
+            if (this.router.url.includes('recommended-option')) {
+                this.BusinessCaseOptionId = GlobalBusinessCaseOptions.OPTION_1
+            }
+            else if (this.router.url.includes('option-2')) {
+                this.BusinessCaseOptionId = GlobalBusinessCaseOptions.OPTION_2
+            }
+            else if (this.router.url.includes('option-3')) {
+                this.BusinessCaseOptionId = GlobalBusinessCaseOptions.OPTION_3
+            }
             this.keyAssumptionsSubmit = []
         }
     }
