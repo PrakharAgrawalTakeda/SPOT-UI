@@ -37,7 +37,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
     lookupdata: any[]
     kaTableEditStack = []
     keyAssumptionForm = new FormArray([])
-
+    BusinessCaseOptionId: any = ''
     ngOnInit(): void {
         this.dataloader()
     }
@@ -215,6 +215,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
         if (form.length > 0) {
             this.keyAssumptionsSubmit = []
             if (this.router.url.includes('option-3')) {
+                this.BusinessCaseOptionId = GlobalBusinessCaseOptions.OPTION_3
                 for (var i of form) {
                     this.keyAssumptionsSubmit.push({
                         "keyAssumptionUniqueId": i.keyAssumptionUniqueId,
@@ -229,6 +230,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                 }
             }
             if (this.router.url.includes('option-2')) {
+                this.BusinessCaseOptionId = GlobalBusinessCaseOptions.OPTION_2
                 for (var i of form) {
                     this.keyAssumptionsSubmit.push({
                         "keyAssumptionUniqueId": i.keyAssumptionUniqueId,
@@ -243,6 +245,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                 }
             }
             if (this.router.url.includes('recommended-option')) {
+                this.BusinessCaseOptionId = GlobalBusinessCaseOptions.OPTION_1
                 for (var i of form) {
                     this.keyAssumptionsSubmit.push({
                         "keyAssumptionUniqueId": i.keyAssumptionUniqueId,
@@ -368,7 +371,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
             this.projecthubservice.isFormChanged = false
             if (this.router.url.includes('option-2') || this.router.url.includes('option-3') || this.router.url.includes('recommended-option') ) {
                 this.formValueForOptions()
-                this.apiService.bulkEditKeyAssumptionsForOption(this.keyAssumptionsSubmit, this.projecthubservice.projectid).then(res => {
+                this.apiService.bulkEditKeyAssumptionsForOption(this.keyAssumptionsSubmit, this.BusinessCaseOptionId,this.projecthubservice.projectid).then(res => {
                     this.projecthubservice.submitbutton.next(true)
                     this.projecthubservice.toggleDrawerOpen('', '', [], '')
                     this.projecthubservice.isNavChanged.next(true)
