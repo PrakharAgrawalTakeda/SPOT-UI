@@ -38,6 +38,7 @@ export class ProjectTeamComponent implements OnInit {
   }
   dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+
     if (this.mode != 'Normal') {
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     }
@@ -46,14 +47,14 @@ export class ProjectTeamComponent implements OnInit {
       this.addSingle = 'ProjectTeamAddSingleProjectProposal'
     }
     if (this.mode == 'Project-Charter') {
-      this.bulkEditType = 'ProjectTeamBulkEditProjectCharter';  
+      this.bulkEditType = 'ProjectTeamBulkEditProjectCharter';
       this.addSingle = 'ProjectTeamAddSingleProjectCharter'
     }
     if (this.mode == 'Project-Charter') {
       this.bulkEditType = 'ProjectTeamBulkEditProjectCharter';
       this.addSingle = 'ProjectTeamAddSingleProjectCharter'
     }
-    this.apiService.getmembersbyproject(this.id).then((res) => {
+    this.apiService.getmembersbyproject(this.id ? this.id : this.projecthubservice.projectid).then((res) => {
       this.apiService.getGeneralInfoData(this.id).then((result:any)=>{
       this.isStrategicInitiative = result.projectData.problemType == "Strategic Initiative / Program"
       this.teamMembers = res
@@ -62,14 +63,13 @@ export class ProjectTeamComponent implements OnInit {
       for (let i = 0; i < this.teamMembers.length; i++) {
         if (this.teamMembers[i].includeInCharter === null) {
           this.teamMembers[i].includeInCharter = false;
-        }  
+        }
       }
-    })  
+    })
   })
   }
   getNgxDatatableNumberHeader(): any {
     return ' ngx-number-header';
-  }  
+  }
 
 }
-  
