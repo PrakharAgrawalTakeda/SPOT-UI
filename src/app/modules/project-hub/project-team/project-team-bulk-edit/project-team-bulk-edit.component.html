@@ -143,26 +143,6 @@
                         </a>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [flexGrow]="0.1" [resizeable]="false" [sortable]="false" [draggable]="false"
-                    [flexGrow]="0.3" *ngIf="mode == 'Project-Charter'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
-                        ngx-datatable-cell-template>
-                        <a href="javascript:void(0)" *ngIf="deleteShowLogic(rowIndex)" title="Delete Single"
-                            (click)="deletePT(rowIndex)">
-                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
-                        </a>
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column [flexGrow]="0.1" [resizeable]="false" [sortable]="false" [draggable]="false"
-                    [flexGrow]="0.3" *ngIf="mode == 'Project-Proposal'">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
-                        ngx-datatable-cell-template>
-                        <a href="javascript:void(0)" *ngIf="deleteShowLogic(rowIndex)" title="Delete Single"
-                            (click)="deletePT(rowIndex)">
-                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
-                        </a>
-                    </ng-template>
-                </ngx-datatable-column>
             </ngx-datatable>
         </div>
     </div>

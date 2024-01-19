@@ -67,7 +67,7 @@ export class AuthInterceptor implements HttpInterceptor {
           else {
             // handle other types of errors
             console.error('Request error:', error);
-            if(cloned.url.includes(GlobalVariables.apiurl)){
+            if(cloned.url.includes(GlobalVariables.apiurl) && cloned.method != 'GET'){
               this.appSerice.errorSave.next(true)
             }
           }

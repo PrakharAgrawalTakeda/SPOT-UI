@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
@@ -7,6 +7,7 @@ import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotli
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
+import { Subject, takeUntil } from 'rxjs';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.
   styleUrls: ['./project-benefits.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class ProjectBenefitsComponent implements OnInit {
+export class ProjectBenefitsComponent implements OnInit, OnDestroy {
    ValueCaptureForm = new FormGroup({
     valueCaptureStart: new FormControl(''),
     primaryValueDriver: new FormControl(''),
@@ -37,12 +38,13 @@ export class ProjectBenefitsComponent implements OnInit {
     localCurrency: string = ""
   valueCreation: any;
   projectsMetricsData = []
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(public projectApiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute,
     public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService) {
-      this.projecthubservice.submitbutton.subscribe(res => {
-        if (res) {
-          console.log(res)
+      this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
+        if (this.viewContent == true) {
           this.ngOnInit()
+          
         }
       })
 
@@ -74,7 +76,6 @@ export class ProjectBenefitsComponent implements OnInit {
         this.projectApiService.getfilterlist().then(filterres => {
           this.auth.KPIMaster().then((kpi: any) => {
             this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
-
               console.log(res)
               console.log(currency)
               this.localCurrency = currency ? currency.localCurrencyAbbreviation : ''
@@ -211,6 +212,12 @@ console.log(problemCapture)
       })
     })
   })
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
 
   private initializeFinancialDataForYear(fiscalYear: string, metricsData: any[]): void {
