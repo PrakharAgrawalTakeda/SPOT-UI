@@ -21,7 +21,7 @@
                 </mat-slide-toggle>
             </form>
         </div>
-        <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
+        <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" style="height: calc(calc(100vh/ var(--custom-zoom)) - 180px)"
                        columnMode="flex" class="material datatable-ri-73 w-full font-medium text-sm text-default whitespace-nowrap cursor-pointer"
                        [rows]="tableData" #askNeedTable [rowClass]="getRowClass">
             <ngx-datatable-column name='Status' prop="indicator" [resizeable]="false" [sortable]="false"

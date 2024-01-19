@@ -193,7 +193,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 }
                 console.log("INSERT ARRAY", this.insertarray)
             }
-            if (this.viewContent == true && this.mode != "Business-Case") {
+            if (this.viewContent == true ) {
                 //this.saveScheduleBulkEdit()
                 if (JSON.stringify(this.scheduledataDb) != JSON.stringify(this.scheduleObj)) {
                     this.projecthubservice.isFormChanged = true
@@ -295,7 +295,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             this.apiService.getProjectBaselineLogDetails(this.id).then((logDetails: any) => {
                 this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
                     this.apiService.getprojectviewdata(this.id).then((res: any) => {
-
                         if (logDetails.length != 0) {
                             this.logdetails = logDetails
                         }
@@ -1168,7 +1167,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             this.milestoneTableEditRow(this.schedulengxdata.length - 1)
             var div = document.getElementsByClassName('datatable-scroll')[0]
             setTimeout(() => {
-                div.scroll({
+                div?.scroll({
                     top: div.scrollHeight,
                     left: 0,
                     behavior: 'smooth'
@@ -1850,7 +1849,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             milestone: (i.milestone),
                             plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
                             baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                            responsiblePersonName: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userDisplayName,
+                            responsiblePersonName: i.responsiblePersonName ? (Object.keys(i.responsiblePersonName).length === 0 ? null : i.responsiblePersonName.userDisplayName) : null,
                             completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
                             comments: i.comments,
                             includeInReport: i.includeInReport,
@@ -1861,7 +1860,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             milestoneType: i.milestoneType,
                             templateMilestoneId: i.templateMilestoneId,
                             includeInCloseout: i.includeInCloseout,
-                            responsiblePersonId: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userAdid,
+                            responsiblePersonId: i.responsiblePersonName ? (Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userAdid) : null,
                             indicator: i.indicator
                         })
                     }
@@ -2437,6 +2436,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     }
 
 
+    closeDrawer() {
+        this.projecthubservice.toggleDrawerOpen('', '', [], '',true)
+    }
     submitschedulecloseout() {
         this.projecthubservice.isFormChanged = false
         var formValue = this.milestoneForm.getRawValue()
@@ -2633,21 +2635,21 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
 
         //standard milestones and no new milestone
-        if (!this.flag && !baselinedates2 && baselinedates.length == baselinedates3.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates3)) {
+        if (!this.flag && !baselinedates2 && baselinedates?.length == baselinedates3?.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates3)) {
             this.flag = true
             //this.insertArray(control['controls']['projectId'].value)
         }
         //standard milestones and new milestone not baselined
-        if (!this.flag && !baselinedates2 && JSON.stringify(baselinedates2) == '' && baselinedates.length == baselinedates3.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates3)) {
+        if (!this.flag && !baselinedates2 && JSON.stringify(baselinedates2) == '' && baselinedates?.length == baselinedates3?.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates3)) {
             this.flag = true
             //this.insertArray(control['controls']['projectId'].value)
         }
         //new milestone baselined
-        if (!this.flag && baselinedates2 && baselinedates.length == baselinedates3.length) {
+        if (!this.flag && baselinedates2 && baselinedates?.length == baselinedates3?.length) {
             this.flag = true
         }
         //milestone deleted and other milestone baselined
-        if (!this.flag && baselinedates.length > baselinedates3.length && JSON.stringify(baselinedates4) != JSON.stringify(baselinedates3)) {
+        if (!this.flag && baselinedates?.length > baselinedates3?.length && JSON.stringify(baselinedates4) != JSON.stringify(baselinedates3)) {
             this.flag = true
         }
         // if (!this.flag && JSON.stringify(baselinedates2) != '' && baselinedates.length < baselinedates2.length && JSON.stringify(baselinedates) == JSON.stringify(baselinedates2)) {
@@ -2818,7 +2820,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             }
             var div = document.getElementsByClassName('datatable-scroll')[0]
             setTimeout(() => {
-                div.scroll({
+                div?.scroll({
                     top: div.scrollHeight,
                     left: 0,
                     behavior: 'smooth'

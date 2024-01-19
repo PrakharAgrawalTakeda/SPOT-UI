@@ -58,10 +58,16 @@ export class AuthInterceptor implements HttpInterceptor {
             console.error('Request timed out:', req.url);
             location.reload()
             // navigate to a timeout page, for example
-          } else {
+          } 
+          else if(error.status == 401){
+            if(cloned.url.includes(GlobalVariables.apiurl)){
+              location.reload()
+            }
+          }
+          else {
             // handle other types of errors
             console.error('Request error:', error);
-            if(cloned.url.includes(GlobalVariables.apiurl)){
+            if(cloned.url.includes(GlobalVariables.apiurl) && cloned.method != 'GET'){
               this.appSerice.errorSave.next(true)
             }
           }

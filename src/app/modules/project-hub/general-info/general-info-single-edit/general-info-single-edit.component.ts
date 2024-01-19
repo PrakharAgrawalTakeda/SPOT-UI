@@ -29,7 +29,6 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   flag = 0
   @Output() eventName = new EventEmitter<EventType>();
   viewContent: boolean = false
-  showMessage: boolean = false;
   filterCriteria: any = {}
   generalInfo: any = {}
   lookupdata: any = [];
@@ -267,6 +266,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    console.log("inside GI")
     if(this.callLocation == 'CreateNew'){
       this.generalInfoForm.controls.localCurrency.enable()
     }
@@ -448,14 +448,14 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
     return [];
   }
 
-  clickEvent(value: string, name: string) {
-    if ((name == "Project Name" || name == "Portfolio Owner\nhelp" || name == "None\nOwning Organizationhelp *" || name == "Submitted By" || name == "Primary Producthelp *" || name == "Problem Description / Present Situation / Submission Description *" || name == "Project Type *") && (value == '' || value == undefined)) {
-      this.showMessage = true
-    }
-    else {
-      this.showMessage = false
-    }
-  }
+  // clickEvent(value: string, name: string) {
+  //   if ((name == "Project Name" || name == "Portfolio Owner\nhelp" || name == "Local Currency\nLocal Currency" || name == "Submitted By" || name == "Primary Product\nhelp" || name == "Problem Description / Present Situation / Submission Description\nhelp") && (value == '' || value == undefined)) {
+  //     this.showMessage = true
+  //   }
+  //   else {
+  //     this.showMessage = false
+  //   }
+  // }
 
 
   submitGI() {

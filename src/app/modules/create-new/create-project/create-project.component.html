@@ -12,6 +12,8 @@
                                     <div style="overflow-y: scroll;height: 65vh;">
                                     <ng-template 
                                         matStepLabel><span>Basics</span></ng-template>
+                                        <p style="color:red;" *ngIf="showMessage">Error: Some of the
+                                            required fields are missing. Please review and correct your data below</p>
                                         <app-general-info-single-edit *ngIf="SIP" [callLocation]="'CreateNewSIP'" [viewType]="'Form'" (formValue)="captureValue(0,$event)"
                                             [viewElements]="['problemTitle', 'portfolioOwner', 'excecutionScope', 'owningOrganization', 'SubmittedBy', 'primaryProduct', 'otherImpactedProducts', 'projectDescription', 'problemType1','sponsor','valueCaptureStart']"></app-general-info-single-edit>
                                         <app-general-info-single-edit *ngIf="!SIP" [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(0,$event)" [viewElements]="['problemTitle', 'portfolioOwner', 'excecutionScope', 'owningOrganization', 'SubmittedBy', 'primaryProduct', 'otherImpactedProducts', 'projectDescription', 'targetGoalSituation', 'localCurrency', 'problemType1']"></app-general-info-single-edit>
