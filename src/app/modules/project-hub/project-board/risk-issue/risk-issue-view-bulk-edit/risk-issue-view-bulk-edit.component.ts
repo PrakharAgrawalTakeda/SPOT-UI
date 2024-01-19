@@ -65,6 +65,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     riTableEditStack = []
     isclosedriskissuetoggle: boolean = false;
     lookupdata: any = []
+    BusinessCaseOptionId: any = ''
     ngOnInit(): void {
         this.getllookup()
     }
@@ -398,7 +399,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             if (this.mode == "Business-Case") {
                 this.submitPrepForOptions()
                 this.projectHubService.isFormChanged = false
-                this.apiService.bulkEditRiskIssuesForOption(this.formValue, this.projectHubService.projectid).then(res => {
+                this.apiService.bulkEditRiskIssuesForOption(this.formValue, this.BusinessCaseOptionId ,this.projectHubService.projectid).then(res => {
                     this.projectHubService.submitbutton.next(true)
                     this.projectHubService.toggleDrawerOpen('', '', [], '')
                     this.projectHubService.isNavChanged.next(true)
@@ -530,12 +531,15 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         let optionId = "";
         if (this.router.url.includes('option-3')) {
             optionId= GlobalBusinessCaseOptions.OPTION_3
+            this.BusinessCaseOptionId = GlobalBusinessCaseOptions.OPTION_3
         }
         if (this.router.url.includes('option-2')) {
             optionId= GlobalBusinessCaseOptions.OPTION_2
+            this.BusinessCaseOptionId = GlobalBusinessCaseOptions.OPTION_2
         }
         if (this.router.url.includes('recommended-option')) {
             optionId=""
+            this.BusinessCaseOptionId = GlobalBusinessCaseOptions.OPTION_1
         }
         for (var i of formValue) {
             this.formValue.push({

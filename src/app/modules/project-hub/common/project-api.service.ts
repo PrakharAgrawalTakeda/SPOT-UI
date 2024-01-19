@@ -471,8 +471,8 @@ async addBCFunding(body,optionId,projectId){
       const response = await lastValueFrom(abc$)
       return response
   }
-  async bulkEditKeyAssumptionsForOption(body,projectId){
-      var link = GlobalVariables.apiurl+"BusinessCase/KeyAssumption/BulkEdit/" + projectId
+  async bulkEditKeyAssumptionsForOption(body, optionId, projectId){
+      var link = GlobalVariables.apiurl+"BusinessCase/KeyAssumption/BulkEdit/" + optionId + '/' + projectId
       const abc$ = this.http.put(link,body)
       const response = await lastValueFrom(abc$)
       return response
@@ -483,8 +483,8 @@ async addBCFunding(body,optionId,projectId){
       const response = await lastValueFrom(abc$)
       return response
   }
-  async bulkEditRiskIssuesForOption(body,projectId){
-      var link = GlobalVariables.apiurl+"BusinessCase/RiskIssue/BulkEdit/" + projectId
+  async bulkEditRiskIssuesForOption(body,optionId,projectId){
+      var link = GlobalVariables.apiurl+"BusinessCase/RiskIssue/BulkEdit/"+ optionId + '/' + projectId
       const abc$ = this.http.put(link,body)
       const response = await lastValueFrom(abc$)
       return response
