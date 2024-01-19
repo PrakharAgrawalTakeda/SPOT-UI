@@ -739,8 +739,8 @@ export class BudgetForecastBulkEditComponent {
         this.budgetForecastForm.patchValue({
             totalApprovedCapex: budget.totalApprovedCapEx ? budget.totalApprovedCapEx : 0,
             committedSpend: forecast.find(x => x.active == 'Current').committedSpend,
-            afpDeviationCode: forecast.find(x => x.active == 'Current').afpDeviationCodeID,
-            mtdpDeviationCode: forecast.find(x => x.active == 'Current').mtdpDeviationCodeID
+            afpDeviationCode: this.projecthubservice.lookUpMaster.find(x => x.lookUpId == forecast.find(x => x.active == 'Current').afpDeviationCodeID),
+            mtdpDeviationCode: this.projecthubservice.lookUpMaster.find(x => x.lookUpId == forecast.find(x => x.active == 'Current').mtdpDeviationCodeID),
         })
         this.budgetForecastForm.controls.totalApprovedCapex.disable()
         this.budgetService.setTextColors();
