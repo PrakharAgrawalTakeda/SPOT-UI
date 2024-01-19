@@ -32,6 +32,7 @@ export class CreateProjectComponent implements OnInit {
   lookupdata: any = [];
   activeaccount: any;
   projectid: string = "";
+  showMessage = false
   qualityformValue = [];
   qualityType: any = [];
   campaignPhase: any = [];
@@ -203,6 +204,7 @@ export class CreateProjectComponent implements OnInit {
   }
 
   captureValue(index: number, event: any) {
+    this.showMessage = false;
     this.capturedValues[index] = event
     if (index == 4) {
       this.capturedValues[index] = event.value
@@ -654,6 +656,7 @@ export class CreateProjectComponent implements OnInit {
         }
         const alert = this.fuseAlert.open(comfirmConfig)
         this.stepper.selectedIndex = index - 1;
+        this.showMessage = true;
       }
       else {
         this.showLocalAttributes = false
@@ -665,6 +668,7 @@ export class CreateProjectComponent implements OnInit {
         }
         this.showLocalAttributes = true
         this.stepper.selectedIndex = index;
+        this.showMessage = false;
       }
     }
     else {
@@ -692,6 +696,7 @@ export class CreateProjectComponent implements OnInit {
         }
         const alert = this.fuseAlert.open(comfirmConfig)
         this.stepper.selectedIndex = index - 1;
+        this.showMessage = true
       }
       else {
         this.showLocalAttributes = false
@@ -703,6 +708,7 @@ export class CreateProjectComponent implements OnInit {
         }
         this.showLocalAttributes = true
         this.stepper.selectedIndex = index;
+        this.showMessage = false
       }
     }
 
@@ -750,6 +756,7 @@ export class CreateProjectComponent implements OnInit {
           }
           const alert = this.fuseAlert.open(comfirmConfig)
           this.stepper.selectedIndex = "0"
+          this.showMessage = true
         }
         else {
           this.showLocalAttributes = false
@@ -761,6 +768,7 @@ export class CreateProjectComponent implements OnInit {
           }
           this.showLocalAttributes = true
           this.stepper.selectedIndex = index._selectedIndex;
+          this.showMessage = false
         }
       }
       else {
@@ -788,6 +796,7 @@ export class CreateProjectComponent implements OnInit {
           }
           const alert = this.fuseAlert.open(comfirmConfig)
           this.stepper.selectedIndex = "0"
+          this.showMessage = true
         }
         else {
           this.showLocalAttributes = false
@@ -799,6 +808,7 @@ export class CreateProjectComponent implements OnInit {
           }
           this.showLocalAttributes = true
           this.stepper.selectedIndex = index._selectedIndex;
+          this.showMessage = false
         }
       }
 

@@ -193,7 +193,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 }
                 console.log("INSERT ARRAY", this.insertarray)
             }
-            if (this.viewContent == true && this.mode != "Business-Case") {
+            if (this.viewContent == true ) {
                 //this.saveScheduleBulkEdit()
                 if (JSON.stringify(this.scheduledataDb) != JSON.stringify(this.scheduleObj)) {
                     this.projecthubservice.isFormChanged = true
@@ -295,7 +295,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             this.apiService.getProjectBaselineLogDetails(this.id).then((logDetails: any) => {
                 this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
                     this.apiService.getprojectviewdata(this.id).then((res: any) => {
-
                         if (logDetails.length != 0) {
                             this.logdetails = logDetails
                         }
@@ -2437,6 +2436,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     }
 
 
+    closeDrawer() {
+        this.projecthubservice.toggleDrawerOpen('', '', [], '',true)
+    }
     submitschedulecloseout() {
         this.projecthubservice.isFormChanged = false
         var formValue = this.milestoneForm.getRawValue()
