@@ -33,4 +33,4 @@ jobs:
           app-name: 'tospot'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E053E82EE1384D76963D74D75BF24282 }}
-          package: .
+          package: './dist/fuse'
