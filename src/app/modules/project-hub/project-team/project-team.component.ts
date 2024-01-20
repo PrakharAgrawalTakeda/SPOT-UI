@@ -38,21 +38,23 @@ export class ProjectTeamComponent implements OnInit {
   }
   dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-
-    if (this.mode != 'Normal') {
-      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-    }
     if (this.mode == 'Project-Proposal') {
+      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
       this.bulkEditType = 'ProjectTeamBulkEditProjectProposal';
       this.addSingle = 'ProjectTeamAddSingleProjectProposal'
     }
     if (this.mode == 'Project-Charter') {
+        this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
       this.bulkEditType = 'ProjectTeamBulkEditProjectCharter';
       this.addSingle = 'ProjectTeamAddSingleProjectCharter'
     }
     if (this.mode == 'Project-Charter') {
+        this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
       this.bulkEditType = 'ProjectTeamBulkEditProjectCharter';
       this.addSingle = 'ProjectTeamAddSingleProjectCharter'
+    }
+    if(this.id == null || this.id == ''){
+        this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     }
     this.apiService.getmembersbyproject(this.id ? this.id : this.projecthubservice.projectid).then((res) => {
       this.apiService.getGeneralInfoData(this.id).then((result:any)=>{
