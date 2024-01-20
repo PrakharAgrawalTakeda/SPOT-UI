@@ -1,14 +1,14 @@
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
-import {ProjectHubService} from "../../../project-hub.service";
-import {FormArray, FormControl, FormGroup} from "@angular/forms";
-import {ProjectApiService} from "../../../common/project-api.service";
-import {SpotlightIndicatorsService} from "../../../../../core/spotlight-indicators/spotlight-indicators.service";
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ProjectHubService } from "../../../project-hub.service";
+import { FormArray, FormControl, FormGroup } from "@angular/forms";
+import { ProjectApiService } from "../../../common/project-api.service";
+import { SpotlightIndicatorsService } from "../../../../../core/spotlight-indicators/spotlight-indicators.service";
 import * as moment from "moment";
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
-import {AuthService} from "../../../../../core/auth/auth.service";
-import {Router} from "@angular/router";
-import {Constants} from "../../../../../shared/constants";
-import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-case-options";
+import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../../../@fuse/services/confirmation";
+import { AuthService } from "../../../../../core/auth/auth.service";
+import { Router } from "@angular/router";
+import { Constants } from "../../../../../shared/constants";
+import { GlobalBusinessCaseOptions } from "../../../../../shared/global-business-case-options";
 
 @Component({
     selector: 'app-risk-issue-view-bulk-edit',
@@ -17,7 +17,7 @@ import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-c
     encapsulation: ViewEncapsulation.None
 })
 export class RisIssueViewBulkEditComponent implements OnInit {
-    @Input() viewElements: any = ["status", "dateInitiated", "type", "logDate", "ifThisHappens", "probability", "thisIsTheResult", "impact", "mitigation", "owner", "function", "dueDate", "closeDate", "includeInProjectDashboard",'isLink', 'indicator', 'includeClosedItems']
+    @Input() viewElements: any = ["status", "dateInitiated", "type", "logDate", "ifThisHappens", "probability", "thisIsTheResult", "impact", "mitigation", "owner", "function", "dueDate", "closeDate", "includeInProjectDashboard", 'isLink', 'indicator', 'includeClosedItems']
     @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' | 'Business-Case' = 'Normal'
     constructor(
         public projectHubService: ProjectHubService,
@@ -72,10 +72,9 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     dataloader() {
         this.viewContent = false
         if (this.projectHubService.projectid) {
-            if(this.mode == "Business-Case")
-            {
+            if (this.mode == "Business-Case") {
                 if (this.router.url.includes('option-2')) {
-                    this.apiService.getRiskIssuesByOption(this.projectHubService.projectid,GlobalBusinessCaseOptions.OPTION_2).then((res: any) => {
+                    this.apiService.getRiskIssuesByOption(this.projectHubService.projectid, GlobalBusinessCaseOptions.OPTION_2).then((res: any) => {
                         this.riskIssueData = res;
                         if (this.riskIssueData.length > 0) {
                             for (var i of this.riskIssueData) {
@@ -108,12 +107,14 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                         this.linksProblemCapture = res.linksProblemCapture
                         this.tableData = this.riskIssueData;
                         this.tableData.length > 0 ? this.formIntializer() : ''
-                        this.viewContent = true
+                        setTimeout(() => {
+                            this.viewContent = true
+                        }, 400);
                     })
                 }
-                else{
+                else {
                     if (this.router.url.includes('option-3')) {
-                        this.apiService.getRiskIssuesByOption(this.projectHubService.projectid,GlobalBusinessCaseOptions.OPTION_3).then((res: any) => {
+                        this.apiService.getRiskIssuesByOption(this.projectHubService.projectid, GlobalBusinessCaseOptions.OPTION_3).then((res: any) => {
                             this.riskIssueData = res;
                             if (this.riskIssueData.length > 0) {
                                 for (var i of this.riskIssueData) {
@@ -144,11 +145,14 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                             }
                             this.tableData = this.riskIssueData;
                             this.tableData.length > 0 ? this.formIntializer() : ''
-                            this.viewContent = true
+                            setTimeout(() => {
+                                this.viewContent = true
+                            }, 400);
+
                         })
-                    }else{
+                    } else {
                         if (this.router.url.includes('recommended-option')) {
-                            this.apiService.getRiskIssuesByOption(this.projectHubService.projectid,GlobalBusinessCaseOptions.OPTION_1).then((res: any) => {
+                            this.apiService.getRiskIssuesByOption(this.projectHubService.projectid, GlobalBusinessCaseOptions.OPTION_1).then((res: any) => {
                                 this.riskIssueData = res;
                                 if (this.riskIssueData.length > 0) {
                                     for (var i of this.riskIssueData) {
@@ -179,12 +183,14 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                                 }
                                 this.tableData = this.riskIssueData;
                                 this.tableData.length > 0 ? this.formIntializer() : ''
-                                this.viewContent = true
+                                setTimeout(() => {
+                                    this.viewContent = true
+                                }, 400);
                             })
                         }
                     }
                 }
-            }else{
+            } else {
                 this.apiService.getprojectviewdata(this.projectHubService.projectid).then((res: any) => {
                     this.riskIssueData = res.riskIssuesData;
                     if (res.riskIssuesData?.length > 0) {
@@ -219,7 +225,9 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                     this.changeRiskIssue(this.projectHubService.includeClosedItems.riskIssue.value)
                     this.tableData = this.sortByDate(this.tableData)
                     this.tableData.length > 0 ? this.formIntializer() : ''
-                    this.viewContent = true
+                    setTimeout(() => {
+                        this.viewContent = true
+                    }, 400);
                 })
             }
 
@@ -399,12 +407,12 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             if (this.mode == "Business-Case") {
                 this.submitPrepForOptions()
                 this.projectHubService.isFormChanged = false
-                this.apiService.bulkEditRiskIssuesForOption(this.formValue, this.BusinessCaseOptionId ,this.projectHubService.projectid).then(res => {
+                this.apiService.bulkEditRiskIssuesForOption(this.formValue, this.BusinessCaseOptionId, this.projectHubService.projectid).then(res => {
                     this.projectHubService.submitbutton.next(true)
                     this.projectHubService.toggleDrawerOpen('', '', [], '')
                     this.projectHubService.isNavChanged.next(true)
                 })
-            }else{
+            } else {
                 this.submitPrep()
                 this.projectHubService.isFormChanged = false
                 this.apiService.bulkeditRiskIssue(this.formValue, this.projectHubService.projectid).then(res => {
@@ -415,13 +423,13 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                             this.projectHubService.isNavChanged.next(true)
                             this.projectHubService.successSave.next(true)
                         })
-                    }else{
+                    } else {
                         this.projectHubService.toggleDrawerOpen('', '', [], '')
                         this.projectHubService.submitbutton.next(true)
                         this.projectHubService.isNavChanged.next(true)
                         this.projectHubService.successSave.next(true)
                     }
-                    }
+                }
                 )
             }
 
@@ -461,9 +469,9 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         this.disabler()
     }
     disabler() {
-        if (this.router.url.includes('option-3') || this.router.url.includes('option-2')){
+        if (this.router.url.includes('option-3') || this.router.url.includes('option-2')) {
             this.submitPrepForOptions()
-        }else{
+        } else {
             this.submitPrep()
             var formValue = this.formValue
             if (formValue.length > 0) {
@@ -530,15 +538,15 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         var formValue = this.riskIssueForm.getRawValue()
         let optionId = "";
         if (this.router.url.includes('option-3')) {
-            optionId= GlobalBusinessCaseOptions.OPTION_3
+            optionId = GlobalBusinessCaseOptions.OPTION_3
             this.BusinessCaseOptionId = GlobalBusinessCaseOptions.OPTION_3
         }
         if (this.router.url.includes('option-2')) {
-            optionId= GlobalBusinessCaseOptions.OPTION_2
+            optionId = GlobalBusinessCaseOptions.OPTION_2
             this.BusinessCaseOptionId = GlobalBusinessCaseOptions.OPTION_2
         }
         if (this.router.url.includes('recommended-option')) {
-            optionId=""
+            optionId = ""
             this.BusinessCaseOptionId = GlobalBusinessCaseOptions.OPTION_1
         }
         for (var i of formValue) {
