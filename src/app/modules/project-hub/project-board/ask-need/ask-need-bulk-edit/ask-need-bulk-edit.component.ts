@@ -97,7 +97,9 @@ export class AskNeedBulkEditComponent implements OnInit {
 
 
 
-        this.viewContent = true
+        setTimeout(() => {
+          this.viewContent = true
+        }, 400);
       })
     }
   }
@@ -140,7 +142,7 @@ export class AskNeedBulkEditComponent implements OnInit {
         askNeedUniqueId: i.askNeedUniqueId,
         projectId: i.projectId,
         askNeed1: i.askNeed1,
-        needFromId:  i.needFrom?.userAdid ?i.needFrom.userAdid : null,
+        needFromId: i.needFrom?.userAdid ? i.needFrom.userAdid : null,
         needFromName: i.needFrom?.userDisplayName ? i.needFrom.userDisplayName : null,
         needByDate: i.needByDate ? moment(i.needByDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
         comments: i.comments,

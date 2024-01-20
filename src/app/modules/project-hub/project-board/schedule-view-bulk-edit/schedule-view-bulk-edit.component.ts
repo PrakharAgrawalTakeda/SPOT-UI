@@ -1128,7 +1128,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 templateMilestoneId: new FormControl(''),
                 includeInCloseout: new FormControl(false),
                 responsiblePersonId: new FormControl(''),
-                indicator: new FormControl('')
+                indicator: new FormControl(''),
+                missedMsreasonCode: new FormControl(null)
             }))
             for (let control of this.milestoneForm.controls) {
                 if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
@@ -1159,7 +1160,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 projectId: this.id,
                 responsiblePersonId: null,
                 responsiblePersonName: null,
-                templateMilestoneId: null
+                templateMilestoneId: null,
+                missedMsreasonCode: null
             }]
 
             this.schedulengxdata = [...this.schedulengxdata, ...j]
@@ -1413,7 +1415,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
                         includeInCloseout: false,
                         includeSlipChart: false,
-                        baseLineReasonCode: this.baselineForm.value.baseLineReasonCode.lookUpId
+                        baseLineReasonCode: this.baselineForm.value.baseLineReasonCode?.lookUpId
                     }
                     var baselineObjNew = {
                         projectId: this.id,
@@ -1441,7 +1443,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
                         includeInCloseout: false,
                         includeSlipChart: false,
-                        baseLineReasonCode: this.baselineForm.value.baseLineReasonCode.lookUpId
+                        baseLineReasonCode: this.baselineForm.value.baseLineReasonCode?.lookUpId
                     }
                     this.apiService.addProjectBaselineLog(justificationObjNewnocounter).then(res => {
                         //this.viewContent = true
@@ -1463,7 +1465,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                 baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
                                 includeInCloseout: i.includeInCloseout,
                                 includeSlipChart: i.includeSlipChart,
-                                baseLineReasonCode: this.baselineForm.value.baseLineReasonCode.lookUpId
+                                baseLineReasonCode: this.baselineForm.value.baseLineReasonCode?.lookUpId
                             }
                         }
                         this.apiService.addProjectBaselineLog(justjustificationObj).then(res => {
@@ -1491,7 +1493,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                 baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
                                 includeInCloseout: i.includeInCloseout,
                                 includeSlipChart: i.includeSlipChart,
-                                baseLineReasonCode: this.baselineForm.value.baseLineReasonCode.lookUpId
+                                baseLineReasonCode: this.baselineForm.value.baseLineReasonCode?.lookUpId
                             }
                         }
                         this.apiService.editProjectBaseline(newbaselineObj).then((count: any) => {

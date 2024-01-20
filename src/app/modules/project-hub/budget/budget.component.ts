@@ -164,6 +164,7 @@ export class BudgetComponent implements OnInit {
                 submittedByPreliminary: forecast.find(x => x.active == 'Preliminary')?.userName ? forecast.find(x => x.active == 'Preliminary').userName : "",
             })
         }
+        console.log("Aaaaaaaaaaaaa", this.budgetService.openEntry)
         this.budgetForecastForm.patchValue({
             referenceCurrent: forecast.find(x => x.active == 'Current').active,
             periodCurrent: forecast.find(x => x.active == 'Current').periodName,
@@ -171,7 +172,7 @@ export class BudgetComponent implements OnInit {
             submittedByCurrent: forecast.find(x => x.active == 'Current').userName,
             afpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').afpDeviationCodeID),
             mtdpCodeId: this.getLookUpName( this.budgetService.currentEntry.mtdpDeviationCodeID),
-            committedSpend: forecast.find(x => x.active == 'Current').committedSpend,
+            committedSpend: forecast.find(x => x.isopen && x.budgetData== "CapEx Forecast").committedSpend,
         })
         this.budgetService.headerLabel = "Current " +  forecast.find(x => x.active == 'Current').periodName + " versus Plan " +forecast.find(x => x.active == 'Plan').periodName
     }
