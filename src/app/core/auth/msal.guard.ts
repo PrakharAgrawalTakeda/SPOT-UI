@@ -16,7 +16,7 @@ export class MsalGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     console.log(this.authService.instance.getActiveAccount())
     
-    /* ONLY FOR PRODUCTION, DON'T LEAVE THIS UNCOMMENTED, THIS WILL RESTRICT ALL USERS 
+    /* ONLY FOR PRODUCTION, DON'T LEAVE THIS UNCOMMENTED, THIS WILL RESTRICT ALL USERS */
     var allowedUsers = ["prakhar.agrawal@takeda.com","sandor.miletic@takeda.com", "mannat.dev@takeda.com","darshan.patel@takeda.com","heinz.wolfger@takeda.com","mikalai.tursumbayeu@takeda.com","heiko.matschek@takeda.com","zenab.waglawala@takeda.com","toader.morosan@takeda.com","andreas.denzler@takeda.com","shane.mccarroll@takeda.com"]
     if(this.authService.instance.getActiveAccount()){
       var active = this.authService.instance.getActiveAccount()
@@ -25,7 +25,6 @@ export class MsalGuard implements CanActivate {
         return false
       }
     }
-    */
 
     if (this.authService.instance.getActiveAccount() == null) {
       localStorage.setItem('spot-redirect', state.url);
