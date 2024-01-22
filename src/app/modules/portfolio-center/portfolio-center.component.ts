@@ -167,7 +167,7 @@ export class PortfolioCenterComponent implements OnInit {
   activeaccount: any
   budgetCurrency: string = ""
   newmainnav: any
-
+  SPRData;
   //For Local Attributes
   localAttributeForm: any = new FormGroup({})
   localAttributeFormRaw: any = new FormGroup({})
@@ -369,6 +369,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.AgileWave = this.lookup.filter(result => result.lookUpParentId == "4bdbcbca-90f2-4c7b-b2a5-c337446d60b1")
         this.overallStatus = this.lookup.filter(result => result.lookUpParentId == "81ab7402-ab5d-4b2c-bf70-702aedb308f0")
         this.primaryKPI = this.lookup.filter(result => result.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474")
+        this.SPRData = this.lookup.filter(x => x.lookUpParentId == "218576ed-07ee-4d7f-8572-89c8e5b9a7e9")
         this.AgileWorkstream.push(AGILEall)
 
         this.apiService.getCapitalPhase().then((res: any) => {
@@ -582,6 +583,10 @@ export class PortfolioCenterComponent implements OnInit {
                   var name = "Primary Value Driver"
                   var order = 18
                 }
+                else if (attribute == "SPRProjectCategory") {
+                  var name = "SPR Project Category"
+                  var order = 19
+                }
                 var filterdata = {
                   "name": name,
                   "value": this.filtersnew[attribute][0].lookUpName,
@@ -608,23 +613,23 @@ export class PortfolioCenterComponent implements OnInit {
                 }
                 filterItems.push(filterItems1)
               }
-              else if (attribute == "SPRProjectCategory") {
-                var length: any = 1
-                var filterdata = {
-                  "name": "SPR Project Category",
-                  "value": this.filtersnew[attribute],
-                  "count": length,
-                  "order": 16
-                }
-                var filterItems1 =
-                {
-                  "filterAttribute": attribute,
-                  "filterOperator": "=",
-                  "filterValue": this.filtersnew[attribute],
-                  "unionOperator": 2
-                }
-                filterItems.push(filterItems1)
-              }
+              // else if (attribute == "SPRProjectCategory") {
+              //   var length: any = 1
+              //   var filterdata = {
+              //     "name": "SPR Project Category",
+              //     "value": this.filtersnew[attribute],
+              //     "count": length,
+              //     "order": 16
+              //   }
+              //   var filterItems1 =
+              //   {
+              //     "filterAttribute": attribute,
+              //     "filterOperator": "=",
+              //     "filterValue": this.filtersnew[attribute],
+              //     "unionOperator": 2
+              //   }
+              //   filterItems.push(filterItems1)
+              // }
               else {
                 for (var j = 0; j < this.filtersnew[attribute].length; j++) {
                   if (attribute == "PortfolioOwner" || attribute == "ExecutionScope") {
