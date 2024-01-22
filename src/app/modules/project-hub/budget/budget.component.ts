@@ -164,7 +164,6 @@ export class BudgetComponent implements OnInit {
                 submittedByPreliminary: forecast.find(x => x.active == 'Preliminary')?.userName ? forecast.find(x => x.active == 'Preliminary').userName : "",
             })
         }
-        console.log("Aaaaaaaaaaaaa", this.budgetService.openEntry)
         this.budgetForecastForm.patchValue({
             referenceCurrent: forecast.find(x => x.active == 'Current').active,
             periodCurrent: forecast.find(x => x.active == 'Current').periodName,
