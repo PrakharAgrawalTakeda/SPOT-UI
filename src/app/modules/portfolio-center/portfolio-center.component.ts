@@ -819,6 +819,7 @@ export class PortfolioCenterComponent implements OnInit {
             var budgetData;
             this.projects.data = res.portfolioDetails;
             this.bulkreportdata = res.portfolioDetails
+
             this.initial = res
 
 
@@ -1764,7 +1765,9 @@ export class PortfolioCenterComponent implements OnInit {
     });
 
     let noTogglesTurnedOn = true
-
+            // Reverse the order of bulkreportdata
+            this.bulkreportdata = this.bulkreportdata.slice().reverse();
+            console.log(this.bulkreportdata)
     // Step 1: Iterate through each page
     for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
       if (this.pageToggleStates[pageNumber]) {
@@ -1773,6 +1776,7 @@ export class PortfolioCenterComponent implements OnInit {
         Object.keys(pageToggleStates).forEach((toggleName) => {
           const toggleValues = pageToggleStates[toggleName];
 
+console.log("TOGGLE values", toggleValues)
           if (toggleValues.some((value) => value === true)) {
             noTogglesTurnedOn = false
             // Only add project UUIDs to toggleObject if the toggle is true
@@ -1781,6 +1785,9 @@ export class PortfolioCenterComponent implements OnInit {
             }
 
             const existingProjectUUIDs = this.toggleObject[toggleName]; // Get existing UUIDs for the toggle
+console.log(existingProjectUUIDs)
+console.log("bulkreportdata project IDs:", this.bulkreportdata);
+console.log("Toggle values:", toggleValues);
 
             // Find the project UUIDs for which the toggle is true
             const trueProjectUUIDs = toggleValues
@@ -1800,7 +1807,6 @@ export class PortfolioCenterComponent implements OnInit {
         });
       }
     }
-
     console.log('Toggle Object:', this.toggleObject);
 
     // Step 2: Check if more than 500 toggles are turned on
@@ -1907,6 +1913,7 @@ export class PortfolioCenterComponent implements OnInit {
 
     }
     else {
+      console.log(this.toggleObject)
       this.apiService.bulkGenerateReports(this.toggleObject).then(Res => {
         // Close the drawer
         this.filterDrawer.close();
