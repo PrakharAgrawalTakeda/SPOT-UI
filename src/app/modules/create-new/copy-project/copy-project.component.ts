@@ -219,6 +219,7 @@ export class CopyProjectComponent implements OnInit {
               this.router.navigateByUrl('/create-project/create-strategic-initiative-project', { state: { data: res, quality: quality, callLocation: 'CopyProject', copytemplateId: this.projectid, lookupString: this.finalData.toString(), copyParameterObject: copyProjectParameter } });
             }
             else{
+              res.problemType = res.problemType == '' || res.problemType == null ? 'Standard Project / Program' : res.problemType
               this.router.navigateByUrl('/create-project/create-new-project', { state: { data: res, quality: quality, callLocation: 'CopyProject', copytemplateId: this.projectid, lookupString: this.finalData.toString(), copyParameterObject: copyProjectParameter } });
             }
             

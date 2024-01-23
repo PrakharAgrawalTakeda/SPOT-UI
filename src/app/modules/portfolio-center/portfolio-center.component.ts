@@ -432,6 +432,7 @@ export class PortfolioCenterComponent implements OnInit {
               PrimaryValueDriver: this.filtersnew.PrimaryValueDriver,
               SPRProjectCategory: this.filtersnew.SPRProjectCategory
             })
+
             // if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)) {
             //   if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0) {
             //     this.filtersnew.ProjectTeamMember = this.user
@@ -1229,7 +1230,7 @@ export class PortfolioCenterComponent implements OnInit {
       "uniqueId": "",
       "value": ""
     }
-    if(this.PortfolioFilterForm.value.PortfolioOwner?.length > 0 || this.PortfolioFilterForm.value.ExecutionScope?.length > 0){
+    // if(this.PortfolioFilterForm.value.PortfolioOwner?.length > 0 || this.PortfolioFilterForm.value.ExecutionScope?.length > 0){
       var portfolioOwners = ""
       var executionScope = ""
       if (this.PortfolioFilterForm.controls.PortfolioOwner.value != null) {
@@ -1527,15 +1528,76 @@ export class PortfolioCenterComponent implements OnInit {
       dataToSend = removeData
     }
     localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
-  }
-      )}
-  else{
+    this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
+    if(dataToSend.length == 0){
     localStorage.setItem('spot-localattribute', JSON.stringify([]))
-  }
+    }
+    if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0) && dataToSend.length == 0) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "There must be at least one filter present other wise the query will return too much data to load.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warn"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "warn"
+          },
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else{
     this.filterDrawer.close()
     this.PortfolioCenterService.drawerOpenedPrakharTemp = false
     this.resetpage()
     this.showFilter = false
+    }
+    // this.filterDrawer.close()
+    // this.PortfolioCenterService.drawerOpenedPrakharTemp = false
+    // this.resetpage()
+    // this.showFilter = false
+  })
+    // }
+  // else{
+    // this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
+    // localStorage.setItem('spot-localattribute', JSON.stringify([]))
+    // if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)) {
+    //   var comfirmConfig: FuseConfirmationConfig = {
+    //     "title": "There must be at least one filter present other wise the query will return too much data to load.",
+    //     "message": "",
+    //     "icon": {
+    //       "show": true,
+    //       "name": "heroicons_outline:exclamation",
+    //       "color": "warn"
+    //     },
+    //     "actions": {
+    //       "confirm": {
+    //         "show": true,
+    //         "label": "Okay",
+    //         "color": "warn"
+    //       },
+    //     },
+    //     "dismissible": true
+    //   }
+    //   const alert = this.fuseAlert.open(comfirmConfig)
+    // }
+    // else{
+    // this.filterDrawer.close()
+    // this.PortfolioCenterService.drawerOpenedPrakharTemp = false
+    // this.resetpage()
+    // this.showFilter = false
+    // }
+  // }
+    // this.filterDrawer.close()
+    // this.PortfolioCenterService.drawerOpenedPrakharTemp = false
+    // this.resetpage()
+    // this.showFilter = false
   }
   captureClose(event){
     if(event){
@@ -2942,7 +3004,8 @@ export class PortfolioCenterComponent implements OnInit {
     if (type == 'Filter') {
       this.showFilter = true
       console.log(this.PortfolioFilterForm)
-      if(this.PortfolioFilterForm.value.PortfolioOwner?.length == 0 && this.PortfolioFilterForm.value.ExecutionScope?.length == 0){
+    var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
+      if(this.PortfolioFilterForm.value.PortfolioOwner?.length == 0 && this.PortfolioFilterForm.value.ExecutionScope?.length == 0 && (LA == null || LA == undefined)){
         this.localAttributeFormRaw.controls = {}
         this.localAttributeFormRaw.value = {}
         this.localAttributeForm.controls = {}
