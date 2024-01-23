@@ -80,16 +80,16 @@ export class WaterWasteBulkEditComponent {
 
   }
 
-  getData(id){
-    if (this.waterWasteForm.value[id].wwstream == "Water"){
+  getData(id) {
+    if (this.waterWasteForm.value[id].wwstream == "Water") {
       this.waterWasteForm.value[id].standardUoM = "m3"
       return '1'
     }
-    else if (this.waterWasteForm.value[id].wwstream == "Waste"){
+    else if (this.waterWasteForm.value[id].wwstream == "Waste") {
       this.waterWasteForm.value[id].standardUoM = "kg"
       return '2'
     }
-    else{
+    else {
       return '0'
     }
   }
@@ -116,7 +116,7 @@ export class WaterWasteBulkEditComponent {
     console.log(this.waterwasteValues)
     console.log(this.ProjectData)
     var waterValues = this.projecthubservice.all[3].filter(x => x.wwstream == "Water")
-    for(var j=0;j<waterValues.length;j++){
+    for (var j = 0; j < waterValues.length; j++) {
       this.waterTypeDropDrownValues.push(waterValues[j].wwtype)
     }
     this.waterTypeDropDrownValues.sort()
@@ -139,7 +139,9 @@ export class WaterWasteBulkEditComponent {
         wwtype: new FormControl(i.wwtype)
       }))
     }
-    this.viewContent = true
+    setTimeout(() => {
+      this.viewContent = true
+    }, 400);
   }
 
   sortbyNameandType(array: any): any {
@@ -306,7 +308,7 @@ export class WaterWasteBulkEditComponent {
       }
       const alert = this.fuseAlert.open(comfirmConfig)
     }
-    else if (((this.waterWasteDb.filter(x => x.emwwunit != "" && x.emwwunit != null && x.emwwunit != 0).length > 0 ) || (this.projecthubservice.all[5])) && (this.CAPSform.value.impactRealizationDate == "" || this.CAPSform.value.impactRealizationDate == null)) {
+    else if (((this.waterWasteDb.filter(x => x.emwwunit != "" && x.emwwunit != null && x.emwwunit != 0).length > 0) || (this.projecthubservice.all[5])) && (this.CAPSform.value.impactRealizationDate == "" || this.CAPSform.value.impactRealizationDate == null)) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Please enter a value for Impact Realization Date.",
         "message": "",
@@ -331,9 +333,9 @@ export class WaterWasteBulkEditComponent {
       const alert = this.fuseAlert.open(comfirmConfig)
     }
     else {
-        console.log(this.waterWasteDb)
-        this.projecthubservice.isFormChanged = false
-        this.submitPrep()
+      console.log(this.waterWasteDb)
+      this.projecthubservice.isFormChanged = false
+      this.submitPrep()
       if (this.ProjectData.projectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate) {
         var formValue = this.CAPSform.getRawValue()
         var mainObj = this.ProjectData.projectData
@@ -342,24 +344,24 @@ export class WaterWasteBulkEditComponent {
 
         this.apiService.editCAPSData(this.projecthubservice.projectid, mainObj).then(res => {
           this.apiService.bulkeditWW(this.waterWasteDb, this.projecthubservice.projectid).then(res => {
-          this.projecthubservice.isFormChanged = false
-          this.projecthubservice.isNavChanged.next(true)
-          this.projecthubservice.submitbutton.next(true)
-          this.projecthubservice.successSave.next(true)
-          this.projecthubservice.toggleDrawerOpen('', '', [], '')
-        })
-      })
-      }
-      else{
-        this.apiService.bulkeditWW(this.waterWasteDb, this.projecthubservice.projectid).then(res => {
             this.projecthubservice.isFormChanged = false
-            this.projecthubservice.submitbutton.next(true)
-            this.projecthubservice.toggleDrawerOpen('', '', [], '')
             this.projecthubservice.isNavChanged.next(true)
+            this.projecthubservice.submitbutton.next(true)
             this.projecthubservice.successSave.next(true)
+            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          })
         })
-            
-          }
+      }
+      else {
+        this.apiService.bulkeditWW(this.waterWasteDb, this.projecthubservice.projectid).then(res => {
+          this.projecthubservice.isFormChanged = false
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.isNavChanged.next(true)
+          this.projecthubservice.successSave.next(true)
+        })
+
+      }
     }
   }
 

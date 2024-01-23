@@ -380,7 +380,11 @@ export class BudgetService {
 
     setLabels() {
         if(this.openEntry){
-            let year = new Date(this.openEntry.financialMonthStartDate).getFullYear();
+            let year = new Date().getFullYear()
+            let month = new Date().getMonth()
+            if(month < 3){
+                year = year - 1;
+            }
             let year2 = year + 1;
             let year3 = year + 2;
             let year4 = year + 3;

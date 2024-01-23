@@ -81,7 +81,7 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Change Date" prop="modificationDate" [flexGrow]="0.7">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{ row.modificationDate.split('T')[0] | date:'dd-MMM-yyyy' }}
+                        {{ row.modificationDate?.split('T')[0] | date:'dd-MMM-yyyy' }}
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Changed By" prop="modifiedByName" [flexGrow]="1">

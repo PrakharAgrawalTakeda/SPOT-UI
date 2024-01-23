@@ -120,7 +120,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   }
 
   getLookUpName(id: string): string {
-    return id && id != '' ? this.lookupdata.find(x => x.lookUpId == id).lookUpName : ''
+    return id && id != '' ? this.lookupdata.find(x => x.lookUpId == id)?.lookUpName : ''
   }
 
   submitPrep() {

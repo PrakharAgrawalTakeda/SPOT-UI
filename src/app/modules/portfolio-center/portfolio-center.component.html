@@ -104,10 +104,15 @@
                         [label]="'AGILE Wave'" [placeholder]="'AGILE Wave'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
                     </spot-multiselect-autocomplete>
-                    <spot-select class="w-full" formControlName="SPRProjectCategory" name="SPRProjectCategory"
+                    <!-- <spot-select class="w-full" formControlName="SPRProjectCategory" name="SPRProjectCategory"
                         [label]="'SPR Project Category'" [placeholder]="'SPR Project Category'" [showNoneOption]="true"
                         [dropDownArrayType]="'string'" [dropDownArray]="CAPSDropDrownValues">
-                    </spot-select>
+                    </spot-select> -->
+                    <spot-multiselect-autocomplete formControlName="SPRProjectCategory" class="w-full"
+                        name="SPRProjectCategory" [label]="'SPR Project Category'"
+                        [placeholder]="'SPR Project Category'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                        [dropDownArray]="SPRData" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+                    </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="PrimaryValueDriver" class="w-full"
                         name="PrimaryValueDriver" [label]="'Primary Value Driver'"
                         [placeholder]="'Primary Value Driver'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
