@@ -69,7 +69,7 @@
         <app-operational-performance-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEditProposal'"
             [mode]="'Project-Proposal'"></app-operational-performance-edit>
-        <app-data-quality-page *ngIf="projecthubservice.itemtype == 'DataQuality'"></app-data-quality-page>
+        <app-data-quality-page *ngIf="projecthubservice.itemtype == 'DataQuality'" [type]="'Sliding-Panel'"></app-data-quality-page>
         <app-operational-performance-bulk-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
         <app-funding-bulk-edit *ngIf="projecthubservice.itemtype == 'FundingBulkEdit'"
