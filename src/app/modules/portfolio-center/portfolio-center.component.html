@@ -108,6 +108,11 @@
                         [label]="'SPR Project Category'" [placeholder]="'SPR Project Category'" [showNoneOption]="true"
                         [dropDownArrayType]="'string'" [dropDownArray]="CAPSDropDrownValues">
                     </spot-select> -->
+                    <spot-multiselect-autocomplete formControlName="SPRProjectCategory" class="w-full"
+                        name="SPRProjectCategory" [label]="'SPR Project Category'"
+                        [placeholder]="'SPR Project Category'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                        [dropDownArray]="SPRData" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+                    </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="PrimaryValueDriver" class="w-full"
                         name="PrimaryValueDriver" [label]="'Primary Value Driver'"
                         [placeholder]="'Primary Value Driver'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"

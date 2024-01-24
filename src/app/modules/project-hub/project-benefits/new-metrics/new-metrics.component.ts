@@ -20,6 +20,7 @@ export class NewMetricsComponent {
   metric: any;
   metricNameWithOwner: any;
   displayMetricName: any;
+  lookup: any;
 
   constructor(public projecthubservice: ProjectHubService, public apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService, private router: Router) {
     // this.newMetricForm.controls.metricName.valueChanges.subscribe(res => {
@@ -32,12 +33,14 @@ export class NewMetricsComponent {
 
   ngOnInit(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    this.apiService.getmetricRepo(this.id).then((vc: any) => {
+    this.apiService.getMetricRepo(this.id).then((vc: any) => {
       this.apiService.getproject(this.id).then((pc: any) => {
         this.apiService.singleEditMetricProjectData(this.id, this.projecthubservice.itemid).then((res: any) => {
           this.auth.lookupMaster().then((lookup: any) => {
             console.log(vc)
             console.log(res)
+            console.log(lookup)
+            this.lookup = lookup
             // Split execution scope into an array of IDs
             const executionScopeIds = pc.executionScope ? pc.executionScope.split(',').map(id => id.trim()) : '';
             // Combine portfolioOwnerId and executionScopeIds
@@ -81,10 +84,11 @@ export class NewMetricsComponent {
 // Enhance each object in metricName with a new display property
 this.metricName = this.metricName.map(metric => {
   let displayText = metric.metricName;
-  if (metric.portfolioOwner) {
-    displayText = metric.portfolioOwner + ' - ' + displayText;
-  } else {
+  if (metric.metricTypeID == 'e7a9e055-1319-4a4f-b929-cd7777599e39') {
     displayText = 'Global - ' + displayText;
+    //displayText = metric.metricPortfolioID + ' - ' + displayText;
+  } else {
+    displayText = metric.portfolioOwner + ' - ' + displayText;
   }
   return { ...metric, displayMetricName: displayText };
 });

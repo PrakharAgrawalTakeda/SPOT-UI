@@ -894,6 +894,13 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     return response
   }
 
+  async getMetricRepo(projectid) {
+    var url = GlobalVariables.apiurl + "MetricRepository/all"
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
   // async editValueCreation(body,projectid){
   //   var link = GlobalVariables.apiurl+"ValueCreation/ValueCaptureFields/" + projectid
   //   const abc$ = this.http.put(link,body)

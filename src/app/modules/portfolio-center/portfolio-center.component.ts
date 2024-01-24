@@ -167,7 +167,7 @@ export class PortfolioCenterComponent implements OnInit {
   activeaccount: any
   budgetCurrency: string = ""
   newmainnav: any
-
+  SPRData;
   //For Local Attributes
   localAttributeForm: any = new FormGroup({})
   localAttributeFormRaw: any = new FormGroup({})
@@ -369,6 +369,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.AgileWave = this.lookup.filter(result => result.lookUpParentId == "4bdbcbca-90f2-4c7b-b2a5-c337446d60b1")
         this.overallStatus = this.lookup.filter(result => result.lookUpParentId == "81ab7402-ab5d-4b2c-bf70-702aedb308f0")
         this.primaryKPI = this.lookup.filter(result => result.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474")
+        this.SPRData = this.lookup.filter(x => x.lookUpParentId == "218576ed-07ee-4d7f-8572-89c8e5b9a7e9")
         this.AgileWorkstream.push(AGILEall)
 
         this.apiService.getCapitalPhase().then((res: any) => {
@@ -431,6 +432,7 @@ export class PortfolioCenterComponent implements OnInit {
               PrimaryValueDriver: this.filtersnew.PrimaryValueDriver,
               SPRProjectCategory: this.filtersnew.SPRProjectCategory
             })
+
             // if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)) {
             //   if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0) {
             //     this.filtersnew.ProjectTeamMember = this.user
@@ -582,6 +584,10 @@ export class PortfolioCenterComponent implements OnInit {
                   var name = "Primary Value Driver"
                   var order = 18
                 }
+                else if (attribute == "SPRProjectCategory") {
+                  var name = "SPR Project Category"
+                  var order = 19
+                }
                 var filterdata = {
                   "name": name,
                   "value": this.filtersnew[attribute][0].lookUpName,
@@ -608,23 +614,23 @@ export class PortfolioCenterComponent implements OnInit {
                 }
                 filterItems.push(filterItems1)
               }
-              else if (attribute == "SPRProjectCategory") {
-                var length: any = 1
-                var filterdata = {
-                  "name": "SPR Project Category",
-                  "value": this.filtersnew[attribute],
-                  "count": length,
-                  "order": 16
-                }
-                var filterItems1 =
-                {
-                  "filterAttribute": attribute,
-                  "filterOperator": "=",
-                  "filterValue": this.filtersnew[attribute],
-                  "unionOperator": 2
-                }
-                filterItems.push(filterItems1)
-              }
+              // else if (attribute == "SPRProjectCategory") {
+              //   var length: any = 1
+              //   var filterdata = {
+              //     "name": "SPR Project Category",
+              //     "value": this.filtersnew[attribute],
+              //     "count": length,
+              //     "order": 16
+              //   }
+              //   var filterItems1 =
+              //   {
+              //     "filterAttribute": attribute,
+              //     "filterOperator": "=",
+              //     "filterValue": this.filtersnew[attribute],
+              //     "unionOperator": 2
+              //   }
+              //   filterItems.push(filterItems1)
+              // }
               else {
                 for (var j = 0; j < this.filtersnew[attribute].length; j++) {
                   if (attribute == "PortfolioOwner" || attribute == "ExecutionScope") {
@@ -819,6 +825,7 @@ export class PortfolioCenterComponent implements OnInit {
             var budgetData;
             this.projects.data = res.portfolioDetails;
             this.bulkreportdata = res.portfolioDetails
+
             this.initial = res
 
 
@@ -1224,7 +1231,7 @@ export class PortfolioCenterComponent implements OnInit {
       "uniqueId": "",
       "value": ""
     }
-    if(this.PortfolioFilterForm.value.PortfolioOwner?.length > 0 || this.PortfolioFilterForm.value.ExecutionScope?.length > 0){
+    // if(this.PortfolioFilterForm.value.PortfolioOwner?.length > 0 || this.PortfolioFilterForm.value.ExecutionScope?.length > 0){
       var portfolioOwners = ""
       var executionScope = ""
       if (this.PortfolioFilterForm.controls.PortfolioOwner.value != null) {
@@ -1522,15 +1529,76 @@ export class PortfolioCenterComponent implements OnInit {
       dataToSend = removeData
     }
     localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
-  }
-      )}
-  else{
+    this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
+    if(dataToSend.length == 0){
     localStorage.setItem('spot-localattribute', JSON.stringify([]))
-  }
+    }
+    if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0) && dataToSend.length == 0) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "There must be at least one filter present other wise the query will return too much data to load.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warn"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "warn"
+          },
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else{
     this.filterDrawer.close()
     this.PortfolioCenterService.drawerOpenedPrakharTemp = false
     this.resetpage()
     this.showFilter = false
+    }
+    // this.filterDrawer.close()
+    // this.PortfolioCenterService.drawerOpenedPrakharTemp = false
+    // this.resetpage()
+    // this.showFilter = false
+  })
+    // }
+  // else{
+    // this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
+    // localStorage.setItem('spot-localattribute', JSON.stringify([]))
+    // if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)) {
+    //   var comfirmConfig: FuseConfirmationConfig = {
+    //     "title": "There must be at least one filter present other wise the query will return too much data to load.",
+    //     "message": "",
+    //     "icon": {
+    //       "show": true,
+    //       "name": "heroicons_outline:exclamation",
+    //       "color": "warn"
+    //     },
+    //     "actions": {
+    //       "confirm": {
+    //         "show": true,
+    //         "label": "Okay",
+    //         "color": "warn"
+    //       },
+    //     },
+    //     "dismissible": true
+    //   }
+    //   const alert = this.fuseAlert.open(comfirmConfig)
+    // }
+    // else{
+    // this.filterDrawer.close()
+    // this.PortfolioCenterService.drawerOpenedPrakharTemp = false
+    // this.resetpage()
+    // this.showFilter = false
+    // }
+  // }
+    // this.filterDrawer.close()
+    // this.PortfolioCenterService.drawerOpenedPrakharTemp = false
+    // this.resetpage()
+    // this.showFilter = false
   }
   captureClose(event){
     if(event){
@@ -1764,7 +1832,9 @@ export class PortfolioCenterComponent implements OnInit {
     });
 
     let noTogglesTurnedOn = true
-
+            // Reverse the order of bulkreportdata
+            this.bulkreportdata = this.bulkreportdata.slice().reverse();
+            console.log(this.bulkreportdata)
     // Step 1: Iterate through each page
     for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
       if (this.pageToggleStates[pageNumber]) {
@@ -1773,6 +1843,7 @@ export class PortfolioCenterComponent implements OnInit {
         Object.keys(pageToggleStates).forEach((toggleName) => {
           const toggleValues = pageToggleStates[toggleName];
 
+console.log("TOGGLE values", toggleValues)
           if (toggleValues.some((value) => value === true)) {
             noTogglesTurnedOn = false
             // Only add project UUIDs to toggleObject if the toggle is true
@@ -1781,6 +1852,9 @@ export class PortfolioCenterComponent implements OnInit {
             }
 
             const existingProjectUUIDs = this.toggleObject[toggleName]; // Get existing UUIDs for the toggle
+console.log(existingProjectUUIDs)
+console.log("bulkreportdata project IDs:", this.bulkreportdata);
+console.log("Toggle values:", toggleValues);
 
             // Find the project UUIDs for which the toggle is true
             const trueProjectUUIDs = toggleValues
@@ -1800,7 +1874,6 @@ export class PortfolioCenterComponent implements OnInit {
         });
       }
     }
-
     console.log('Toggle Object:', this.toggleObject);
 
     // Step 2: Check if more than 500 toggles are turned on
@@ -1907,6 +1980,7 @@ export class PortfolioCenterComponent implements OnInit {
 
     }
     else {
+      console.log(this.toggleObject)
       this.apiService.bulkGenerateReports(this.toggleObject).then(Res => {
         // Close the drawer
         this.filterDrawer.close();
@@ -2937,7 +3011,8 @@ export class PortfolioCenterComponent implements OnInit {
     if (type == 'Filter') {
       this.showFilter = true
       console.log(this.PortfolioFilterForm)
-      if(this.PortfolioFilterForm.value.PortfolioOwner?.length == 0 && this.PortfolioFilterForm.value.ExecutionScope?.length == 0){
+    var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
+      if(this.PortfolioFilterForm.value.PortfolioOwner?.length == 0 && this.PortfolioFilterForm.value.ExecutionScope?.length == 0 && (LA == null || LA == undefined)){
         this.localAttributeFormRaw.controls = {}
         this.localAttributeFormRaw.value = {}
         this.localAttributeForm.controls = {}
