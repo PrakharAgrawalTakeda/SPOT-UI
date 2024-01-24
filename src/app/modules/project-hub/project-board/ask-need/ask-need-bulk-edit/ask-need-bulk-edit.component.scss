@@ -1,1 +1,13 @@
+.ask-need-bulk-edit {
+    ::ng-deep.datatable-header {
+        width: 100% !important;
+    }
 
+    ::ng-deep.datatable-body {
+        width: 100% !important;
+
+        ::ng-deep.datatable-scroll {
+            width: 100% !important;
+        }
+    }
+}
