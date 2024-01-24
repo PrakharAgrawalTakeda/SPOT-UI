@@ -28,6 +28,15 @@
         }
     }
 }
+:host {
+    ::ng-deep .sort-btn { display: none !important; }}
+
+:host {
+    ::ng-deep .sort-btn datatable-icon-up sort-asc { display: none !important; }}
+
+:host {
+    ::ng-deep .sort-btn datatable-icon-down sort-desc { display: none !important; }}
+
 .custom {
     width: 80% !important;
 }
@@ -82,6 +91,11 @@
     display: block !important;
     height: 28px !important;
     margin: 0em -.0em .4em -.0em !important;
+}
+.headBgHeightCapex {
+    display: block !important;
+    height: 28px !important;
+    margin: 0em 0em 0.4em -2em !important;
 }
 .projectNames {
     cursor: pointer !important;
