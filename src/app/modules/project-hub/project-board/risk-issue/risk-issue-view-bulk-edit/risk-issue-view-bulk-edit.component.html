@@ -23,7 +23,7 @@
         <div class="w-full pl-3" style="height: calc(calc(100vh/ var(--custom-zoom)) - 180px)" >
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
                            columnMode="force"
-                           class="material datatable-ri-73 font-medium text-sm text-default whitespace-nowrap cursor-pointer"
+                           class="material risk-issue-bulk-edit font-medium text-sm text-default whitespace-nowrap cursor-pointer"
                            [rows]="tableData" #riskIssueTable [rowClass]="getRowClass">
                 <ngx-datatable-column name='Status' prop="indicator" [resizeable]="false" [sortable]="false" *ngIf="viewElementChecker('status')"
                                       [width]="75" [draggable]="false">

@@ -1,0 +1,12 @@
+.risk-issue-bulk-edit {
+    [role="table"] {
+        max-width: 100%;
+        overflow-x: scroll;
+        overflow-y: hidden;
+
+        .datatable-body {
+            height: calc(100vh / var(--custom-zoom) - 220px) !important;
+            overflow-y: scroll !important;
+        }
+    }
+}
