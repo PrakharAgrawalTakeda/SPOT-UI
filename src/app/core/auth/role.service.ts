@@ -41,7 +41,7 @@ export class RoleService {
     localroleController.roleId = this.roleMaster.securityGroupId
     if (this.roleMaster.securityGroupId == 'F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F') {
       localroleController.generalInfo.SPREdit = false
-      if (!this.roleMaster.readWriteProjects.some(x => x == projectid)) {
+      if (!this.roleMaster.readWriteProjects?.some(x => x == projectid)) {
         localroleController.projectHub.projectBoard = {
           askNeedEdit: false,
           riskIssuesEdit: false,
