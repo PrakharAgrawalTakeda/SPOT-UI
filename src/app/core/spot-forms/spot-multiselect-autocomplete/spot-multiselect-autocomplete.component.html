@@ -4,14 +4,14 @@
                 *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}">help</mat-icon>
         </mat-label>
         <mat-chip-grid #chipListList class="chipList" formControlName="chipList" [required]="Required" ngDefaultControl>
-            <mat-chip *ngFor="let item of selectedOption" (removed)="removeOption(item)">
+            <mat-chip *ngFor="let item of selectedOption" (removed)="removeOption(item,Required)">
                 {{item[valuePointer]}}
                 <button matChipRemove *ngIf="!isDisabled">
                     <mat-icon inline=true>cancel</mat-icon>
                 </button>
             </mat-chip>
                 <input #input matInput (focus)="changeInput()" formControlName="control" [placeholder]="placeholder"
-                    [matAutocomplete]="singleSelect" [matChipInputFor]="chipListList" (blur) = "onBlur()">
+                    [matAutocomplete]="singleSelect" [matChipInputFor]="chipListList" (blur) = "onBlur(Required)">
         </mat-chip-grid>
         <mat-autocomplete autoActiveFirstOption #singleSelect="matAutocomplete"
             (optionSelected)="onFunctionSelect($event)">
