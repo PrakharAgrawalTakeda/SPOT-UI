@@ -9,7 +9,7 @@
     <div class="flex items-start justify-between">
         <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
             <mat-label>Status Through</mat-label>
-            <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
+            <input matInput [matDatepicker]="picker1" [placeholder]="'Choose a date'"
                 formControlName="statusThrough" name="statusThrough">
             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
