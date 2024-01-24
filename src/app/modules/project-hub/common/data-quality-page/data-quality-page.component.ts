@@ -1,11 +1,11 @@
 
 import {
-    Component,
+    Component, Input,
     OnInit,
     ViewChild,
     ViewEncapsulation,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
     FuseConfirmationService,
 } from '@fuse/services/confirmation';
@@ -21,12 +21,13 @@ import { Constants } from '../../../../shared/constants';
 })
 export class DataQualityPageComponent implements OnInit {
     @ViewChild('dataCompletnessTable') dataCompletnessTable: any;
-
+    @Input()  type: 'Sliding-Panel' | 'Normal' = 'Normal'
     constructor(
         public projecthubservice: ProjectHubService,
         public fuseAlert: FuseConfirmationService,
         private apiService: ProjectApiService,
         private _Activatedroute: ActivatedRoute,
+        private router: Router
     ) {}
     id: string = '';
     rows = [];
@@ -94,6 +95,10 @@ export class DataQualityPageComponent implements OnInit {
             this.projectType = res.projectType;
             this.viewContent = true;
         });
+    }
+    openNewTab(): void {
+        const url = this.router.createUrlTree([`/project-hub/${this.id}/data-quality`]).toString();
+        window.open(url, '_blank');
     }
 }
 
