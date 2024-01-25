@@ -45,6 +45,7 @@
                 <div style="padding-right: 5px;">
                     <button class="min-w-26 ml-4 text-primary bg-gray-200 " mat-flat-button [color]="'primary-200'"
                         (click)="baselinePlans()"
+                        *ngIf="projecthubservice.roleControllerControl.generalInfo.basicFields"
                         [matTooltip]="'Baselining plans will copy all `Current Plan` values and set them as Baseline. This will overwrite any previous baseline plans.'">
                         Baseline Plans
                     </button>
