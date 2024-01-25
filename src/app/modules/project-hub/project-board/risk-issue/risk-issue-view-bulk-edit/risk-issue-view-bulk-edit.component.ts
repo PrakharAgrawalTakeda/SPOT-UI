@@ -302,7 +302,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         this.disabler()
         this.tableData = [...this.tableData, ...j]
         this.riTableEditStack.push(this.tableData.length - 1)
-        var div = document.getElementsByClassName('ngx-datatable')[0]
+        var div = document.getElementsByClassName('datatable-body')[0]
         setTimeout(() => {
             div?.scroll({
                 top: div.scrollHeight,
