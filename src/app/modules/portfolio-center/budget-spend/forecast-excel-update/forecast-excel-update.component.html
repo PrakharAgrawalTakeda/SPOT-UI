@@ -44,7 +44,7 @@
                                 </kendo-spreadsheet>
                             </div>
                             <div *ngIf="showDataForecast" style="width: 100%;">
-                                <kendo-spreadsheet #Forecastspreadsheet [sheets]="finalDatatoSheet" style="width: 100%" >
+                                <kendo-spreadsheet *ngIf="showDataForecast" #Forecastspreadsheet [sheets]="finalDatatoSheet" style="width: 100%" >
                                 </kendo-spreadsheet>
                             </div>
                             <div *ngIf="showDataForecastOpex" style="width: 100%;">
