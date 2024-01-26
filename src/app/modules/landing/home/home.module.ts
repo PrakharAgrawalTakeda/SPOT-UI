@@ -6,11 +6,13 @@ import { SharedModule } from 'app/shared/shared.module';
 import { LandingHomeComponent } from 'app/modules/landing/home/home.component';
 import { landingHomeRoutes } from 'app/modules/landing/home/home.routing';
 import { ComingSoonComponent } from './coming-soon/coming-soon.component';
+import { UnderDeploymentComponent } from './under-deployment/under-deployment.component';
 
 @NgModule({
     declarations: [
         LandingHomeComponent,
-        ComingSoonComponent
+        ComingSoonComponent,
+        UnderDeploymentComponent
     ],
     imports     : [
         RouterModule.forChild(landingHomeRoutes),

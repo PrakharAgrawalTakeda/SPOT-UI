@@ -1167,7 +1167,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             this.schedulengxdata = [...this.schedulengxdata, ...j]
             this.scheduleData.scheduleData = res.scheduleData
             this.milestoneTableEditRow(this.schedulengxdata.length - 1)
-            var div = document.getElementsByClassName('datatable-scroll')[0]
+            var div = document.getElementsByClassName('datatable-body')[0]
             setTimeout(() => {
                 div?.scroll({
                     top: div.scrollHeight,

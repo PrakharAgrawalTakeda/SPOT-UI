@@ -39,6 +39,7 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
   askneed: any = {}
   today = new Date();
   item: any = {}
+  canSubmit: boolean = true
   askneedform = new FormGroup({
     askNeed1: new FormControl(''),
     comments: new FormControl(''),
@@ -64,7 +65,7 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
           closeDate: res.closeDate,
           usersingle: res.needFromName,
           usersingleid: res.needFromId,
-          includeInReport: this.projecthubservice.all.find(x=>x.askNeedUniqueId == res.askNeedUniqueId).includeInReport
+          includeInReport: this.projecthubservice.all.find(x => x.askNeedUniqueId == res.askNeedUniqueId).includeInReport
         })
         console.log(this.askneed.needFromName)
         this.askneedform.controls['logDate'].disable()
@@ -110,104 +111,108 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
 
   submitaskneed() {
     //.format('YYYY-MM-DD[T]HH-mm-ss.sss[Z]')
-    console.log(typeof this.askneedform.value.logDate)
-    console.log(this.askneedform.value.needByDate)
-    console.log(this.askneedform.errors)
-    this.projecthubservice.isFormChanged = false
+    if (this.canSubmit) {
+      this.canSubmit = false
+      console.log(typeof this.askneedform.value.logDate)
+      console.log(this.askneedform.value.needByDate)
+      console.log(this.askneedform.errors)
+      this.projecthubservice.isFormChanged = false
 
-    if (this.askneedform.valid) {
-      if (this.projecthubservice.itemid == "new") {
-        var mainObjnew = {
-          askNeed1: this.askneedform.value.askNeed1,
-          comments: this.askneedform.value.comments,
-          logDate: moment(this.askneed.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          needByDate: moment(this.askneedform.value.needByDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          closeDate: moment(this.askneedform.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          needFromId: this.askneedform.value.usersingleid,
-          needFromName: this.askneedform.value.usersingle,
-          includeInReport: this.askneedform.value.includeInReport,
-          indicator: "Grey",
-          projectId: this.projecthubservice.projectid,
-          askNeedUniqueId: "new"
-        }
+      if (this.askneedform.valid) {
+        if (this.projecthubservice.itemid == "new") {
+          var mainObjnew = {
+            askNeed1: this.askneedform.value.askNeed1,
+            comments: this.askneedform.value.comments,
+            logDate: moment(this.askneed.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+            needByDate: moment(this.askneedform.value.needByDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+            closeDate: moment(this.askneedform.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+            needFromId: this.askneedform.value.usersingleid,
+            needFromName: this.askneedform.value.usersingle,
+            includeInReport: this.askneedform.value.includeInReport,
+            indicator: "Grey",
+            projectId: this.projecthubservice.projectid,
+            askNeedUniqueId: "new"
+          }
 
-         //NeedFrom when null
-         console.log(this.askneedform.controls['usersingle'].value)
-         if (this.askneedform.controls['usersingle'].value == "") {
-          mainObjnew.needFromName = null
-          mainObjnew.needFromId = null
-        }
-        //Log Date
-        if (mainObjnew.logDate == "Invalid date") {
-          mainObjnew.logDate = this.askneed.logDate + ".000Z"
-        }
+          //NeedFrom when null
+          console.log(this.askneedform.controls['usersingle'].value)
+          if (this.askneedform.controls['usersingle'].value == "") {
+            mainObjnew.needFromName = null
+            mainObjnew.needFromId = null
+          }
+          //Log Date
+          if (mainObjnew.logDate == "Invalid date") {
+            mainObjnew.logDate = this.askneed.logDate + ".000Z"
+          }
 
-        // if (this.askneedform.controls['logDate'].value == null) {
-        //   mainObjnew.logDate = moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-        // }
-        if (this.askneedform.controls['includeInReport'].disabled) {
-          mainObjnew.includeInReport = false
+          // if (this.askneedform.controls['logDate'].value == null) {
+          //   mainObjnew.logDate = moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+          // }
+          if (this.askneedform.controls['includeInReport'].disabled) {
+            mainObjnew.includeInReport = false
+          }
+          if (mainObjnew.needByDate == "Invalid date") {
+            mainObjnew.needByDate = null
+          }
+          if (mainObjnew.closeDate == "Invalid date") {
+            mainObjnew.closeDate = null
+          }
+          console.log("final object")
+          console.log(mainObjnew)
+          this.apiService.addAskNeed(mainObjnew).then(() => {
+            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+            this.projecthubservice.submitbutton.next(true)
+          })
         }
-        if (mainObjnew.needByDate == "Invalid date") {
-          mainObjnew.needByDate = null
-        }
-        if (mainObjnew.closeDate == "Invalid date") {
-          mainObjnew.closeDate = null
-        }
-        console.log("final object")
-        console.log(mainObjnew)
-        this.apiService.addAskNeed(mainObjnew).then(() => {
-          this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          this.projecthubservice.submitbutton.next(true)
-        })
-      }
-      else {
-        var mainObj = {
-          askNeed1: this.askneedform.value.askNeed1,
-          comments: this.askneedform.value.comments,
-          logDate: moment(this.askneed.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          needByDate: moment(this.askneedform.value.needByDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          closeDate: moment(this.askneedform.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          needFromId: this.askneedform.value.usersingleid,
-          needFromName: this.askneedform.value.usersingle,
-          includeInReport: this.askneedform.value.includeInReport,
-          indicator: this.askneed.indicator,
-          projectId: this.askneed.projectId,
-          askNeedUniqueId: this.askneed.askNeedUniqueId
-        }
+        else {
+          var mainObj = {
+            askNeed1: this.askneedform.value.askNeed1,
+            comments: this.askneedform.value.comments,
+            logDate: moment(this.askneed.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+            needByDate: moment(this.askneedform.value.needByDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+            closeDate: moment(this.askneedform.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+            needFromId: this.askneedform.value.usersingleid,
+            needFromName: this.askneedform.value.usersingle,
+            includeInReport: this.askneedform.value.includeInReport,
+            indicator: this.askneed.indicator,
+            projectId: this.askneed.projectId,
+            askNeedUniqueId: this.askneed.askNeedUniqueId
+          }
 
-        //NeedFrom when null
-        console.log(this.askneedform.controls['usersingle'].value)
-        if (this.askneedform.controls['usersingle'].value == "") {
-          mainObj.needFromName = null
-          mainObj.needFromId = null
-        }
-        //Log Date
-        if (mainObj.logDate == "Invalid date") {
-          mainObj.logDate = this.askneed.logDate + ".000Z"
-        }
+          //NeedFrom when null
+          console.log(this.askneedform.controls['usersingle'].value)
+          if (this.askneedform.controls['usersingle'].value == "") {
+            mainObj.needFromName = null
+            mainObj.needFromId = null
+          }
+          //Log Date
+          if (mainObj.logDate == "Invalid date") {
+            mainObj.logDate = this.askneed.logDate + ".000Z"
+          }
 
-        // if (this.askneedform.controls['logDate'].value == null) {
-        //   mainObj.logDate = this.askneed.logDate
-        // }
+          // if (this.askneedform.controls['logDate'].value == null) {
+          //   mainObj.logDate = this.askneed.logDate
+          // }
 
-        //Need By Date
-        if (mainObj.needByDate == "Invalid date") {
-          mainObj.needByDate = null
+          //Need By Date
+          if (mainObj.needByDate == "Invalid date") {
+            mainObj.needByDate = null
+          }
+
+          //Close Date
+          if (mainObj.closeDate == "Invalid date") {
+            mainObj.closeDate = null
+          }
+
+          console.log("final object")
+          console.log(mainObj)
+          this.apiService.editAskNeed(this.projecthubservice.projectid, mainObj).then(res => {
+            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+            this.projecthubservice.isNavChanged.next(true)
+            this.projecthubservice.submitbutton.next(true)
+            this.canSubmit = true
+          })
         }
-
-        //Close Date
-        if (mainObj.closeDate == "Invalid date") {
-          mainObj.closeDate = null
-        }
-
-        console.log("final object")
-        console.log(mainObj)
-        this.apiService.editAskNeed(this.projecthubservice.projectid,mainObj).then(res => {
-          this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          this.projecthubservice.isNavChanged.next(true)
-          this.projecthubservice.submitbutton.next(true)
-        })
       }
     }
   }
