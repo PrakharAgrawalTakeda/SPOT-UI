@@ -58,6 +58,7 @@ export class ScheduleViewEditComponent implements OnInit {
   functionSets: any = []
   milestoneMsReasonCodeDropDown: any = []
   milestoneName: any;
+  canSubmit: boolean = true
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
     public auth: AuthService, private _elementRef: ElementRef, private router: Router,public fuseAlert: FuseConfirmationService) {
     //this.scheduleForm.controls.function.valueChanges.subscribe(res => (console.log(res)))
@@ -232,145 +233,155 @@ export class ScheduleViewEditComponent implements OnInit {
     }
   }
   submitschedule() {
-    this.projecthubservice.isFormChanged = false
+    if(this.canSubmit)
+    {
+      this.canSubmit = false
+      this.projecthubservice.isFormChanged = false
 
-    if (this.scheduleForm.valid) {
-      if (this.projecthubservice.itemid == "new") {
-        var mainObjnew = {
-          scheduleUniqueId: "new",
-          projectId: this.projecthubservice.projectid,
-          milestone: (this.schedule.milestoneType > 0 ? (this.schedule.milestoneType == 1 ? 'Execution Start - '.concat(this.scheduleForm.value.milestone) : (this.schedule.milestoneType == 2 ? 'Execution End - '.concat(this.scheduleForm.value.milestone) : this.scheduleForm.value.milestone)) : this.scheduleForm.value.milestone),
-          plannedFinish: moment(this.scheduleForm.value.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          baselineFinish: this.scheduleForm.controls.baselineFinish.value ? moment(this.scheduleForm.value.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-          functionGroupId: this.scheduleForm.value.function ? this.scheduleForm.value.function.lookUpId : null,
-          comments: this.scheduleForm.value.comments,
-          completionDate: moment(this.scheduleForm.value.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          includeInReport: this.scheduleForm.value.includeInReport,
-          includeInBusinessCase: this.scheduleForm.value.includeInBusinessCase,
-          indicator: "Grey",
-          includeInCharter: this.scheduleForm.value.includeInCharter,
-          milestoneType: this.schedule.milestoneType,
-          templateMilestoneId: this.schedule.templateMilestoneId,
-          includeInCloseout: this.schedule.includeInCloseout,
-          responsiblePersonId: this.scheduleForm.value.usersingleid,
-          responsiblePersonName: this.scheduleForm.value.usersingle,
-          businessOptionId: "",
-          missedMsreasonCode: this.scheduleForm.value.missedMsreasonCode ? this.scheduleForm.value.missedMsreasonCode.lookUpId : null
-        }
-        //Function when null
-        if (this.scheduleForm.controls['function'].value == "") {
-          mainObjnew.functionGroupId = null
-        }
-        if (this.scheduleForm.controls['includeInReport'].disabled) {
-          mainObjnew.includeInReport = false
-        }
-        if (this.scheduleForm.controls['includeInBusinessCase'].disabled) {
-          mainObjnew.includeInBusinessCase = false
-        }
-        if (this.scheduleForm.controls['includeInCharter'].disabled) {
-          mainObjnew.includeInBusinessCase = false
-        }
-
-        // //Planned Finish
-        if (mainObjnew.plannedFinish == "Invalid date") {
-          mainObjnew.plannedFinish = null
-        }
-        //Completion
-        if (mainObjnew.completionDate == "Invalid date") {
-          mainObjnew.completionDate = null
-        }
-
-        //Baseline
-        if (mainObjnew.baselineFinish == "Invalid date") {
-          mainObjnew.baselineFinish = null
-        }
-        if (this.router.url.includes('option-2')) {
-          mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
-          this.apiService.addTimelineForOption(mainObjnew).then(res => {
-            this.projecthubservice.submitbutton.next(true)
-            this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          })
-        } else {
-          if (this.router.url.includes('option-3')) {
-            mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
+      if (this.scheduleForm.valid) {
+        if (this.projecthubservice.itemid == "new") {
+          var mainObjnew = {
+            scheduleUniqueId: "new",
+            projectId: this.projecthubservice.projectid,
+            milestone: (this.schedule.milestoneType > 0 ? (this.schedule.milestoneType == 1 ? 'Execution Start - '.concat(this.scheduleForm.value.milestone) : (this.schedule.milestoneType == 2 ? 'Execution End - '.concat(this.scheduleForm.value.milestone) : this.scheduleForm.value.milestone)) : this.scheduleForm.value.milestone),
+            plannedFinish: moment(this.scheduleForm.value.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+            baselineFinish: this.scheduleForm.controls.baselineFinish.value ? moment(this.scheduleForm.value.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            functionGroupId: this.scheduleForm.value.function ? this.scheduleForm.value.function.lookUpId : null,
+            comments: this.scheduleForm.value.comments,
+            completionDate: moment(this.scheduleForm.value.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+            includeInReport: this.scheduleForm.value.includeInReport,
+            includeInBusinessCase: this.scheduleForm.value.includeInBusinessCase,
+            indicator: "Grey",
+            includeInCharter: this.scheduleForm.value.includeInCharter,
+            milestoneType: this.schedule.milestoneType,
+            templateMilestoneId: this.schedule.templateMilestoneId,
+            includeInCloseout: this.schedule.includeInCloseout,
+            responsiblePersonId: this.scheduleForm.value.usersingleid,
+            responsiblePersonName: this.scheduleForm.value.usersingle,
+            businessOptionId: "",
+            missedMsreasonCode: this.scheduleForm.value.missedMsreasonCode ? this.scheduleForm.value.missedMsreasonCode.lookUpId : null
+          }
+          //Function when null
+          if (this.scheduleForm.controls['function'].value == "") {
+            mainObjnew.functionGroupId = null
+          }
+          if (this.scheduleForm.controls['includeInReport'].disabled) {
+            mainObjnew.includeInReport = false
+          }
+          if (this.scheduleForm.controls['includeInBusinessCase'].disabled) {
+            mainObjnew.includeInBusinessCase = false
+          }
+          if (this.scheduleForm.controls['includeInCharter'].disabled) {
+            mainObjnew.includeInBusinessCase = false
+          }
+  
+          // //Planned Finish
+          if (mainObjnew.plannedFinish == "Invalid date") {
+            mainObjnew.plannedFinish = null
+          }
+          //Completion
+          if (mainObjnew.completionDate == "Invalid date") {
+            mainObjnew.completionDate = null
+          }
+  
+          //Baseline
+          if (mainObjnew.baselineFinish == "Invalid date") {
+            mainObjnew.baselineFinish = null
+          }
+          if (this.router.url.includes('option-2')) {
+            mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
             this.apiService.addTimelineForOption(mainObjnew).then(res => {
               this.projecthubservice.submitbutton.next(true)
               this.projecthubservice.toggleDrawerOpen('', '', [], '')
+              this.canSubmit = true
             })
           } else {
-            if (this.router.url.includes('recommended-option')) {
-              mainObjnew.businessOptionId = "";
+            if (this.router.url.includes('option-3')) {
+              mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
               this.apiService.addTimelineForOption(mainObjnew).then(res => {
                 this.projecthubservice.submitbutton.next(true)
                 this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                this.canSubmit = true
               })
             } else {
-              this.apiService.addSchedule(mainObjnew).then(() => {
-                this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                this.projecthubservice.submitbutton.next(true)
-                this.projecthubservice.isNavChanged.next(true)
-              })
+              if (this.router.url.includes('recommended-option')) {
+                mainObjnew.businessOptionId = "";
+                this.apiService.addTimelineForOption(mainObjnew).then(res => {
+                  this.projecthubservice.submitbutton.next(true)
+                  this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                  this.canSubmit = true
+                })
+              } else {
+                this.apiService.addSchedule(mainObjnew).then(() => {
+                  this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                  this.projecthubservice.submitbutton.next(true)
+                  this.projecthubservice.isNavChanged.next(true)
+                  this.canSubmit = true
+                })
+              }
+  
             }
-
           }
         }
-      }
-      else {
-        console.log(this.scheduleForm.controls.baselineFinish.value)
-        var mainObj = {
-          scheduleUniqueId: this.schedule.scheduleUniqueId,
-          projectId: this.schedule.projectId,
-          milestone: (this.schedule.milestoneType > 0 ? (this.schedule.milestoneType == 1 ? 'Execution Start - '.concat(this.scheduleForm.value.milestone) : (this.schedule.milestoneType == 2 ? 'Execution End - '.concat(this.scheduleForm.value.milestone) : this.scheduleForm.value.milestone)) : this.scheduleForm.value.milestone),
-          plannedFinish: moment(this.scheduleForm.value.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          baselineFinish: moment(this.schedule.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          functionGroupId: this.scheduleForm.value.function ? this.scheduleForm.value.function.lookUpId : null,
-          comments: this.scheduleForm.value.comments,
-          completionDate: moment(this.scheduleForm.value.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          includeInReport: this.scheduleForm.value.includeInReport,
-          includeInBusinessCase: this.scheduleForm.value.includeInBusinessCase,
-          indicator: this.schedule.indicator,
-          includeInCharter: this.scheduleForm.value.includeInCharter,
-          milestoneType: this.schedule.milestoneType,
-          templateMilestoneId: this.schedule.templateMilestoneId,
-          includeInCloseout: this.schedule.includeInCloseout,
-          responsiblePersonId: this.scheduleForm.value.usersingleid,
-          responsiblePersonName: this.scheduleForm.value.usersingle,
-          missedMsreasonCode: this.scheduleForm.value.missedMsreasonCode ? this.scheduleForm.value.missedMsreasonCode.lookUpId : null
+        else {
+          console.log(this.scheduleForm.controls.baselineFinish.value)
+          var mainObj = {
+            scheduleUniqueId: this.schedule.scheduleUniqueId,
+            projectId: this.schedule.projectId,
+            milestone: (this.schedule.milestoneType > 0 ? (this.schedule.milestoneType == 1 ? 'Execution Start - '.concat(this.scheduleForm.value.milestone) : (this.schedule.milestoneType == 2 ? 'Execution End - '.concat(this.scheduleForm.value.milestone) : this.scheduleForm.value.milestone)) : this.scheduleForm.value.milestone),
+            plannedFinish: moment(this.scheduleForm.value.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+            baselineFinish: moment(this.schedule.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+            functionGroupId: this.scheduleForm.value.function ? this.scheduleForm.value.function.lookUpId : null,
+            comments: this.scheduleForm.value.comments,
+            completionDate: moment(this.scheduleForm.value.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+            includeInReport: this.scheduleForm.value.includeInReport,
+            includeInBusinessCase: this.scheduleForm.value.includeInBusinessCase,
+            indicator: this.schedule.indicator,
+            includeInCharter: this.scheduleForm.value.includeInCharter,
+            milestoneType: this.schedule.milestoneType,
+            templateMilestoneId: this.schedule.templateMilestoneId,
+            includeInCloseout: this.schedule.includeInCloseout,
+            responsiblePersonId: this.scheduleForm.value.usersingleid,
+            responsiblePersonName: this.scheduleForm.value.usersingle,
+            missedMsreasonCode: this.scheduleForm.value.missedMsreasonCode ? this.scheduleForm.value.missedMsreasonCode.lookUpId : null
+          }
+          //Function when null
+          // console.log(this.scheduleForm.controls.baselineFinish.value)
+          // console.log(mainObj.baselineFinish)
+          if (this.scheduleForm.controls['function'].value == "") {
+            mainObj.functionGroupId = null
+          }
+  
+          //Planned Finish
+          if (mainObj.plannedFinish == "Invalid date") {
+            mainObj.plannedFinish = null
+          }
+  
+          //Completion
+          if (mainObj.completionDate == "Invalid date") {
+            mainObj.completionDate = null
+          }
+          //console.log(this.schedule.baselineFinish)
+          //Baseline
+          if (mainObj.baselineFinish == "Invalid date") {
+            mainObj.baselineFinish = null
+          }
+          // if (mainObj.baselineFinish == moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')) {
+          //   mainObj.baselineFinish = null
+          // }
+  
+          console.log("final object")
+          console.log(mainObj)
+          this.apiService.editSchedule(this.projecthubservice.projectid, mainObj).then(res => {
+            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+            this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.isNavChanged.next(true)
+            this.canSubmit = true
+          })
         }
-        //Function when null
-        // console.log(this.scheduleForm.controls.baselineFinish.value)
-        // console.log(mainObj.baselineFinish)
-        if (this.scheduleForm.controls['function'].value == "") {
-          mainObj.functionGroupId = null
-        }
-
-        //Planned Finish
-        if (mainObj.plannedFinish == "Invalid date") {
-          mainObj.plannedFinish = null
-        }
-
-        //Completion
-        if (mainObj.completionDate == "Invalid date") {
-          mainObj.completionDate = null
-        }
-        //console.log(this.schedule.baselineFinish)
-        //Baseline
-        if (mainObj.baselineFinish == "Invalid date") {
-          mainObj.baselineFinish = null
-        }
-        // if (mainObj.baselineFinish == moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')) {
-        //   mainObj.baselineFinish = null
-        // }
-
-        console.log("final object")
-        console.log(mainObj)
-        this.apiService.editSchedule(this.projecthubservice.projectid, mainObj).then(res => {
-          this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          this.projecthubservice.submitbutton.next(true)
-          this.projecthubservice.isNavChanged.next(true)
-        })
       }
     }
+    
   }
 
   @HostListener('unloaded')

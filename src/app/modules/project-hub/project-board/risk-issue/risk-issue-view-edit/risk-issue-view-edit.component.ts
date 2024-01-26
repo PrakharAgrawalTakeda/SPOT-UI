@@ -59,6 +59,7 @@ export class RiskIssueViewEditComponent implements OnInit {
   item: any = {}
   functionSets: any = []
   id: string = ''
+  canSubmit: boolean = true
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute,
               public auth: AuthService,private _elementRef: ElementRef, private router: Router) {
   }
@@ -230,7 +231,10 @@ export class RiskIssueViewEditComponent implements OnInit {
 
   }
   submitriskissue() {
-    this.projecthubservice.isFormChanged = false
+    if(this.canSubmit)
+    {
+      this.canSubmit = false
+      this.projecthubservice.isFormChanged = false
     if (this.riskIssueForm.valid) {
       if (this.projecthubservice.itemid == "new") {
         var mainObjnew = {
@@ -287,6 +291,7 @@ export class RiskIssueViewEditComponent implements OnInit {
                     this.projecthubservice.submitbutton.next(true)
                     this.projecthubservice.isNavChanged.next(true)
                     this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                    this.canSubmit = true
                 })
             }else{
                 if (this.router.url.includes('option-3')) {
@@ -295,6 +300,7 @@ export class RiskIssueViewEditComponent implements OnInit {
                         this.projecthubservice.submitbutton.next(true)
                         this.projecthubservice.isNavChanged.next(true)
                         this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                        this.canSubmit = true
                     })
                 }else{
                     if (this.router.url.includes('recommended-option')) {
@@ -303,6 +309,7 @@ export class RiskIssueViewEditComponent implements OnInit {
                             this.projecthubservice.submitbutton.next(true)
                             this.projecthubservice.isNavChanged.next(true)
                             this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                            this.canSubmit = true
                         })
                     }
                 }
@@ -314,11 +321,13 @@ export class RiskIssueViewEditComponent implements OnInit {
                         this.projecthubservice.toggleDrawerOpen('', '', [], '')
                         this.projecthubservice.submitbutton.next(true)
                         this.projecthubservice.isNavChanged.next(true)
+                        this.canSubmit = true
                     })
                 }else{
                     this.projecthubservice.toggleDrawerOpen('', '', [], '')
                     this.projecthubservice.submitbutton.next(true)
                     this.projecthubservice.isNavChanged.next(true)
+                    this.canSubmit = true
                 }
             })
         }
@@ -374,10 +383,13 @@ export class RiskIssueViewEditComponent implements OnInit {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.isNavChanged.next(true)
+          this.canSubmit = true
         })
 
       }
     }
+    }
+    
   }
 
   @HostListener('unloaded')
