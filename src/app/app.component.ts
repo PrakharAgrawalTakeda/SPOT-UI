@@ -19,8 +19,23 @@ export class AppComponent {
     constructor(private authService: MsalService, private appService: AppService, private snack: MatSnackBar, private _fuseConfigService: FuseConfigService) {
         this._fuseConfigService.config$
             .subscribe((config: AppConfig) => {
-                if (environment.environment == 'Local') {
+                if (environment.environment == 'Local' || environment.environment == 'DEV') {
                     var theme: any = config.themes.find(x => x.id == 'theme-teal')?.id
+                    this._fuseConfigService.config = { theme }
+                }
+                else if(environment.environment == 'QA')
+                {
+                    var theme: any = config.themes.find(x => x.id == 'theme-purple')?.id
+                    this._fuseConfigService.config = { theme }
+                }
+                else if(environment.environment == 'Training')
+                {
+                    var theme: any = config.themes.find(x => x.id == 'theme-rose')?.id
+                    this._fuseConfigService.config = { theme }
+                }
+                else if(environment.environment == 'PROD')
+                {
+                    var theme: any = config.themes.find(x => x.id == 'theme-brand')?.id
                     this._fuseConfigService.config = { theme }
                 }
                 // Store the config

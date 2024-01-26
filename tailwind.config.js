@@ -11,9 +11,11 @@ const generatePalette = require(path.resolve(__dirname, ('src/@fuse/tailwind/uti
  */
 const customPalettes = {
     brand: generatePalette('#4c9bcf'),
-    local: generatePalette('#ff5c33')
+    local: generatePalette('#696563'),
+    training: generatePalette('#002266'),
+    qa: generatePalette('#527a7a')
 };
-
+//696563
 /**
  * Themes
  */
@@ -45,17 +47,15 @@ const themes = {
         primary: customPalettes.local
     },
     'rose'  : {
-        primary: colors.rose
-    },
-    'purple': {
-        primary: {
-            ...colors.purple,
-            DEFAULT: colors.purple[600]
-        }
-    },
-    'amber' : {
-        primary: colors.amber
+        primary: customPalettes.training
     }
+    ,
+    'purple': {
+        primary: customPalettes.qa
+    },
+    // 'amber' : {
+    //     primary: customPalettes.prod
+    // }
 };
 
 /**
