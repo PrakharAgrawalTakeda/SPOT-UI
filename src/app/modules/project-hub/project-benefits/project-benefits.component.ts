@@ -52,10 +52,10 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
+    this.columnYear = [];
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     // Clear the arrays before populating
-    this.columnYear = [];
+  
 
     this.projectsMetricsData = [];
     this.projectApiService.getMetricProjectData(this.id).then((res: any) => {
@@ -72,12 +72,13 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
           parentData = parent
         })
       }
+      console.log(this.columnYear)
       this.projectApiService.getproject(this.id).then((problemCapture: any) => {
         this.auth.lookupMaster().then((resp: any) => {
           this.projectApiService.getfilterlist().then(filterres => {
             this.auth.KPIMaster().then((kpi: any) => {
               this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
-                
+                //debugger
                 console.log(this.columnYear)
                 console.log(currency)
                 this.localCurrency = currency ? currency.localCurrencyAbbreviation : ''
@@ -129,6 +130,7 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                 console.log(this.ValueCaptureForm.getRawValue())
                 var year = []
                 var yearList = []
+                console.log(res)
 
                 if (res.length > 0) {
                   for (var z = 0; z < res.length; z++) {
@@ -138,6 +140,7 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                         year = listYear
                       }
                     }
+                    console.log(year)
                   }
                   for (var i = 0; i < year.length; i++) {
                     var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i])?.lookUpName : ''
@@ -209,9 +212,11 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                 }
                 this.compare(this.columnYear)
                 this.valuecreationngxdata = this.projectsMetricsData
-
+                console.log(this.columnYear)
+console.log(this.projectsMetricsData)
                 if (!res.projectsMetricsDataYearly || res.projectsMetricsDataYearly.length === 0) {
                   const fiscalYear = this.getFiscalYearFromDate(problemCapture.financialRealizationStartDate);
+                  console.log(fiscalYear)
                   if (fiscalYear === "Historical") {
                     this.initializeFinancialDataForYear("Historical", this.projectsMetricsData);
                   }
@@ -258,12 +263,15 @@ this.sortColumnYears()
   
 
   private isBeforeFY2020(dateString: string): boolean {
-    const date = new Date(dateString);
-    const fiscalYearStart = new Date(date.getFullYear(), 3, 1); // FY starts in April
-    if (date < fiscalYearStart) {
-      return date.getFullYear() < 2020;
+    if(dateString){
+      const date = new Date(dateString);
+      const fiscalYearStart = new Date(date.getFullYear(), 3, 1); // FY starts in April
+      if (date < fiscalYearStart) {
+        return date.getFullYear() < 2020;
+      }
+      return date.getFullYear() - 1 < 2020;
     }
-    return date.getFullYear() - 1 < 2020;
+
   }
 
 

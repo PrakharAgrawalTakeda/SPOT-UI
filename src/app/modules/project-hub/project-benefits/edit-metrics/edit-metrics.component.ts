@@ -119,6 +119,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
         this.apiService.getproject(this.id).then((pc: any) => {
           this.auth.lookupMaster().then((resp: any) => {
             this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
+              debugger
               if (res) {
 
                 if (res && res.projectsMetricsData.metricLevelId == 'd6a905be-4ff9-402e-b074-028242b6f8e0') {
@@ -405,12 +406,25 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                 }
                 console.log("YO", this.valuecreationngxdata)
                 if (!pc.financialRealizationStartDate && (!res.projectsMetricsDataYearly || res.projectsMetricsDataYearly.length === 0)) {
-                  const currentYear = new Date().getFullYear();
-                  const shortYear = currentYear % 100; // Get the last two digits of the year
-                  const fiscalYearKey = `FY${shortYear}`; // Format as 'FYXX'
-
+                  const currentDate = new Date();
+                  const currentYear = currentDate.getFullYear();
+                  const fiscalStartMonth = 3; // April as the start of the fiscal year (months are 0-indexed in JavaScript: Jan = 0, Feb = 1, ..., Dec = 11)
+                  
+                  let fiscalYear;
+                  if (currentDate.getMonth() >= fiscalStartMonth) {
+                      // If the current month is April or later, the fiscal year is the same as the current calendar year
+                      fiscalYear = currentYear;
+                  } else {
+                      // If the current month is before April, the fiscal year is the previous calendar year
+                      fiscalYear = currentYear - 1;
+                  }
+                  
+                  const shortFiscalYear = fiscalYear % 100; // Get the last two digits of the fiscal year
+                  const fiscalYearKey = `FY${shortFiscalYear.toString().padStart(2, '0')}`; // Format as 'FYXX'
+                  
+                  console.log(fiscalYearKey)
                   // Add the new fiscal year to the columnYear array
-                  this.columnYear.push({ year: `FY ${currentYear}` });
+                  this.columnYear.push({ year: `FY ${fiscalYear}` });
 
                   // Initialize all values for this year to 0 in valuecreationngxdata
                   this.valuecreationngxdata.forEach(financialType => {
@@ -486,6 +500,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
         this.showWarningMessage();
       }
     });
+    console.log(this.columnYear)
     this.synchronizeColumnYears()
     console.log(this.valuecreationngxdata)
             })
@@ -497,6 +512,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
   }
 
   synchronizeColumnYears() {
+    debugger
     const existingYears = new Set(this.columnYear.map(y => y.year));
 
     this.valuecreationngxdata.forEach(financialType => {
