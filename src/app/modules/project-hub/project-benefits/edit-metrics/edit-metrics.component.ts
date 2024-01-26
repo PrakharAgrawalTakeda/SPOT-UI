@@ -244,6 +244,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                 // }
                 
                 const updateGlobalYearRange = (listString: string) => {
+                  debugger
                   console.log(this.columnYear)
                   // const currentYear = new Date().getFullYear();
                   // let currentFiscalYear = currentYear;
@@ -266,7 +267,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                     else{
                       this.fiscalYearString = `FY ${fiscalYear}`;
                     }
-                
+                debugger
                     if (!this.columnYear.some(yearObj => yearObj.year === this.fiscalYearString)) {
                       this.columnYear.push({ year: this.fiscalYearString });
                     }
@@ -294,7 +295,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                     });
                   }
                 };
-                
+                console.log(res.projectsMetricsData)
                 // Call updateGlobalYearRange for each list
                 updateGlobalYearRange(res.projectsMetricsData.strategicTargetList);
                 updateGlobalYearRange(res.projectsMetricsData.strategicBaselineList);
@@ -310,6 +311,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                 // this.globalMaxYear = Math.max(...years);
 
                 this.columnYear.forEach(yearObj => {
+                  //debugger
                   if (yearObj.year === "Historical") {
                       const historicalYear = 2019; // Example: Year that represents "Historical"
                       this.globalMinYear = Math.min(this.globalMinYear, historicalYear);

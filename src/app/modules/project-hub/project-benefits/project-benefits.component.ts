@@ -80,9 +80,15 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
 
                 const isHistorical = this.isBeforeFY2020(problemCapture.financialRealizationStartDate);
                 if (isHistorical) {
-                  // Add the "Historical" column as the first entry
-                  this.columnYear.unshift({ year: "Historical" });
+                  // Check if "Historical" already exists in this.columnYear
+                  const historicalExists = this.columnYear.find(entry => entry.year === "Historical");
+                  
+                  // If "Historical" does not exist, add it as the first entry
+                  if (!historicalExists) {
+                    this.columnYear.unshift({ year: "Historical" });
+                  }
                 }
+                
                 console.log(this.columnYear)
                 console.log(currency)
                 this.localCurrency = currency ? currency.localCurrencyAbbreviation : ''
