@@ -27,6 +27,14 @@ export class ProjectSettingsComponent {
   constructor(private titleService: Title, public auth: AuthService, private roleService: RoleService, private apiService: MyPreferenceApiService, private msalService: MsalService,
     public fuseAlert: FuseConfirmationService) {
 
+    this.archiveForm.valueChanges.subscribe(res => {
+      console.log(this.archiveForm.getRawValue())
+      if (this.initialized) {
+        this.changeToggle()
+      } else {
+        this.initialized = true;
+      }
+    })
     //   this.archiveForm.controls.includeArchiveProject.valueChanges.subscribe(res => {
     //     if (this.initialized) {
 
@@ -99,15 +107,14 @@ export class ProjectSettingsComponent {
 
 
         }
-        else
-        {
-          
+        else {
+
           location.reload()
         }
       })
 
     }
-    else{
+    else {
       var archiveProject = this.archiveForm.getRawValue();
       var mainObj = {
         userAdid: archiveProject.userAdid,

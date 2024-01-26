@@ -67,6 +67,7 @@ export class ForecastExcelUpdateComponent {
       if (this.showContent) {
         if(this.ForecastForm.controls.DataType.value == "Forecast"){
           this.showData = false;
+          this.showDataOpex = false;
           this.showDataForecast = false;
           this.showDataForecastOpex = false;
           this.forecastExcel = this.ExcelData.filter(x => x.budgetData == res.lookUpName)
@@ -229,7 +230,7 @@ export class ForecastExcelUpdateComponent {
             { value: i.y1_Aug, textAlign: "center"},
             { value: i.y1_Sep, textAlign: "center"},
             { value: i.y1_Oct, textAlign: "center"},
-            { value: i.y1_nov, textAlign: "center"},
+            { value: i.y1_Nov, textAlign: "center"},
             { value: i.y1_Dec, textAlign: "center"},
             { value: i.y1_Jan, textAlign: "center"},
             { value: i.y1_Feb, textAlign: "center"},
@@ -271,6 +272,7 @@ export class ForecastExcelUpdateComponent {
         }
         else{
           this.showData = false;
+          this.showDataOpex = false;
           this.showDataForecast = false
           this.forecastExcelHistorical = this.ExcelData.filter(x => x.budgetDataType == res.lookUpName)
           this.finalDatatoSheetHistorical = []
@@ -461,6 +463,10 @@ export class ForecastExcelUpdateComponent {
 
   getData(){
     var mandatory = true
+    this.showData = false
+    this.showDataForecast = false
+    this.showDataOpex = false
+    this.showDataForecastOpex = false
     if(this.ForecastForm.controls.DataType.value == "Historical"){
     if(this.ForecastForm.controls.ProjectId.value == null && (this.ForecastForm.controls.BudgetId.value == null || this.ForecastForm.controls.BudgetId.value == "")){
       mandatory = false
@@ -511,18 +517,9 @@ export class ForecastExcelUpdateComponent {
       budgetId = this.ForecastForm.controls.BudgetId.value ? this.ForecastForm.controls.BudgetId.value : ''
       if(this.ForecastForm.controls.DataType.value == "Historical"){
         this.portfoliService.getHistoricalExcelData(projectId, budgetId).then((historicalData : any) => {
-          this.showData = false
-          this.showDataForecast = false
-          this.showDataOpex = false
-          this.showDataForecastOpex = false
           this.ExcelData = historicalData
           this.forecastExcelHistorical = historicalData.filter(x => x.budgetDataType == this.ForecastForm.controls.ForecastType.value.lookUpName)
-          if(this.ForecastForm.controls.ForecastType.value.lookUpName == "OpEx Forecast"){
-            this.showDataOpex = true
-          }
-          else{
-            this.showData = true
-          }
+          
           var firstrow={
             height: 30,
             cells: [
@@ -665,14 +662,25 @@ export class ForecastExcelUpdateComponent {
           ],
           rows: finaldata
           }]
+          
+          var element:any = this.el
+          if(element != undefined){
+            element._sheetsInfo[0].rows = finaldata
+          }
+          if(this.ForecastForm.controls.ForecastType.value.lookUpName == "OpEx Forecast"){
+            this.showData = true
+            this.showData = false
+            this.showDataOpex = true
+          }
+          else{
+            this.showDataOpex = true
+            this.showDataOpex = false
+            this.showData = true
+          }
         })
       }
       if(this.ForecastForm.controls.DataType.value == "Forecast"){
         this.portfoliService.getForecastExcelData(LBEPeriod, projectId, budgetId).then((LBE : any) => {
-          this.showData = false
-          this.showDataForecast = false
-          this.showDataOpex = false
-          this.showDataForecastOpex = false
           this.ExcelData = LBE
           const d = new Date();
           let year = d.getFullYear();
@@ -688,12 +696,12 @@ export class ForecastExcelUpdateComponent {
           this.y4Label= 'FY' + year6 + '+';
 
           this.forecastExcel = LBE.filter(x => x.budgetData == this.ForecastForm.controls.ForecastType.value.lookUpName)
-          if(this.ForecastForm.controls.ForecastType.value.lookUpName == "OpEx Forecast"){
-            this.showDataForecastOpex = true
-          }
-          else{
-            this.showDataForecast = true
-          }
+          // if(this.ForecastForm.controls.ForecastType.value.lookUpName == "OpEx Forecast"){
+          //   this.showDataForecastOpex = true
+          // }
+          // else{
+          //   this.showDataForecast = true
+          // }
           var firstrow={
             height: 30,
             cells: [
@@ -852,7 +860,7 @@ export class ForecastExcelUpdateComponent {
               { value: i.y1_Aug, textAlign: "center"},
               { value: i.y1_Sep, textAlign: "center"},
               { value: i.y1_Oct, textAlign: "center"},
-              { value: i.y1_nov, textAlign: "center"},
+              { value: i.y1_Nov, textAlign: "center"},
               { value: i.y1_Dec, textAlign: "center"},
               { value: i.y1_Jan, textAlign: "center"},
               { value: i.y1_Feb, textAlign: "center"},
@@ -913,6 +921,20 @@ export class ForecastExcelUpdateComponent {
           ],
           rows: finaldata
           }]
+          var element:any = this.forecastElement
+          if(element != undefined){
+            element._sheetsInfo[0].rows = finaldata
+          }
+          if(this.ForecastForm.controls.ForecastType.value.lookUpName == "OpEx Forecast"){
+          this.showDataForecast = true;
+          this.showDataForecast = false;
+            this.showDataForecastOpex = true
+          }
+          else{
+            this.showDataForecastOpex = true
+            this.showDataForecastOpex = false
+            this.showDataForecast = true
+          }
         })
       }
     }

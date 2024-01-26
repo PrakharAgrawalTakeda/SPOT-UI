@@ -1,3 +1,49 @@
+.datatable-schedule-2  {
+  [role="table"] {
+      max-width: 100%;
+      overflow-x: scroll;
+      overflow-y: hidden;
+
+      .datatable-body {
+          height: calc(100vh / var(--custom-zoom) - 270px) !important;
+          overflow-y: scroll !important;
+      }
+  }
+}
+.datatable-schedule-1  {
+  [role="table"] {
+      max-width: 100%;
+      overflow-x: scroll;
+      overflow-y: hidden;
+
+      .datatable-body {
+          height: calc(100vh / var(--custom-zoom) - 310px) !important;
+          overflow-y: scroll !important;
+      }
+  }
+}
+.datatable-schedule-close-out  {
+  [role="table"] {
+      max-width: 100%;
+      overflow-x: hidden;
+      overflow-y: hidden;
+
+      .datatable-body {
+          height: calc(100vh / var(--custom-zoom) - 150px) !important;
+          overflow-y: scroll !important;
+          overflow-x: hidden !important
+      }
+  }
+}
+.datatable-schedule-1{
+  height: calc(calc(100vh/ var(--custom-zoom)) - 260px)
+}
+.datatable-schedule-2{
+  height: calc(calc(100vh/ var(--custom-zoom)) - 210px)
+}
+.datatable-schedule-close-out  {
+  height: calc(calc(100vh/ var(--custom-zoom)) - 130px)
+}
 .font-bold {
   font-size: 16px;
 }

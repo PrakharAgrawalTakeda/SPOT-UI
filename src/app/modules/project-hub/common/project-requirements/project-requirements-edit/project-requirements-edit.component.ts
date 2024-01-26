@@ -27,6 +27,7 @@ export class ProjectRequirementsEditComponent {
         primaryProductID: new FormControl(''),
         primaryProductName: new FormControl(''),
         projectName: new FormControl(''),
+        problemType: new FormControl(''),
         problemID: new FormControl(''),
         otherImpactedProducts: new FormControl(''),
         portfolioOwnerID: new FormControl(''),
@@ -152,7 +153,8 @@ export class ProjectRequirementsEditComponent {
                 localCurrencyAbbreviation: res.localCurrencyAbbreviation,
                 impactedProductsName: res.impactedProductsName,
                 functionGroupID: res.functionGroupID,
-                functionsRequiredId: res.functionsRequiredId
+                functionsRequiredId: res.functionsRequiredId,
+                problemType: res.problemType
             })
             this.portApiService.getOnlyLocalCurrency(this.projectHubService.projectid).then(currency => {
                 this.localCurrency = currency
@@ -209,6 +211,7 @@ export class ProjectRequirementsEditComponent {
         mainObj.impactedProductsName = formValue.impactedProductsName
         mainObj.functionGroupID = formValue.functionGroupID
         mainObj.functionsRequiredId = formValue.functionsRequiredId
+        mainObj.projectType = formValue.problemType
         this.apiService.editProjectRequirements(this.authService.instance.getActiveAccount().localAccountId, mainObj).then(res => {
             this.projectHubService.isNavChanged.next(true)
             this.projectHubService.submitbutton.next(true)

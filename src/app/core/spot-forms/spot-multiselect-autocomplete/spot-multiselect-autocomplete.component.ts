@@ -79,12 +79,14 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   get control() {
     return this.form.get('control');
   }
-  onBlur() {
+  onBlur(value) {
+    if(value){
     if (this.form.controls.chipList.value.length > 0) {
         this.Required = false;
     } else {
         this.Required = true;
     }
+  }
 }
   onFunctionSelect(event: any) {
     console.log(this.selectedOption)
@@ -96,13 +98,13 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
     this.form.controls.control.patchValue('')
     this.input.nativeElement.value = ''
   }
-  removeOption(item: any) {
+  removeOption(item: any, value) {
     this.selectedOption = this.selectedOption.filter(x => x[this.idPointer] != item[this.idPointer])
     // this.form.controls.chipList.patchValue(this.selectedOption)
     this.form.controls.chipList.markAsDirty()
     this.form.controls.chipList.patchValue(this.selectedOption)
     this.onChange(this.selectedOption)
-    this.onBlur()
+    this.onBlur(value)
   }
   isOptionSelected(option: any): boolean {
     if (this.selectedOption && this.selectedOption.length > 0) {
