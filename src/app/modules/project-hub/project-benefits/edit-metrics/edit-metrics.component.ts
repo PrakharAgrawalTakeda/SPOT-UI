@@ -119,7 +119,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
         this.apiService.getproject(this.id).then((pc: any) => {
           this.auth.lookupMaster().then((resp: any) => {
             this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
-              debugger
+              //debugger
               if (res) {
 
                 if (res && res.projectsMetricsData.metricLevelId == 'd6a905be-4ff9-402e-b074-028242b6f8e0') {
@@ -512,7 +512,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
   }
 
   synchronizeColumnYears() {
-    debugger
+    //debugger
     const existingYears = new Set(this.columnYear.map(y => y.year));
 
     this.valuecreationngxdata.forEach(financialType => {
