@@ -17,6 +17,7 @@ export class FundingEditComponent implements OnInit {
   @Input() optionType: 'recommended-option' | 'option-2' | 'option-3' = 'recommended-option'
   @Input() lookup: any;
   Funding: any = {}
+  canSubmit : boolean = true
   formIntialized: boolean = false
   FundingForm = new FormGroup({
     fundingTypeId: new FormControl(''),
@@ -183,93 +184,102 @@ export class FundingEditComponent implements OnInit {
     return source ? this.fundingSourceData.portfolioOwner.find(x => x.portfolioOwnerId == source).portfolioOwner : ''
   }
   submitfunding() {
-    this.projecthubservice.isFormChanged = false
-    var funding = this.FundingForm.getRawValue()
-    var BCfunding = this.FundingBCForm.getRawValue()
-    console.log(BCfunding)
-    if (this.mode == 'Project-Charter') {
-      var mainObj = {
-        fundingUniqueId: "",
-        projectId: this.projecthubservice.projectid,
-        fundingTypeId: funding.fundingTypeId,
-        fundingSourceId: funding.fundingSourceId,
-        fundingIntheplan: funding.fundingIntheplan,
-        fundingAmount: funding.fundingAmount,
-        fundingNotes: funding.fundingNotes,
-        includeInCharter: funding.includeInCharter,
-        fundingAmountFxconv: funding.fundingAmountFxconv,
-        includeInBusinessCase: false
+    if(this.canSubmit)
+    {
+      this.canSubmit = false
+      this.projecthubservice.isFormChanged = false
+      var funding = this.FundingForm.getRawValue()
+      var BCfunding = this.FundingBCForm.getRawValue()
+      console.log(BCfunding)
+      if (this.mode == 'Project-Charter') {
+        var mainObj = {
+          fundingUniqueId: "",
+          projectId: this.projecthubservice.projectid,
+          fundingTypeId: funding.fundingTypeId,
+          fundingSourceId: funding.fundingSourceId,
+          fundingIntheplan: funding.fundingIntheplan,
+          fundingAmount: funding.fundingAmount,
+          fundingNotes: funding.fundingNotes,
+          includeInCharter: funding.includeInCharter,
+          fundingAmountFxconv: funding.fundingAmountFxconv,
+          includeInBusinessCase: false
+        }
+        this.apiService.addFunding(mainObj).then(res => {
+          this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+            this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+            this.canSubmit = true
+          })
+  
+        })
       }
-      this.apiService.addFunding(mainObj).then(res => {
-        this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+      if (this.mode != 'Project-Charter' && this.optionType == 'recommended-option') {
+        var submitObj = {
+          fundingUniqueId: "",
+          businessFundingUniqueId: "",
+          businessOptionId: GlobalBusinessCaseOptions.OPTION_1,
+          projectId: this.projecthubservice.projectid,
+          fundingTypeId: BCfunding.fundingTypeId,
+          fundingSourceId: BCfunding.fundingSourceId,
+          fundingIntheplan: BCfunding.fundingIntheplan,
+          fundingAmount: BCfunding.fundingAmount,
+          fundingNotes: BCfunding.fundingNotes,
+          includeInCharter: false,
+          fundingAmountFxconv: BCfunding.fundingAmountFxconv,
+          includeInBusinessCase: BCfunding.includeInBusinessCase
+        }
+        this.apiService.addBCFunding(submitObj, GlobalBusinessCaseOptions.OPTION_1, this.projecthubservice.projectid).then(res => {
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.canSubmit = true
         })
-
-      })
-    }
-    if (this.mode != 'Project-Charter' && this.optionType == 'recommended-option') {
-      var submitObj = {
-        fundingUniqueId: "",
-        businessFundingUniqueId: "",
-        businessOptionId: GlobalBusinessCaseOptions.OPTION_1,
-        projectId: this.projecthubservice.projectid,
-        fundingTypeId: BCfunding.fundingTypeId,
-        fundingSourceId: BCfunding.fundingSourceId,
-        fundingIntheplan: BCfunding.fundingIntheplan,
-        fundingAmount: BCfunding.fundingAmount,
-        fundingNotes: BCfunding.fundingNotes,
-        includeInCharter: false,
-        fundingAmountFxconv: BCfunding.fundingAmountFxconv,
-        includeInBusinessCase: BCfunding.includeInBusinessCase
       }
-      this.apiService.addBCFunding(submitObj, GlobalBusinessCaseOptions.OPTION_1, this.projecthubservice.projectid).then(res => {
-        this.projecthubservice.submitbutton.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '', [], '')
-      })
-    }
-
-    if (this.mode != 'Project-Charter' && this.optionType == 'option-2') {
-      var submitObj = {
-        fundingUniqueId: "",
-        businessFundingUniqueId: "",
-        businessOptionId: GlobalBusinessCaseOptions.OPTION_2,
-        projectId: this.projecthubservice.projectid,
-        fundingTypeId: BCfunding.fundingTypeId,
-        fundingSourceId: BCfunding.fundingSourceId,
-        fundingIntheplan: BCfunding.fundingIntheplan,
-        fundingAmount: BCfunding.fundingAmount,
-        fundingNotes: BCfunding.fundingNotes,
-        includeInCharter: false,
-        fundingAmountFxconv: BCfunding.fundingAmountFxconv,
-        includeInBusinessCase: BCfunding.includeInBusinessCase
+  
+      if (this.mode != 'Project-Charter' && this.optionType == 'option-2') {
+        var submitObj = {
+          fundingUniqueId: "",
+          businessFundingUniqueId: "",
+          businessOptionId: GlobalBusinessCaseOptions.OPTION_2,
+          projectId: this.projecthubservice.projectid,
+          fundingTypeId: BCfunding.fundingTypeId,
+          fundingSourceId: BCfunding.fundingSourceId,
+          fundingIntheplan: BCfunding.fundingIntheplan,
+          fundingAmount: BCfunding.fundingAmount,
+          fundingNotes: BCfunding.fundingNotes,
+          includeInCharter: false,
+          fundingAmountFxconv: BCfunding.fundingAmountFxconv,
+          includeInBusinessCase: BCfunding.includeInBusinessCase
+        }
+        this.apiService.addBCFunding(submitObj, GlobalBusinessCaseOptions.OPTION_2, this.projecthubservice.projectid).then(res => {
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.canSubmit = true
+        })
       }
-      this.apiService.addBCFunding(submitObj, GlobalBusinessCaseOptions.OPTION_2, this.projecthubservice.projectid).then(res => {
-        this.projecthubservice.submitbutton.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '', [], '')
-      })
-    }
-    if (this.mode != 'Project-Charter' && this.optionType == 'option-3') {
-      var submitObj = {
-        fundingUniqueId: "",
-        businessFundingUniqueId: "",
-        businessOptionId: GlobalBusinessCaseOptions.OPTION_3,
-        projectId: this.projecthubservice.projectid,
-        fundingTypeId: BCfunding.fundingTypeId,
-        fundingSourceId: BCfunding.fundingSourceId,
-        fundingIntheplan: BCfunding.fundingIntheplan,
-        fundingAmount: BCfunding.fundingAmount,
-        fundingNotes: BCfunding.fundingNotes,
-        includeInCharter: false,
-        fundingAmountFxconv: BCfunding.fundingAmountFxconv,
-        includeInBusinessCase: BCfunding.includeInBusinessCase
+      if (this.mode != 'Project-Charter' && this.optionType == 'option-3') {
+        var submitObj = {
+          fundingUniqueId: "",
+          businessFundingUniqueId: "",
+          businessOptionId: GlobalBusinessCaseOptions.OPTION_3,
+          projectId: this.projecthubservice.projectid,
+          fundingTypeId: BCfunding.fundingTypeId,
+          fundingSourceId: BCfunding.fundingSourceId,
+          fundingIntheplan: BCfunding.fundingIntheplan,
+          fundingAmount: BCfunding.fundingAmount,
+          fundingNotes: BCfunding.fundingNotes,
+          includeInCharter: false,
+          fundingAmountFxconv: BCfunding.fundingAmountFxconv,
+          includeInBusinessCase: BCfunding.includeInBusinessCase
+        }
+        console.log(submitObj)
+        this.apiService.addBCFunding(submitObj, GlobalBusinessCaseOptions.OPTION_3, this.projecthubservice.projectid).then(res => {
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.canSubmit = true
+        })
       }
-      console.log(submitObj)
-      this.apiService.addBCFunding(submitObj, GlobalBusinessCaseOptions.OPTION_3, this.projecthubservice.projectid).then(res => {
-        this.projecthubservice.submitbutton.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '', [], '')
-      })
     }
+    
   }
 
 }
