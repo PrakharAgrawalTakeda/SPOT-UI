@@ -288,7 +288,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                         const fullYear = year < 100 ? 2000 + year : year;
                         const yearString = `FY ${fullYear}`;
                 
-                        if (!this.columnYear.some(yearObj => yearObj.year === yearString)) {
+                        if (!this.columnYear.some(yearObj => yearObj.year === yearString) && yearString != 'FY 2019' && yearString != 'FY19') {
                           this.columnYear.push({ year: yearString });
                         }
                       }
@@ -486,6 +486,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
         this.showWarningMessage();
       }
     });
+    this.synchronizeColumnYears()
     console.log(this.valuecreationngxdata)
             })
           })
@@ -495,6 +496,41 @@ export class EditMetricsComponent implements OnInit, OnChanges {
 
   }
 
+  synchronizeColumnYears() {
+    const existingYears = new Set(this.columnYear.map(y => y.year));
+
+    this.valuecreationngxdata.forEach(financialType => {
+        Object.keys(financialType.values).forEach(yearKey => {
+            let fullYear;
+            if (yearKey.startsWith('FY')) {
+                // Assuming yearKey is like "FY22", convert to full format "FY 2022"
+                const shortYear = yearKey.substring(2);
+                fullYear = `FY 20${shortYear}`;
+            } else if (yearKey === 'Historical') {
+                // Handle "Historical" separately if needed
+                fullYear = yearKey;
+            }
+
+            if (fullYear && !existingYears.has(fullYear)) {
+                this.columnYear.push({ year: fullYear });
+                existingYears.add(fullYear);
+            }
+        });
+    });
+
+    // Sort this.columnYear to maintain chronological order, ensuring "Historical" comes first
+    this.columnYear.sort((a, b) => {
+        if (a.year === "Historical") return -1;
+        if (b.year === "Historical") return 1;
+
+        // Extract numeric part of the year for comparison
+        const yearA = parseInt(a.year.substring(3));
+        const yearB = parseInt(b.year.substring(3));
+        return yearA - yearB;
+    });
+}
+
+  
 
    // New method to process fiscal years from all metrics
    private processFiscalYears(allMetrics: any[]): void {
@@ -744,7 +780,7 @@ isValidTimeFormat(timeStr: string): boolean {
     if (!listString) {
       return values;
     }
-  
+  debugger
     listString.split(',').forEach(item => {
       // Adjust regex to capture "FY19" specifically for "Historical" handling
       const match = item.trim().match(/(FY\d+|Historical):\s*(.+)/);
@@ -760,7 +796,6 @@ isValidTimeFormat(timeStr: string): boolean {
         values[yearKey] = this.formatValue(value, metricFormat);
       }
     });
-  
     console.log("Processed values:", values);
     return values;
   }
