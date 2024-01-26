@@ -99,8 +99,8 @@
                     </button>
                 </div>
             </div>
-            <div class="mt-3 pl-3 w-full" #target id="scheduleTableDiv">
-                <ngx-datatable  [ngClass]="getRIClass()" style="height: calc(calc(100vh/ var(--custom-zoom)) - 230px)"
+            <div class="w-full pl-3" #target id="scheduleTableDiv">
+                <ngx-datatable  [ngClass]="getRIClass()"
                                class="material datatable-schedule w-full font-medium text-sm text-default whitespace-nowrap cursor-pointer"
                     [rows]="schedulengxdata" #scheduleTable columnMode="force" [headerHeight]="'auto'" [rowHeight]="'auto'"
                     [scrollbarV]="false" [scrollbarH]="true" [rowClass]="getRowClass">
