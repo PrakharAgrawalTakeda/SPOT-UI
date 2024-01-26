@@ -244,7 +244,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                 // }
                 
                 const updateGlobalYearRange = (listString: string) => {
-                  debugger
+                  //debugger
                   console.log(this.columnYear)
                   // const currentYear = new Date().getFullYear();
                   // let currentFiscalYear = currentYear;
@@ -267,7 +267,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                     else{
                       this.fiscalYearString = `FY ${fiscalYear}`;
                     }
-                debugger
+                //debugger
                     if (!this.columnYear.some(yearObj => yearObj.year === this.fiscalYearString)) {
                       this.columnYear.push({ year: this.fiscalYearString });
                     }
@@ -780,7 +780,7 @@ isValidTimeFormat(timeStr: string): boolean {
     if (!listString) {
       return values;
     }
-  debugger
+  //debugger
     listString.split(',').forEach(item => {
       // Adjust regex to capture "FY19" specifically for "Historical" handling
       const match = item.trim().match(/(FY\d+|Historical):\s*(.+)/);

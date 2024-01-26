@@ -77,17 +77,6 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
           this.projectApiService.getfilterlist().then(filterres => {
             this.auth.KPIMaster().then((kpi: any) => {
               this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
-
-                const isHistorical = this.isBeforeFY2020(problemCapture.financialRealizationStartDate);
-                if (isHistorical) {
-                  // Check if "Historical" already exists in this.columnYear
-                  const historicalExists = this.columnYear.find(entry => entry.year === "Historical");
-                  
-                  // If "Historical" does not exist, add it as the first entry
-                  if (!historicalExists) {
-                    this.columnYear.unshift({ year: "Historical" });
-                  }
-                }
                 
                 console.log(this.columnYear)
                 console.log(currency)
@@ -95,7 +84,7 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                 console.log(problemCapture)
                 this.kpi = kpi
                 console.log(this.kpi)
-                console.log(res.projectsMetricsData)
+                console.log(res)
                 this.lookupData = resp
                 this.filterData = filterres
                 res.forEach((element) => {
@@ -109,6 +98,18 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                   element.metricData.FianncialType3 = "Current Plan"
                   element.metricData.FianncialType4 = "Actual"
                   element.metricData.parentName = element.projectsMetricsData.parentProjectId ? parentData.problemTitle : ''
+                  if (element.projectsMetricsData.strategicTargetList) {
+                    element.projectsMetricsData.strategicTargetList = element.projectsMetricsData.strategicTargetList.replace(/FY19:/g, 'Historical:');
+                }
+                if (element.projectsMetricsData.strategicBaselineList) {
+                    element.projectsMetricsData.strategicBaselineList = element.projectsMetricsData.strategicBaselineList.replace(/FY19:/g, 'Historical:');
+                }
+                if (element.projectsMetricsData.strategicCurrentList) {
+                    element.projectsMetricsData.strategicCurrentList = element.projectsMetricsData.strategicCurrentList.replace(/FY19:/g, 'Historical:');
+                }
+                if (element.projectsMetricsData.strategicActualList) {
+                    element.projectsMetricsData.strategicActualList = element.projectsMetricsData.strategicActualList.replace(/FY19:/g, 'Historical:');
+                }
                   // Initialize null values to "0"
                   element.projectsMetricsData.strategicTarget = element.projectsMetricsData.strategicTarget ?? "0";
                   element.projectsMetricsData.strategicBaseline = element.projectsMetricsData.strategicBaseline ?? "0";
@@ -209,31 +210,6 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                 this.compare(this.columnYear)
                 this.valuecreationngxdata = this.projectsMetricsData
 
-
-                // if (!res.projectsMetricsDataYearly || res.projectsMetricsDataYearly.length === 0) {
-
-                //   const fiscalYear = this.getFiscalYearFromDate(problemCapture.financialRealizationStartDate);
-                //   // Initialize data for "Historical" if applicable
-                //   if (fiscalYear === "Historical") {
-                //     this.initializeFinancialDataForYear("FY 2019", this.projectsMetricsData); // Treat "Historical" as "FY 2019"
-                //     if (!this.columnYear.some(yearObj => yearObj.year === "Historical")) {
-                //       this.columnYear.unshift({ year: "Historical" }); // Add "Historical" at the start
-                //     }
-                //   }
-
-                //  else{
-                //   this.initializeFinancialDataForYear(fiscalYear, this.projectsMetricsData);
-                //   // Push this year to columnYear if not already present
-                //   if (!this.columnYear.some(yearObj => yearObj.year === fiscalYear)) {
-                //     this.columnYear.push({ year: fiscalYear });
-                //   }
-                //  }
-                // }
-
-
-
-
-
                 if (!res.projectsMetricsDataYearly || res.projectsMetricsDataYearly.length === 0) {
                   const fiscalYear = this.getFiscalYearFromDate(problemCapture.financialRealizationStartDate);
                   if (fiscalYear === "Historical") {
@@ -250,6 +226,16 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                 //this.columnYear.sort((a, b) => a.year.localeCompare(b.year));
 this.sortColumnYears()
                 console.log(this.columnYear)
+                const isHistorical = this.isBeforeFY2020(problemCapture.financialRealizationStartDate);
+                if (isHistorical) {
+                  // Check if "Historical" already exists in this.columnYear
+                  const historicalExists = this.columnYear.find(entry => entry.year === "Historical");
+                  
+                  // If "Historical" does not exist, add it as the first entry
+                  if (!historicalExists) {
+                    this.columnYear.unshift({ year: "Historical" });
+                  }
+                }
                 this.ValueCaptureForm.disable()
                 this.viewContent = true
               })
