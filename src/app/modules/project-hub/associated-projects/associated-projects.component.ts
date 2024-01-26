@@ -40,7 +40,7 @@ export class AssociatedProjectsComponent implements OnInit {
     lastIndex = 15;
     viewContent = false;
     problemID = ''
-    count:number = 0
+    count: number = 0
     ngOnInit(): void {
         this.dataloader();
     }
@@ -58,7 +58,7 @@ export class AssociatedProjectsComponent implements OnInit {
                 console.log(res)
                 this.allprojects = res
                 res.values.forEach(project => {
-                    if(project.problemUniqueId == this.projecthubservice.projectid){
+                    if (project.problemUniqueId == this.projecthubservice.projectid) {
                         this.problemID = project.problemId
                     }
                     ids.push(project.problemUniqueId);
@@ -78,8 +78,8 @@ export class AssociatedProjectsComponent implements OnInit {
                         (project.oePhaseAbbreviation
                             ? project.oePhaseAbbreviation
                             : 'NA');
-                    project.nextMilestoneFinishDate = formatDate(new Date(project.nextMilestoneFinishDate));
-                    project.projectPlannedFinishDate = formatDate(new Date(project.projectPlannedFinishDate));
+                    project.nextMilestoneFinishDate = project.nextMilestoneFinishDate ? formatDate(new Date(project.nextMilestoneFinishDate)) : null;
+                    project.projectPlannedFinishDate = project.projectPlannedFinishDate ? formatDate(new Date(project.projectPlannedFinishDate)) : null;
                     project.portfolioOwnerId = this.getPortfolioName(project.portfolioOwnerId)
                     project.treeStatus = "expanded";
                     projects.push(project);
@@ -120,8 +120,8 @@ export class AssociatedProjectsComponent implements OnInit {
     yAxisTickFormatting(value) {
         return percentTickFormatting(value);
     }
-    getPortfolioName(id:string){
-        return this.filterCriteria?.portfolioOwner?.find(x=>x.portfolioOwnerId == id)?.portfolioOwner
+    getPortfolioName(id: string) {
+        return this.filterCriteria?.portfolioOwner?.find(x => x.portfolioOwnerId == id)?.portfolioOwner
     }
     getCellClass(): any {
         return 'first-column-datatable';
@@ -177,30 +177,30 @@ export class AssociatedProjectsComponent implements OnInit {
                 const problemIdsString = ',' + problemIds.join(',');
 
                 console.log(problemIdsString);
-            this.apiService.generateReports(problemIdsString,'Portfolio Report').then((res: any) => {
-                // handle response
-            });
-        }
-    });
+                this.apiService.generateReports(problemIdsString, 'Portfolio Report').then((res: any) => {
+                    // handle response
+                });
+            }
+        });
     }
     // tootlipFormatter(value, series) {
     //     return value.toString();
     // }
     tootlipFormatter(value, series) {
         this.count = this.count == undefined ? 0 : this.count
-        if(this.count == 0){
-          this.count++
-          return value.toString();
+        if (this.count == 0) {
+            this.count++
+            return value.toString();
         }
-        else if(this.count == 1){
-          this.count++
-          return '<div style="color: #775DD0;">'+value.toString()+'</div>';
+        else if (this.count == 1) {
+            this.count++
+            return '<div style="color: #775DD0;">' + value.toString() + '</div>';
         }
-        else{
-          this.count = 0
-          return '<div style="color: rgba(0,143,251,0.85);">'+value.toString()+'</div>';
+        else {
+            this.count = 0
+            return '<div style="color: rgba(0,143,251,0.85);">' + value.toString() + '</div>';
         }
-      }
+    }
 }
 function percentTickFormatting(val: any) {
     return val.toLocaleString() + '%';
