@@ -1832,7 +1832,6 @@ export class PortfolioCenterComponent implements OnInit {
 
 
   generateReports() {
-    debugger
     this.toggleObject = {}
     // Initialize counters for each report type
     const reportTypeCounters = {};
