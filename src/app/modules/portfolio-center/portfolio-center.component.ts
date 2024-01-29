@@ -81,7 +81,7 @@ export class PortfolioCenterComponent implements OnInit {
   sorting: any = { name: "", dir: "" }
   viewBaseline = false
   projectOverview: any = []
-  count:number = 0
+  count: number = 0
   filtersnew: any = {
     "PortfolioOwner": [],
     "ProjectTeamMember": [],
@@ -201,16 +201,16 @@ export class PortfolioCenterComponent implements OnInit {
   user = {}
   state = {}
   changedToggleStates: Record<string, boolean[]> = {};
-  showdefault:boolean = false
+  showdefault: boolean = false
   localAttributeData = []
   currentData
   Date2
   Date3
-  portfolio:any
- 
+  portfolio: any
+
   // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
-  constructor(private snack: MatSnackBar,private renderer: Renderer2, private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService, public PortfolioCenterService: PortfolioCenterService) {
+  constructor(private snack: MatSnackBar, private renderer: Renderer2, private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService, public PortfolioCenterService: PortfolioCenterService) {
     this.PortfolioFilterForm.controls.PortfolioOwner.valueChanges.subscribe(res => {
       if (this.showContent) {
         if (this.showLA) {
@@ -238,12 +238,12 @@ export class PortfolioCenterComponent implements OnInit {
     this.renderer.listen('window', 'scroll', this.scrollHandler.bind(this));
     this.PortfolioCenterService.successSave.subscribe(res => {
       if (res == true) {
-          this.snack.open("The information has been saved successfully", "", {
-              duration: 2000,
-              panelClass: ["bg-primary", "text-on-primary"]
-          })
+        this.snack.open("The information has been saved successfully", "", {
+          duration: 2000,
+          panelClass: ["bg-primary", "text-on-primary"]
+        })
       }
-  })
+    })
 
   }
 
@@ -736,79 +736,79 @@ export class PortfolioCenterComponent implements OnInit {
             }
           }
           this.localAttributeData = []
-          if( localattribute != undefined){
-          for(var i=0;i<localattribute.length;i++){
-            if(localattribute[i].data.length > 0){
-              if(localattribute[i].dataType == "3"){
-                var localdata = {
-                  "name": localattribute[i].name,
-                  "value": this.lookup.filter(result => result.lookUpId == localattribute[i].data[0].value)[0].lookUpName,
-                  "count": localattribute[i].data.length,
-                  "order": 15
-                }
-              }
-              else if(localattribute[i].dataType == "5"){
-                var localdata = {
-                  "name": localattribute[i].name,
-                  "value": localattribute[i].data[0].value.userDisplayName,
-                  "count": localattribute[i].data.length,
-                  "order": 15
-                }
-              }
-              else if(localattribute[i].dataType == "1"){
-                var data:any = 'Yes'
-                if(localattribute[i].data[0].value != false){
+          if (localattribute != undefined) {
+            for (var i = 0; i < localattribute.length; i++) {
+              if (localattribute[i].data.length > 0) {
+                if (localattribute[i].dataType == "3") {
                   var localdata = {
                     "name": localattribute[i].name,
+                    "value": this.lookup.filter(result => result.lookUpId == localattribute[i].data[0].value)[0].lookUpName,
+                    "count": localattribute[i].data.length,
+                    "order": 15
+                  }
+                }
+                else if (localattribute[i].dataType == "5") {
+                  var localdata = {
+                    "name": localattribute[i].name,
+                    "value": localattribute[i].data[0].value.userDisplayName,
+                    "count": localattribute[i].data.length,
+                    "order": 15
+                  }
+                }
+                else if (localattribute[i].dataType == "1") {
+                  var data: any = 'Yes'
+                  if (localattribute[i].data[0].value != false) {
+                    var localdata = {
+                      "name": localattribute[i].name,
+                      "value": data,
+                      "count": localattribute[i].data.length,
+                      "order": 15
+                    }
+                  }
+                }
+                else if (localattribute[i].dataType == "4") {
+                  if (localattribute[i].data.length == 2) {
+                    var data: any = localattribute[i].data[0].value + ' to ' + localattribute[i].data[1].value
+                  }
+                  else {
+                    var data: any = localattribute[i].data[0].value
+                  }
+                  localdata = {
+                    "name": localattribute[i].name,
                     "value": data,
+                    "count": 1,
+                    "order": 15
+                  }
+                }
+                else if (localattribute[i].dataType == "2") {
+                  if (localattribute[i].data.length == 2) {
+
+                    var data: any = moment(localattribute[i].data[0].value).format('DD-MMM-YYYY') + ' to ' + moment(localattribute[i].data[1].value).format('DD-MMM-YYYY')
+                  }
+                  else {
+                    var data: any = moment(localattribute[i].data[0].value).format('DD-MMM-YYYY')
+                  }
+                  localdata = {
+                    "name": localattribute[i].name,
+                    "value": data,
+                    "count": 1,
+                    "order": 15
+                  }
+                }
+                else {
+                  var localdata = {
+                    "name": localattribute[i].name,
+                    "value": localattribute[i].data[0].value,
                     "count": localattribute[i].data.length,
                     "order": 15
                   }
                 }
               }
-              else if(localattribute[i].dataType == "4"){
-                if(localattribute[i].data.length == 2){
-                  var data:any = localattribute[i].data[0].value + ' to ' + localattribute[i].data[1].value
-                }
-                else{
-                  var data:any = localattribute[i].data[0].value
-                }
-                localdata = {
-                  "name": localattribute[i].name,
-                  "value": data,
-                  "count": 1,
-                  "order": 15
-                }
+              if (localdata != undefined) {
+                this.localAttributeData.push(localdata)
               }
-              else if(localattribute[i].dataType == "2"){
-                if(localattribute[i].data.length == 2){
-
-                  var data:any = moment(localattribute[i].data[0].value).format('DD-MMM-YYYY') + ' to ' + moment(localattribute[i].data[1].value).format('DD-MMM-YYYY')
-                }
-                else{
-                  var data:any = moment(localattribute[i].data[0].value).format('DD-MMM-YYYY')
-                }
-                localdata = {
-                  "name": localattribute[i].name,
-                  "value": data,
-                  "count": 1,
-                  "order": 15
-                }
-              }
-              else{
-                var localdata = {
-                  "name": localattribute[i].name,
-                  "value": localattribute[i].data[0].value,
-                  "count": localattribute[i].data.length,
-                  "order": 15
-                }
-              }
-            }
-            if(localdata != undefined){
-            this.localAttributeData.push(localdata)
             }
           }
-        }
 
           console.log("Filter Data : " + this.groupData)
           this.currentData = new Date().toISOString().split('T')
@@ -825,6 +825,14 @@ export class PortfolioCenterComponent implements OnInit {
             var budgetData;
             this.projects.data = res.portfolioDetails;
             this.bulkreportdata = res.portfolioDetails
+            console.log(this.bulkreportdata)
+            this.bulkreportdata.sort((a, b) => {
+              if (a.problemId < b.problemId) return -1;
+              if (a.problemId > b.problemId) return 1;
+
+              return 0;
+            });
+            console.log(this.bulkreportdata)
 
             this.initial = res
 
@@ -1002,11 +1010,11 @@ export class PortfolioCenterComponent implements OnInit {
             res.trendingIndicators.sort((a, b) => {
               return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
             })
-            if(res.overallStatusInfo){
-            res.overallStatusInfo.sort((a, b) => {
-              return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
-            })
-          }
+            if (res.overallStatusInfo) {
+              res.overallStatusInfo.sort((a, b) => {
+                return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+              })
+            }
             this.projectNames = res.projectDetails;
             this.setPage(res, 0)
 
@@ -1232,340 +1240,340 @@ export class PortfolioCenterComponent implements OnInit {
       "value": ""
     }
     // if(this.PortfolioFilterForm.value.PortfolioOwner?.length > 0 || this.PortfolioFilterForm.value.ExecutionScope?.length > 0){
-      var portfolioOwners = ""
-      var executionScope = ""
-      if (this.PortfolioFilterForm.controls.PortfolioOwner.value != null) {
-        if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
-          for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
-            portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
-          }
+    var portfolioOwners = ""
+    var executionScope = ""
+    if (this.PortfolioFilterForm.controls.PortfolioOwner.value != null) {
+      if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
+        for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
+          portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
         }
       }
-      if (this.PortfolioFilterForm.controls.ExecutionScope.value != null) {
-        if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
-          for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
-            executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
-          }
+    }
+    if (this.PortfolioFilterForm.controls.ExecutionScope.value != null) {
+      if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
+        for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
+          executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
         }
       }
-      this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
-    Object.keys(this.localAttributeForm.controls).forEach((name) => {
-      const currentControl = this.localAttributeForm.controls[name];
-      var i = mainObj.findIndex(x => x.uniqueId === name);
-      if (i >= 0) {
-        if (mainObj[i].data.length == 0 && mainObj[i].dataType == 1 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
-          mainObj[i].data = []
-          dataToSend.push(mainObj[i])
-        }
-        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 2 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
-          mainObj[i].data = []
-          dataToSend.push(mainObj[i])
-        }
-        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length == 0) {
-          mainObj[i].data = []
-          dataToSend.push(mainObj[i])
-        }
-        else if (mainObj[i].data.length == 0 && (mainObj[i].dataType == 6 || mainObj[i].dataType == 4) && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
-          mainObj[i].data = []
-          dataToSend.push(mainObj[i])
-        }
-        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 5 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
-          mainObj[i].data = []
-          dataToSend.push(mainObj[i])
-        }
-        else if (mainObj[i].dataType == 2) {
-          if (mainObj[i].data.length != 0 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" || this.localAttributeForm.controls[mainObj[i].uniqueId].value == null)) {
-            mainObj[i].data[0].value = null
+    }
+    this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
+      Object.keys(this.localAttributeForm.controls).forEach((name) => {
+        const currentControl = this.localAttributeForm.controls[name];
+        var i = mainObj.findIndex(x => x.uniqueId === name);
+        if (i >= 0) {
+          if (mainObj[i].data.length == 0 && mainObj[i].dataType == 1 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+            mainObj[i].data = []
             dataToSend.push(mainObj[i])
           }
-          else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
-            emptyObject = {
-              "uniqueId": "",
-              "value": moment(this.localAttributeForm.controls[mainObj[i].name].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+          else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 2 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+            mainObj[i].data = []
+            dataToSend.push(mainObj[i])
+          }
+          else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length == 0) {
+            mainObj[i].data = []
+            dataToSend.push(mainObj[i])
+          }
+          else if (mainObj[i].data.length == 0 && (mainObj[i].dataType == 6 || mainObj[i].dataType == 4) && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+            mainObj[i].data = []
+            dataToSend.push(mainObj[i])
+          }
+          else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 5 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+            mainObj[i].data = []
+            dataToSend.push(mainObj[i])
+          }
+          else if (mainObj[i].dataType == 2) {
+            if (mainObj[i].data.length != 0 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" || this.localAttributeForm.controls[mainObj[i].uniqueId].value == null)) {
+              mainObj[i].data[0].value = null
+              dataToSend.push(mainObj[i])
             }
-            mainObj[i].data.push(emptyObject)
-            emptyObject = {
-              "uniqueId": "",
-              "value": moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-            }
-            mainObj[i].data.push(emptyObject)
-            dataToSend.push(mainObj[i])
-          }
-          else {
-            mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].name].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-            mainObj[i].data[1].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-            dataToSend.push(mainObj[i])
-          }
-        }
-        else if (mainObj[i].dataType == 3) {
-          var data = []
-          if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
-            for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
-              if (this.localAttributeForm.controls[mainObj[i].uniqueId].value.length < mainObj[i].data.length) {
-                mainObj[i].data = []
-                mainObj[i].data[j] = {
-                  "uniqueId": "",
-                  "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
-                }
+            else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
+              emptyObject = {
+                "uniqueId": "",
+                "value": moment(this.localAttributeForm.controls[mainObj[i].name].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
               }
-              else {
-                if (mainObj[i].data[j] == undefined) {
+              mainObj[i].data.push(emptyObject)
+              emptyObject = {
+                "uniqueId": "",
+                "value": moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+              }
+              mainObj[i].data.push(emptyObject)
+              dataToSend.push(mainObj[i])
+            }
+            else {
+              mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].name].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+              mainObj[i].data[1].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+              dataToSend.push(mainObj[i])
+            }
+          }
+          else if (mainObj[i].dataType == 3) {
+            var data = []
+            if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
+              for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
+                if (this.localAttributeForm.controls[mainObj[i].uniqueId].value.length < mainObj[i].data.length) {
+                  mainObj[i].data = []
                   mainObj[i].data[j] = {
                     "uniqueId": "",
                     "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
                   }
                 }
                 else {
-                  mainObj[i].data[j].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
+                  if (mainObj[i].data[j] == undefined) {
+                    mainObj[i].data[j] = {
+                      "uniqueId": "",
+                      "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
+                    }
+                  }
+                  else {
+                    mainObj[i].data[j].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
 
+                  }
                 }
               }
             }
+            else {
+              mainObj[i].data = []
+            }
+            dataToSend.push(mainObj[i])
           }
-          else {
-            mainObj[i].data = []
-          }
-          dataToSend.push(mainObj[i])
-        }
-        else if (mainObj[i].dataType == 5) {
-          var data = []
-          if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
-            for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
-              if (this.localAttributeForm.controls[mainObj[i].uniqueId].value.length < mainObj[i].data.length) {
-                mainObj[i].data = []
-                mainObj[i].data[j] = {
-                  "uniqueId": "",
-                  "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j]
-                }
-              }
-              else {
-                if (mainObj[i].data[j] == undefined) {
+          else if (mainObj[i].dataType == 5) {
+            var data = []
+            if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
+              for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
+                if (this.localAttributeForm.controls[mainObj[i].uniqueId].value.length < mainObj[i].data.length) {
+                  mainObj[i].data = []
                   mainObj[i].data[j] = {
                     "uniqueId": "",
                     "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j]
                   }
                 }
                 else {
-                  mainObj[i].data[j].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value[j]
+                  if (mainObj[i].data[j] == undefined) {
+                    mainObj[i].data[j] = {
+                      "uniqueId": "",
+                      "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j]
+                    }
+                  }
+                  else {
+                    mainObj[i].data[j].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value[j]
 
+                  }
                 }
               }
             }
+            else {
+              mainObj[i].data = []
+            }
+            dataToSend.push(mainObj[i])
           }
           else {
-            mainObj[i].data = []
+            if (mainObj[i].data.length == 0) {
+              if (mainObj[i].dataType == 4 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" || isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value))) {
+                emptyObject = {
+                  "uniqueId": "",
+                  "value": ""
+                }
+                mainObj[i].data.push(emptyObject)
+                mainObj[i].data[0].value = null
+                dataToSend.push(mainObj[i])
+              }
+              else if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "" && !isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value)) {
+                emptyObject = {
+                  "uniqueId": "",
+                  "value": this.localAttributeForm.controls[mainObj[i].name].value
+                }
+                mainObj[i].data.push(emptyObject)
+                emptyObject = {
+                  "uniqueId": "",
+                  "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
+                }
+                mainObj[i].data.push(emptyObject)
+                dataToSend.push(mainObj[i])
+              }
+              else {
+                emptyObject = {
+                  "uniqueId": "",
+                  "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
+                }
+                mainObj[i].data.push(emptyObject)
+                mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
+                dataToSend.push(mainObj[i])
+              }
+            }
+            else {
+              if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" && !isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value)) {
+                mainObj[i].data[0].value = null
+                dataToSend.push(mainObj[i])
+              }
+              if (mainObj[i].dataType == 4 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value != "" || isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value))) {
+                mainObj[i].data = []
+                emptyObject = {
+                  "uniqueId": "",
+                  "value": this.localAttributeForm.controls[mainObj[i].name].value
+                }
+                mainObj[i].data.push(emptyObject)
+                emptyObject = {
+                  "uniqueId": "",
+                  "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
+                }
+                mainObj[i].data.push(emptyObject)
+                dataToSend.push(mainObj[i])
+              }
+              else {
+                mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
+                dataToSend.push(mainObj[i])
+              }
+            }
           }
-          dataToSend.push(mainObj[i])
+        }
+      })
+      console.log(dataToSend)
+      var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
+      if ((LA != null || LA != undefined) && dataToSend.length > 0) {
+        var CommonArray = LA.filter(o => dataToSend.some(i => i.uniqueId === o.uniqueId));
+        if (CommonArray.length != 0) {
+          for (var z = 0; z < CommonArray.length; z++) {
+            for (var j = 0; j < LA.length; j++) {
+              if (LA[j].uniqueId == CommonArray[z].uniqueId) {
+                LA.splice(j, 1)
+              }
+            }
+          }
+        }
+      }
+      var index = []
+      var updateArray = []
+      for (var z = 0; z < dataToSend.length; z++) {
+        if (dataToSend[z].dataType == "4" && dataToSend[z].data.length != 0) {
+          if (dataToSend[z].data[0].value == "0") {
+            index.push(z)
+          }
+        }
+        if (dataToSend[z].data.length == 0) {
+          // updateArray.splice(z,1);
+        }
+        else if (dataToSend[z].data[0].value == "" || dataToSend[z].data[0].value == null || dataToSend[z].data[0].value == undefined || dataToSend[z].data[0].value.length == 0) {
+          // updateArray.splice(z,1);
+        }
+        else if (isNaN(dataToSend[z].data[0].value) && dataToSend[z].dataType == 4) {
+          // updateArray.splice(z,1);
         }
         else {
-          if (mainObj[i].data.length == 0) {
-            if (mainObj[i].dataType == 4 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" || isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value))) {
-              emptyObject = {
-                "uniqueId": "",
-                "value": ""
-              }
-              mainObj[i].data.push(emptyObject)
-              mainObj[i].data[0].value = null
-              dataToSend.push(mainObj[i])
+          index.push(z)
+        }
+      }
+      if (index.length > 0) {
+        for (var i = 0; i < index.length; i++) {
+          updateArray.push(dataToSend[index[i]])
+        }
+      }
+      dataToSend = updateArray
+      // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+      if ((LA == null || LA == undefined) && dataToSend.length == 0) {
+        localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+      }
+      else if (dataToSend.length != 0) {
+        var c = 0;
+        if (LA != null || LA != undefined) {
+          var secondArray = LA.filter(o => !dataToSend.some(i => i.uniqueId === o.uniqueId));
+          console.log(secondArray)
+          if (secondArray.length != 0) {
+            for (var z = 0; z < secondArray.length; z++) {
+              dataToSend.push(secondArray[z])
             }
-            else if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "" && !isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value) ) {
-              emptyObject = {
-                "uniqueId": "",
-                "value": this.localAttributeForm.controls[mainObj[i].name].value
-              }
-              mainObj[i].data.push(emptyObject)
-              emptyObject = {
-                "uniqueId": "",
-                "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
-              }
-              mainObj[i].data.push(emptyObject)
-              dataToSend.push(mainObj[i])
-            }
-            else {
-              emptyObject = {
-                "uniqueId": "",
-                "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
-              }
-              mainObj[i].data.push(emptyObject)
-              mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
-              dataToSend.push(mainObj[i])
-            }
+          }
+        }
+        var newIndex = []
+        var newArray = []
+        for (var z = 0; z < dataToSend.length; z++) {
+          if (dataToSend[z].dataType == "4" && dataToSend[z].data[0].value == "0") {
+            newIndex.push(z)
+          }
+          if (dataToSend[z].data.length == 0) {
+            // newArray.splice(z,1);
+          }
+          else if (dataToSend[z].data[0].value == "" || dataToSend[z].data[0].value == null || dataToSend[z].data[0].value == undefined || dataToSend[z].data[0].value.length == 0) {
+            // newArray.splice(z,1);
+          }
+          else if (isNaN(dataToSend[z].data[0].value) && dataToSend[z].dataType == 4) {
+            // newArray.splice(z,1);
           }
           else {
-            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" && !isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value)) {
-              mainObj[i].data[0].value = null
-              dataToSend.push(mainObj[i])
+            newIndex.push(z)
+          }
+        }
+        if (newIndex.length > 0) {
+          for (var i = 0; i < newIndex.length; i++) {
+            newArray.push(dataToSend[newIndex[i]])
+          }
+        }
+        dataToSend = newArray
+        // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+      }
+      else if ((LA != null || LA != undefined) && dataToSend.length == 0) {
+        for (var i = 0; i < LA.length; i++) {
+          dataToSend.push(LA[i])
+        }
+        // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+      }
+      var removeEle = []
+      var removeData = []
+      if (dataToSend.length > 0) {
+        for (var i = 0; i < dataToSend.length; i++) {
+          var count = 0
+          for (var j = 0; j < res.length; j++) {
+            if (dataToSend[i].uniqueId == res[j].uniqueId) {
+              count++
             }
-            if (mainObj[i].dataType == 4 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value != "" || isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value))) {
-              mainObj[i].data = []
-              emptyObject = {
-                "uniqueId": "",
-                "value": this.localAttributeForm.controls[mainObj[i].name].value
-              }
-              mainObj[i].data.push(emptyObject)
-              emptyObject = {
-                "uniqueId": "",
-                "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
-              }
-              mainObj[i].data.push(emptyObject)
-              dataToSend.push(mainObj[i])
-            }
-            else {
-              mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
-              dataToSend.push(mainObj[i])
-            }
+          }
+          if (count > 0) {
+            removeEle.push(i)
           }
         }
       }
-    })
-    console.log(dataToSend)
-    var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
-    if ((LA != null || LA != undefined) && dataToSend.length > 0){
-      var CommonArray = LA.filter(o => dataToSend.some(i => i.uniqueId === o.uniqueId));
-      if (CommonArray.length != 0) {
-        for (var z = 0; z < CommonArray.length; z++) {
-          for(var j=0;j<LA.length;j++){
-            if(LA[j].uniqueId == CommonArray[z].uniqueId){
-              LA.splice(j,1)
-            }
-          }
+      if (removeEle.length > 0) {
+        for (var i = 0; i < removeEle.length; i++) {
+          removeData.push(dataToSend[removeEle[i]])
         }
+        dataToSend = removeData
       }
-    }
-    var index = []
-    var updateArray = []
-    for(var z=0;z<dataToSend.length;z++){
-      if(dataToSend[z].dataType == "4" && dataToSend[z].data.length != 0){
-        if( dataToSend[z].data[0].value == "0"){
-        index.push(z)
-        }
-      }
-      if(dataToSend[z].data.length == 0){
-        // updateArray.splice(z,1);
-      }
-      else if(dataToSend[z].data[0].value == "" || dataToSend[z].data[0].value == null || dataToSend[z].data[0].value == undefined || dataToSend[z].data[0].value.length == 0){
-        // updateArray.splice(z,1);
-      }
-      else if(isNaN(dataToSend[z].data[0].value) && dataToSend[z].dataType == 4){
-        // updateArray.splice(z,1);
-      }
-      else{
-        index.push(z)
-      }
-    }
-    if(index.length > 0){
-      for(var i=0;i<index.length;i++){
-        updateArray.push(dataToSend[index[i]])
-      }
-    }
-    dataToSend = updateArray
-    // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
-    if((LA == null || LA == undefined) && dataToSend.length == 0) {
       localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
-    }
-    else if (dataToSend.length != 0) {
-      var c = 0;
-      if (LA != null || LA != undefined) {
-        var secondArray = LA.filter(o => !dataToSend.some(i => i.uniqueId === o.uniqueId));
-        console.log(secondArray)
-        if (secondArray.length != 0) {
-          for (var z = 0; z < secondArray.length; z++) {
-            dataToSend.push(secondArray[z])
-          }
-        }
+      this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
+      if (dataToSend.length == 0) {
+        localStorage.setItem('spot-localattribute', JSON.stringify([]))
       }
-      var newIndex= []
-      var newArray = []
-      for(var z=0;z<dataToSend.length;z++){
-        if(dataToSend[z].dataType == "4" && dataToSend[z].data[0].value == "0"){
-          newIndex.push(z)
-        }
-        if(dataToSend[z].data.length == 0){
-          // newArray.splice(z,1);
-        }
-        else if(dataToSend[z].data[0].value == "" || dataToSend[z].data[0].value == null || dataToSend[z].data[0].value == undefined || dataToSend[z].data[0].value.length == 0){
-          // newArray.splice(z,1);
-        }
-        else if(isNaN(dataToSend[z].data[0].value) && dataToSend[z].dataType == 4){
-          // newArray.splice(z,1);
-        }
-        else{
-          newIndex.push(z)
-        }
-      }
-      if(newIndex.length > 0){
-        for(var i=0;i<newIndex.length;i++){
-          newArray.push(dataToSend[newIndex[i]])
-        }
-      }
-      dataToSend = newArray
-      // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
-    }
-    else if ((LA != null || LA != undefined) && dataToSend.length == 0){
-      for(var i=0;i<LA.length;i++){
-        dataToSend.push(LA[i])
-      }
-      // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
-    }
-    var removeEle = []
-    var removeData = []
-    if(dataToSend.length > 0){
-      for(var i=0;i<dataToSend.length;i++){
-        var count = 0
-        for(var j=0;j<res.length;j++){
-          if(dataToSend[i].uniqueId == res[j].uniqueId){
-            count++
-          }
-        }
-        if(count > 0){
-          removeEle.push(i)
-        }
-      }
-    }
-    if(removeEle.length > 0){
-      for(var i=0;i<removeEle.length;i++){
-        removeData.push(dataToSend[removeEle[i]])
-      }
-      dataToSend = removeData
-    }
-    localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
-    this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
-    if(dataToSend.length == 0){
-    localStorage.setItem('spot-localattribute', JSON.stringify([]))
-    }
-    if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0) && dataToSend.length == 0) {
-      var comfirmConfig: FuseConfirmationConfig = {
-        "title": "There must be at least one filter present other wise the query will return too much data to load.",
-        "message": "",
-        "icon": {
-          "show": true,
-          "name": "heroicons_outline:exclamation",
-          "color": "warn"
-        },
-        "actions": {
-          "confirm": {
+      if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0) && dataToSend.length == 0) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "There must be at least one filter present other wise the query will return too much data to load.",
+          "message": "",
+          "icon": {
             "show": true,
-            "label": "Okay",
+            "name": "heroicons_outline:exclamation",
             "color": "warn"
           },
-        },
-        "dismissible": true
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
       }
-      const alert = this.fuseAlert.open(comfirmConfig)
-    }
-    else{
-    this.filterDrawer.close()
-    this.PortfolioCenterService.drawerOpenedPrakharTemp = false
-    this.resetpage()
-    this.showFilter = false
-    }
-    // this.filterDrawer.close()
-    // this.PortfolioCenterService.drawerOpenedPrakharTemp = false
-    // this.resetpage()
-    // this.showFilter = false
-  })
+      else {
+        this.filterDrawer.close()
+        this.PortfolioCenterService.drawerOpenedPrakharTemp = false
+        this.resetpage()
+        this.showFilter = false
+      }
+      // this.filterDrawer.close()
+      // this.PortfolioCenterService.drawerOpenedPrakharTemp = false
+      // this.resetpage()
+      // this.showFilter = false
+    })
     // }
-  // else{
+    // else{
     // this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
     // localStorage.setItem('spot-localattribute', JSON.stringify([]))
     // if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)) {
@@ -1594,17 +1602,17 @@ export class PortfolioCenterComponent implements OnInit {
     // this.resetpage()
     // this.showFilter = false
     // }
-  // }
+    // }
     // this.filterDrawer.close()
     // this.PortfolioCenterService.drawerOpenedPrakharTemp = false
     // this.resetpage()
     // this.showFilter = false
   }
-  captureClose(event){
-    if(event){
+  captureClose(event) {
+    if (event) {
       this.PortfolioCenterService.drawerOpenedPrakharTemp = true
     }
-    else{
+    else {
       this.PortfolioCenterService.drawerOpenedPrakharTemp = false
     }
   }
@@ -1832,9 +1840,13 @@ export class PortfolioCenterComponent implements OnInit {
     });
 
     let noTogglesTurnedOn = true
-            // Reverse the order of bulkreportdata
-            this.bulkreportdata = this.bulkreportdata.slice().reverse();
-            console.log(this.bulkreportdata)
+    this.bulkreportdata.sort((a, b) => {
+      if (a.problemId < b.problemId) return -1;
+      if (a.problemId > b.problemId) return 1;
+
+      return 0;
+    });
+    console.log(this.bulkreportdata)
     // Step 1: Iterate through each page
     for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
       if (this.pageToggleStates[pageNumber]) {
@@ -1843,7 +1855,7 @@ export class PortfolioCenterComponent implements OnInit {
         Object.keys(pageToggleStates).forEach((toggleName) => {
           const toggleValues = pageToggleStates[toggleName];
 
-console.log("TOGGLE values", toggleValues)
+          console.log("TOGGLE values", toggleValues)
           if (toggleValues.some((value) => value === true)) {
             noTogglesTurnedOn = false
             // Only add project UUIDs to toggleObject if the toggle is true
@@ -1852,9 +1864,9 @@ console.log("TOGGLE values", toggleValues)
             }
 
             const existingProjectUUIDs = this.toggleObject[toggleName]; // Get existing UUIDs for the toggle
-console.log(existingProjectUUIDs)
-console.log("bulkreportdata project IDs:", this.bulkreportdata);
-console.log("Toggle values:", toggleValues);
+            console.log(existingProjectUUIDs)
+            console.log("bulkreportdata project IDs:", this.bulkreportdata);
+            console.log("Toggle values:", toggleValues);
 
             // Find the project UUIDs for which the toggle is true
             const trueProjectUUIDs = toggleValues
@@ -2268,22 +2280,22 @@ console.log("Toggle values:", toggleValues);
         this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
         this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
         this.projectOverview[i].dataFreshness = this.projects.data[i].dataFreshness + ' days'
-  //       this.projectOverview[i].overallStatusLastUpdate = 
-  // res.overallStatusInfo && res.overallStatusInfo[i] && res.overallStatusInfo[i].overallStatusLastUpdate
-  //   ? res.overallStatusInfo[i].overallStatusLastUpdate.split('T')
-  //   : '';
-      var data = res.overallStatusInfo ? res.overallStatusInfo.filter(element => element.projectId == this.projectOverview[i].projectUid) : []
-      this.projectOverview[i].overallStatusLastUpdate = data.length != 0 ? data[0].overallStatusLastUpdate ? data[0].overallStatusLastUpdate.split('T') : '' : ''
+        //       this.projectOverview[i].overallStatusLastUpdate = 
+        // res.overallStatusInfo && res.overallStatusInfo[i] && res.overallStatusInfo[i].overallStatusLastUpdate
+        //   ? res.overallStatusInfo[i].overallStatusLastUpdate.split('T')
+        //   : '';
+        var data = res.overallStatusInfo ? res.overallStatusInfo.filter(element => element.projectId == this.projectOverview[i].projectUid) : []
+        this.projectOverview[i].overallStatusLastUpdate = data.length != 0 ? data[0].overallStatusLastUpdate ? data[0].overallStatusLastUpdate.split('T') : '' : ''
         this.projectOverview[i].grey = false
         this.projectOverview[i].darkGrey = false
-        if(this.projectOverview[i].overallStatusLastUpdate != ''){
-        if(this.projectOverview[i].overallStatusLastUpdate[0] <= this.Date2[0] && this.projectOverview[i].overallStatusLastUpdate >= this.Date3[0]){
-          this.projectOverview[i].grey = true
+        if (this.projectOverview[i].overallStatusLastUpdate != '') {
+          if (this.projectOverview[i].overallStatusLastUpdate[0] <= this.Date2[0] && this.projectOverview[i].overallStatusLastUpdate >= this.Date3[0]) {
+            this.projectOverview[i].grey = true
+          }
+          else if (this.projectOverview[i].overallStatusLastUpdate[0] < this.Date3[0]) {
+            this.projectOverview[i].darkGrey = true
+          }
         }
-        else if(this.projectOverview[i].overallStatusLastUpdate[0] < this.Date3[0]){
-          this.projectOverview[i].darkGrey = true
-        }
-      }
         this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
         this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
         this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
@@ -2324,11 +2336,11 @@ console.log("Toggle values:", toggleValues);
           res.trendingIndicators.sort((a, b) => {
             return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
           })
-          if(res.overallStatusInfo){
-          res.overallStatusInfo.sort((a, b) => {
-            return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
-          })
-        }
+          if (res.overallStatusInfo) {
+            res.overallStatusInfo.sort((a, b) => {
+              return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+            })
+          }
           if (res.conditionalFormattingLabels != null) {
             res.conditionalFormattingLabels.sort((a, b) => {
               return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
@@ -2391,17 +2403,17 @@ console.log("Toggle values:", toggleValues);
             //   ? res.overallStatusInfo[i].overallStatusLastUpdate.split('T')
             //   : '';
             var data = res.overallStatusInfo ? res.overallStatusInfo.filter(element => element.projectId == this.projectOverview[i].projectUid) : []
-      this.projectOverview[i].overallStatusLastUpdate = data.length != 0 ? data[0].overallStatusLastUpdate ? data[0].overallStatusLastUpdate.split('T') : '' : ''
+            this.projectOverview[i].overallStatusLastUpdate = data.length != 0 ? data[0].overallStatusLastUpdate ? data[0].overallStatusLastUpdate.split('T') : '' : ''
             this.projectOverview[i].grey = false
             this.projectOverview[i].darkGrey = false
-            if(this.projectOverview[i].overallStatusLastUpdate != ''){
-            if(this.projectOverview[i].overallStatusLastUpdate[0] <= this.Date2[0] && this.projectOverview[i].overallStatusLastUpdate <= this.Date3[0]){
-              this.projectOverview[i].grey = true
+            if (this.projectOverview[i].overallStatusLastUpdate != '') {
+              if (this.projectOverview[i].overallStatusLastUpdate[0] <= this.Date2[0] && this.projectOverview[i].overallStatusLastUpdate <= this.Date3[0]) {
+                this.projectOverview[i].grey = true
+              }
+              else if (this.projectOverview[i].overallStatusLastUpdate[0] < this.Date3[0]) {
+                this.projectOverview[i].darkGrey = true
+              }
             }
-            else if(this.projectOverview[i].overallStatusLastUpdate[0] < this.Date3[0]){
-              this.projectOverview[i].darkGrey = true
-            }
-          }
             this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
             this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
             this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
@@ -2566,22 +2578,22 @@ console.log("Toggle values:", toggleValues);
         noChangeES = true
       }
     }
-    if(filtersnew != null){
-      if(filtersnew.ExecutionScope == null && executionScope == ""){
+    if (filtersnew != null) {
+      if (filtersnew.ExecutionScope == null && executionScope == "") {
         noChangeES = true
       }
-      else if(filtersnew.ExecutionScope != null){
-        if(filtersnew.ExecutionScope.length == 0 && executionScope == ""){
+      else if (filtersnew.ExecutionScope != null) {
+        if (filtersnew.ExecutionScope.length == 0 && executionScope == "") {
           noChangeES = true
         }
       }
     }
-    if(filtersnew != null){
-      if(filtersnew.PortfolioOwner == null && portfolioOwners == ""){
+    if (filtersnew != null) {
+      if (filtersnew.PortfolioOwner == null && portfolioOwners == "") {
         noChangePO = true
       }
-      else if(filtersnew.PortfolioOwner != null){
-        if(filtersnew.PortfolioOwner.length == 0 && portfolioOwners == ""){
+      else if (filtersnew.PortfolioOwner != null) {
+        if (filtersnew.PortfolioOwner.length == 0 && portfolioOwners == "") {
           noChangePO = true
         }
       }
@@ -2597,30 +2609,30 @@ console.log("Toggle values:", toggleValues);
         this.localAttributeFormRaw.value = {}
         this.localAttributeForm.controls = {}
         this.localAttributeForm.value = {}
-        if(filterKeys.length != 0){
-          res.forEach(response=>{
-            filterKeys.forEach((key : any)=> {
-              if(response.uniqueId == key){
-                if(response.dataType == 2 || response.dataType == 4){
-                  response.data.push({'value': origData[response.name]})
-                  response.data.push({'value': origData[key]})
+        if (filterKeys.length != 0) {
+          res.forEach(response => {
+            filterKeys.forEach((key: any) => {
+              if (response.uniqueId == key) {
+                if (response.dataType == 2 || response.dataType == 4) {
+                  response.data.push({ 'value': origData[response.name] })
+                  response.data.push({ 'value': origData[key] })
                 }
-                else{
-                  if(origData[key].length == 0 || origData[key] == ""){
+                else {
+                  if (origData[key].length == 0 || origData[key] == "") {
                     // response.data.push([])
                   }
-                  else if(response.dataType == 3){
-                    for(var i=0;i<origData[key].length;i++){
-                      response.data.push({'value' : origData[key][i].lookUpId})
+                  else if (response.dataType == 3) {
+                    for (var i = 0; i < origData[key].length; i++) {
+                      response.data.push({ 'value': origData[key][i].lookUpId })
                     }
                   }
-                  else if(response.dataType == 5){
-                    for(var i=0;i<origData[key].length;i++){
-                      response.data.push({'value' : origData[key][i]})
+                  else if (response.dataType == 5) {
+                    for (var i = 0; i < origData[key].length; i++) {
+                      response.data.push({ 'value': origData[key][i] })
                     }
                   }
-                  else{
-                    response.data.push({'value' : origData[key]})
+                  else {
+                    response.data.push({ 'value': origData[key] })
                   }
                 }
               }
@@ -2664,30 +2676,30 @@ console.log("Toggle values:", toggleValues);
         this.localAttributeFormRaw.value = {}
         this.localAttributeForm.controls = {}
         this.localAttributeForm.value = {}
-        if(filterKeys.length != 0){
-          res.forEach(response=>{
-            filterKeys.forEach((key : any)=> {
-              if(response.uniqueId == key){
-                if(response.dataType == 2 || response.dataType == 4){
-                  response.data.push({'value': origData[response.name]})
-                  response.data.push({'value': origData[key]})
+        if (filterKeys.length != 0) {
+          res.forEach(response => {
+            filterKeys.forEach((key: any) => {
+              if (response.uniqueId == key) {
+                if (response.dataType == 2 || response.dataType == 4) {
+                  response.data.push({ 'value': origData[response.name] })
+                  response.data.push({ 'value': origData[key] })
                 }
-                else{
-                  if(origData[key].length == 0 || origData[key] == ""){
+                else {
+                  if (origData[key].length == 0 || origData[key] == "") {
                     // response.data.push([])
                   }
-                  else if(response.dataType == 3){
-                    for(var i=0;i<origData[key].length;i++){
-                      response.data.push({'value' : origData[key][i].lookUpId})
+                  else if (response.dataType == 3) {
+                    for (var i = 0; i < origData[key].length; i++) {
+                      response.data.push({ 'value': origData[key][i].lookUpId })
                     }
                   }
-                  else if(response.dataType == 5){
-                    for(var i=0;i<origData[key].length;i++){
-                      response.data.push({'value' : origData[key][i]})
+                  else if (response.dataType == 5) {
+                    for (var i = 0; i < origData[key].length; i++) {
+                      response.data.push({ 'value': origData[key][i] })
                     }
                   }
-                  else{
-                    response.data.push({'value' : origData[key]})
+                  else {
+                    response.data.push({ 'value': origData[key] })
                   }
                 }
               }
@@ -2811,7 +2823,7 @@ console.log("Toggle values:", toggleValues);
             //   i.data[j] = []
             // }
             // else {
-              i.data[j] = newData[j].value.userAdid
+            i.data[j] = newData[j].value.userAdid
             // }
           }
           this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
@@ -2983,17 +2995,17 @@ console.log("Toggle values:", toggleValues);
 
   tootlipFormatter(value, series) {
     this.count = this.count == undefined ? 0 : this.count
-    if(this.count == 0){
+    if (this.count == 0) {
       this.count++
       return value.toString();
     }
-    else if(this.count == 1){
+    else if (this.count == 1) {
       this.count++
-      return '<div style="color: #775DD0;">'+value.toString()+'</div>';
+      return '<div style="color: #775DD0;">' + value.toString() + '</div>';
     }
-    else{
+    else {
       this.count = 0
-      return '<div style="color: rgba(0,143,251,0.85);">'+value.toString()+'</div>';
+      return '<div style="color: rgba(0,143,251,0.85);">' + value.toString() + '</div>';
     }
   }
 
@@ -3011,46 +3023,46 @@ console.log("Toggle values:", toggleValues);
     if (type == 'Filter') {
       this.showFilter = true
       console.log(this.PortfolioFilterForm)
-    var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
-      if(this.PortfolioFilterForm.value.PortfolioOwner?.length == 0 && this.PortfolioFilterForm.value.ExecutionScope?.length == 0 && (LA == null || LA == undefined)){
+      var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
+      if (this.PortfolioFilterForm.value.PortfolioOwner?.length == 0 && this.PortfolioFilterForm.value.ExecutionScope?.length == 0 && (LA == null || LA == undefined)) {
         this.localAttributeFormRaw.controls = {}
         this.localAttributeFormRaw.value = {}
         this.localAttributeForm.controls = {}
         this.localAttributeForm.value = {}
         this.showFilter = true
       }
-      else{
+      else {
         var portfolioOwners = ""
-      var executionScope = ""
-      if (this.PortfolioFilterForm.controls.PortfolioOwner.value != null) {
-        if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
-          for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
-            portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
-          }
-        }
-      }
-      if (this.PortfolioFilterForm.controls.ExecutionScope.value != null) {
-        if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
-          for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
-            executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
-          }
-        }
-      }
-      this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
-        var filterKeys = Object.keys(this.localAttributeForm.value);
-        for(var i=0;i<filterKeys.length;i++){
-          var count = 0
-          for(var j=0;j<res.length;j++){
-            if(filterKeys[i] == res[j].uniqueId || filterKeys[i] == res[j].name){
-              count++
+        var executionScope = ""
+        if (this.PortfolioFilterForm.controls.PortfolioOwner.value != null) {
+          if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
+            for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
+              portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
             }
           }
-          if(count == 0){
-            this.localAttributeForm.removeControl(filterKeys[i])
+        }
+        if (this.PortfolioFilterForm.controls.ExecutionScope.value != null) {
+          if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
+            for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
+              executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
+            }
           }
         }
-        this.showFilter = true
-      })
+        this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
+          var filterKeys = Object.keys(this.localAttributeForm.value);
+          for (var i = 0; i < filterKeys.length; i++) {
+            var count = 0
+            for (var j = 0; j < res.length; j++) {
+              if (filterKeys[i] == res[j].uniqueId || filterKeys[i] == res[j].name) {
+                count++
+              }
+            }
+            if (count == 0) {
+              this.localAttributeForm.removeControl(filterKeys[i])
+            }
+          }
+          this.showFilter = true
+        })
       }
     }
     else {
@@ -3058,7 +3070,7 @@ console.log("Toggle values:", toggleValues);
     }
     this.filterDrawer.toggle();
   }
-  DefaultFilter(){
+  DefaultFilter() {
     this.PortfolioFilterForm.patchValue({
       ProjectTeamMember: this.user,
       ProjectState: this.state,
