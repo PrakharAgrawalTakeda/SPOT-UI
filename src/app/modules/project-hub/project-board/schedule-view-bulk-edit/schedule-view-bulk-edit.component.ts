@@ -677,6 +677,12 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         var responsible2 = this.value.map(x => {
             return x.responsiblePersonId
         })
+        var missedMsreasonCode1 = this.scheduleData.scheduleData.filter(x => x.completionDate == null).map(x => {
+            return x.missedMsreasonCode
+        })
+        var missedMsreasonCode2 = this.value.filter(x => x.completionDate == null).map(x => {
+            return x.missedMsreasonCode ? x.missedMsreasonCode.lookUpId : null
+        })
         var baselineall = this.scheduleData.scheduleData.map(x => {
             return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
         })
@@ -725,10 +731,16 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         var responsibleall2 = this.value.map(x => {
             return x.responsiblePersonId
         })
+        var missedMsreasonCodeall1 = this.scheduleData.scheduleData.map(x => {
+            return x.missedMsreasonCode
+        })
+        var missedMsreasonCodeall2 = this.value.map(x => {
+           return x.missedMsreasonCode ? x.missedMsreasonCode.lookUpId : null
+        })
         if (initial) {
             if (event == true) {
                 if ((JSON.stringify(baseline) != JSON.stringify(baseline2) || JSON.stringify(planned) != JSON.stringify(planned2) || JSON.stringify(completion) != JSON.stringify(completion2) || JSON.stringify(comments) != JSON.stringify(comments2)
-                    || JSON.stringify(includein) != JSON.stringify(includein2) || JSON.stringify(functionowner) != JSON.stringify(functionowner2) || JSON.stringify(milestone) != JSON.stringify(milestone2) || JSON.stringify(responsible) != JSON.stringify(responsible2))) {
+                    || JSON.stringify(includein) != JSON.stringify(includein2) || JSON.stringify(functionowner) != JSON.stringify(functionowner2) || JSON.stringify(milestone) != JSON.stringify(milestone2) || JSON.stringify(responsible) != JSON.stringify(responsible2) || JSON.stringify(missedMsreasonCode1) != JSON.stringify(missedMsreasonCode2))) {
                     var comfirmConfig: FuseConfirmationConfig = {
                         "title": "Are you sure?",
                         "message": "Are you sure you want to show/hide closed items, all unsaved data will be lost. ",
@@ -786,7 +798,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 }
             } else if (event == false) {
                 if ((JSON.stringify(baselineall) != JSON.stringify(baselineall2) || JSON.stringify(plannedall) != JSON.stringify(plannedall2) || JSON.stringify(completionall) != JSON.stringify(completionall2) || JSON.stringify(commentsall) != JSON.stringify(commentsall2)
-                    || JSON.stringify(includeinall) != JSON.stringify(includeinall2) || JSON.stringify(functionownerall) != JSON.stringify(functionownerall2) || JSON.stringify(milestoneall) != JSON.stringify(milestoneall2) || JSON.stringify(responsibleall) != JSON.stringify(responsibleall2))) {
+                    || JSON.stringify(includeinall) != JSON.stringify(includeinall2) || JSON.stringify(functionownerall) != JSON.stringify(functionownerall2) || JSON.stringify(milestoneall) != JSON.stringify(milestoneall2) || JSON.stringify(responsibleall) != JSON.stringify(responsibleall2) || JSON.stringify(missedMsreasonCodeall1) != JSON.stringify(missedMsreasonCodeall2))) {
                     var comfirmConfig: FuseConfirmationConfig = {
                         "title": "Are you sure?",
                         "message": "Are you sure you want to show/hide closed items, all unsaved data will be lost. ",
@@ -1697,7 +1709,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             includeInCloseout: i.includeInCloseout,
                             responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
                             indicator: i.indicator,
-                            missedMsreasonCode: i.missedMsreasonCode?.lookUpId,
+                            missedMsreasonCode: i.missedMsreasonCode,
                         })
                     }
                 }

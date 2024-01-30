@@ -1,32 +1,33 @@
 import { Component } from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
-import {MyPreferenceService} from "../../my-preference.service";
-import {MyPreferenceApiService} from "../../my-preference-api.service";
-import {MsalService} from "@azure/msal-angular";
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
+import { FormControl, FormGroup } from "@angular/forms";
+import { MyPreferenceService } from "../../my-preference.service";
+import { MyPreferenceApiService } from "../../my-preference-api.service";
+import { MsalService } from "@azure/msal-angular";
+import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../../@fuse/services/confirmation";
 
 @Component({
-  selector: 'app-metric-repository-add-edit-view',
-  templateUrl: './metric-repository-add-edit-view.component.html',
-  styleUrls: ['./metric-repository-add-edit-view.component.scss']
+    selector: 'app-metric-repository-add-edit-view',
+    templateUrl: './metric-repository-add-edit-view.component.html',
+    styleUrls: ['./metric-repository-add-edit-view.component.scss']
 })
 export class MetricRepositoryAddEditViewComponent {
     metricRepository: any = {}
-    portfolioOwnerList =[];
+    portfolioOwnerList = [];
     categoryChanged: boolean = false;
+    canSubmit: boolean = true
     constructor(
         public myPreferenceApiService: MyPreferenceApiService,
         public myPreferenceService: MyPreferenceService,
         private msalService: MsalService,
         public fuseAlert: FuseConfirmationService,
-    ){
+    ) {
         this.metricRepositoryForm.controls.category.valueChanges.subscribe(res => {
-            if(this.myPreferenceService.itemid != "new"){
+            if (this.myPreferenceService.itemid != "new") {
                 this.categoryChanged = true;
             }
         })
         this.metricRepositoryForm.controls.metricFormat.valueChanges.subscribe(res => {
-            if(this.myPreferenceService.itemid != "new"){
+            if (this.myPreferenceService.itemid != "new") {
                 var comfirmConfig: FuseConfirmationConfig = {
                     "title": "",
                     "message": "Updating the format will remove all the current data from the metric. Do you want to proceed?",
@@ -53,7 +54,7 @@ export class MetricRepositoryAddEditViewComponent {
                     if (close == 'cancelled') {
                         this.metricRepositoryForm.patchValue({
                             metricFormat: this.metricRepository.metricFormatID,
-                        }, {emitEvent: false})
+                        }, { emitEvent: false })
                     }
                 })
             }
@@ -90,56 +91,35 @@ export class MetricRepositoryAddEditViewComponent {
                     metricDescription: this.metricRepository.metricDescription,
                     metricUsage: this.metricRepository.metricUsage,
                 }, { emitEvent: false })
-                if(this.metricRepository.metricUsage>0){
+                if (this.metricRepository.metricUsage > 0) {
                     this.metricRepositoryForm.controls.managingPortfolio.disable()
                 }
             }
         })
     }
     submitMetricRepository() {
-        var fieldsMissing = 0;
-        if(this.metricRepositoryForm.get('managingPortfolio').value==null){
-            fieldsMissing ++;
-        }
-        if(this.metricRepositoryForm.get('category').value==null){
-            fieldsMissing ++;
-        }
-        if(this.metricRepositoryForm.get('metricName').value==null || this.metricRepositoryForm.get('metricName').value==""){
-            fieldsMissing ++;
-        }
-        if(this.metricRepositoryForm.get('unit').value==null || this.metricRepositoryForm.get('unit').value==""){
-            fieldsMissing ++;
-        }
-        if(this.metricRepositoryForm.get('metricFormat').value==null || this.metricRepositoryForm.get('metricFormat').value==null){
-            fieldsMissing ++;
-        }
-        if (fieldsMissing>0) {
-            var comfirmConfig: FuseConfirmationConfig = {
-                "title": "Required fields missing",
-                "message": "Please fill all the required fields.",
-                "icon": {
-                    "show": true,
-                    "name": "heroicons_outline:exclamation",
-                    "color": "warning"
-                },
-                "actions": {
-                    "confirm": {
-                        "show": true,
-                        "label": "Okay",
-                        "color": "primary"
-                    },
-                    "cancel": {
-                        "show": false,
-                    },
-                },
-                "dismissible": true
+        if (this.canSubmit) {
+            this.canSubmit = false
+            var fieldsMissing = 0;
+            if (this.metricRepositoryForm.get('managingPortfolio').value == null) {
+                fieldsMissing++;
             }
-            const alert = this.fuseAlert.open(comfirmConfig)
-        }else{
-            if (this.categoryChanged) {
+            if (this.metricRepositoryForm.get('category').value == null) {
+                fieldsMissing++;
+            }
+            if (this.metricRepositoryForm.get('metricName').value == null || this.metricRepositoryForm.get('metricName').value == "") {
+                fieldsMissing++;
+            }
+            if (this.metricRepositoryForm.get('unit').value == null || this.metricRepositoryForm.get('unit').value == "") {
+                fieldsMissing++;
+            }
+            if (this.metricRepositoryForm.get('metricFormat').value == null || this.metricRepositoryForm.get('metricFormat').value == null) {
+                fieldsMissing++;
+            }
+            if (fieldsMissing > 0) {
                 var comfirmConfig: FuseConfirmationConfig = {
-                    "title": "Category Changed",
-                    "message": "All data generated for this local metric in projects has been based on the current category. If you change the category, the interpretation of the data may be different and the data entered in the projects may not be good. Do you want to proceed?”",
+                    "title": "Required fields missing",
+                    "message": "Please fill all the required fields.",
                     "icon": {
                         "show": true,
                         "name": "heroicons_outline:exclamation",
@@ -152,19 +132,47 @@ export class MetricRepositoryAddEditViewComponent {
                             "color": "primary"
                         },
                         "cancel": {
-                            "show": true,
+                            "show": false,
                         },
                     },
                     "dismissible": true
                 }
                 const alert = this.fuseAlert.open(comfirmConfig)
-                alert.afterClosed().subscribe(close => {
-                    if (close == 'confirmed') {
-                        this.submitMethod()
+                this.canSubmit = true
+            } else {
+                if (this.categoryChanged) {
+                    var comfirmConfig: FuseConfirmationConfig = {
+                        "title": "Category Changed",
+                        "message": "All data generated for this local metric in projects has been based on the current category. If you change the category, the interpretation of the data may be different and the data entered in the projects may not be good. Do you want to proceed?”",
+                        "icon": {
+                            "show": true,
+                            "name": "heroicons_outline:exclamation",
+                            "color": "warning"
+                        },
+                        "actions": {
+                            "confirm": {
+                                "show": true,
+                                "label": "Okay",
+                                "color": "primary"
+                            },
+                            "cancel": {
+                                "show": true,
+                            },
+                        },
+                        "dismissible": true
                     }
-                })
-            }else{
-                this.submitMethod()
+                    const alert = this.fuseAlert.open(comfirmConfig)
+                    alert.afterClosed().subscribe(close => {
+                        if (close == 'confirmed') {
+                            this.submitMethod()
+                        }
+                        else{
+                            this.canSubmit = true
+                        }
+                    })
+                } else {
+                    this.submitMethod()
+                }
             }
         }
     }
@@ -174,7 +182,7 @@ export class MetricRepositoryAddEditViewComponent {
         if (this.myPreferenceService.itemid == "new") {
             var mainObj = {
                 metricID: "",
-                metricPortfolioID:  metricRepository.managingPortfolio.portfolioOwnerID,
+                metricPortfolioID: metricRepository.managingPortfolio.portfolioOwnerID,
                 portfolioOwner: "",
                 metricTypeID: "",
                 metricCategoryID: metricRepository.category,
@@ -190,8 +198,9 @@ export class MetricRepositoryAddEditViewComponent {
             this.myPreferenceApiService.addMetricRepository(mainObj).then(res => {
                 this.myPreferenceService.submitbutton.next(true)
                 this.myPreferenceService.toggleDrawerOpen('', '', [], '')
+                this.canSubmit = true
             })
-        }else {
+        } else {
             var mainObjUpdate = {
                 metricID: this.metricRepository.metricID,
                 metricPortfolioID: metricRepository.managingPortfolio.portfolioOwnerID,
@@ -206,9 +215,10 @@ export class MetricRepositoryAddEditViewComponent {
                 metricUsage: this.metricRepository.metricUsage,
                 isMandatory: this.metricRepository.isMandatory,
             }
-            this.myPreferenceApiService.editMetricRepository(this.metricRepository.metricID,mainObjUpdate).then(res => {
+            this.myPreferenceApiService.editMetricRepository(this.metricRepository.metricID, mainObjUpdate).then(res => {
                 this.myPreferenceService.submitbutton.next(true)
                 this.myPreferenceService.toggleDrawerOpen('', '', [], '')
+                this.canSubmit = true
             })
         }
     }
@@ -223,7 +233,7 @@ export class MetricRepositoryAddEditViewComponent {
         })
     }
     getPortfolioOwnerByName(portfolioId: string): any {
-        return this.portfolioOwnerList.filter(x =>  x.portfolioOwner == portfolioId)[0];
+        return this.portfolioOwnerList.filter(x => x.portfolioOwner == portfolioId)[0];
     }
     getLookUpID(name: any): any {
         return this.myPreferenceService.lookUpMaster.find(x => x.lookUpName == name)?.lookUpId;
