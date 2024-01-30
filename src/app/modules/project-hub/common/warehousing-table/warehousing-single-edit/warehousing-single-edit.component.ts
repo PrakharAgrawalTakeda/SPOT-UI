@@ -23,7 +23,7 @@ export class WarehousingSingleEditComponent {
   biogenicsUpdated: any
   activeaccount: any
   impactRealizationDate: any
-
+  canSubmit: boolean = true
   WarehousingForm = new FormGroup({
     emenvironmentId: new FormControl(),
     environmentalSourceTypeId: new FormControl(),
@@ -102,6 +102,9 @@ this.WarehousingForm.controls.affectedLocations.valueChanges.subscribe(res => {
 
 
   submitWarehousing() {
+    if(this.canSubmit)
+    {
+      this.canSubmit = false
        this.projecthubservice.isFormChanged = false
       var formValue = this.WarehousingForm.getRawValue()
        formValue.affectedLocations = isNaN(formValue.affectedLocations) ? null : formValue.affectedLocations
@@ -144,7 +147,8 @@ this.WarehousingForm.controls.affectedLocations.valueChanges.subscribe(res => {
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.successSave.next(true)
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.canSubmit = true
         })
       }
-  //}
+  }
 }

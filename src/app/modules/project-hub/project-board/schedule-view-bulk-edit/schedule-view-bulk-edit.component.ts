@@ -1696,7 +1696,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             templateMilestoneId: i.templateMilestoneId,
                             includeInCloseout: i.includeInCloseout,
                             responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
-                            indicator: i.indicator
+                            indicator: i.indicator,
+                            missedMsreasonCode: i.missedMsreasonCode?.lookUpId,
                         })
                     }
                 }

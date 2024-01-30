@@ -57,6 +57,7 @@ export class WaterWasteSingleEditComponent {
   waterTypeDropDrownValues = []
   wasteTypeDropDrownValues = []
   waterwasteValues: any
+  canSubmit: boolean = true
 
   constructor(public fuseAlert: FuseConfirmationService, private authService: MsalService, private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) {
     this.waterWasteForm.controls.wwstream.valueChanges.subscribe(res => {
@@ -118,6 +119,9 @@ export class WaterWasteSingleEditComponent {
   }
 
   submitWaterWaste() {
+    if(this.canSubmit)
+    {
+      this.canSubmit = false
     this.projecthubservice.isFormChanged = false
     var formValue = this.waterWasteForm.getRawValue()
     formValue.emwwunit = isNaN(formValue.emwwunit) ? null : formValue.emwwunit
@@ -145,6 +149,7 @@ export class WaterWasteSingleEditComponent {
         "dismissible": true
       }
       const alert = this.fuseAlert.open(comfirmConfig)
+      this.canSubmit = true
     }
     else if (formValue.wwtype == "") {
       var comfirmConfig: FuseConfirmationConfig = {
@@ -169,6 +174,7 @@ export class WaterWasteSingleEditComponent {
         "dismissible": true
       }
       const alert = this.fuseAlert.open(comfirmConfig)
+      this.canSubmit = true
     }
     else if (((formValue.emwwunit != null && formValue.emwwunit != 0) || (this.projecthubservice.all[5])) && (this.impactRealizationDate == "" || this.impactRealizationDate == null)) {
       var comfirmConfig: FuseConfirmationConfig = {
@@ -193,6 +199,7 @@ export class WaterWasteSingleEditComponent {
         "dismissible": true
       }
       const alert = this.fuseAlert.open(comfirmConfig)
+      this.canSubmit = true
     }
     else{
       var id = this.waterwasteValues.filter(x => x.wwstream == formValue.wwstream && x.wwtype == formValue.wwtype)[0].wwsourceMasterUniqueId
@@ -208,7 +215,9 @@ export class WaterWasteSingleEditComponent {
         this.projecthubservice.submitbutton.next(true)
         this.projecthubservice.successSave.next(true)
         this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        this.canSubmit = true
       })
     }
   }
+}
 }

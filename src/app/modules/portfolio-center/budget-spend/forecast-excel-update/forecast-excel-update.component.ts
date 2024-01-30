@@ -43,6 +43,7 @@ export class ForecastExcelUpdateComponent {
   forecastDB = []
   finalDatatoSheet: SheetDescriptor[];
   finalDatatoSheetHistorical: SheetDescriptor[];
+  canSubmit: boolean = true
 
 @ViewChild('spreadsheet') el: ElementRef;
 @ViewChild('Forecastspreadsheet') forecastElement: ElementRef;
@@ -941,6 +942,9 @@ export class ForecastExcelUpdateComponent {
   }
 
 SubmitData(){
+  if(this.canSubmit)
+    {
+      this.canSubmit = false
     if(this.ForecastForm.controls.DataType.value == "Forecast"){
       var data:any = this.forecastElement
   var jsonData
@@ -990,6 +994,7 @@ SubmitData(){
         this.showDataForecastOpex = false
         this.getData()
         this.PortfolioCenterService.successSave.next(true)
+        this.canSubmit = true
       })
     })
     }
@@ -1027,9 +1032,11 @@ SubmitData(){
         this.showDataOpex = false
         this.getData()
         this.PortfolioCenterService.successSave.next(true)
+        this.canSubmit = true
       })
     })
     }
+  }
 }
 
 }
