@@ -43,6 +43,7 @@ export class CopyProjectComponent implements OnInit {
     StrategicalDriver: new FormControl(true)
   })
   newmainnav: any = []
+  canSubmit: boolean = true
 
   constructor(public auth: AuthService, private router: Router, private apiService: PortfolioApiService,
     private _fuseNavigationService: FuseNavigationService, private titleService: Title, private authService: MsalService, public createApiservice: CreateNewApiService, public fuseAlert: FuseConfirmationService, public role: RoleService) { }
@@ -134,6 +135,9 @@ export class CopyProjectComponent implements OnInit {
   }
 
   SubmitCopyProject(data: any) {
+    if(this.canSubmit)
+    {
+      this.canSubmit = false
     if (this.projectid == "") {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "You must select a project to copy.",
@@ -227,6 +231,7 @@ export class CopyProjectComponent implements OnInit {
         })
       })
     }
+  }
   }
 
   callCreateProject() {

@@ -49,6 +49,7 @@ export class LocalAttributeSingleEditComponent {
   originalData: any
   rawData: any
   lookupData: any
+  canSubmit: boolean = true
   constructor(private projectHubService: ProjectHubService, public auth: AuthService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute) {
     this.localAttributeForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
@@ -111,6 +112,9 @@ export class LocalAttributeSingleEditComponent {
   }
 
   submitLA(data) {
+    if(this.canSubmit)
+    {
+      this.canSubmit = false
     var projectId = ""
     if(this.callLocation == "CreateNew"){
       projectId = data
@@ -262,9 +266,10 @@ export class LocalAttributeSingleEditComponent {
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.isNavChanged.next(true)
         this.projectHubService.successSave.next(true)
+        this.canSubmit = true
       }
     })
-
+  }
   }
 
   dataLoader(res) {
