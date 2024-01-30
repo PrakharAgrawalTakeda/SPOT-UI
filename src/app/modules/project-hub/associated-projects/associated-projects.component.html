@@ -122,7 +122,7 @@
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Budget" prop="budgetIndicatorArrow" [headerClass]="getHeaderClass" [draggable]="false"
+                    <ngx-datatable-column name="Budget" prop="budgetIndicator" [headerClass]="getHeaderClass" [draggable]="false"
                         [resizeable]="false" [flexGrow]="1" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
@@ -130,7 +130,7 @@
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Spend" prop="budgetSpendIndicatorArrow" [headerClass]="getHeaderClass" [draggable]="false"
+                    <ngx-datatable-column name="Spend" prop="budgetSpendIndicator" [headerClass]="getHeaderClass" [draggable]="false"
                         [resizeable]="false" [flexGrow]="1" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"

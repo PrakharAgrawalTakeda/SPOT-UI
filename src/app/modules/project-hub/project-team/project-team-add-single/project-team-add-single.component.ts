@@ -131,6 +131,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
               "dismissible": true
             }
             const alert = this.fuseAlert.open(comfirmConfig)
+            this.canSubmit = true
           } else {
             if (this.projectTeamAddForm.controls.duration.value < 0) {
               var comfirmConfig: FuseConfirmationConfig = {
@@ -155,6 +156,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
                 "dismissible": true
               }
               const alert = this.fuseAlert.open(comfirmConfig)
+              this.canSubmit = true
             } else {
               if (this.projectTeamAddForm.controls.duration.value % 1 != 0 || this.projectTeamAddForm.controls.percentTime.value % 1 != 0) {
                 var comfirmConfig: FuseConfirmationConfig = {
@@ -179,6 +181,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
                   "dismissible": true
                 }
                 const alert = this.fuseAlert.open(comfirmConfig)
+                this.canSubmit = true
               } else {
                 this.projecthubservice.isFormChanged = false
                 var projectTeam = this.projectTeamAddForm.getRawValue();
@@ -246,6 +249,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
             "dismissible": true
           }
           const alert = this.fuseAlert.open(comfirmConfig)
+          this.canSubmit = true
         }
       }
       else if (this.charterCount < 10) {
@@ -297,6 +301,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
           "dismissible": true
         }
         const alert = this.fuseAlert.open(comfirmConfig)
+        this.canSubmit = true
       }
     }
     

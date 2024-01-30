@@ -1,16 +1,16 @@
-import {Component} from '@angular/core';
-import {ProjectApiService} from "../../../project-hub/common/project-api.service";
-import {AuthService} from "../../../../core/auth/auth.service";
-import {RoleService} from "../../../../core/auth/role.service";
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
-import {Router} from "@angular/router";
-import {MyPreferenceService} from "../../my-preference.service";
-import {FormArray, FormControl, FormGroup} from "@angular/forms";
-import {MyPreferenceApiService} from "../../my-preference-api.service";
-import {MsalService} from "@azure/msal-angular";
-import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
+import { Component } from '@angular/core';
+import { ProjectApiService } from "../../../project-hub/common/project-api.service";
+import { AuthService } from "../../../../core/auth/auth.service";
+import { RoleService } from "../../../../core/auth/role.service";
+import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../../@fuse/services/confirmation";
+import { Router } from "@angular/router";
+import { MyPreferenceService } from "../../my-preference.service";
+import { FormArray, FormControl, FormGroup } from "@angular/forms";
+import { MyPreferenceApiService } from "../../my-preference-api.service";
+import { MsalService } from "@azure/msal-angular";
+import { PortfolioApiService } from "../../../portfolio-center/portfolio-api.service";
 import moment from "moment";
-import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 
 @Component({
     selector: 'app-milestone-set-view-edit',
@@ -19,8 +19,8 @@ import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 })
 export class MilestoneSetViewEditComponent {
     constructor(public myPreferenceApiService: MyPreferenceApiService, public apiService: ProjectApiService, public myPreferenceService: MyPreferenceService, public authService: AuthService,
-                public role: RoleService, private msalService: MsalService, private portApiService: PortfolioApiService,
-                public fuseAlert: FuseConfirmationService, private router: Router) {
+        public role: RoleService, private msalService: MsalService, private portApiService: PortfolioApiService,
+        public fuseAlert: FuseConfirmationService, private router: Router) {
         this.standardMilestonesTableForm.valueChanges.subscribe(res => {
             if (this.viewContent == true) {
                 this.formValue()
@@ -42,10 +42,11 @@ export class MilestoneSetViewEditComponent {
     filterCriteria: any = {}
     mainObj: any = {}
     editedSet: any = {}
-    portfolioOwnerList =[];
+    portfolioOwnerList = [];
     orderView = false;
     standardMilestonesTableForm = new FormArray([])
     milestoneName: any;
+    canSubmit: boolean = true
     standardMilestonesDetailsForm = new FormGroup({
         milestoneTemplateId: new FormControl(""),
         milestonesetId: new FormControl(""),
@@ -77,7 +78,7 @@ export class MilestoneSetViewEditComponent {
                             milestoneTemplateId: res.milestoneTemplateId,
                             milestonesetId: res.milestonesetId,
                             portfolioId: res.portfolioId,
-                            portfolioOwner:  this.getPortfolioOwnerById(res.portfolioId),
+                            portfolioOwner: this.getPortfolioOwnerById(res.portfolioId),
                             milestoneSet: res.milestoneSet,
                             templateOwner: res.templateOwner,
                             templateOwnerName: res.templateOwnerName,
@@ -133,7 +134,8 @@ export class MilestoneSetViewEditComponent {
                         sortOrder: '',
                         milestoneType: 1,
                     },
-                    {   milestoneTemplateId: '',
+                    {
+                        milestoneTemplateId: '',
                         milestoneId: '',
                         milestoneInternalId: '',
                         milestone: 'Execution End - ',
@@ -141,7 +143,8 @@ export class MilestoneSetViewEditComponent {
                         comment: '',
                         includeInReport: false,
                         sortOrder: '',
-                        milestoneType: 2  }
+                        milestoneType: 2
+                    }
                 ];
                 this.standardMilestonesTableData = executionMilestones;
                 if (this.standardMilestonesTableData.length > 0) {
@@ -239,7 +242,7 @@ export class MilestoneSetViewEditComponent {
                 modifiedDate: moment(),
                 templateDetails: this.standardMilestonesTableDataSubmit
             }
-        }else{
+        } else {
             this.mainObj = {
                 milestoneTemplateId: this.editedSet.milestoneTemplateId,
                 milestonesetId: this.editedSet.milestonesetId,
@@ -286,7 +289,7 @@ export class MilestoneSetViewEditComponent {
                     this.orderView = !this.orderView;
                 }
             })
-        }else{
+        } else {
             this.orderView = !this.orderView;
             this.smTableEditStack = [];
             this.myPreferenceService.isFormChanged = false;
@@ -360,49 +363,27 @@ export class MilestoneSetViewEditComponent {
         }
         const alert = this.fuseAlert.open(comfirmConfig)
         alert.afterClosed().subscribe(close => {
-                if (close == 'confirmed') {
-                    this.standardMilestonesTableData.splice(rowIndex, 1)
-                    this.standardMilestonesTableForm.removeAt(rowIndex)
-                    if (this.smTableEditStack.includes(rowIndex)) {
-                        this.smTableEditStack.splice(this.smTableEditStack.indexOf(rowIndex), 1)
-                    }
-                    this.smTableEditStack = this.smTableEditStack.map(function (value) {
-                        return value > rowIndex ? value - 1 : value;
-                    })
-                    this.standardMilestonesTableData = [...this.standardMilestonesTableData]
+            if (close == 'confirmed') {
+                this.standardMilestonesTableData.splice(rowIndex, 1)
+                this.standardMilestonesTableForm.removeAt(rowIndex)
+                if (this.smTableEditStack.includes(rowIndex)) {
+                    this.smTableEditStack.splice(this.smTableEditStack.indexOf(rowIndex), 1)
                 }
+                this.smTableEditStack = this.smTableEditStack.map(function (value) {
+                    return value > rowIndex ? value - 1 : value;
+                })
+                this.standardMilestonesTableData = [...this.standardMilestonesTableData]
             }
+        }
         )
     }
 
     submitStandardMilestones() {
-        if (!this.standardMilestonesDetailsForm.value.milestoneSet) {
-            var comfirmConfig: FuseConfirmationConfig = {
-                "title": "Please enter a Milestone Set name!",
-                "message": "",
-                "icon": {
-                    "show": true,
-                    "name": "heroicons_outline:exclamation",
-                    "color": "warning"
-                },
-                "actions": {
-                    "confirm": {
-                        "show": true,
-                        "label": "Okay",
-                        "color": "primary"
-                    },
-                    "cancel": {
-                        "show": false,
-                        "label": "Cancel"
-                    }
-                },
-                "dismissible": true
-            }
-            this.fuseAlert.open(comfirmConfig)
-        }else{
-            if (!this.standardMilestonesDetailsForm.value.portfolioOwner || Object.keys(this.standardMilestonesDetailsForm.value.portfolioOwner).length===0) {
+        if (this.canSubmit) {
+            this.canSubmit = false
+            if (!this.standardMilestonesDetailsForm.value.milestoneSet) {
                 var comfirmConfig: FuseConfirmationConfig = {
-                    "title": "Please select a Portfolio Owner",
+                    "title": "Please enter a Milestone Set name!",
                     "message": "",
                     "icon": {
                         "show": true,
@@ -422,39 +403,68 @@ export class MilestoneSetViewEditComponent {
                     },
                     "dismissible": true
                 }
-                const alert = this.fuseAlert.open(comfirmConfig)
-            }else{
-                if (this.myPreferenceService.itemid != 'new') {
-                    if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
-                        this.myPreferenceService.isFormChanged = false
-                        this.formValue()
-                        this.myPreferenceApiService.editStandardMilestoneSet(this.mainObj, this.mainObj.milestoneTemplateId).then(res => {
-                            this.myPreferenceService.submitbutton.next(true)
-                            this.myPreferenceService.toggleDrawerOpen('', '', [], '')
-                        })
-                    } else {
-                        this.myPreferenceService.submitbutton.next(true)
-                        this.myPreferenceService.toggleDrawerOpen('', '', [], '')
-
+                this.fuseAlert.open(comfirmConfig)
+                this.canSubmit = true
+            } else {
+                if (!this.standardMilestonesDetailsForm.value.portfolioOwner || Object.keys(this.standardMilestonesDetailsForm.value.portfolioOwner).length === 0) {
+                    var comfirmConfig: FuseConfirmationConfig = {
+                        "title": "Please select a Portfolio Owner",
+                        "message": "",
+                        "icon": {
+                            "show": true,
+                            "name": "heroicons_outline:exclamation",
+                            "color": "warning"
+                        },
+                        "actions": {
+                            "confirm": {
+                                "show": true,
+                                "label": "Okay",
+                                "color": "primary"
+                            },
+                            "cancel": {
+                                "show": false,
+                                "label": "Cancel"
+                            }
+                        },
+                        "dismissible": true
                     }
-                }else{
-                    if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
-                        this.myPreferenceService.isFormChanged = false
-                        this.formValue()
-                        this.myPreferenceApiService.addStandardMilestoneSet(this.mainObj).then(res => {
+                    const alert = this.fuseAlert.open(comfirmConfig)
+                    this.canSubmit = true
+                } else {
+                    if (this.myPreferenceService.itemid != 'new') {
+                        if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
+                            this.myPreferenceService.isFormChanged = false
+                            this.formValue()
+                            this.myPreferenceApiService.editStandardMilestoneSet(this.mainObj, this.mainObj.milestoneTemplateId).then(res => {
+                                this.myPreferenceService.submitbutton.next(true)
+                                this.myPreferenceService.toggleDrawerOpen('', '', [], '')
+                                this.canSubmit = true
+                            })
+                        } else {
                             this.myPreferenceService.submitbutton.next(true)
                             this.myPreferenceService.toggleDrawerOpen('', '', [], '')
-                        });
+                            this.canSubmit = true
+
+                        }
+                    } else {
+                        if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
+                            this.myPreferenceService.isFormChanged = false
+                            this.formValue()
+                            this.myPreferenceApiService.addStandardMilestoneSet(this.mainObj).then(res => {
+                                this.myPreferenceService.submitbutton.next(true)
+                                this.myPreferenceService.toggleDrawerOpen('', '', [], '')
+                                this.canSubmit = true
+                            });
+                        }
                     }
                 }
             }
         }
 
-
     }
 
     getPortfolioOwnerById(portfolioId: string): any {
-        return this.portfolioOwnerList.filter(x =>  x.portfolioOwnerID == portfolioId)[0];
+        return this.portfolioOwnerList.filter(x => x.portfolioOwnerID == portfolioId)[0];
     }
 
     getFunctionOwner(): any {
@@ -477,6 +487,6 @@ export class MilestoneSetViewEditComponent {
         moveItemInArray(this.standardMilestonesTableData, event.previousIndex, event.currentIndex);
         let group = (<FormArray>this.standardMilestonesTableForm).at(event.previousIndex);
         (<FormArray>this.standardMilestonesTableForm).removeAt(event.previousIndex);
-        (<FormArray>this.standardMilestonesTableForm).insert(event.currentIndex,group);
+        (<FormArray>this.standardMilestonesTableForm).insert(event.currentIndex, group);
     }
 }
