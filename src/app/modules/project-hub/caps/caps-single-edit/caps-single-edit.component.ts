@@ -51,6 +51,7 @@ viewType = 'SidePanel'
   energyLabel: string = ""
   waterLabel:string = ""
   wasteLabel:string = ""
+  canSubmit: boolean = true
   CAPSform = new FormGroup({
     impactRealizationDate: new FormControl(''),
     EnergyCost: new FormControl(null),
@@ -108,6 +109,9 @@ viewType = 'SidePanel'
   }
     
   submitCAPS(){
+    if(this.canSubmit)
+    {
+      this.canSubmit = false
     var formValue = this.CAPSform.getRawValue()
     this.projectHubService.isFormChanged = false
     var formValue = this.CAPSform.getRawValue()
@@ -135,6 +139,7 @@ viewType = 'SidePanel'
         "dismissible": true
       }
       const alert = this.fuseAlert.open(comfirmConfig)
+      this.canSubmit = true
     }
     else{
       mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
@@ -146,8 +151,10 @@ viewType = 'SidePanel'
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)
         this.projectHubService.toggleDrawerOpen('', '', [], '')
+        this.canSubmit = true
       })
     }
   }
+}
 }
 

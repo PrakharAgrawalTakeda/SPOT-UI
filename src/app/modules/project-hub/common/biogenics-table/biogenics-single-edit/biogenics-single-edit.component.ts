@@ -24,6 +24,7 @@ export class BiogenicsSingleEditComponent {
     activeaccount: any
     impactRealizationDate: any;
     viewContent: boolean = false;
+    canSubmit: boolean = true
     BiogenicsForm = new FormGroup({
         biogenicDataId: new FormControl(),
         projectId: new FormControl(),
@@ -92,6 +93,9 @@ export class BiogenicsSingleEditComponent {
     }
 
     submitBiogenics() {
+        if(this.canSubmit)
+    {
+      this.canSubmit = false
         this.projecthubservice.isFormChanged = false
         var formValue = this.BiogenicsForm.getRawValue()
         formValue.biogenicUnit = isNaN(formValue.biogenicUnit) ? null : formValue.biogenicUnit
@@ -120,6 +124,7 @@ export class BiogenicsSingleEditComponent {
                 "dismissible": true
             }
             const alert = this.fuseAlert.open(comfirmConfig)
+            this.canSubmit = true
         } else if (((formValue.biogenicUnit != null && formValue.biogenicUnit != 0) || (this.projecthubservice.all[4])) && (this.impactRealizationDate == "" || this.impactRealizationDate == null)) {
             var comfirmConfig: FuseConfirmationConfig = {
                 "title": "Please enter a value for Impact Realization Date.",
@@ -143,6 +148,7 @@ export class BiogenicsSingleEditComponent {
                 "dismissible": true
             }
             const alert = this.fuseAlert.open(comfirmConfig)
+            this.canSubmit = true
         } else {
             var mainObj: any = {
                 projectId: this.projecthubservice.projectid,
@@ -158,7 +164,9 @@ export class BiogenicsSingleEditComponent {
                 this.projecthubservice.submitbutton.next(true)
                 this.projecthubservice.successSave.next(true)
                 this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                this.canSubmit = true
             })
         }
     }
+}
 }
