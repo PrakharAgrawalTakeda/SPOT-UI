@@ -1,11 +1,11 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {ProjectHubService} from "../../project-hub.service";
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
-import {ProjectApiService} from "../project-api.service";
-import {FormControl, FormGroup} from "@angular/forms";
-import {ActivatedRoute} from "@angular/router";
-import {AuthService} from "../../../../core/auth/auth.service";
-import {MsalService} from "@azure/msal-angular";
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ProjectHubService } from "../../project-hub.service";
+import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../../@fuse/services/confirmation";
+import { ProjectApiService } from "../project-api.service";
+import { FormControl, FormGroup } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
+import { AuthService } from "../../../../core/auth/auth.service";
+import { MsalService } from "@azure/msal-angular";
 
 @Component({
     selector: 'app-phase-state',
@@ -29,10 +29,10 @@ export class PhaseStateComponent implements OnInit {
     phaseRows = [];
     stateRows = [];
     phaseArray: any = [];
-    capitalPhaseArray=[];
-    filteredPhaseArray=[];
-    oePhaseArray= [];
-    stateArray= [];
+    capitalPhaseArray = [];
+    filteredPhaseArray = [];
+    oePhaseArray = [];
+    stateArray = [];
     viewContent = false;
     lookupdata: any = [];
     currentPhase: string = '';
@@ -49,7 +49,7 @@ export class PhaseStateComponent implements OnInit {
         state: new FormControl(''),
         stateComment: new FormControl(''),
     })
-
+    canSubmit: boolean = true
     ngOnInit(): void {
         this.getllookup();
     }
@@ -63,7 +63,7 @@ export class PhaseStateComponent implements OnInit {
         this.phaseForm.controls["phase"]
             .valueChanges.subscribe((value) => {
                 this.changePhase(value);
-        })
+            })
         this.apiService.getPhaseState(this.id).then((res: any) => {
             this.currentPhase = res.currentPhase;
             this.currentState = res.currentState;
@@ -83,67 +83,73 @@ export class PhaseStateComponent implements OnInit {
         this.viewContent = true;
     }
 
-    onSubmit(){
-        var stateActive= false;
-        var body = {
-            projectId: this.id,
-            phaseId: null,
-            stateId: null,
-            modificationDate: new Date(),
-            modifiedBy: this.msalService.instance.getActiveAccount().localAccountId,
-            capitalPhaseId: null,
-            oephaseId: null,
-            phaseComment: null,
-            stateComment: null
-        }
-        if(this.phaseForm.get('phase').value != this.currentPhase || this.phaseForm.get('capitalPhase').value != this.currentCapitalPhase || this.phaseForm.get('oePhase').value != this.currentOEPhase){
-            body.phaseId = this.phaseForm.get('phase').value;
-            body.capitalPhaseId= this.phaseForm.get('capitalPhase').value;
-            body.oephaseId = this.phaseForm.get('oePhase').value;
-            body.phaseComment =this.phaseForm.get('phaseComment').value;
-        }
-        if(this.stateForm.get('state').value != this.currentState ){
-            stateActive = true;
-            body.stateId = this.stateForm.get('state').value;
-            body.stateComment = this.stateForm.get('stateComment').value;
-        }
-        this.apiService.postPhaseState(body).then(res=>{
-            this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
-            this.projecthubservice.isNavChanged.next(true)
-            this.projecthubservice.submitbutton.next(true)
-        }).catch(err => {
-            if(err.status == 400){
-                if(err.error.code == 204){
-                    var existingForecastAlert: FuseConfirmationConfig = {
-                        "title": "The project contains forecast",
-                        "message": "In order to cancel it please remove the forecast values in the Budget page!",
-                        "icon": {
-                            "show": true,
-                            "name": "heroicons_outline:exclamation",
-                            "color": "warning"
-                        },
-                        "actions": {
-                            "confirm": {
-                                "show": true,
-                                "label": "Okay",
-                                "color": "primary"
-                            },
-                            "cancel": {
-                                "show": false,
-                                "label": "Cancel"
-                            }
-                        },
-                        "dismissible": true
-                    }
-                    this.fuseAlert.open(existingForecastAlert);
-                }
-                else {
-                    this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
-                    this.projecthubservice.toggleDrawerOpen('StateCheck', 'new', body, '', true);
-                }
-
+    onSubmit() {
+        if (this.canSubmit) {
+            this.canSubmit = false
+            var stateActive = false;
+            var body = {
+                projectId: this.id,
+                phaseId: null,
+                stateId: null,
+                modificationDate: new Date(),
+                modifiedBy: this.msalService.instance.getActiveAccount().localAccountId,
+                capitalPhaseId: null,
+                oephaseId: null,
+                phaseComment: null,
+                stateComment: null
             }
-        })
+            if (this.phaseForm.get('phase').value != this.currentPhase || this.phaseForm.get('capitalPhase').value != this.currentCapitalPhase || this.phaseForm.get('oePhase').value != this.currentOEPhase) {
+                body.phaseId = this.phaseForm.get('phase').value;
+                body.capitalPhaseId = this.phaseForm.get('capitalPhase').value;
+                body.oephaseId = this.phaseForm.get('oePhase').value;
+                body.phaseComment = this.phaseForm.get('phaseComment').value;
+            }
+            if (this.stateForm.get('state').value != this.currentState) {
+                stateActive = true;
+                body.stateId = this.stateForm.get('state').value;
+                body.stateComment = this.stateForm.get('stateComment').value;
+            }
+            this.apiService.postPhaseState(body).then(res => {
+                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                this.projecthubservice.isNavChanged.next(true)
+                this.projecthubservice.submitbutton.next(true)
+                this.canSubmit = true
+            }).catch(err => {
+                if (err.status == 400) {
+                    if (err.error.code == 204) {
+                        var existingForecastAlert: FuseConfirmationConfig = {
+                            "title": "The project contains forecast",
+                            "message": "In order to cancel it please remove the forecast values in the Budget page!",
+                            "icon": {
+                                "show": true,
+                                "name": "heroicons_outline:exclamation",
+                                "color": "warning"
+                            },
+                            "actions": {
+                                "confirm": {
+                                    "show": true,
+                                    "label": "Okay",
+                                    "color": "primary"
+                                },
+                                "cancel": {
+                                    "show": false,
+                                    "label": "Cancel"
+                                }
+                            },
+                            "dismissible": true
+                        }
+                        this.fuseAlert.open(existingForecastAlert);
+                        this.canSubmit = true
+                    }
+                    else {
+                        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                        this.projecthubservice.toggleDrawerOpen('StateCheck', 'new', body, '', true);
+                        this.canSubmit = true
+                    }
+
+                }
+            })
+        }
     }
     changePhase(phaseId) {
         this.phaseForm.patchValue({
