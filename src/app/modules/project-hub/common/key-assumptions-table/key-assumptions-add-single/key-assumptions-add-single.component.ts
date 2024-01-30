@@ -1,12 +1,12 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
-import {ProjectHubService} from "../../../project-hub.service";
-import {AuthService} from "../../../../../core/auth/auth.service";
-import {RoleService} from "../../../../../core/auth/role.service";
-import {ProjectApiService} from "../../project-api.service";
-import { FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
-import {ActivatedRoute, Router} from "@angular/router";
-import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-case-options";
+import { Component, Input, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from "@angular/forms";
+import { ProjectHubService } from "../../../project-hub.service";
+import { AuthService } from "../../../../../core/auth/auth.service";
+import { RoleService } from "../../../../../core/auth/role.service";
+import { ProjectApiService } from "../../project-api.service";
+import { FuseConfirmationService } from "../../../../../../@fuse/services/confirmation";
+import { ActivatedRoute, Router } from "@angular/router";
+import { GlobalBusinessCaseOptions } from "../../../../../shared/global-business-case-options";
 
 @Component({
     selector: 'app-key-assumptions-add-single',
@@ -24,13 +24,14 @@ export class KeyAssumptionsAddSingleComponent implements OnInit {
     })
     formInital: boolean = false
     id: string = ''
-    constructor(public projecthubservice: ProjectHubService, public auth: AuthService,private _Activatedroute: ActivatedRoute, public role: RoleService,
-                private apiService: ProjectApiService, public fuseAlert: FuseConfirmationService, private router: Router) {
+    canSubmit: boolean = true
+    constructor(public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, public role: RoleService,
+        private apiService: ProjectApiService, public fuseAlert: FuseConfirmationService, private router: Router) {
         this.keyAssumptionForm.valueChanges.subscribe(res => {
-                if (this.formInital == true) {
-                    this.projecthubservice.isFormChanged = true
-                }
+            if (this.formInital == true) {
+                this.projecthubservice.isFormChanged = true
             }
+        }
         )
     }
 
@@ -54,63 +55,71 @@ export class KeyAssumptionsAddSingleComponent implements OnInit {
     }
 
     submitKeyAssumption() {
-        this.projecthubservice.isFormChanged = false
-        var keyAssumption = this.keyAssumptionForm.getRawValue();
-        var mainObj = {
-            keyAssumptionUniqueId: "",
-            projectId: this.id,
-            keyAssumption: keyAssumption.keyAssumptionName,
-            assumptionRationale: keyAssumption.assumptionRationale,
-            includeInCharter: keyAssumption.includeInCharter,
-            includeInBusinessCase: keyAssumption.includeInBusinessCase,
-        }
-        var optionObj = {
-            keyAssumptionUniqueId: "",
-            projectId: this.id,
-            keyAssumption: keyAssumption.keyAssumptionName,
-            assumptionRationale: keyAssumption.assumptionRationale,
-            includeInBusinessCase: keyAssumption.includeInBusinessCase,
-            includeInCharter: keyAssumption.includeInCharter,
-            businessKeyAssumptionUniqueId:"",
-            businessOptionId:""
-        }
-        if(this.mode == "Business-Case"){
-            if (this.router.url.includes('option-2')) {
-                optionObj.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
-                this.apiService.addKeyAssumptionForOption(optionObj).then(res => {
-                    this.projecthubservice.submitbutton.next(true)
-                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                })
-            }else{
-                if (this.router.url.includes('option-3')) {
-                    optionObj.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
+        if (this.canSubmit) {
+            this.canSubmit = false
+            this.projecthubservice.isFormChanged = false
+            var keyAssumption = this.keyAssumptionForm.getRawValue();
+            var mainObj = {
+                keyAssumptionUniqueId: "",
+                projectId: this.id,
+                keyAssumption: keyAssumption.keyAssumptionName,
+                assumptionRationale: keyAssumption.assumptionRationale,
+                includeInCharter: keyAssumption.includeInCharter,
+                includeInBusinessCase: keyAssumption.includeInBusinessCase,
+            }
+            var optionObj = {
+                keyAssumptionUniqueId: "",
+                projectId: this.id,
+                keyAssumption: keyAssumption.keyAssumptionName,
+                assumptionRationale: keyAssumption.assumptionRationale,
+                includeInBusinessCase: keyAssumption.includeInBusinessCase,
+                includeInCharter: keyAssumption.includeInCharter,
+                businessKeyAssumptionUniqueId: "",
+                businessOptionId: ""
+            }
+            if (this.mode == "Business-Case") {
+                if (this.router.url.includes('option-2')) {
+                    optionObj.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
                     this.apiService.addKeyAssumptionForOption(optionObj).then(res => {
                         this.projecthubservice.submitbutton.next(true)
                         this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                        this.canSubmit = true
                     })
-                }else{
-                    if (this.router.url.includes('recommended-option')) {
-                        optionObj.businessOptionId = GlobalBusinessCaseOptions.OPTION_1;
+                } else {
+                    if (this.router.url.includes('option-3')) {
+                        optionObj.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
                         this.apiService.addKeyAssumptionForOption(optionObj).then(res => {
                             this.projecthubservice.submitbutton.next(true)
                             this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                            this.canSubmit = true
                         })
+                    } else {
+                        if (this.router.url.includes('recommended-option')) {
+                            optionObj.businessOptionId = GlobalBusinessCaseOptions.OPTION_1;
+                            this.apiService.addKeyAssumptionForOption(optionObj).then(res => {
+                                this.projecthubservice.submitbutton.next(true)
+                                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                                this.canSubmit = true
+                            })
+                        }
                     }
                 }
-            }
-        }else{
-            this.apiService.addKeyAssumption(mainObj).then(res => {
-                if (this.mode == 'Project-Charter') {
-                    this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+            } else {
+                this.apiService.addKeyAssumption(mainObj).then(res => {
+                    if (this.mode == 'Project-Charter') {
+                        this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+                            this.projecthubservice.submitbutton.next(true)
+                            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                            this.canSubmit = true
+                        })
+                    } else {
                         this.projecthubservice.submitbutton.next(true)
                         this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                    })
-                }else{
-                    this.projecthubservice.submitbutton.next(true)
-                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                }
+                        this.canSubmit = true
+                    }
 
-            })
+                })
+            }
         }
 
 
