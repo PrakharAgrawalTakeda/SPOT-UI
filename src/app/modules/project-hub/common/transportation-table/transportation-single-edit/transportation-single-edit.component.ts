@@ -31,6 +31,7 @@ export class TransportationSingleEditComponent {
   parcelTypeDropDownValues = []
   seaTypeDropDownValues = []
   trainTypeDropDownValues = []
+  canSubmit: boolean = true
 
   TransportationForm = new FormGroup({
     emenvironmentId: new FormControl(),
@@ -62,6 +63,7 @@ export class TransportationSingleEditComponent {
   allowNegativeWeight = true;
   allowNegativeFrequency = true;
   allowNegativeDistance = true;
+  
   
 
   constructor(public fuseAlert: FuseConfirmationService, private authService: MsalService, private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) {
@@ -385,6 +387,9 @@ export class TransportationSingleEditComponent {
 
 
   submitTransportation() {
+    if(this.canSubmit)
+    {
+      this.canSubmit = false
     this.projecthubservice.isFormChanged = false
     var formValue = this.TransportationForm.getRawValue()
     formValue.shipmentDistance = isNaN(formValue.shipmentDistance) ? null : formValue.shipmentDistance
@@ -413,6 +418,7 @@ export class TransportationSingleEditComponent {
         "dismissible": true
       }
       const alert = this.fuseAlert.open(comfirmConfig)
+      this.canSubmit = true
     }
     else if (formValue.transportationType == "") {
       var comfirmConfig: FuseConfirmationConfig = {
@@ -437,6 +443,7 @@ export class TransportationSingleEditComponent {
         "dismissible": true
       }
       const alert = this.fuseAlert.open(comfirmConfig)
+      this.canSubmit = true
     }
     else if (formValue.fuelType == "") {
       var comfirmConfig: FuseConfirmationConfig = {
@@ -461,6 +468,7 @@ export class TransportationSingleEditComponent {
         "dismissible": true
       }
       const alert = this.fuseAlert.open(comfirmConfig)
+      this.canSubmit = true
     }
     else {
       var environmentalSourceId = this.projecthubservice.all[1]
@@ -484,7 +492,9 @@ export class TransportationSingleEditComponent {
         this.projecthubservice.submitbutton.next(true)
         this.projecthubservice.successSave.next(true)
         this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        this.canSubmit = true
       })
     }
   }
+}
 }
