@@ -17,7 +17,7 @@
             </spot-toggle>
         </div>
         <div
-            *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')"
+            *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived') && archiveable"
             class="flex justify-between items-center mt-3 mb-6">
             <div class="flex justify-start gap-1 items-center font-medium">Archived
             </div>
