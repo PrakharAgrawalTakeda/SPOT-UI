@@ -187,6 +187,9 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
                 if (['Completed', 'Cancelled'].includes(state.current)) {
                   this.archiveable = true;
                 }
+                else{
+                  this.archiveable = false;
+                }
                 this.viewContent = true
               })
             })

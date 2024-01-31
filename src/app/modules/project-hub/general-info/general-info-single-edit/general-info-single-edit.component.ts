@@ -308,6 +308,9 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           if (['Completed', 'Cancelled'].includes(state.current)) {
             this.archiveable = true;
           }
+          else{
+            this.archiveable = false;
+          }
           console.log(this.generalInfo.projectData)
           this.generalInfoForm.patchValue({
             problemTitle: res.projectData.problemTitle,
