@@ -23,17 +23,18 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' | 'BusinessCase' = 'ProjectHub'
-  @Input() viewElements: any = ["isConfidential", "isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "projectManager", "sponsor", "topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription", "isTechTransfer", "isOeproject", "isQualityRef", "StrategicDrivers", "primaryKPI", "isAgile", "isPobos", "isGmsgqltannualMustWin", "isSiteAssessment", "isGoodPractise", "isSprproject","sprprojectCategory","sprprojectGrouping"]
+  @Input() viewElements: any = ["isConfidential", "isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "projectManager", "sponsor", "topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription", "isTechTransfer", "isOeproject", "isQualityRef", "StrategicDrivers", "primaryKPI", "isAgile", "isPobos", "isGmsgqltannualMustWin", "isSiteAssessment", "isGoodPractise", "isSprproject", "sprprojectCategory", "sprprojectGrouping"]
   generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' | 'GeneralInfoSingleEditBusinessCase' | 'GeneralInfoSingleEditStrategicInitiative' = 'GeneralInfoSingleEdit'
   strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' | 'StrategicDriversSingleEditStrategicInitiative' | 'StrategicDriversSingleEditProjectProposalStrategicInitiative' | 'StrategicDriversSingleEditCloseOutStrategicInitiative' = 'StrategicDriversSingleEdit'
   viewContent: boolean = false
   isWizzard: boolean = false
-  projectNameLabel:string = "Project Name"
+  projectNameLabel: string = "Project Name"
   lookUpData: any = []
   kpiData: any = []
   id: string = ""
   generalInfoData: any = {}
   filterCriteria: any = {}
+  phaseStateData: any = []
   wizzardApprovedDate: string = ""
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
@@ -101,6 +102,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   isStrategicInitiative: boolean = false
   formFieldHelpers: any
   lookUpPVD: any;
+  archiveable: boolean = false;
   constructor(private apiService: ProjectApiService,
     private _Activatedroute: ActivatedRoute,
     private portApiService: PortfolioApiService,
@@ -176,9 +178,17 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
           }
           if (this.callLocation == 'ProjectHub') {
             this.apiService.getGeneralInfoData(this.id).then((res: any) => {
-              this.generalInfoData = res
-              this.generalInfoPatchValue(res)
-              this.viewContent = true
+              this.apiService.getPhaseState(this.id).then((phase: any) => {
+                this.generalInfoData = res
+                this.generalInfoPatchValue(res)
+                this.phaseStateData = phase
+                //sort datetime in phaseStateData.projectStatus in decenting order and get the first element
+                var state = phase.projectStatus.length > 0 ? phase.projectStatus.sort((a, b) => new Date(b.modificationDate).getTime() - new Date(a.modificationDate).getTime())[0] : ''
+                if (['Completed', 'Cancelled'].includes(state.current)) {
+                  this.archiveable = true;
+                }
+                this.viewContent = true
+              })
             })
           }
           if (this.callLocation == 'BusinessCase') {
@@ -229,7 +239,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   viewElementChecker(element: string): boolean {
     return this.viewElements.some(x => x == element)
   }
-   removeDuplicates(array1, array2): any {
+  removeDuplicates(array1, array2): any {
     const result = [];
     for (const element of array1) {
       if (!array2.includes(element)) {
@@ -238,7 +248,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
     }
     return result;
   }
-  
+
   generalInfoPatchValue(response) {
     this.isStrategicInitiative = response.projectData.problemType == "Strategic Initiative / Program"
     if (this.isStrategicInitiative) {
@@ -248,20 +258,20 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
         this.strategicDriversType = "StrategicDriversSingleEditStrategicInitiative"
         this.generalInfoType = "GeneralInfoSingleEditStrategicInitiative"
       }
-      if(this.callLocation == "ProjectProposal"){
+      if (this.callLocation == "ProjectProposal") {
         this.viewElements = this.removeDuplicates(this.viewElements, ["isPobos", "isGmsgqltannualMustWin", "isSiteAssessment"])
         this.viewElements.push("problemType")
         this.strategicDriversType = "StrategicDriversSingleEditProjectProposalStrategicInitiative"
       }
-      if(this.callLocation == "BusinessCase"){
+      if (this.callLocation == "BusinessCase") {
         this.viewElements.push("problemType")
         this.projectNameLabel = "Initiative Title/ Project Name"
       }
-      if(this.callLocation == "ProjectCharter"){
+      if (this.callLocation == "ProjectCharter") {
         this.viewElements.push("problemType")
         this.projectNameLabel = "Initiative Title/ Project Name"
       }
-      if(this.callLocation == "CloseOut"){
+      if (this.callLocation == "CloseOut") {
         this.viewElements.push(...["problemType", "isAgile"])
         this.strategicDriversType = "StrategicDriversSingleEditCloseOutStrategicInitiative"
         this.projectNameLabel = "Initiative Title/ Project Name"
@@ -312,21 +322,21 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
       //primaryKPI: response.projectData.primaryKpi && this.lookUpData.find(x => x.lookUpId == response.projectData.primaryKpi) ? this.lookUpData.find(x => x.lookUpId == response.projectData.primaryKpi).lookUpName : '',
       primaryKPI: (() => {
         if (response.projectData.primaryKpi) {
-            const lookUpResult = this.lookUpPVD.find(x => x.lookUpId == response.projectData.primaryKpi);
-            if (lookUpResult) {
-                return lookUpResult.lookUpName;
-            } else {
-                const kpiResult = this.kpiData.find(x => x.kpiid == response.projectData.primaryKpi);
-                if (kpiResult) {
-                    return kpiResult.kpiname;
-                }
+          const lookUpResult = this.lookUpPVD.find(x => x.lookUpId == response.projectData.primaryKpi);
+          if (lookUpResult) {
+            return lookUpResult.lookUpName;
+          } else {
+            const kpiResult = this.kpiData.find(x => x.kpiid == response.projectData.primaryKpi);
+            if (kpiResult) {
+              return kpiResult.kpiname;
             }
+          }
         }
-        else{
+        else {
           return '';
         }
-        
-    })(),
+
+      })(),
       isAgile: response.agilePrimaryWorkstream || response.agileWave || response.agileSecondaryWorkstream,
       agilePrimaryWorkstream: response.agilePrimaryWorkstream ? response.agilePrimaryWorkstream.lookUpName : '',
       agileSecondaryWorkstream: response.agileSecondaryWorkstream ? response.agileSecondaryWorkstream : [],

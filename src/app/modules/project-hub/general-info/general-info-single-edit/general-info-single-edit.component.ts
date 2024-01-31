@@ -39,6 +39,8 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   isStrategicInitiative: boolean = false
   projectNameLabel: string = "Project Name"
   owningOrganizationValues = []
+  archiveable: boolean = false;
+  phaseStateData: any = []
   changeExecutionScope: boolean = false
   isConfidetialAlertShowAgain: boolean = true
   generalInfoForm = new FormGroup({
@@ -102,8 +104,8 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
     this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
       if (this.viewContent && this.callLocation == 'ProjectHub') {
         if (res != this.generalInfo.projectData.problemType) {
-          if(res == "Strategic Initiative / Program"){
-            if(this.generalInfo.hasCAPEX || this.generalInfo.hasCAPS || this.generalInfo.hasTOPS){
+          if (res == "Strategic Initiative / Program") {
+            if (this.generalInfo.hasCAPEX || this.generalInfo.hasCAPS || this.generalInfo.hasTOPS) {
               console.log("CONDITIONS NOT MET")
               var comfirmConfig: FuseConfirmationConfig = {
                 "title": "The project type cannot be changed to Strategic Initiative as it contains Caps/Tops/Capex data.",
@@ -125,10 +127,10 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
               const alert = this.fuseAlert.open(comfirmConfig)
               this.generalInfoForm.controls.problemType.patchValue(this.generalInfo.projectData.problemType)
             }
-            else{
-                this.generalInfoForm.controls.projectsingleid.patchValue("")
-                this.generalInfoForm.controls.projectsingle.patchValue("")
-                this.isStrategicInitiative = true
+            else {
+              this.generalInfoForm.controls.projectsingleid.patchValue("")
+              this.generalInfoForm.controls.projectsingle.patchValue("")
+              this.isStrategicInitiative = true
             }
           }
 
@@ -189,7 +191,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         var portfolio = []
         if (res != null) {
           portfolio.push(res)
-          if(this.callLocation == 'CreateNew' || this.callLocation == 'CopyProject'){
+          if (this.callLocation == 'CreateNew' || this.callLocation == 'CopyProject') {
             if (res.portfolioGroup == "Center Function") {
               this.generalInfoForm.controls.localCurrency.enable()
             }
@@ -205,7 +207,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
             localCurrency: currency[0]?.localCurrencyAbbreviation
           })
         }
-        else{
+        else {
           this.generalInfoForm.controls.localCurrency.enable()
         }
       }
@@ -251,12 +253,18 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
               projectsingle: ''
             })
           }
-          else{
+          else {
             this.isConfidetialAlertShowAgain = false
             this.generalInfoForm.controls.isConfidential.patchValue(!res)
             this.isConfidetialAlertShowAgain = true
           }
         })
+      }
+    })
+
+    this.generalInfoForm.controls.isArchived.valueChanges.subscribe(res => {
+      if (this.viewContent && res == false) {
+        this.generalInfo.projectData.isManualArchive = true
       }
     })
   }
@@ -267,10 +275,10 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     console.log("inside GI")
-    if(this.callLocation == 'CreateNew'){
+    if (this.callLocation == 'CreateNew') {
       this.generalInfoForm.controls.localCurrency.enable()
     }
-    else if(this.callLocation=='CopyProject'){
+    else if (this.callLocation == 'CopyProject') {
       if (this.generalInfoForm.value.portfolioOwner.portfolioGroup == "Center Function") {
         this.generalInfoForm.controls.localCurrency.enable()
       }
@@ -278,7 +286,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         this.generalInfoForm.controls.localCurrency.disable()
       }
     }
-    else if(this.callLocation=='CreateNewSIP'){
+    else if (this.callLocation == 'CreateNewSIP') {
       this.generalInfoForm.controls.problemType.disable()
     }
     if (this.callLocation == 'ProjectHub') {
@@ -290,56 +298,65 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         api = this.apiService.getGeneralInfoData(this.projectHubService.projectid)
       }
       api.then((res: any) => {
-        this.generalInfo = res
-        this.filterCriteria = this.projectHubService.all
-        this.isStrategicInitiative = res.projectData.problemType == "Strategic Initiative / Program"
-        this.generalInfoForm.patchValue({
-          problemTitle: res.projectData.problemTitle,
-          problemType: res.projectData.problemType,
-          projectsingle: res.parentProject ? res.parentProject.problemId + ' - ' + res.parentProject.problemTitle : '',
-          projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
-          projectDescription: res.projectData.projectDescription,
-          primaryProduct: res.primaryProduct ? res.primaryProduct : {},
-          otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
-          portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
-          excecutionScope: res.excecutionScope ? res.excecutionScope : [],
-          enviornmentalPortfolio: res.enviornmentalPortfolio,
-          isArchived: res.projectData.isArchived,
-          isConfidential: res.projectData.isConfidential,
-          isCapsProject: res.projectData.isCapsProject,
-          owningOrganization: res.projectData.defaultOwningOrganizationId,
-          closeOutApprovedDate: res.projectData.closeOutApprovedDate,
-          projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
-          approvedDate: res.projectData.approvedDate,
-          functionGroupID: res.projectData.functionGroupID ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.functionGroupID.toLowerCase()) : {},
-          whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
-          proposalStatement: res.projectData.proposalStatement,
-          projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {},
-          StrategicRationale: res.projectData.strategicRationale,
-          BCAuthor: res.businessCaseAuthor ? res.businessCaseAuthor : {},
-          RiskImpact: res.businessCaseImpactOfDoingNothing,
-          businessCaseApprovedDate: res.businessCaseApprovedDate,
-          AdditionalAuthor: res.businessCaseAdditionalAuthorsContributors ? res.businessCaseAdditionalAuthorsContributors : [],
-          sponsor: res.sponsor ? {
-            userAdid: res.sponsor.teamMemberAdId,
-            userDisplayName: res.sponsor.teamMemberName
-          } : {},
-          projectManager: {
-            userAdid: res.projectData.projectManagerId,
-            userDisplayName: res.portfolioCenterData.pm
+        this.apiService.getPhaseState(this.projectHubService.projectid).then((phase: any) => {
+          this.generalInfo = res
+          this.filterCriteria = this.projectHubService.all
+          this.isStrategicInitiative = res.projectData.problemType == "Strategic Initiative / Program"
+          this.phaseStateData = phase
+          //sort datetime in phaseStateData.projectStatus in decenting order and get the first element
+          var state = phase.projectStatus.length > 0 ? phase.projectStatus.sort((a, b) => new Date(b.modificationDate).getTime() - new Date(a.modificationDate).getTime())[0] : ''
+          if (['Completed', 'Cancelled'].includes(state.current)) {
+            this.archiveable = true;
           }
-        });
-        this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
-        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'SimpleProject' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.problemType.enable() : this.generalInfoForm.controls.problemType.disable()
-        if (this.isStrategicInitiative) {
-          this.projectNameLabel = "Initiaitive Name"
-          if (['ProjectCharter', 'CloseOut', 'BusinessCase'].includes(this.subCallLocation)) {
-            this.projectNameLabel = "Initiative Title/ Project Name"
+          console.log(this.generalInfo.projectData)
+          this.generalInfoForm.patchValue({
+            problemTitle: res.projectData.problemTitle,
+            problemType: res.projectData.problemType,
+            projectsingle: res.parentProject ? res.parentProject.problemId + ' - ' + res.parentProject.problemTitle : '',
+            projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
+            projectDescription: res.projectData.projectDescription,
+            primaryProduct: res.primaryProduct ? res.primaryProduct : {},
+            otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
+            portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
+            excecutionScope: res.excecutionScope ? res.excecutionScope : [],
+            enviornmentalPortfolio: res.enviornmentalPortfolio,
+            isArchived: res.projectData.isArchived,
+            isConfidential: res.projectData.isConfidential,
+            isCapsProject: res.projectData.isCapsProject,
+            owningOrganization: res.projectData.defaultOwningOrganizationId,
+            closeOutApprovedDate: res.projectData.closeOutApprovedDate,
+            projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
+            approvedDate: res.projectData.approvedDate,
+            functionGroupID: res.projectData.functionGroupID ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.functionGroupID.toLowerCase()) : {},
+            whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
+            proposalStatement: res.projectData.proposalStatement,
+            projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {},
+            StrategicRationale: res.projectData.strategicRationale,
+            BCAuthor: res.businessCaseAuthor ? res.businessCaseAuthor : {},
+            RiskImpact: res.businessCaseImpactOfDoingNothing,
+            businessCaseApprovedDate: res.businessCaseApprovedDate,
+            AdditionalAuthor: res.businessCaseAdditionalAuthorsContributors ? res.businessCaseAdditionalAuthorsContributors : [],
+            sponsor: res.sponsor ? {
+              userAdid: res.sponsor.teamMemberAdId,
+              userDisplayName: res.sponsor.teamMemberName
+            } : {},
+            projectManager: {
+              userAdid: res.projectData.projectManagerId,
+              userDisplayName: res.portfolioCenterData.pm
+            }
+          });
+          this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
+          this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'SimpleProject' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
+          this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.problemType.enable() : this.generalInfoForm.controls.problemType.disable()
+          if (this.isStrategicInitiative) {
+            this.projectNameLabel = "Initiaitive Name"
+            if (['ProjectCharter', 'CloseOut', 'BusinessCase'].includes(this.subCallLocation)) {
+              this.projectNameLabel = "Initiative Title/ Project Name"
+            }
+            this.generalInfoForm.controls.problemType.disable()
           }
-          this.generalInfoForm.controls.problemType.disable()
-        }
-        this.viewContent = true
+          this.viewContent = true
+        })
       })
     }
     else {
