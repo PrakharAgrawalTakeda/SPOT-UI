@@ -614,6 +614,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         //this.scheduleData.scheduleData = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
         this.toggleHelper = true
         this.projecthubservice.includeClosedItems.schedule.next(event.checked)
+        this.localIncludedItems.controls['toggle'].disable()
     }
     changeschedule(event: any, initial: boolean = false) {
         //debugger
@@ -866,6 +867,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             this.localIncludedItems.controls.toggle.patchValue(event)
             this.localIncludedItems.controls.toggle.markAsPristine()
         }
+        this.localIncludedItems.controls['toggle'].enable()
     }
     //   else if(event == false)
     //   {
