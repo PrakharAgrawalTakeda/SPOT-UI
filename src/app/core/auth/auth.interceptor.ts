@@ -17,6 +17,7 @@ import { AppService } from 'app/app.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   TIMEOUT_DURATION = 1800000; // 10 seconds, for example
+  exceptionList = ['ProjectHubData/PhaseState']
   constructor(private authService: AuthService, private msalService: MsalService, private router: Router, private appSerice:AppService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -67,11 +68,10 @@ export class AuthInterceptor implements HttpInterceptor {
           else {
             // handle other types of errors
             console.error('Request error:', error);
-            if(cloned.url.includes(GlobalVariables.apiurl) && cloned.method != 'GET'){
+            if(cloned.url.includes(GlobalVariables.apiurl) && cloned.method != 'GET' && !this.exceptionList.some(x=>cloned.url.includes(x))){
               this.appSerice.errorSave.next(true)
             }
           }
-
           // rethrow the error
           return throwError(error);
         })
