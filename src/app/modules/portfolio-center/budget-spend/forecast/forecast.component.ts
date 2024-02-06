@@ -9,6 +9,7 @@ import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { AuthService } from 'app/core/auth/auth.service';
 import { Title } from '@angular/platform-browser';
 import { PortfolioCenterService } from '../../portfolio-center.service';
+import { BudgetService } from 'app/modules/project-hub/budget/budget.service';
 
 @Component({
   selector: 'app-forecast',
@@ -83,7 +84,8 @@ export class ForecastComponent {
   sortDiractive = ""
   @ViewChild('FxRateDrawer') FxRateDrawer: MatSidenav
   constructor(private portfoliService: PortfolioApiService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
-    , public fuseAlert: FuseConfirmationService, private router: Router, private titleService: Title, private auth: AuthService, public PortfolioCenterService: PortfolioCenterService) {
+    ,
+    public budgetService: BudgetService, public fuseAlert: FuseConfirmationService, private router: Router, private titleService: Title, private auth: AuthService, public PortfolioCenterService: PortfolioCenterService) {
     this.ForecastForm.valueChanges.subscribe(res => {
       if (this.showContent) {
       this.PortfolioCenterService.isFormChanged = true
@@ -156,6 +158,7 @@ export class ForecastComponent {
               ForecastType: this.forecastType.filter(x => x.lookUpId == 'ec313be6-353d-413b-9805-b7519f2ede18')[0]
             })
           }
+          console.log("DATA",forecastData)
           this.currencyList = []
           forecastData.currencies.forEach(response => {
             this.currencyList.push({ name: response })

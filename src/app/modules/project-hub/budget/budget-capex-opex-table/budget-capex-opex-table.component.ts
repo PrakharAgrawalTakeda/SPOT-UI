@@ -37,6 +37,7 @@ export class BudgetCapexOpexTableComponent {
         this.setTableColumnMode();
     }
     dataloader() {
+        console.log(this.mode)
         if(this.mode=="Y1"){
             this.data = this.inputData;
         }
