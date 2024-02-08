@@ -101,7 +101,8 @@ export class PortfolioCenterComponent implements OnInit {
     "Project/Program": [],
     "OverallStatus": [],
     "PrimaryValueDriver": [],
-    "SPRProjectCategory": []
+    "SPRProjectCategory": [],
+    "projectNameKeyword": []
   }
   defaultfilter: any = {
     "PortfolioOwner": [],
@@ -122,7 +123,8 @@ export class PortfolioCenterComponent implements OnInit {
     "Project/Program": [],
     "OverallStatus": [],
     "PrimaryValueDriver": [],
-    "SPRProjectCategory": []
+    "SPRProjectCategory": [],
+    "projectNameKeyword": []
   }
   PortfolioFilterForm = new FormGroup({
     PortfolioOwner: new FormControl(),
@@ -143,7 +145,8 @@ export class PortfolioCenterComponent implements OnInit {
     OverallStatus: new FormControl(),
     projectName: new FormControl(),
     PrimaryValueDriver: new FormControl(),
-    SPRProjectCategory: new FormControl()
+    SPRProjectCategory: new FormControl(),
+    projectNameKeyword: new FormControl()
   })
 
   bulkreportdata: any;
@@ -430,7 +433,8 @@ export class PortfolioCenterComponent implements OnInit {
               projectName: this.filtersnew.projectName,
               OverallStatus: this.filtersnew.OverallStatus,
               PrimaryValueDriver: this.filtersnew.PrimaryValueDriver,
-              SPRProjectCategory: this.filtersnew.SPRProjectCategory
+              SPRProjectCategory: this.filtersnew.SPRProjectCategory,
+              projectNameKeyword: this.filtersnew.projectNameKeyword
             })
 
             // if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)) {
@@ -528,6 +532,15 @@ export class PortfolioCenterComponent implements OnInit {
                   "name": "Project/Program",
                   "value": this.filtersnew[attribute][0].problemTitle,
                   "count": this.filtersnew[attribute].length,
+                  "order": 17
+                }
+              }
+              else if (attribute == "projectNameKeyword") {
+                var count = this.filtersnew[attribute].split(',')
+                var filterdata = {
+                  "name": "Project Name Keyword",
+                  "value": this.filtersnew[attribute],
+                  "count": count.length,
                   "order": 17
                 }
               }
@@ -632,7 +645,20 @@ export class PortfolioCenterComponent implements OnInit {
               //   filterItems.push(filterItems1)
               // }
               else {
+                if (attribute == "projectNameKeyword") {
+                  var filterItems1 =
+                  {
+                    "filterAttribute": "ProjectNameKeywords",
+                    "filterOperator": "=",
+                    "filterValue": this.filtersnew[attribute],
+                    "unionOperator": 2
+                  }
+                  filterItems.push(filterItems1)
+                }
                 for (var j = 0; j < this.filtersnew[attribute].length; j++) {
+                  if (attribute == "projectNameKeyword") {
+                    break;
+                  }
                   if (attribute == "PortfolioOwner" || attribute == "ExecutionScope") {
                     var filterItems1 =
                     {
