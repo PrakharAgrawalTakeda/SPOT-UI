@@ -133,6 +133,9 @@
                         [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
                         [label]="'Project/Program'" name="projectName" [showLabel]="true">
                     </app-spot-multiselect-project-autocomplete>
+                    <spot-input class="w-full" formControlName="projectNameKeyword" name="projectNameKeyword"
+                        [label]="'Project Name Keyword'" [placeholder]="'Project Name Keyword'">
+                    </spot-input>
 
                     <mat-label *ngIf="!showLA" id="localAttribute" style="color: #a0cbf1;cursor: pointer;"
                         (click)="OpenLA()">+ Show Local Attributes</mat-label>
