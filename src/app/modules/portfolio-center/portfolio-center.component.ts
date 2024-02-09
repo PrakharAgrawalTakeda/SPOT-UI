@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { PortfolioApiService } from './portfolio-api.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -101,7 +101,8 @@ export class PortfolioCenterComponent implements OnInit {
     "Project/Program": [],
     "OverallStatus": [],
     "PrimaryValueDriver": [],
-    "SPRProjectCategory": []
+    "SPRProjectCategory": [],
+    "projectNameKeyword": []
   }
   defaultfilter: any = {
     "PortfolioOwner": [],
@@ -122,7 +123,8 @@ export class PortfolioCenterComponent implements OnInit {
     "Project/Program": [],
     "OverallStatus": [],
     "PrimaryValueDriver": [],
-    "SPRProjectCategory": []
+    "SPRProjectCategory": [],
+    "projectNameKeyword": []
   }
   PortfolioFilterForm = new FormGroup({
     PortfolioOwner: new FormControl(),
@@ -143,7 +145,8 @@ export class PortfolioCenterComponent implements OnInit {
     OverallStatus: new FormControl(),
     projectName: new FormControl(),
     PrimaryValueDriver: new FormControl(),
-    SPRProjectCategory: new FormControl()
+    SPRProjectCategory: new FormControl(),
+    projectNameKeyword: new FormControl()
   })
 
   bulkreportdata: any;
@@ -430,7 +433,8 @@ export class PortfolioCenterComponent implements OnInit {
               projectName: this.filtersnew.projectName,
               OverallStatus: this.filtersnew.OverallStatus,
               PrimaryValueDriver: this.filtersnew.PrimaryValueDriver,
-              SPRProjectCategory: this.filtersnew.SPRProjectCategory
+              SPRProjectCategory: this.filtersnew.SPRProjectCategory,
+              projectNameKeyword: this.filtersnew.projectNameKeyword
             })
 
             // if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)) {
@@ -528,6 +532,15 @@ export class PortfolioCenterComponent implements OnInit {
                   "name": "Project/Program",
                   "value": this.filtersnew[attribute][0].problemTitle,
                   "count": this.filtersnew[attribute].length,
+                  "order": 17
+                }
+              }
+              else if (attribute == "projectNameKeyword") {
+                var count = this.filtersnew[attribute].split(',')
+                var filterdata = {
+                  "name": "Project Name Keyword",
+                  "value": this.filtersnew[attribute],
+                  "count": count.length,
                   "order": 17
                 }
               }
@@ -632,7 +645,20 @@ export class PortfolioCenterComponent implements OnInit {
               //   filterItems.push(filterItems1)
               // }
               else {
+                if (attribute == "projectNameKeyword") {
+                  var filterItems1 =
+                  {
+                    "filterAttribute": "ProjectNameKeywords",
+                    "filterOperator": "=",
+                    "filterValue": this.filtersnew[attribute],
+                    "unionOperator": 2
+                  }
+                  filterItems.push(filterItems1)
+                }
                 for (var j = 0; j < this.filtersnew[attribute].length; j++) {
+                  if (attribute == "projectNameKeyword") {
+                    break;
+                  }
                   if (attribute == "PortfolioOwner" || attribute == "ExecutionScope") {
                     var filterItems1 =
                     {
@@ -826,6 +852,7 @@ export class PortfolioCenterComponent implements OnInit {
             this.projects.data = res.portfolioDetails;
             this.bulkreportdata = res.portfolioDetails
             console.log(this.bulkreportdata)
+
             this.bulkreportdata.sort((a, b) => {
               if (a.problemId < b.problemId) return -1;
               if (a.problemId > b.problemId) return 1;
@@ -1064,7 +1091,27 @@ export class PortfolioCenterComponent implements OnInit {
   trackByFn(index: number, item: any): any {
     return item.projectTeamUniqueId || index;
   }
-
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      if (this.PortfolioCenterService.drawerOpenedPrakharTemp) {
+        if (this.showFilter) {
+          this.Closefilter()
+        }
+        else{
+          this.Close()
+        }
+      }
+      if (this.PortfolioCenterService.drawerOpenedright) {
+        if (this.PortfolioCenterService.itemtype == 'FXRateOpen') {
+          this.PortfolioCenterService.toggleDrawerOpenSmall('BudgetSpendOpen', '', [], '')
+        }
+        else {
+          this.PortfolioCenterService.toggleDrawerOpen('', '', [], '')
+        }
+      }
+    }
+  }
 
   private _fixSvgFill(element: Element): void {
     // Current URL
@@ -2347,6 +2394,7 @@ export class PortfolioCenterComponent implements OnInit {
             })
           }
           this.projectOverview = res.portfolioDetails
+          console.log("PROJECT OVERVIEW", this.projectOverview)
           this.bulkreportdata = res.portfolioDetails
           this.projects.data = res.portfolioDetails;
           for (var i = 0; i < this.projectOverview.length; i++) {
@@ -2380,7 +2428,6 @@ export class PortfolioCenterComponent implements OnInit {
             this.projectOverview[i].CAPEX = this.projectOverview[i].localTotalApprovedCapex
             this.projectOverview[i].FORECAST = this.projectOverview[i].localForecastLbecapEx
             this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
-
             this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
             this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact
             this.projectOverview[i].calculatedEmissionsImpact1 = res.projectDetails[i].calculatedEmissionsImpact ? res.projectDetails[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;

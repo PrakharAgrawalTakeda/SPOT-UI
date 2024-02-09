@@ -58,6 +58,24 @@
                         <p style="text-align:right">{{value | number : fractionSize}}</p>
                     </ng-template>
                 </ngx-datatable-column>  
+                <ngx-datatable-column name="Include in Proposal (Max 5)" prop="includeInProposal"  [flexGrow]="0.7" *ngIf="mode == 'Project-Proposal'">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <div class="flex items-center justify-between pl-2 overflow-hidden">
+                            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="value == false"></mat-icon>
+                            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="value == true">
+                            </mat-icon>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Include in Charter (Max 10)" prop="includeInCharter"  [flexGrow]="0.7" *ngIf="mode == 'Project-Charter'">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <div class="flex items-center justify-between pl-2 overflow-hidden">
+                            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="value == false"></mat-icon>
+                            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="value == true">
+                            </mat-icon>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
                 <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false"
                     *ngIf="mode == 'Normal'">  
                     <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>

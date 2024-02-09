@@ -1115,6 +1115,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     }
 
     addMilestoneRecord(el): void {
+        //debugger
         // var div = document.getElementsByClassName('datatable-scroll')[0]
         // setTimeout(() => {
         //   div.scroll({
@@ -1782,17 +1783,17 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 // })
                 // //debugger
                 // if (baselines.length == baselines2.length && JSON.stringify(baselines) != JSON.stringify(baselines2)) {
-                this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-                    //  this.viewBaseline = true
-                    //  this.viewBaselineLogs = true
-                    //  this.compareBaselineLogs = false
-                    //  this.projecthubservice.isBulkEdit = false
-                    //this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                    //this.projecthubservice.submitbutton.next(true)
-                    //this.projecthubservice.isNavChanged.next(true)
-                    this.submitjustification()
-                    //this.projecthubservice.submitbutton.next(true)
-                })
+                    this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+                        //  this.viewBaseline = true
+                        //  this.viewBaselineLogs = true
+                        //  this.compareBaselineLogs = false
+                        //  this.projecthubservice.isBulkEdit = false
+                                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                                this.projecthubservice.submitbutton.next(true)
+                                this.projecthubservice.isNavChanged.next(true)
+                        // this.submitjustification()
+                        //this.projecthubservice.submitbutton.next(true)
+                    })
                 // } else if (this.formValue.length < this.scheduleData.scheduleData.length) {
                 //     this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
                 //         this.projecthubservice.toggleDrawerOpen('', '', [], '')
@@ -2153,6 +2154,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     }
 
     checklogDetails(baselinelogid: string): boolean {
+        console.log(this.logdetails.some(x => x.baselineLogId == baselinelogid))
         return this.logdetails && this.logdetails != '' && this.logdetails.length > 0 ? this.logdetails.some(x => x.baselineLogId == baselinelogid) : false
     }
 
