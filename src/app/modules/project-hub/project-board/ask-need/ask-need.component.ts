@@ -31,6 +31,7 @@ export class AskNeedComponent implements OnInit, OnChanges {
     this.dataloader()
   }
   dataloader() {
+    console.log(this.askNeedData)
     for(var i of this.askNeedData){
       i.includeInReport = i.projectId == this.projectId? i.includeInReport: this.links.find(t=>t.linkItemId == i.askNeedUniqueId).includeInReport 
     }

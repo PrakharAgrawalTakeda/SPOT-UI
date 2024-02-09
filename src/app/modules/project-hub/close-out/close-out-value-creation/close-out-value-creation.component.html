@@ -20,6 +20,11 @@
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container *ngIf="viewContent">
             <div class="pb-3 pt-0 flex items-center justify-between">
                 <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Value Creation Metric Table</div>
+                <div *ngIf="projecthubservice.roleControllerControl.projectBenefits">
+                    <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="openVC()">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp;Edit Details
+                    </button>
+                </div>
                 </div>
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
         class="datatable-VC-80 pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata" [sorts]="[{prop: 'PO', dir: 'desc'}, { prop: 'metricName', dir: 'asc' }, { prop: 'sortOrder', dir: 'asc'}]" #valuecreationTable [rowClass]="getRowClass" class="custom-ngx-table">
