@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MyPreferenceService } from "./my-preference.service";
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -151,7 +151,14 @@ export class MyPreferenceComponent implements OnInit {
         }
         )
     }
-
+    @HostListener('document:keydown', ['$event'])
+    handleKeyboardEvent(event: KeyboardEvent) {
+        if (event.key === 'Escape') {
+            if (this.myPreferenceService.drawerOpenedright) {
+                this.myPreferenceService.toggleDrawerOpen('', '', [], '')
+            }
+        }
+    }
     reloadName() {
         this.navItem = {
             title: 'My Preferences',

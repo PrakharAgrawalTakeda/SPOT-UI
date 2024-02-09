@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { PortfolioApiService } from './portfolio-api.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -1091,7 +1091,27 @@ export class PortfolioCenterComponent implements OnInit {
   trackByFn(index: number, item: any): any {
     return item.projectTeamUniqueId || index;
   }
-
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      if (this.PortfolioCenterService.drawerOpenedPrakharTemp) {
+        if (this.showFilter) {
+          this.Closefilter()
+        }
+        else{
+          this.Close()
+        }
+      }
+      if (this.PortfolioCenterService.drawerOpenedright) {
+        if (this.PortfolioCenterService.itemtype == 'FXRateOpen') {
+          this.PortfolioCenterService.toggleDrawerOpenSmall('BudgetSpendOpen', '', [], '')
+        }
+        else {
+          this.PortfolioCenterService.toggleDrawerOpen('', '', [], '')
+        }
+      }
+    }
+  }
 
   private _fixSvgFill(element: Element): void {
     // Current URL
