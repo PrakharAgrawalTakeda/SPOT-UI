@@ -1,10 +1,12 @@
 import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectApiService } from '../../common/project-api.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
+import { ProjectHubService } from '../../project-hub.service';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
   selector: 'app-close-out-value-creation',
@@ -31,8 +33,8 @@ export class CloseOutValueCreationComponent implements OnInit {
   projectsMetricsData = []
   isStrategicInitiative = false
   @ViewChild('valuecreationTable') table: any;
-  constructor(public projectApiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService,public indicator: SpotlightIndicatorsService,
-    private portApiService: PortfolioApiService){
+  constructor(private router: Router, public projectApiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService,public indicator: SpotlightIndicatorsService,
+    private portApiService: PortfolioApiService, public projecthubservice: ProjectHubService, public fuseAlert: FuseConfirmationService){
 
   }
   ngOnInit():void{
@@ -256,5 +258,39 @@ export class CloseOutValueCreationComponent implements OnInit {
   }
   getFrozenID(): any{
     return ' frozen-header-ID'
+  }
+
+  openVC() {
+    var message = "";
+      message = "The details can be edited only in the Value Creation page. Do you want to leave this page and switch to the Value Creation page?"
+
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Are you sure?",
+      "message": message,
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Go to Value Creation",
+          // "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const alert = this.fuseAlert.open(comfirmConfig)
+    alert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.router.navigate([`./project-hub/` + this.id + `/value-creation`]);
+      }
+    }
+    )
   }
 }

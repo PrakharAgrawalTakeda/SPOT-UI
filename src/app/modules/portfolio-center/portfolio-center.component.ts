@@ -826,6 +826,7 @@ export class PortfolioCenterComponent implements OnInit {
             this.projects.data = res.portfolioDetails;
             this.bulkreportdata = res.portfolioDetails
             console.log(this.bulkreportdata)
+
             this.bulkreportdata.sort((a, b) => {
               if (a.problemId < b.problemId) return -1;
               if (a.problemId > b.problemId) return 1;
@@ -2347,6 +2348,7 @@ export class PortfolioCenterComponent implements OnInit {
             })
           }
           this.projectOverview = res.portfolioDetails
+          console.log("PROJECT OVERVIEW", this.projectOverview)
           this.bulkreportdata = res.portfolioDetails
           this.projects.data = res.portfolioDetails;
           for (var i = 0; i < this.projectOverview.length; i++) {
@@ -2380,7 +2382,6 @@ export class PortfolioCenterComponent implements OnInit {
             this.projectOverview[i].CAPEX = this.projectOverview[i].localTotalApprovedCapex
             this.projectOverview[i].FORECAST = this.projectOverview[i].localForecastLbecapEx
             this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
-
             this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
             this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact
             this.projectOverview[i].calculatedEmissionsImpact1 = res.projectDetails[i].calculatedEmissionsImpact ? res.projectDetails[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;

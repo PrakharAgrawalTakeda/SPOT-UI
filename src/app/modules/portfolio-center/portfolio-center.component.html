@@ -640,6 +640,13 @@
                             </ng-template>
                         </ngx-datatable-column>
 
+                        <ngx-datatable-column name="State" prop="projStatus" [width]="100"
+                            [resizeable]="false">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
                         <ngx-datatable-column name="Phase (Project/Capital/OE)" prop="projectCapitalOe" [width]="200"
                             [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
