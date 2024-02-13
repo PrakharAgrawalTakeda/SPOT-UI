@@ -78,6 +78,7 @@ export class PortfolioCenterComponent implements OnInit {
   AgileWave = []
   overallStatus = []
   primaryKPI = []
+  showForecast:boolean =  false
   sorting: any = { name: "", dir: "" }
   viewBaseline = false
   projectOverview: any = []
@@ -256,6 +257,12 @@ export class PortfolioCenterComponent implements OnInit {
     this.activeaccount = this.msal.instance.getActiveAccount();
     this.showContent = false;
     this.titleService.setTitle("Portfolio Center")
+    if (["C9F323D4-EF97-4C2A-B748-11DB5B8589D0","0E83F6BE-79BE-426A-A316-F523FFAECC4F"].includes(this.role.roleMaster.securityGroupId) || this.role.roleMaster?.secondarySecurityGroupId?.some(x=>x?.toLowerCase()=='500ee862-3878-43d9-9378-53feb1832cef'.toLowerCase())) {
+      this.showForecast = true
+    }
+    else{
+      this.showForecast = false
+    }
     if (this.role.roleMaster.securityGroupId == "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F") {
       this.newmainnav = [
         {
