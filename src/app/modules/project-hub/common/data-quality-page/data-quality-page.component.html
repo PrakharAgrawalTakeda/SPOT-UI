@@ -26,19 +26,19 @@
                 [rowClass]="rowClass" style="height: calc(calc(100vh/ var(--custom-zoom)) - 155px); overflow-y:visible"
                 class="ml-3 material font-medium text-sm text-default whitespace-nowrap cursor-default"
                 [rows]="rows" #dataQualityTable>
-                <ngx-datatable-column name="Phase/State" prop="phase" [flexGrow]="1">
+                <ngx-datatable-column name="Phase/State" prop="phase" [flexGrow]="0.4">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <div class="flex items-center justify-start gap-6">
                             {{ value }}
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Requirement" prop="requirement" [flexGrow]="1">
+                <ngx-datatable-column name="Requirement" prop="requirement" [flexGrow]="0.8">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ value }}
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Hit/Miss" prop="hitMiss" [flexGrow]="1" [cellClass]="getCellClass">
+                <ngx-datatable-column name="Hit/Miss" prop="hitMiss" [flexGrow]="0.3" [cellClass]="getCellClass">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ value }}
                     </ng-template>
