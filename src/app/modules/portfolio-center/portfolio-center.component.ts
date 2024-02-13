@@ -78,7 +78,7 @@ export class PortfolioCenterComponent implements OnInit {
   AgileWave = []
   overallStatus = []
   primaryKPI = []
-  showForecast:boolean =  false
+  showForecast: boolean = false
   sorting: any = { name: "", dir: "" }
   viewBaseline = false
   projectOverview: any = []
@@ -257,10 +257,10 @@ export class PortfolioCenterComponent implements OnInit {
     this.activeaccount = this.msal.instance.getActiveAccount();
     this.showContent = false;
     this.titleService.setTitle("Portfolio Center")
-    if (["C9F323D4-EF97-4C2A-B748-11DB5B8589D0","0E83F6BE-79BE-426A-A316-F523FFAECC4F"].includes(this.role.roleMaster.securityGroupId) || this.role.roleMaster?.secondarySecurityGroupId?.some(x=>x?.toLowerCase()=='500ee862-3878-43d9-9378-53feb1832cef'.toLowerCase())) {
+    if (["C9F323D4-EF97-4C2A-B748-11DB5B8589D0", "0E83F6BE-79BE-426A-A316-F523FFAECC4F"].includes(this.role.roleMaster.securityGroupId) || this.role.roleMaster?.secondarySecurityGroupId?.some(x => x?.toLowerCase() == '500ee862-3878-43d9-9378-53feb1832cef'.toLowerCase())) {
       this.showForecast = true
     }
-    else{
+    else {
       this.showForecast = false
     }
     if (this.role.roleMaster.securityGroupId == "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F") {
@@ -1105,7 +1105,7 @@ export class PortfolioCenterComponent implements OnInit {
         if (this.showFilter) {
           this.Closefilter()
         }
-        else{
+        else {
           this.Close()
         }
       }
@@ -2814,12 +2814,8 @@ export class PortfolioCenterComponent implements OnInit {
     window.open('https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/3b64d881-0127-47a0-a4e1-8ae202214a6a/ReportSection76c7ec63df87082c77bb?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae')
   }
 
-  OpenProject(projectName) {
-    this.projectOverview.forEach((item) => {
-      if (item.problemTitle == projectName) {
-        window.open('/project-hub/' + item.projectUid + '/project-board', "_blank")
-      }
-    })
+  OpenProject(projectUid) {
+    window.open('/project-hub/' + projectUid + '/project-board', "_blank")
   }
 
   dataLoader(res) {

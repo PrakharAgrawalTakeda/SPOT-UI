@@ -639,7 +639,7 @@
                         <ngx-datatable-column name="Program/Project Name" prop="problemTitle" [width]="350"
                             [frozenLeft]="true" [headerClass]="getFrozenHeaderClass" [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p (click)="OpenProject(value)" class="projectNames">{{ value }}</p>
+                                <p (click)="OpenProject(row.projectUid)" class="projectNames">{{ value }}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
