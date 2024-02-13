@@ -24,24 +24,28 @@ export class BudgetSpendComponent {
     this.dataloader()
   }
   dataloader(){
-    if (["C9F323D4-EF97-4C2A-B748-11DB5B8589D0","0E83F6BE-79BE-426A-A316-F523FFAECC4F"].includes(this.role.roleMaster.securityGroupId) || this.role.roleMaster?.secondarySecurityGroupId?.some(x=>x=='500ee862-3878-43d9-9378-53feb1832cef')) {
+    if (["C9F323D4-EF97-4C2A-B748-11DB5B8589D0","0E83F6BE-79BE-426A-A316-F523FFAECC4F"].includes(this.role.roleMaster.securityGroupId) || this.role.roleMaster?.secondarySecurityGroupId?.some(x=>x?.toLowerCase()=='500ee862-3878-43d9-9378-53feb1832cef'.toLowerCase())) {
       this.showForecast = true
     }
     else{
       this.showForecast = false
     }
-    if(this.showForecast){
+    if(this.showForecast && this.role.roleMaster.securityGroupId == "C9F323D4-EF97-4C2A-B748-11DB5B8589D0" && !this.role.roleMaster?.secondarySecurityGroupId?.some(x=>x?.toLowerCase()=='500ee862-3878-43d9-9378-53feb1832cef'.toLowerCase())){
       this.navItem = {
         title: 'Budget/Spend',
           children: [
             {
-              title: 'Portfolio Performance',
-              toggled: false
-            },
-            {
-              title: 'Project Performance',
-              toggled: false
-            },
+              title: 'Forecast Bulk View',
+              toggled: true
+            }
+            
+          ]
+        }
+    }
+    else if(this.showForecast && (this.role.roleMaster.securityGroupId == "0E83F6BE-79BE-426A-A316-F523FFAECC4F"|| this.role.roleMaster?.secondarySecurityGroupId?.some(x=>x?.toLowerCase()=='500ee862-3878-43d9-9378-53feb1832cef'.toLowerCase()))){
+      this.navItem = {
+        title: 'Budget/Spend',
+          children: [
             {
               title: 'Forecast Bulk View',
               toggled: true
@@ -60,7 +64,7 @@ export class BudgetSpendComponent {
       children: [
         {
           title: 'Portfolio Performance',
-          toggled: false
+          toggled: true
         },
         {
           title: 'Project Performance',
