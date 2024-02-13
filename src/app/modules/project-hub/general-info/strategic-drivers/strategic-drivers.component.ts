@@ -539,21 +539,21 @@ export class StrategicDriversComponent implements OnInit {
     var formValue = this.strategicDriversForm.getRawValue()
     console.log(formValue)
     var mainObj = this.generalInfo.projectData
-    mainObj.primaryKpi = Object.keys(formValue.primaryKPI).length > 0 ? formValue.primaryKPI.lookUpId : ''
-    mainObj.agilePrimaryWorkstream = Object.keys(formValue.agilePrimaryWorkstream).length > 0 ? formValue.agilePrimaryWorkstream.lookUpId : ''
-    mainObj.agileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
-    mainObj.agileWave = Object.keys(formValue.agileWave).length > 0 ? formValue.agileWave.lookUpId : ''
+    mainObj.primaryKpi = Object.keys(formValue.primaryKPI).length > 0 ? formValue.primaryKPI.lookUpId : null
+    mainObj.agilePrimaryWorkstream = Object.keys(formValue.agilePrimaryWorkstream).length > 0 ? formValue.agilePrimaryWorkstream.lookUpId : null
+    mainObj.agileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : null
+    mainObj.agileWave = Object.keys(formValue.agileWave).length > 0 ? formValue.agileWave.lookUpId : null
     mainObj.isPobos = formValue.isPobos
-    mainObj.poboscategory = formValue.pobosCategory.length > 0 ? formValue.pobosCategory.map(x => x.lookUpId).join() : ''
+    mainObj.poboscategory = formValue.pobosCategory.length > 0 ? formValue.pobosCategory.map(x => x.lookUpId).join() : null
     mainObj.isGmsgqltannualMustWin = formValue.isGmsgqltannualMustWin
-    mainObj.strategicYearId = Object.keys(formValue.strategicYear).length > 0 ? formValue.strategicYear.lookUpId : ''
-    mainObj.annualMustWinId = Object.keys(formValue.annualMustWinID).length > 0 ? formValue.annualMustWinID.lookUpId : ''
+    mainObj.strategicYearId = Object.keys(formValue.strategicYear).length > 0 ? formValue.strategicYear.lookUpId : null
+    mainObj.annualMustWinId = Object.keys(formValue.annualMustWinID).length > 0 ? formValue.annualMustWinID.lookUpId : null
     mainObj.isSiteAssessment = formValue.isSiteAssessment
-    mainObj.siteAssessmentCategory = formValue.siteAssessmentCategory.length > 0 ? formValue.siteAssessmentCategory.map(x => x.lookUpId).join() : ''
+    mainObj.siteAssessmentCategory = formValue.siteAssessmentCategory.length > 0 ? formValue.siteAssessmentCategory.map(x => x.lookUpId).join() : null
     mainObj.isGoodPractise = formValue.isGoodPractise
     mainObj.isSprproject = formValue.isSprproject
-    mainObj.sprprojectCategory = Object.keys(formValue.sprprojectCategory).length > 0? formValue.sprprojectCategory.lookUpId :''
-    mainObj.sprprojectGrouping = Object.keys(formValue.sprprojectGrouping).length > 0? formValue.sprprojectGrouping.lookUpId :''
+    mainObj.sprprojectCategory = Object.keys(formValue.sprprojectCategory).length > 0? formValue.sprprojectCategory.lookUpId : null
+    mainObj.sprprojectGrouping = Object.keys(formValue.sprprojectGrouping).length > 0? formValue.sprprojectGrouping.lookUpId : null
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       if (this.subCallLocation == 'ProjectProposal') {
         this.apiService.updateReportDates(this.projectHubService.projectid, "ProjectProposalModifiedDate").then(secondRes => {
