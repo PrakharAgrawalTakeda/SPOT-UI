@@ -519,7 +519,7 @@
                         </div>
 
                         <div class="p-4 text-right">
-                            <button class="forecast"
+                            <button class="forecast" *ngIf="showForecast"
                                 (click)="PortfolioCenterService.toggleDrawerOpen('BudgetSpendOpen', '' , groupData , '1', true)">Forecast
                                 Bulk View</button>
                         </div>
