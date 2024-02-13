@@ -43,6 +43,7 @@ export class LessonLearnedSingleEditComponent implements OnInit {
   lookupdata: any
   lessonLearned: any
   lessonLearnedData: any
+  canSubmit: boolean = true
   lessonLearnedUpdated: any
   activeaccount: any
   LessonLearnedForm = new FormGroup({
@@ -181,6 +182,9 @@ export class LessonLearnedSingleEditComponent implements OnInit {
   }
 
   submiLL() {
+    if(this.canSubmit)
+    {
+      this.canSubmit = false
     this.lessonLearnedUpdated = this.lessonLearnedData
     for (var j = 0; j < this.lessonLearnedData.length; j++) {
       this.lessonLearnedUpdated[j].actionOwner = this.lessonLearnedData[j].actionOwner.userAdid
@@ -234,6 +238,7 @@ export class LessonLearnedSingleEditComponent implements OnInit {
         this.projecthubservice.submitbutton.next(true)
         this.projecthubservice.isNavChanged.next(true)
         this.projecthubservice.successSave.next(true)
+        this.canSubmit = true
       })
     }
     else {
@@ -280,10 +285,11 @@ export class LessonLearnedSingleEditComponent implements OnInit {
         this.projecthubservice.submitbutton.next(true)
         this.projecthubservice.isNavChanged.next(true)
         this.projecthubservice.successSave.next(true)
+        this.canSubmit = true
       })
 
     }
-    // }
+    }
   }
 }
 

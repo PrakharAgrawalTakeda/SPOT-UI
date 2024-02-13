@@ -133,6 +133,9 @@
                         [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
                         [label]="'Project/Program'" name="projectName" [showLabel]="true">
                     </app-spot-multiselect-project-autocomplete>
+                    <spot-input class="w-full" formControlName="projectNameKeyword" name="projectNameKeyword"
+                        [label]="'Project Name Keyword'" [placeholder]="'Project Name Keyword'">
+                    </spot-input>
 
                     <mat-label *ngIf="!showLA" id="localAttribute" style="color: #a0cbf1;cursor: pointer;"
                         (click)="OpenLA()">+ Show Local Attributes</mat-label>
@@ -236,7 +239,7 @@
                     columnMode="force" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
                     [limit]="size" (page)="setPage('',$event)" (sort)="sort($event)" [virtualization]="false"
                     [footerHeight]="20"
-                    [sorts]="[{ prop: 'overallStatus', dir: 'desc' },{ prop: 'problemTitle', dir: 'asc' }]"
+                    [sorts]="[{ prop: 'problemId', dir: 'asc' }]"
                     class="font-medium h-full reportTable text-sm text-default whitespace-nowrap overflow-y-scroll" [rows]="projectOverview"
                     #projectOverviewTable>
 
@@ -516,7 +519,7 @@
                         </div>
 
                         <div class="p-4 text-right">
-                            <button class="forecast"
+                            <button class="forecast" *ngIf="showForecast"
                                 (click)="PortfolioCenterService.toggleDrawerOpen('BudgetSpendOpen', '' , groupData , '1', true)">Forecast
                                 Bulk View</button>
                         </div>
@@ -637,6 +640,13 @@
                             [frozenLeft]="true" [headerClass]="getFrozenHeaderClass" [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p (click)="OpenProject(value)" class="projectNames">{{ value }}</p>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column name="State" prop="projStatus" [width]="100"
+                            [resizeable]="false">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 

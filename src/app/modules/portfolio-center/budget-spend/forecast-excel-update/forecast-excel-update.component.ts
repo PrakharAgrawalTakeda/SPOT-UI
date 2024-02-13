@@ -43,6 +43,7 @@ export class ForecastExcelUpdateComponent {
   forecastDB = []
   finalDatatoSheet: SheetDescriptor[];
   finalDatatoSheetHistorical: SheetDescriptor[];
+  canSubmit: boolean = true
 
 @ViewChild('spreadsheet') el: ElementRef;
 @ViewChild('Forecastspreadsheet') forecastElement: ElementRef;
@@ -688,12 +689,11 @@ export class ForecastExcelUpdateComponent {
           let year3 = year+2;
           let year4 = year+3;
           let year5 = year+4;
-          let year6 = year+5;
-          this.y0Label= 'FY' + year2;
-          this.y1Label= 'FY' + year3;
-          this.y2Label= 'FY' + year4;
-          this.y3Label= 'FY' + year5;
-          this.y4Label= 'FY' + year6 + '+';
+          this.y0Label= 'FY' + year;
+          this.y1Label= 'FY' + year2;
+          this.y2Label= 'FY' + year3;
+          this.y3Label= 'FY' + year4;
+          this.y4Label= 'FY' + year5 + '+';
 
           this.forecastExcel = LBE.filter(x => x.budgetData == this.ForecastForm.controls.ForecastType.value.lookUpName)
           // if(this.ForecastForm.controls.ForecastType.value.lookUpName == "OpEx Forecast"){
@@ -941,6 +941,9 @@ export class ForecastExcelUpdateComponent {
   }
 
 SubmitData(){
+  if(this.canSubmit)
+    {
+      this.canSubmit = false
     if(this.ForecastForm.controls.DataType.value == "Forecast"){
       var data:any = this.forecastElement
   var jsonData
@@ -990,6 +993,7 @@ SubmitData(){
         this.showDataForecastOpex = false
         this.getData()
         this.PortfolioCenterService.successSave.next(true)
+        this.canSubmit = true
       })
     })
     }
@@ -1027,9 +1031,11 @@ SubmitData(){
         this.showDataOpex = false
         this.getData()
         this.PortfolioCenterService.successSave.next(true)
+        this.canSubmit = true
       })
     })
     }
+  }
 }
 
 }

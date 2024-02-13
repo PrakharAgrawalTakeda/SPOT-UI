@@ -28,7 +28,7 @@ export class ShippingSingleEditComponent {
   envirotainerDropDownValues = []
   standardDropDownValues = []
   vaqtechDropDownValues = []
-
+  canSubmit: boolean = true
   ShippingForm = new FormGroup({
     emenvironmentId: new FormControl(),
     environmentalSourceTypeId: new FormControl(),
@@ -147,6 +147,9 @@ export class ShippingSingleEditComponent {
   }
 
   submitShipping() {
+    if(this.canSubmit)
+    {
+      this.canSubmit = false
     this.projecthubservice.isFormChanged = false
     var formValue = this.ShippingForm.getRawValue()
     formValue.shipmentDistance = isNaN(formValue.shipmentDistance) ? null : formValue.shipmentDistance
@@ -174,6 +177,7 @@ export class ShippingSingleEditComponent {
         "dismissible": true
       }
       const alert = this.fuseAlert.open(comfirmConfig)
+      this.canSubmit = true
     }
     else if (formValue.solutionName == "") {
       var comfirmConfig: FuseConfirmationConfig = {
@@ -198,6 +202,7 @@ export class ShippingSingleEditComponent {
         "dismissible": true
       }
       const alert = this.fuseAlert.open(comfirmConfig)
+      this.canSubmit = true
     }
     
     else {
@@ -225,7 +230,9 @@ export class ShippingSingleEditComponent {
         this.projecthubservice.submitbutton.next(true)
         this.projecthubservice.successSave.next(true)
         this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        this.canSubmit = true
       })
     }
   }
+}
 }

@@ -21,7 +21,7 @@
             <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column name="Need From" prop="needFromName" [flexGrow]="2" [resizeable]="false"
+    <ngx-datatable-column name="Need From" prop="needFromName" [flexGrow]="1.5" [resizeable]="false"
         [sortable]="mode == 'Normal'" [draggable]="false">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
@@ -33,6 +33,16 @@
             <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
         </ng-template>
     </ngx-datatable-column>
+    <ngx-datatable-column name="Include in Dashboard (Max 1)" prop="includeInReport" [sortable]="mode == 'Normal'"
+            [resizeable]="false" [flexGrow]="1">
+            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                <div class="flex items-center justify-between pl-2 overflow-hidden">
+                    <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="value == false"></mat-icon>
+                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="value == true">
+                    </mat-icon>
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
     <ngx-datatable-column *ngIf="mode == 'Link'" name="Comments" prop="comments" [flexGrow]="2" [resizeable]="false"
         [sortable]="mode == 'Normal'" [draggable]="false">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>

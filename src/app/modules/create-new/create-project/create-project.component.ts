@@ -95,6 +95,7 @@ export class CreateProjectComponent implements OnInit {
   SIP: boolean = false
   capturedValues = ['', '']
   LAData: any = []
+  canSubmit: boolean = true
   // fuseAlert: any;
 
   constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService, public _fuseNavigationService: FuseNavigationService, public projectHubService: ProjectHubService, private msalService: MsalService, public role: RoleService) {
@@ -364,6 +365,9 @@ export class CreateProjectComponent implements OnInit {
   }
 
   createProject() {
+    if(this.canSubmit)
+    {
+      this.canSubmit = false
     console.log(this.qualityForm);
     var hubSettings = [{
       hubSettingId: "",
@@ -602,6 +606,7 @@ export class CreateProjectComponent implements OnInit {
         })
       })
     }
+  }
   }
 
   RoutetoBoard() {
