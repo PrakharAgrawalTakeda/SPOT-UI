@@ -170,6 +170,7 @@ export class PortfolioCenterComponent implements OnInit {
   lookup: any = [];
   activeaccount: any
   budgetCurrency: string = ""
+  currfiscalYear: string = ""
   newmainnav: any
   SPRData;
   //For Local Attributes
@@ -383,6 +384,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.AgileWorkstream.push(AGILEall)
 
         this.apiService.getCapitalPhase().then((res: any) => {
+          console.log(res)
           this.capitalPhaseArray = res;
           for (var z = 0; z < this.capitalPhaseArray.length; z++) {
             if (this.capitalPhaseArray[z].capitalPhaseID == "70538E71-D9F5-42BC-884C-F1824D40D211") {
@@ -870,7 +872,9 @@ export class PortfolioCenterComponent implements OnInit {
 
             this.initial = res
 
-
+            if (res.budgetTile.fiscalYear) {
+              this.currfiscalYear = res.budgetTile.fiscalYear
+            }
 
             if (res.budgetTile.localCurrencyAbbreviation == "OY") {
               this.budgetCurrency = "OY"
@@ -1592,6 +1596,7 @@ export class PortfolioCenterComponent implements OnInit {
       }
       localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
       this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
+      console.log(this.filtersnew)
       if (dataToSend.length == 0) {
         localStorage.setItem('spot-localattribute', JSON.stringify([]))
       }
@@ -1626,6 +1631,7 @@ export class PortfolioCenterComponent implements OnInit {
       // this.resetpage()
       // this.showFilter = false
     })
+    this.PortfolioFilterForm.markAsPristine()
     // }
     // else{
     // this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
@@ -1694,7 +1700,8 @@ export class PortfolioCenterComponent implements OnInit {
       OverallStatus: [],
       projectName: [],
       PrimaryValueDriver: [],
-      SPRProjectCategory: []
+      SPRProjectCategory: [],
+      projectNameKeyword: []
     })
     this.showContent = true
     this.defaultfilter.ProjectTeamMember = this.user
@@ -2307,6 +2314,7 @@ export class PortfolioCenterComponent implements OnInit {
         else if (res.projectDetails[i].isConfidential && res.projectDetails[i].isArchived) {
           preffix = "[ARCHIVED CONF]"
         }
+        console.log(res)
         if (res.budgetTile.localCurrencyAbbreviation == "OY") {
           this.budgetCurrency = "OY"
         }
@@ -3124,7 +3132,8 @@ export class PortfolioCenterComponent implements OnInit {
     this.PortfolioFilterForm.patchValue({
       ProjectTeamMember: this.user,
       ProjectState: this.state,
-      ProjectPhase: []
+      ProjectPhase: [],
+      projectNameKeyword: []
     })
     localStorage.setItem('spot-filtersNew', JSON.stringify(this.PortfolioFilterForm.getRawValue()))
     this.ngOnInit()
