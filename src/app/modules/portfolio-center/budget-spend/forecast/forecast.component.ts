@@ -96,6 +96,8 @@ export class ForecastComponent {
         if (res.lookUpName == "CapEx Forecast") {
           this.fundingRequests = this.CAPEXdata
           this.projectFunding = this.projectCAPEXdata
+          console.log(this.fundingRequests)
+          console.log(this.projectFunding)
         }
         else {
           this.fundingRequests = this.OPEXdata
@@ -156,6 +158,7 @@ export class ForecastComponent {
               ForecastType: this.forecastType.filter(x => x.lookUpId == 'ec313be6-353d-413b-9805-b7519f2ede18')[0]
             })
           }
+          console.log(forecastData)
           this.currencyList = []
           forecastData.currencies.forEach(response => {
             this.currencyList.push({ name: response })
