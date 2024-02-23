@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="mxflex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden datatable"
-                    *ngIf="showContent" #ForecastTable>
+                    *ngIf="showContent && !hidePlan" #ForecastTable>
                     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarH]="true"
                         [scrollbarV]="false" columnMode="force"
                         class="font-medium text-sm text-default whitespace-nowrap datatable-CX-80"

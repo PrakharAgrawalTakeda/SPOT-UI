@@ -82,6 +82,8 @@ export class ForecastComponent {
   sortDirLS = ""
   sortDiractive = ""
   @ViewChild('FxRateDrawer') FxRateDrawer: MatSidenav
+  forecastData: any;
+  hidePlan: boolean = false;
   constructor(private portfoliService: PortfolioApiService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
     , public fuseAlert: FuseConfirmationService, private router: Router, private titleService: Title, private auth: AuthService, public PortfolioCenterService: PortfolioCenterService) {
     this.ForecastForm.valueChanges.subscribe(res => {
@@ -93,13 +95,20 @@ export class ForecastComponent {
       if (this.showContent) {
         console.log(res)
         this.showContent = false;
-        if (res.lookUpName == "CapEx Forecast") {
+        if (res.lookUpName == "CapEx Forecast" && this.forecastData.forecastProjectItems.CapExForecast) {
+          this.hidePlan = false
           this.fundingRequests = this.CAPEXdata
           this.projectFunding = this.projectCAPEXdata
           console.log(this.fundingRequests)
           console.log(this.projectFunding)
         }
+        else if(res.lookUpName == "CapEx Forecast" && !this.forecastData.forecastProjectItems.CapExForecast)
+        {
+          this.hidePlan = true
+          this.projectFunding = this.projectCAPEXdata
+        }
         else {
+          this.hidePlan = false
           this.fundingRequests = this.OPEXdata
           this.projectFunding = this.projectOPEXdata
         }
@@ -121,18 +130,29 @@ export class ForecastComponent {
         console.log(res)
         this.showContent = false;
         if (res.name == "OY") {
-          if (this.ForecastForm.controls.ForecastType.value.lookUpName == "CapEx Forecast") {
+          if (this.ForecastForm.controls.ForecastType.value.lookUpName == "CapEx Forecast"  && this.forecastData.forecastProjectItems.CapExForecast) {
             this.fundingRequests = this.CAPEXdata
+            this.hidePlan = false
+          }
+          else if (this.ForecastForm.controls.ForecastType.value.lookUpName == "CapEx Forecast"  && !this.forecastData.forecastProjectItems.CapExForecast) {
+            //this.fundingRequests = this.CAPEXdata
+            this.hidePlan = true
           }
           else {
+            this.hidePlan = false
             this.fundingRequests = this.OPEXdata
           }
         }
         else {
-          if (this.ForecastForm.controls.ForecastType.value.lookUpName == "CapEx Forecast") {
+          if (this.ForecastForm.controls.ForecastType.value.lookUpName == "CapEx Forecast"  && this.forecastData.forecastProjectItems.CapExForecast) {
             this.fundingRequests = this.localCAPEX
+            this.hidePlan = false
+          }
+          else if (this.ForecastForm.controls.ForecastType.value.lookUpName == "CapEx Forecast"  && !this.forecastData.forecastProjectItems.CapExForecast) {
+            this.hidePlan = true
           }
           else {
+            this.hidePlan = false
             this.fundingRequests = this.localOPEX
           }
         }
@@ -152,13 +172,30 @@ export class ForecastComponent {
     this.auth.lookupMaster().then((lookup: any) => {
       this.portfoliService.getLocalCurrency().then(currency => {
         this.portfoliService.getForecastData(this.filterdata).then((forecastData: any) => {
+          //debugger
           this.forecastType = lookup.filter(x => x.lookUpParentId == 'bc786c6a-8f23-4161-9f2a-67e1897295c7')
           if (this.ForecastForm.controls.ForecastType.value == null) {
             this.ForecastForm.patchValue({
               ForecastType: this.forecastType.filter(x => x.lookUpId == 'ec313be6-353d-413b-9805-b7519f2ede18')[0]
             })
           }
+          console.log(this.ForecastForm.controls.ForecastType.value.lookUpName)
+
+          this.forecastData = forecastData
           console.log(forecastData)
+          if(this.ForecastForm.controls.ForecastType.value.lookUpName == 'CapEx Forecast' && this.forecastData.forecastProjectItems.CapExForecast)
+          {
+            //this.fundingRequests = this.CAPEXdata
+            this.hidePlan = false
+          }
+          else if(this.ForecastForm.controls.ForecastType.value.lookUpName == 'CapEx Forecast' && !this.forecastData.forecastProjectItems.CapExForecast)
+          {
+            //this.fundingRequests = this.CAPEXdata
+            this.hidePlan = true
+          }
+          else{
+            this.hidePlan = false
+          }
           this.currencyList = []
           forecastData.currencies.forEach(response => {
             this.currencyList.push({ name: response })

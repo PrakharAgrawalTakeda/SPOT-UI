@@ -170,6 +170,7 @@ export class PortfolioCenterComponent implements OnInit {
   lookup: any = [];
   activeaccount: any
   budgetCurrency: string = ""
+  currfiscalYear: string = ""
   newmainnav: any
   SPRData;
   //For Local Attributes
@@ -383,6 +384,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.AgileWorkstream.push(AGILEall)
 
         this.apiService.getCapitalPhase().then((res: any) => {
+          console.log(res)
           this.capitalPhaseArray = res;
           for (var z = 0; z < this.capitalPhaseArray.length; z++) {
             if (this.capitalPhaseArray[z].capitalPhaseID == "70538E71-D9F5-42BC-884C-F1824D40D211") {
@@ -870,7 +872,9 @@ export class PortfolioCenterComponent implements OnInit {
 
             this.initial = res
 
-
+            if (res.budgetTile.fiscalYear) {
+              this.currfiscalYear = res.budgetTile.fiscalYear
+            }
 
             if (res.budgetTile.localCurrencyAbbreviation == "OY") {
               this.budgetCurrency = "OY"
