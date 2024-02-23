@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="mxflex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden datatable"
-                    *ngIf="showContent" #ForecastTable>
+                    *ngIf="showContent && !hidePlan" #ForecastTable>
                     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarH]="true"
                         [scrollbarV]="false" columnMode="force"
                         class="font-medium text-sm text-default whitespace-nowrap datatable-CX-80"
@@ -544,7 +544,7 @@
                         [rows]="projectFunding">
                         <ngx-datatable-column name="Budget ID" prop="capitalBudgetID" [width]="130" [resizeable]="false"
                             [frozenLeft]="true">
-                            <ng-template let-column="column" let-sort="soFrtn" ngx-datatable-header-template>
+                            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
                                         <div style="top: 19px;position: fixed;left: 8px; font-weight: bold;" (click)="sortasc('capitalBudgetID')">
