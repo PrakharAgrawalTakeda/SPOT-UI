@@ -1632,6 +1632,14 @@ export class PortfolioCenterComponent implements OnInit {
       // this.showFilter = false
     })
     this.PortfolioFilterForm.markAsPristine()
+    console.log(this.PortfolioFilterForm.getRawValue())
+    Object.keys(this.PortfolioFilterForm.controls).forEach(key => {
+      const control = this.PortfolioFilterForm.get(key);
+      if (control.dirty) {
+
+          console.log('Dirty Control:', key);
+      }
+  });
     // }
     // else{
     // this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
@@ -1741,8 +1749,26 @@ export class PortfolioCenterComponent implements OnInit {
     this.showLA = false;
   }
   Closefilter() {
-    if (this.PortfolioFilterForm.dirty) {
-      var comfirmConfig: FuseConfirmationConfig = {
+    let dirtyControls = 0;
+    let projectNameKeywordIsOnlyDirtyAndEmpty = false;
+  
+    Object.keys(this.PortfolioFilterForm.controls).forEach(key => {
+      const control = this.PortfolioFilterForm.get(key);
+      if (control.dirty) {
+        dirtyControls++; // Count dirty controls
+        if (key == 'projectNameKeyword' && control.value == '') {
+          projectNameKeywordIsOnlyDirtyAndEmpty = true;
+        } else {
+          projectNameKeywordIsOnlyDirtyAndEmpty = false; // Reset if other dirty controls are found
+        }
+      }
+    });
+  
+    // Condition to check if the only dirty control is projectNameKeyword and it's empty
+    if (dirtyControls === 1 && projectNameKeywordIsOnlyDirtyAndEmpty) {
+      this.filterDrawer.close(); // Close drawer directly
+    } else if (this.PortfolioFilterForm.dirty) {
+      var confirmConfig: FuseConfirmationConfig = {
         "title": "Are you sure you want to exit?",
         "message": "All unsaved data will be lost.",
         "icon": {
@@ -1763,18 +1789,18 @@ export class PortfolioCenterComponent implements OnInit {
         },
         "dismissible": true
       }
-      const alert = this.fuseAlert.open(comfirmConfig)
+      const alert = this.fuseAlert.open(confirmConfig);
       alert.afterClosed().subscribe(close => {
         if (close == 'confirmed') {
-          this.clearForm()
+          this.clearForm();
         }
-      })
+      });
+    } else {
+      this.filterDrawer.close();
     }
-    else {
-      this.filterDrawer.close()
-    }
-    this.PortfolioCenterService.drawerOpenedPrakharTemp = false
+    this.PortfolioCenterService.drawerOpenedPrakharTemp = false;
   }
+  
 
   Close() {
     let changesDetected = false;
