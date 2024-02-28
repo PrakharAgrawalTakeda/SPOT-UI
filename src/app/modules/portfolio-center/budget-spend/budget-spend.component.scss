@@ -1,0 +1,6 @@
+.fixed-bottom-right {
+    position: fixed; /* Fix position relative to the viewport */
+    bottom: 460px; /* Distance from the bottom */
+    right: 20px; /* Distance from the right */
+    z-index: 1000; /* Ensure it sits above other content */
+}
