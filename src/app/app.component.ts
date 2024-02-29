@@ -19,7 +19,6 @@ export class AppComponent {
     constructor(private authService: MsalService, private appService: AppService, private snack: MatSnackBar, private _fuseConfigService: FuseConfigService) {
         this._fuseConfigService.config$
             .subscribe((config: AppConfig) => {
-                debugger
                 if (config?.theme != this.config?.theme) {
                     if (environment.environment == 'Local' || environment.environment == 'DEV') {
                         var theme: any = config.themes.find(x => x.id == 'theme-teal')?.id
