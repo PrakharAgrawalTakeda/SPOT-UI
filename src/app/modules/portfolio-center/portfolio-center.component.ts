@@ -212,6 +212,7 @@ export class PortfolioCenterComponent implements OnInit {
   Date2
   Date3
   portfolio: any
+  status: any;
 
   // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
@@ -2312,6 +2313,7 @@ export class PortfolioCenterComponent implements OnInit {
   setPage(res: any, offset) {
     if (res != '') {
       this.projectOverview = res.portfolioDetails
+      this.status = this.projectOverview.projStatus
       this.bulkreportdata = res.portfolioDetails
       for (var i = 0; i < this.projectOverview.length; i++) {
         this.projectOverview[i].projectCapitalOe = this.projects.data[i].phase +
@@ -3065,7 +3067,12 @@ export class PortfolioCenterComponent implements OnInit {
     }
   }
 
-  getColor(percentage: number) {
+  getColor(percentage, state) {
+    console.log(state)
+    if (state == 'Completed')
+        {
+            return '#000000'
+        }
     if (percentage < this.lowerTargetPercentage) {
       return "red";
     }
