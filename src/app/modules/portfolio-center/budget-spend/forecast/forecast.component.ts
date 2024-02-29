@@ -183,12 +183,12 @@ export class ForecastComponent {
 
           this.forecastData = forecastData
           console.log(forecastData)
-          if(this.ForecastForm.controls.ForecastType.value.lookUpName == 'CapEx Forecast' && this.forecastData.forecastProjectItems.CapExForecast)
+          if(this.forecastData.forecastProjectItems && this.ForecastForm.controls.ForecastType.value.lookUpName == 'CapEx Forecast' && this.forecastData.forecastProjectItems.CapExForecast)
           {
             //this.fundingRequests = this.CAPEXdata
             this.hidePlan = false
           }
-          else if(this.ForecastForm.controls.ForecastType.value.lookUpName == 'CapEx Forecast' && !this.forecastData.forecastProjectItems.CapExForecast)
+          else if(this.forecastData.forecastProjectItems && this.ForecastForm.controls.ForecastType.value.lookUpName == 'CapEx Forecast' && !this.forecastData.forecastProjectItems.CapExForecast)
           {
             //this.fundingRequests = this.CAPEXdata
             this.hidePlan = true
