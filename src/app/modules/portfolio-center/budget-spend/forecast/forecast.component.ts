@@ -95,14 +95,14 @@ export class ForecastComponent {
       if (this.showContent) {
         console.log(res)
         this.showContent = false;
-        if (res.lookUpName == "CapEx Forecast" && this.forecastData.forecastProjectItems.CapExForecast) {
+        if (res.lookUpName == "CapEx Forecast" && this.forecastData.forecastProjectItems && this.forecastData.forecastProjectItems.CapExForecast) {
           this.hidePlan = false
           this.fundingRequests = this.CAPEXdata
           this.projectFunding = this.projectCAPEXdata
           console.log(this.fundingRequests)
           console.log(this.projectFunding)
         }
-        else if(res.lookUpName == "CapEx Forecast" && !this.forecastData.forecastProjectItems.CapExForecast)
+        else if(res.lookUpName == "CapEx Forecast" && this.forecastData.forecastProjectItems && !this.forecastData.forecastProjectItems.CapExForecast)
         {
           this.hidePlan = true
           this.projectFunding = this.projectCAPEXdata
