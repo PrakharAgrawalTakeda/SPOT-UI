@@ -3068,20 +3068,22 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   getColor(percentage, state) {
-    console.log(state)
     if (state == 'Completed')
         {
             return '#000000'
         }
-    if (percentage < this.lowerTargetPercentage) {
-      return "red";
-    }
-    if (this.targetPercentage > percentage && percentage >= this.lowerTargetPercentage) {
-      return "orange";
-    }
-    if (this.targetPercentage < percentage) {
-      return "green";
-    }
+        else {
+          if (percentage < this.lowerTargetPercentage) {
+            return "red";
+          }
+          if (this.targetPercentage > percentage && percentage >= this.lowerTargetPercentage) {
+            return "orange";
+          }
+          if (this.targetPercentage < percentage) {
+            return "green";
+          }
+        }
+    
   }
 
   tootlipFormatter(value, series) {
