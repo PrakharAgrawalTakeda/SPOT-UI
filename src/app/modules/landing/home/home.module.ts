@@ -7,12 +7,14 @@ import { LandingHomeComponent } from 'app/modules/landing/home/home.component';
 import { landingHomeRoutes } from 'app/modules/landing/home/home.routing';
 import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 import { UnderDeploymentComponent } from './under-deployment/under-deployment.component';
+import { AccessDeniedComponent } from '../access-denied/access-denied.component';
 
 @NgModule({
     declarations: [
         LandingHomeComponent,
         ComingSoonComponent,
-        UnderDeploymentComponent
+        UnderDeploymentComponent,
+        AccessDeniedComponent
     ],
     imports     : [
         RouterModule.forChild(landingHomeRoutes),
