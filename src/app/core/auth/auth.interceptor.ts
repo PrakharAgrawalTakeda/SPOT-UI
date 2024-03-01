@@ -60,7 +60,7 @@ export class AuthInterceptor implements HttpInterceptor {
             location.reload()
             // navigate to a timeout page, for example
           } 
-          else if(error.status == 401){
+          else if(error.status == 401 && error.name=="Unauthorized"){
             if(cloned.url.includes(GlobalVariables.apiurl)){
               location.reload()
             }

@@ -212,6 +212,7 @@ export class PortfolioCenterComponent implements OnInit {
   Date2
   Date3
   portfolio: any
+  status: any;
 
   // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
@@ -1632,6 +1633,14 @@ export class PortfolioCenterComponent implements OnInit {
       // this.showFilter = false
     })
     this.PortfolioFilterForm.markAsPristine()
+    console.log(this.PortfolioFilterForm.getRawValue())
+    Object.keys(this.PortfolioFilterForm.controls).forEach(key => {
+      const control = this.PortfolioFilterForm.get(key);
+      if (control.dirty) {
+
+          console.log('Dirty Control:', key);
+      }
+  });
     // }
     // else{
     // this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
@@ -1741,8 +1750,26 @@ export class PortfolioCenterComponent implements OnInit {
     this.showLA = false;
   }
   Closefilter() {
-    if (this.PortfolioFilterForm.dirty) {
-      var comfirmConfig: FuseConfirmationConfig = {
+    let dirtyControls = 0;
+    let projectNameKeywordIsOnlyDirtyAndEmpty = false;
+  
+    Object.keys(this.PortfolioFilterForm.controls).forEach(key => {
+      const control = this.PortfolioFilterForm.get(key);
+      if (control.dirty) {
+        dirtyControls++; // Count dirty controls
+        if (key == 'projectNameKeyword' && control.value == '') {
+          projectNameKeywordIsOnlyDirtyAndEmpty = true;
+        } else {
+          projectNameKeywordIsOnlyDirtyAndEmpty = false; // Reset if other dirty controls are found
+        }
+      }
+    });
+  
+    // Condition to check if the only dirty control is projectNameKeyword and it's empty
+    if (dirtyControls === 1 && projectNameKeywordIsOnlyDirtyAndEmpty) {
+      this.filterDrawer.close(); // Close drawer directly
+    } else if (this.PortfolioFilterForm.dirty) {
+      var confirmConfig: FuseConfirmationConfig = {
         "title": "Are you sure you want to exit?",
         "message": "All unsaved data will be lost.",
         "icon": {
@@ -1763,18 +1790,18 @@ export class PortfolioCenterComponent implements OnInit {
         },
         "dismissible": true
       }
-      const alert = this.fuseAlert.open(comfirmConfig)
+      const alert = this.fuseAlert.open(confirmConfig);
       alert.afterClosed().subscribe(close => {
         if (close == 'confirmed') {
-          this.clearForm()
+          this.clearForm();
         }
-      })
+      });
+    } else {
+      this.filterDrawer.close();
     }
-    else {
-      this.filterDrawer.close()
-    }
-    this.PortfolioCenterService.drawerOpenedPrakharTemp = false
+    this.PortfolioCenterService.drawerOpenedPrakharTemp = false;
   }
+  
 
   Close() {
     let changesDetected = false;
@@ -2286,6 +2313,7 @@ export class PortfolioCenterComponent implements OnInit {
   setPage(res: any, offset) {
     if (res != '') {
       this.projectOverview = res.portfolioDetails
+      this.status = this.projectOverview.projStatus
       this.bulkreportdata = res.portfolioDetails
       for (var i = 0; i < this.projectOverview.length; i++) {
         this.projectOverview[i].projectCapitalOe = this.projects.data[i].phase +
@@ -3039,16 +3067,23 @@ export class PortfolioCenterComponent implements OnInit {
     }
   }
 
-  getColor(percentage: number) {
-    if (percentage < this.lowerTargetPercentage) {
-      return "red";
-    }
-    if (this.targetPercentage > percentage && percentage >= this.lowerTargetPercentage) {
-      return "orange";
-    }
-    if (this.targetPercentage < percentage) {
-      return "green";
-    }
+  getColor(percentage, state) {
+    if (state == 'Completed')
+        {
+            return '#000000'
+        }
+        else {
+          if (percentage < this.lowerTargetPercentage) {
+            return "red";
+          }
+          if (this.targetPercentage > percentage && percentage >= this.lowerTargetPercentage) {
+            return "orange";
+          }
+          if (this.targetPercentage < percentage) {
+            return "green";
+          }
+        }
+    
   }
 
   tootlipFormatter(value, series) {

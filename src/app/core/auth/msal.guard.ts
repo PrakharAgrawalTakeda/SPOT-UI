@@ -43,8 +43,13 @@ export class MsalGuard implements CanActivate {
     return this.roleService.getCurrentRoleRequest(this.authService.instance.getActiveAccount().localAccountId).pipe(
       map(res => {
         this.roleService.roleMaster = res
-        console.log(this.roleService.roleMaster)
-        return true
+        if (this.roleService.roleMaster.isUserAccessDisabled) {
+          this.router.navigateByUrl('access-denied')
+        }
+        else {
+          console.log(this.roleService.roleMaster)
+          return true
+        }
       })
     )
   }
