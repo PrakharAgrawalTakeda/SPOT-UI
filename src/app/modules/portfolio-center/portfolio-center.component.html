@@ -721,7 +721,7 @@
                         <ngx-datatable-column name="DQ%" prop="projectDataQualityString" [width]="70">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p style="text-align: right;margin-right: 10px;"
-                                    [ngStyle]="{color:getColor(row.projectDataQuality)}">{{value}}</p>
+                                    [ngStyle]="{color:getColor(row.projectDataQuality, row.projStatus)}">{{value}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
