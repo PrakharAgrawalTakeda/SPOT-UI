@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectHubService } from '../../project-hub.service';
 import * as moment from 'moment';
@@ -10,6 +10,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { AuthService } from 'app/core/auth/auth.service';
 import {Constants} from "../../../../shared/constants";
 import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-schedule-table',
@@ -18,7 +19,7 @@ import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case
   encapsulation: ViewEncapsulation.None,
   //changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ScheduleTableComponent implements OnInit, OnChanges {
+export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
   //@Input() scheduleData: any;
   @Input() projectid: any;
   @Input() projectViewDetails: any;
@@ -51,7 +52,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
       optionExecutionEnd : new FormControl("")
   })
   optionType: string = ''
-
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(public projecthubservice: ProjectHubService,
     private authService: AuthService,
     private indicator: SpotlightIndicatorsService,
@@ -63,7 +64,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
       this.changeschedule(res)
       console.log(res)
     })
-    this.projecthubservice.submitbutton.subscribe(res=>{
+    this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res=>{
         if (this.optionType=='option-2'){
             this.apiService.getBusinessCaseOptionInfoData(this.id, Constants.OPTION_2_ID.toString()).then((bcOptionInfo: any) => {
                 this.optionExecutions.controls.optionExecutionEnd.patchValue(bcOptionInfo.executionEndDate)
@@ -414,6 +415,11 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   }
   onDetailToggle(event: any) {
     // console.log(event)
+  }
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
   toggleExpandRow(row) {
     // console.log('Toggled Expand Row!', this.scheduleTable);

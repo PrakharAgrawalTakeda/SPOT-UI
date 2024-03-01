@@ -1,22 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-project-charter-milestones',
   templateUrl: './project-charter-milestones.component.html',
   styleUrls: ['./project-charter-milestones.component.scss']
 })
-export class ProjectCharterMilestonesComponent implements OnInit {
+export class ProjectCharterMilestonesComponent implements OnInit, OnDestroy {
 
   projectViewDetails: any = {}
   viewContent: boolean = false
   id: string = ''
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(public projecthubservice: ProjectHubService,
     private apiService: ProjectApiService,
     private _Activatedroute: ActivatedRoute) {
-      this.projecthubservice.submitbutton.subscribe(res => {
+      this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       console.log(res)
       if(res == true)
       {
@@ -34,5 +36,9 @@ export class ProjectCharterMilestonesComponent implements OnInit {
           this.viewContent = true
       });
     }
-
+    ngOnDestroy(): void {
+      // Unsubscribe from all subscriptions
+      this._unsubscribeAll.next(null);
+      this._unsubscribeAll.complete();
+    }
 }

@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-project-charter-scope',
   templateUrl: './project-charter-scope.component.html',
   styleUrls: ['./project-charter-scope.component.scss']
 })
-export class ProjectCharterScopeComponent implements OnInit {
+export class ProjectCharterScopeComponent implements OnInit,OnDestroy {
 
   id: string = ''
   projectViewDetails: any = {}
@@ -32,13 +33,13 @@ export class ProjectCharterScopeComponent implements OnInit {
 //   scope2Form = new FormGroup({
     
 // })
-
+private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
       public projectApiService: ProjectApiService,
       public projecthubservice: ProjectHubService,
       public auth: AuthService,
       private _Activatedroute: ActivatedRoute) {
-      this.projecthubservice.submitbutton.subscribe(res => {
+      this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
           if (res == true) {
               this.dataloader()
           }
@@ -95,5 +96,9 @@ export class ProjectCharterScopeComponent implements OnInit {
   disabler() {
       this.scopeForm.disable()
   }
-
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
 }

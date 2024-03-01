@@ -1,15 +1,16 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnDestroy} from '@angular/core';
 import {ProjectApiService} from "../../common/project-api.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectHubService} from "../../project-hub.service";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
 import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
+import { Subject, takeUntil } from 'rxjs';
 @Component({
     selector: 'app-budget-funding-information-table',
     templateUrl: './budget-funding-information-table.component.html',
     styleUrls: ['./budget-funding-information-table.component.scss']
 })
-export class BudgetFundingInformationTableComponent {
+export class BudgetFundingInformationTableComponent implements OnDestroy {
     @Input() editable: boolean
     @Input() budgetInfo: any;
     @Input() addButtonShow: boolean;
@@ -17,10 +18,11 @@ export class BudgetFundingInformationTableComponent {
     fundingRequests = [];
     id: string = ''
     localCurrency:any = [];
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute,
                 public projecthubservice: ProjectHubService,
                 public fuseAlert: FuseConfirmationService) {
-        this.projecthubservice.submitbutton.subscribe(res => {
+        this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
             if (res == true) {
                 this.dataloader()
             }
@@ -88,4 +90,9 @@ export class BudgetFundingInformationTableComponent {
             }
         })
     }
+    ngOnDestroy(): void {
+        // Unsubscribe from all subscriptions
+        this._unsubscribeAll.next(null);
+        this._unsubscribeAll.complete();
+      }
 }

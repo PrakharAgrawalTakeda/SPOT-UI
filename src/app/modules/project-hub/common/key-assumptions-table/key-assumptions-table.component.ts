@@ -1,17 +1,18 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ProjectApiService} from "../project-api.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectHubService} from "../../project-hub.service";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
 import {Constants} from "../../../../shared/constants";
 import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-key-assumptions-table',
     templateUrl: './key-assumptions-table.component.html',
     styleUrls: ['./key-assumptions-table.component.scss']
 })
-export class KeyAssumptionsTableComponent implements OnInit {
+export class KeyAssumptionsTableComponent implements OnInit, OnDestroy {
     @Input() callLocation:  'Normal'  | 'Project-Charter' | 'Business-Case'  = 'Normal'
     @Input() editable: boolean
     keyAssumptions: any = []
@@ -20,9 +21,10 @@ export class KeyAssumptionsTableComponent implements OnInit {
     optionId: string = ''
     keyAssumptionsViewEditType: string = "KeyAssumptions";
     keyAssumptionsBulkEditType: string = "KeyAssumptionsBulkEdit";
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
     ,public fuseAlert: FuseConfirmationService, private router: Router) {
-        this.projecthubservice.submitbutton.subscribe(res => {
+        this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
             if (res == true) {
                 this.dataloader()
             }
@@ -111,4 +113,9 @@ export class KeyAssumptionsTableComponent implements OnInit {
             }
         })
     }
+    ngOnDestroy(): void {
+        // Unsubscribe from all subscriptions
+        this._unsubscribeAll.next(null);
+        this._unsubscribeAll.complete();
+      }
 }

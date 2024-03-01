@@ -1,17 +1,18 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../project-api.service';
 import { forEach } from 'lodash';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-carbon-table',
   templateUrl: './carbon-table.component.html',
   styleUrls: ['./carbon-table.component.scss']
 })
-export class CarbonTableComponent {
+export class CarbonTableComponent implements OnInit, OnDestroy {
   id: string = ""
   viewContent:boolean = false
   carbonngx: any = []
@@ -25,9 +26,10 @@ export class CarbonTableComponent {
   sortDir = ""
   sortDirCost = ""
   carbonBulkEditData: any = []
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
-    this.projecthubservice.submitbutton.subscribe(res => {
+    this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (res == true && this.viewContent == true) {
         this.dataloader()
       }
@@ -84,5 +86,9 @@ export class CarbonTableComponent {
       return this.sortDirCost = "desc"
     }
   }
-
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
 }
