@@ -211,7 +211,7 @@ export class MilestoneSetViewEditComponent {
                         "comment": i.comment ? i.comment : "",
                         "includeInReport": i.includeInReport,
                         "sortOrder": sortOrder,
-                        "milestoneType": i.milestoneType ? i.milestoneType : "0",
+                        "milestoneType": i.milestoneType ? i.milestoneType : null,
                     })
                 } else {
                     this.standardMilestonesTableDataSubmit.push({
@@ -222,7 +222,7 @@ export class MilestoneSetViewEditComponent {
                         "comment": i.comment ? i.comment : "",
                         "includeInReport": i.includeInReport,
                         "sortOrder": sortOrder,
-                        "milestoneType": i.milestoneType ? i.milestoneType : "0",
+                        "milestoneType": i.milestoneType ? i.milestoneType : null,
                     })
                 }
                 sortOrder = sortOrder + 100;
@@ -306,7 +306,7 @@ export class MilestoneSetViewEditComponent {
             comment: '',
             includeInReport: false,
             sortOrder: '',
-            milestoneType: '',
+            milestoneType: null,
         }]
         this.standardMilestonesTableForm.push(new FormGroup({
             milestoneTemplateId: new FormControl(''),
@@ -317,7 +317,7 @@ export class MilestoneSetViewEditComponent {
             comment: new FormControl(''),
             includeInReport: new FormControl(false),
             sortOrder: new FormControl(''),
-            milestoneType: new FormControl(''),
+            milestoneType: new FormControl(null),
         }))
 
         this.standardMilestonesTableData = [...this.standardMilestonesTableData, ...j]
