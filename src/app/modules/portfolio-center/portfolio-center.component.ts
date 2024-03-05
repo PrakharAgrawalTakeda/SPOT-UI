@@ -1,5 +1,6 @@
 import {
     Component,
+    HostListener,
     OnInit,
     Renderer2,
     ViewChild,
@@ -97,6 +98,8 @@ export class PortfolioCenterComponent implements OnInit {
     AgileWave = [];
     overallStatus = [];
     primaryKPI = [];
+    showForecast: boolean = false;
+
     sorting: any = { name: '', dir: '' };
     viewBaseline = false;
     projectOverview: any = [];
@@ -247,6 +250,7 @@ export class PortfolioCenterComponent implements OnInit {
     lookup: any = [];
     activeaccount: any;
     budgetCurrency: string = '';
+    currfiscalYear: string = '';
     newmainnav: any;
     SPRData;
     //For Local Attributes
@@ -291,6 +295,7 @@ export class PortfolioCenterComponent implements OnInit {
     portfolio: any;
     isLA = false;
     bookmarkId = '';
+    status: any;
     isInitial = true;
 
     filteredColumnValuesSelected = [];
@@ -396,27 +401,31 @@ export class PortfolioCenterComponent implements OnInit {
 
         this.PortfolioFilterForm.controls.PortfolioOwner.valueChanges.subscribe(
             (res) => {
-                if (this.showLA) {
-                    this.showLA = false;
+                if (this.showContent) {
+                    if (this.showLA) {
+                        this.showLA = false;
+                    }
+                    console.log(res);
+                    this.portfolio = res;
+                    this.changePO = true;
                 }
-                console.log(res);
-                this.portfolio = res;
-                this.changePO = true;
             }
         );
 
         this.PortfolioFilterForm.controls.ExecutionScope.valueChanges.subscribe(
             (res) => {
-                if (this.showLA) {
-                    this.showLA = false;
+                if (this.showContent) {
+                    if (this.showLA) {
+                        this.showLA = false;
+                    }
+                    this.changeES = true;
                 }
-                this.changeES = true;
             }
         );
 
         this.PortfolioFilterForm.controls.ProjectPhase.valueChanges.subscribe(
             (value) => {
-                if (value) {
+                if (this.showContent) {
                     this.changePhase(value);
                 }
             }
@@ -429,6 +438,22 @@ export class PortfolioCenterComponent implements OnInit {
         this.showContent = false;
 
         this.titleService.setTitle('Portfolio Center');
+
+        if (
+            [
+                'C9F323D4-EF97-4C2A-B748-11DB5B8589D0',
+                '0E83F6BE-79BE-426A-A316-F523FFAECC4F',
+            ].includes(this.role.roleMaster.securityGroupId) ||
+            this.role.roleMaster?.secondarySecurityGroupId?.some(
+                (x) =>
+                    x?.toLowerCase() ==
+                    '500ee862-3878-43d9-9378-53feb1832cef'.toLowerCase()
+            )
+        ) {
+            this.showForecast = true;
+        } else {
+            this.showForecast = false;
+        }
 
         if (
             this.role.roleMaster.securityGroupId ==
@@ -603,7 +628,6 @@ export class PortfolioCenterComponent implements OnInit {
                 this.AgileWorkstream.push(AGILEall);
 
                 this.apiService.getCapitalPhase().then((res: any) => {
-                    debugger;
                     this.capitalPhaseArray = res;
                     for (var z = 0; z < this.capitalPhaseArray.length; z++) {
                         if (
@@ -1243,6 +1267,10 @@ export class PortfolioCenterComponent implements OnInit {
                             console.log(this.bulkreportdata);
 
                             this.initial = res;
+                            debugger;
+                            if (res.budgetTile.fiscalYear) {
+                                this.currfiscalYear = res.budgetTile.fiscalYear;
+                            }
 
                             if (
                                 res.budgetTile.localCurrencyAbbreviation == 'OY'
@@ -1880,6 +1908,36 @@ export class PortfolioCenterComponent implements OnInit {
         return item.projectTeamUniqueId || index;
     }
 
+    @HostListener('document:keydown', ['$event'])
+    handleKeyboardEvent(event: KeyboardEvent) {
+        if (event.key === 'Escape') {
+            if (this.PortfolioCenterService.drawerOpenedPrakharTemp) {
+                if (this.showFilter) {
+                    this.Closefilter();
+                } else {
+                    this.Close();
+                }
+            }
+            if (this.PortfolioCenterService.drawerOpenedright) {
+                if (this.PortfolioCenterService.itemtype == 'FXRateOpen') {
+                    this.PortfolioCenterService.toggleDrawerOpenSmall(
+                        'BudgetSpendOpen',
+                        '',
+                        [],
+                        ''
+                    );
+                } else {
+                    this.PortfolioCenterService.toggleDrawerOpen(
+                        '',
+                        '',
+                        [],
+                        ''
+                    );
+                }
+            }
+        }
+    }
+
     private _fixSvgFill(element: Element): void {
         // Current URL
         const currentURL = this.router.url;
@@ -2048,7 +2106,6 @@ export class PortfolioCenterComponent implements OnInit {
     }
 
     applyfilters() {
-        this.showContent = false;
         if (
             this.PortfolioFilterForm.controls.ProjectPhase.value == null ||
             this.PortfolioFilterForm.controls.ProjectPhase.value.length == 0
@@ -2683,6 +2740,8 @@ export class PortfolioCenterComponent implements OnInit {
             JSON.stringify(this.PortfolioFilterForm.getRawValue())
         );
 
+        var data = JSON.parse(localStorage.getItem('spot-filtersNew'));
+
         var mainObj = this.originalData;
         var dataToSend = [];
         var emptyObject = {
@@ -2731,8 +2790,8 @@ export class PortfolioCenterComponent implements OnInit {
             .then((res: any) => {
                 Object.keys(this.localAttributeForm.controls).forEach(
                     (name) => {
-                        // const currentControl =
-                        //     this.localAttributeForm.controls[name];
+                        const currentControl =
+                            this.localAttributeForm.controls[name];
                         var i = mainObj.findIndex((x) => x.uniqueId === name);
                         if (i >= 0) {
                             if (
@@ -3278,6 +3337,17 @@ export class PortfolioCenterComponent implements OnInit {
                     this.showFilter = false;
                 }
 
+                this.PortfolioFilterForm.markAsPristine();
+                console.log(this.PortfolioFilterForm.getRawValue());
+                Object.keys(this.PortfolioFilterForm.controls).forEach(
+                    (key) => {
+                        const control = this.PortfolioFilterForm.get(key);
+                        if (control.dirty) {
+                            console.log('Dirty Control:', key);
+                        }
+                    }
+                );
+
                 // COMMENTED CODE
 
                 // this.filterDrawer.close()
@@ -3321,6 +3391,7 @@ export class PortfolioCenterComponent implements OnInit {
             projectName: [],
             PrimaryValueDriver: [],
             SPRProjectCategory: [],
+            projectNameKeyword: [],
         });
 
         const tableObj = this.patchAllSelectedColumns(
@@ -3370,8 +3441,26 @@ export class PortfolioCenterComponent implements OnInit {
         this.showLA = false;
     }
     Closefilter() {
-        if (this.PortfolioFilterForm.dirty) {
-            var comfirmConfig: FuseConfirmationConfig = {
+        let dirtyControls = 0;
+        let projectNameKeywordIsOnlyDirtyAndEmpty = false;
+
+        Object.keys(this.PortfolioFilterForm.controls).forEach((key) => {
+            const control = this.PortfolioFilterForm.get(key);
+            if (control.dirty) {
+                dirtyControls++; // Count dirty controls
+                if (key == 'projectNameKeyword' && control.value == '') {
+                    projectNameKeywordIsOnlyDirtyAndEmpty = true;
+                } else {
+                    projectNameKeywordIsOnlyDirtyAndEmpty = false; // Reset if other dirty controls are found
+                }
+            }
+        });
+
+        // Condition to check if the only dirty control is projectNameKeyword and it's empty
+        if (dirtyControls === 1 && projectNameKeywordIsOnlyDirtyAndEmpty) {
+            this.filterDrawer.close(); // Close drawer directly
+        } else if (this.PortfolioFilterForm.dirty) {
+            var confirmConfig: FuseConfirmationConfig = {
                 title: 'Are you sure you want to exit?',
                 message: 'All unsaved data will be lost.',
                 icon: {
@@ -3392,7 +3481,7 @@ export class PortfolioCenterComponent implements OnInit {
                 },
                 dismissible: true,
             };
-            const alert = this.fuseAlert.open(comfirmConfig);
+            const alert = this.fuseAlert.open(confirmConfig);
             alert.afterClosed().subscribe((close) => {
                 if (close == 'confirmed') {
                     this.clearForm();
@@ -3966,6 +4055,7 @@ export class PortfolioCenterComponent implements OnInit {
     setPage(res: any, offset) {
         if (res != '') {
             this.projectOverview = res.portfolioDetails;
+            this.status = this.projectOverview.projStatus;
             this.bulkreportdata = res.portfolioDetails;
             for (var i = 0; i < this.projectOverview.length; i++) {
                 this.projectOverview[i].projectCapitalOe =
@@ -4696,7 +4786,6 @@ export class PortfolioCenterComponent implements OnInit {
     }
 
     OpenLA() {
-        debugger;
         this.showLA = false;
         this.dataLA = [];
         this.localAttributeFormRaw.controls = {};
@@ -5008,7 +5097,6 @@ export class PortfolioCenterComponent implements OnInit {
                     });
                     this.dataLoader(res);
                     this.originalData = originalData;
-
                 });
             this.dataLA = [];
             this.showLA = true;
@@ -5065,15 +5153,8 @@ export class PortfolioCenterComponent implements OnInit {
         );
     }
 
-    OpenProject(projectName) {
-        this.projectOverview.forEach((item) => {
-            if (item.problemTitle == projectName) {
-                window.open(
-                    '/project-hub/' + item.projectUid + '/project-board',
-                    '_blank'
-                );
-            }
-        });
+    OpenProject(projectUid) {
+        window.open('/project-hub/' + projectUid + '/project-board', '_blank');
     }
 
     dataLoader(res) {
@@ -5387,18 +5468,22 @@ export class PortfolioCenterComponent implements OnInit {
         }
     }
 
-    getColor(percentage: number) {
-        if (percentage < this.lowerTargetPercentage) {
-            return 'red';
-        }
-        if (
-            this.targetPercentage > percentage &&
-            percentage >= this.lowerTargetPercentage
-        ) {
-            return 'orange';
-        }
-        if (this.targetPercentage < percentage) {
-            return 'green';
+    getColor(percentage, state) {
+        if (state == 'Completed') {
+            return '#000000';
+        } else {
+            if (percentage < this.lowerTargetPercentage) {
+                return 'red';
+            }
+            if (
+                this.targetPercentage > percentage &&
+                percentage >= this.lowerTargetPercentage
+            ) {
+                return 'orange';
+            }
+            if (this.targetPercentage < percentage) {
+                return 'green';
+            }
         }
     }
 
@@ -5435,7 +5520,6 @@ export class PortfolioCenterComponent implements OnInit {
     openDrawer(type) {
         this.PortfolioCenterService.drawerOpenedPrakharTemp = true;
         if (type == 'Filter') {
-            debugger;
             this.dataLA = [];
             this.showLA = false;
             this.localAttributeFormRaw.controls = {};

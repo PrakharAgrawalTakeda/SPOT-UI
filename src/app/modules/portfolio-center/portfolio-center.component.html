@@ -1791,7 +1791,7 @@
                                         <div
                                             class="flex items-center font-extrabold text-lg"
                                         >
-                                            Reference
+                                            Reference ({{ currfiscalYear }})
                                         </div>
                                         <div
                                             class="text-right font-extrabold text-lg"
@@ -1845,6 +1845,7 @@
                             <div class="p-4 text-right">
                                 <button
                                     class="forecast"
+                                    *ngIf="showForecast"
                                     (click)="
                                         PortfolioCenterService.toggleDrawerOpen(
                                             'BudgetSpendOpen',
@@ -2089,11 +2090,26 @@
                                 ngx-datatable-cell-template
                             >
                                 <p
-                                    (click)="OpenProject(value)"
+                                    (click)="OpenProject(row.projectUid)"
                                     class="projectNames"
                                 >
                                     {{ value }}
                                 </p>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="State"
+                            prop="projStatus"
+                            [width]="100"
+                            [resizeable]="false"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
@@ -2307,7 +2323,6 @@
                             <ng-template
                                 let-row="row"
                                 let-value="value"
-                                class="row-table"
                                 ngx-datatable-cell-template
                             >
                                 <p
@@ -2316,7 +2331,10 @@
                                         margin-right: 10px;
                                     "
                                     [ngStyle]="{
-                                        color: getColor(row.projectDataQuality)
+                                        color: getColor(
+                                            row.projectDataQuality,
+                                            row.projStatus
+                                        )
                                     }"
                                 >
                                     {{ value }}

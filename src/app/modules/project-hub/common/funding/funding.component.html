@@ -68,6 +68,26 @@
                 </ng-template>
             </ngx-datatable-column>
 
+            <ngx-datatable-column name="Include in Business Case (Max 2)" prop="includeInBusinessCase"  [flexGrow]="0.5" *ngIf="mode!= 'Project-Charter'">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div class="flex items-center justify-between pl-2 overflow-hidden">
+                        <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="value == false"></mat-icon>
+                        <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="value == true">
+                        </mat-icon>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Include in Charter (Max 3)" prop="includeInCharter"  [flexGrow]="0.5" *ngIf="mode== 'Project-Charter'">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div class="flex items-center justify-between pl-2 overflow-hidden">
+                        <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="value == false"></mat-icon>
+                        <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="value == true">
+                        </mat-icon>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+
             <ngx-datatable-column [flexGrow]="0.1" [resizeable]="false" [sortable]="false" [draggable]="false">
                 <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
 

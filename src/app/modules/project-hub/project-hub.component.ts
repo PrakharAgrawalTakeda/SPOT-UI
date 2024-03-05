@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { ProjectApiService } from './common/project-api.service';
@@ -247,6 +247,14 @@ export class ProjectHubComponent implements OnInit {
                 (~~this.dataQualityPercentage).toString() + "%";
         })
     }
+    @HostListener('document:keydown', ['$event'])
+    handleKeyboardEvent(event: KeyboardEvent) {
+        if (event.key === 'Escape') {
+            if (this.projecthubservice.drawerOpenedright) {
+                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+            }
+        }
+    }
     toggleSideNav() {
         this.drawerOpened = !this.drawerOpened
         if (this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-board' ||
@@ -333,6 +341,10 @@ export class ProjectHubComponent implements OnInit {
         return className;
     }
     getColor(percentage: number) {
+        if (this.portfolioDetails.projStatus == 'Completed')
+        {
+            return '#000000'
+        }
         if (this.portfolioDetails.phase == "Initiate" || this.portfolioDetails.projStatus == 'Cancelled' || this.portfolioDetails.projStatus == 'Hold') {
             this.dataQualityPercentageString = "N/A";
             return '#808080';
@@ -341,7 +353,8 @@ export class ProjectHubComponent implements OnInit {
         }
         if (this.projectType == "SimpleProject" || percentage == null) {
             return '#4c9bcf';
-        } else {
+        }
+         else {
             if (percentage < this.lowerTargetPercentage) {
                 return "red";
             }

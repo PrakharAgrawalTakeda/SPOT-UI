@@ -88,11 +88,12 @@ export class PrimaryKpiSingleEditComponent implements OnInit {
     else {
       // Extract the selected primaryKpi value from the form
       const selectedPrimaryKpiValue = this.primaryKPIForm.get('primaryKpi').value;
+      debugger
       console.log(selectedPrimaryKpiValue)
 
       // Find the corresponding lookUpId from primaryKPI array
-      const selectedPrimaryKpiObject = selectedPrimaryKpiValue ? this.lookupMasters.find(x => x.lookUpName == selectedPrimaryKpiValue.lookUpName) : '';
-
+      const selectedPrimaryKpiObject = selectedPrimaryKpiValue ? this.lookupMasters.find(x => x.lookUpId == selectedPrimaryKpiValue.lookUpId) : '';
+console.log(selectedPrimaryKpiObject)
       // Initialize the mainObj
       var mainObj: any = {};
       console.log(this.pc)
