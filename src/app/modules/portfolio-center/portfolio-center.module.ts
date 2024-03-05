@@ -26,15 +26,18 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { ForecastComponent } from './budget-spend/forecast/forecast.component';
 import { BudgetSpendComponent } from './budget-spend/budget-spend.component';
-import { ProjectHubModule } from '../project-hub/project-hub.module';
 import { PortfolioPerformanceComponent } from './budget-spend/portfolio-performance/portfolio-performance.component';
 import { ProjectPerformanceComponent } from './budget-spend/project-performance/project-performance.component';
-import { ProjectHub } from 'app/shared/role-controller';
 import { FxRateComponent } from './budget-spend/fx-rate/fx-rate.component';
 import { ForecastExcelUpdateComponent } from './budget-spend/forecast-excel-update/forecast-excel-update.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SpreadsheetModule } from '@progress/kendo-angular-spreadsheet';
 import { SpotGlobalMessageModule } from 'app/layout/common/spot-global-message/spot-global-message.module';
+import { BookmarksComponent } from './bookmarks/bookmarks.component';
+import { BookmarkEditComponent } from './bookmarks/bookmark-edit/bookmark-edit.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { SaveBookmarkComponent } from './save-bookmark/save-bookmark.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 export const projectRoutes: Route[] = [
   {
@@ -44,44 +47,49 @@ export const projectRoutes: Route[] = [
 
 
 @NgModule({
-  declarations: [
-    PortfolioCenterComponent,
-    ForecastComponent,
-    BudgetSpendComponent,
-    PortfolioPerformanceComponent,
-    ProjectPerformanceComponent,
-    FxRateComponent,
-    ForecastExcelUpdateComponent,
-  ],
-  imports: [
-    RouterModule.forChild(projectRoutes),
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatDividerModule,
-    MatIconModule,
-    MatMenuModule,
-    MatProgressBarModule,
-    MatRippleModule,
-    MatSidenavModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    NgApexchartsModule,
-    TranslocoModule,
-    SharedModule,
-    CommonModule,
-    FuseDrawerModule,
-    MatChipsModule,
-    MatAutocompleteModule,
-    MatFormFieldModule,
-    SpotFormsModule,
-    NgScrollbarModule,
-    NgxDatatableModule,
-    MatSlideToggleModule,
-    MatSnackBarModule,
-    SpreadsheetModule,
-    SpotGlobalMessageModule
-  ],
-  exports: [RouterModule]
+    declarations: [
+        PortfolioCenterComponent,
+        ForecastComponent,
+        BudgetSpendComponent,
+        PortfolioPerformanceComponent,
+        ProjectPerformanceComponent,
+        FxRateComponent,
+        ForecastExcelUpdateComponent,
+        BookmarksComponent,
+        BookmarkEditComponent,
+        SaveBookmarkComponent,
+    ],
+    imports: [
+        RouterModule.forChild(projectRoutes),
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatDividerModule,
+        MatDialogModule,
+        MatIconModule,
+        MatMenuModule,
+        MatProgressBarModule,
+        MatRippleModule,
+        MatSidenavModule,
+        MatSortModule,
+        MatTableModule,
+        MatTabsModule,
+        MatExpansionModule,
+        NgApexchartsModule,
+        TranslocoModule,
+        SharedModule,
+        CommonModule,
+        FuseDrawerModule,
+        MatChipsModule,
+        MatAutocompleteModule,
+        MatFormFieldModule,
+        SpotFormsModule,
+        NgScrollbarModule,
+        NgxDatatableModule,
+        MatSlideToggleModule,
+        MatSnackBarModule,
+        SpreadsheetModule,
+        SpotGlobalMessageModule,
+    ],
+    exports: [RouterModule],
 })
-export class PortfolioCenterModule { }
+export class PortfolioCenterModule {}
