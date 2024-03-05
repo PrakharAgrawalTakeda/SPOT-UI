@@ -1,18 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseNavigationService } from '@fuse/components/navigation';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-project-dashboard-budget',
   templateUrl: './project-dashboard-budget.component.html',
   styleUrls: ['./project-dashboard-budget.component.scss']
 })
-export class ProjectDashboardBudgetComponent {
-
+export class ProjectDashboardBudgetComponent implements OnInit, OnDestroy {
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(private projectHubService: ProjectHubService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, private router: Router) { 
-    this.projectHubService.submitbutton.subscribe(res=>{
+    this.projectHubService.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res=>{
       if(res == true){
         this.dataloader()
       }
@@ -42,5 +43,10 @@ export class ProjectDashboardBudgetComponent {
   }
   isNavActive(link: string): boolean {
     return this.router.url.includes(link)
+  }
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectApiService } from '../common/project-api.service';
@@ -6,6 +6,7 @@ import { ProjectHubService } from '../project-hub.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../@fuse/services/confirmation";
 import { MsalService } from '@azure/msal-angular';
 import { PortfolioApiService } from "../../portfolio-center/portfolio-api.service";
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-associated-projects',
@@ -13,11 +14,12 @@ import { PortfolioApiService } from "../../portfolio-center/portfolio-api.servic
     styleUrls: ['./associated-projects.component.scss'],
     encapsulation: ViewEncapsulation.None,
 })
-export class AssociatedProjectsComponent implements OnInit {
+export class AssociatedProjectsComponent implements OnInit, OnDestroy {
     single: any[];
     localCurrency: any = [];
     filterCriteria: any = {};
     allprojects: any;
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(
         private apiService: ProjectApiService,
         private _Activatedroute: ActivatedRoute,
@@ -28,7 +30,7 @@ export class AssociatedProjectsComponent implements OnInit {
         private msalService: MsalService,
         private portApiService: PortfolioApiService
     ) {
-        this.projecthubservice.submitbutton.subscribe(res => {
+        this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
             if (this.viewContent) {
                 this.dataloader();
             }
@@ -201,6 +203,11 @@ export class AssociatedProjectsComponent implements OnInit {
             return '<div style="color: rgba(0,143,251,0.85);">' + value.toString() + '</div>';
         }
     }
+    ngOnDestroy(): void {
+        // Unsubscribe from all subscriptions
+        this._unsubscribeAll.next(null);
+        this._unsubscribeAll.complete();
+      }
 }
 function percentTickFormatting(val: any) {
     return val.toLocaleString() + '%';

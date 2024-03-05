@@ -1,17 +1,18 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectHubService } from '../../project-hub.service';
 import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectApiService } from '../project-api.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-transportation-table',
   templateUrl: './transportation-table.component.html',
   styleUrls: ['./transportation-table.component.scss']
 })
-export class TransportationTableComponent {
+export class TransportationTableComponent implements OnInit, OnDestroy {
   id: string = ""
   viewContent: boolean = false
   Transportationngx: any = []
@@ -25,9 +26,10 @@ export class TransportationTableComponent {
   editable= false
   sortDir = ""
   gdlList: any;
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
-    this.projecthubservice.submitbutton.subscribe(res => {
+    this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (res == true) {
         this.dataloader()
       }
@@ -99,5 +101,10 @@ export class TransportationTableComponent {
         })
       }
     })
+  }
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
 }
