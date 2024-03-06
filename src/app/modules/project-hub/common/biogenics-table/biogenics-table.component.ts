@@ -1,17 +1,18 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../project-api.service';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-biogenics-table',
   templateUrl: './biogenics-table.component.html',
   styleUrls: ['./biogenics-table.component.scss']
 })
-export class BiogenicsTableComponent {
+export class BiogenicsTableComponent implements OnInit, OnDestroy {
   id: string = ""
   viewContent:boolean = false
   Biogenicsngx: any = []
@@ -25,9 +26,10 @@ export class BiogenicsTableComponent {
   @Input() DateMandatory: boolean
   sortDir = ""
   lookupdata: any
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
-    this.projecthubservice.submitbutton.subscribe(res => {
+    this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (res == true) {
         this.dataloader()
       }
@@ -117,5 +119,10 @@ export class BiogenicsTableComponent {
     else if(this.sortDir == "asc"){
       return this.sortDir = "desc"
     }
+  }
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
 }

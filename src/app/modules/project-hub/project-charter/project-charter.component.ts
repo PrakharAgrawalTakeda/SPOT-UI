@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-project-charter',
   templateUrl: './project-charter.component.html',
   styleUrls: ['./project-charter.component.scss']
 })
-export class ProjectCharterComponent implements OnInit {
+export class ProjectCharterComponent implements OnInit, OnDestroy {
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
       private projectHubService: ProjectHubService,
       private apiService: ProjectApiService,
@@ -18,7 +20,7 @@ export class ProjectCharterComponent implements OnInit {
       private _fuseNavigationService: FuseNavigationService,
       public fuseAlert: FuseConfirmationService,
       private router: Router) {
-    this.projectHubService.submitbutton.subscribe(res => {
+    this.projectHubService.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (res == true) {
         this.dataloader()
       }
@@ -85,5 +87,10 @@ export class ProjectCharterComponent implements OnInit {
         })
       }
     })
+  }
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
 }

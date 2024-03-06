@@ -1,17 +1,17 @@
-import {Component, HostListener, Input, SimpleChanges} from '@angular/core';
+import {Component, HostListener, Input, OnDestroy, SimpleChanges} from '@angular/core';
 import {ProjectApiService} from "../../common/project-api.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectHubService} from "../../project-hub.service";
 import {FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
 import {BudgetService} from "../budget.service";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-budget-capex-opex-table',
   templateUrl: './budget-capex-opex-table.component.html',
   styleUrls: ['./budget-capex-opex-table.component.scss']
 })
-export class BudgetCapexOpexTableComponent {
+export class BudgetCapexOpexTableComponent implements OnDestroy {
     @Input() mode: 'Capex' | 'Opex' | 'Y1' = 'Capex'
     @Input() inputData: any;
     data: any[];
@@ -19,10 +19,10 @@ export class BudgetCapexOpexTableComponent {
     startingMonth: number;
     hasBigValues = new BehaviorSubject<boolean>(false)
     enableForecastButton: boolean= true;
-
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
         , public fuseAlert: FuseConfirmationService, public budgetService: BudgetService) {
-        this.projecthubservice.submitbutton.subscribe(res => {
+        this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
             if (res == true) {
                 this.dataloader()
             }
@@ -93,5 +93,9 @@ export class BudgetCapexOpexTableComponent {
     getNgxDatatableNumberHeader(): any {
         return ' ngx-number-header';
     }
-
+    ngOnDestroy(): void {
+        // Unsubscribe from all subscriptions
+        this._unsubscribeAll.next(null);
+        this._unsubscribeAll.complete();
+      }
 }

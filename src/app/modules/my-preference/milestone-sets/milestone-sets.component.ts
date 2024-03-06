@@ -1,23 +1,24 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {ProjectHubService} from "../../project-hub/project-hub.service";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../@fuse/services/confirmation";
 import {MyPreferenceApiService} from "../my-preference-api.service";
 import {MsalService} from "@azure/msal-angular";
 import {MyPreferenceService} from "../my-preference.service";
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-milestone-sets',
     templateUrl: './milestone-sets.component.html',
     styleUrls: ['./milestone-sets.component.scss']
 })
-export class MilestoneSetsComponent {
+export class MilestoneSetsComponent implements OnInit, OnDestroy {
     userId: string = ''
     miestoneSetsData: any = []
-
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(private apiService: MyPreferenceApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
         , public fuseAlert: FuseConfirmationService,  private msalService: MsalService, public myPreferenceService:MyPreferenceService ) {
-        this.myPreferenceService.submitbutton.subscribe(res => {
+        this.myPreferenceService.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
             if (res == true) {
                 this.dataloader()
             }
@@ -66,6 +67,10 @@ export class MilestoneSetsComponent {
             }
         })
     }
-
+    ngOnDestroy(): void {
+        // Unsubscribe from all subscriptions
+        this._unsubscribeAll.next(null);
+        this._unsubscribeAll.complete();
+      }
 
 }

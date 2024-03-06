@@ -1,16 +1,17 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {ProjectHubService} from "../../project-hub.service";
 import {ActivatedRoute} from "@angular/router";
 import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
 import {ProjectApiService} from "../../common/project-api.service";
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-close-out-budget-performance',
     templateUrl: './close-out-budget-performance.component.html',
     styleUrls: ['./close-out-budget-performance.component.scss']
 })
-export class CloseOutBudgetPerformanceComponent implements OnInit {
+export class CloseOutBudgetPerformanceComponent implements OnInit, OnDestroy {
     viewContent: boolean = false
     financialRequirements: any = []
     finalRequirements: any = []
@@ -23,11 +24,11 @@ export class CloseOutBudgetPerformanceComponent implements OnInit {
         finalRequirementsValue: new FormControl([]),
         selectedFields: new FormControl([]),
     })
-
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(public projectHubService: ProjectHubService,
                 private _Activatedroute: ActivatedRoute,
                 public apiService: ProjectApiService,) {
-        this.projectHubService.submitbutton.subscribe(res => {
+        this.projectHubService.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
             if (res == true) {
                 this.dataloader()
             }
@@ -66,5 +67,9 @@ export class CloseOutBudgetPerformanceComponent implements OnInit {
     getHeaderClass(): any {
         return ' right-aligned-header-class';
     }
-
+    ngOnDestroy(): void {
+        // Unsubscribe from all subscriptions
+        this._unsubscribeAll.next(null);
+        this._unsubscribeAll.complete();
+      }
 }

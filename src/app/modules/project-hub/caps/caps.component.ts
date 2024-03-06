@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Constants } from 'app/shared/constants';
@@ -6,13 +6,14 @@ import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { toLower } from 'lodash';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-caps',
   templateUrl: './caps.component.html',
   styleUrls: ['./caps.component.scss']
 })
-export class CapsComponent implements OnInit {
+export class CapsComponent implements OnInit, OnDestroy {
   @Input() callLocation: 'Normal' | 'Project-Charter' | 'Business-Case' = 'Normal'
   viewContent = false
   id=""
@@ -51,8 +52,9 @@ export class CapsComponent implements OnInit {
     NoCarbonImpact: new FormControl(false)
   })
   gdlList: any;
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(private router: Router, public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, public projectHubService: ProjectHubService) { 
-    this.projectHubService.submitbutton.subscribe(res => {
+    this.projectHubService.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (res == true) {
         this.viewContent = false
         this.ngOnInit()
@@ -381,5 +383,9 @@ export class CapsComponent implements OnInit {
     )
     
   }
-
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
 }

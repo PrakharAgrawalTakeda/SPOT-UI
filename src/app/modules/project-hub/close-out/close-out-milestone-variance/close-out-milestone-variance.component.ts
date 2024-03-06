@@ -1,21 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-close-out-milestone-variance',
   templateUrl: './close-out-milestone-variance.component.html',
   styleUrls: ['./close-out-milestone-variance.component.scss']
 })
-export class CloseOutMilestoneVarianceComponent implements OnInit {
+export class CloseOutMilestoneVarianceComponent implements OnInit, OnDestroy {
   projectViewDetails: any = {}
   viewContent: boolean = false
   id: string = ''
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(public projecthubservice: ProjectHubService,
     private apiService: ProjectApiService,
     private _Activatedroute: ActivatedRoute) {
-      this.projecthubservice.submitbutton.subscribe(res => {
+      this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       console.log(res)
       if(res == true)
       {
@@ -33,5 +35,9 @@ export class CloseOutMilestoneVarianceComponent implements OnInit {
           this.viewContent = true
       });
     }
-
+    ngOnDestroy(): void {
+      // Unsubscribe from all subscriptions
+      this._unsubscribeAll.next(null);
+      this._unsubscribeAll.complete();
+    }
 }

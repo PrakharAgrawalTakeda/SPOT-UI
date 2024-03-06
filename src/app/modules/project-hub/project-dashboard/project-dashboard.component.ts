@@ -1,22 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProjectHubService } from '../project-hub.service';
 import { ProjectApiService } from '../common/project-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-project-dashboard',
   templateUrl: './project-dashboard.component.html',
   styleUrls: ['./project-dashboard.component.scss']
 })
-export class ProjectDashboardComponent {
+export class ProjectDashboardComponent implements OnInit, OnDestroy {
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
       private projectHubService: ProjectHubService,
       private apiService: ProjectApiService,
       private _Activatedroute: ActivatedRoute,
       public fuseAlert: FuseConfirmationService,
       private router: Router) {
-    this.projectHubService.submitbutton.subscribe(res=>{
+    this.projectHubService.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res=>{
       if(res == true){
         this.dataloader()
       }
@@ -157,5 +159,10 @@ export class ProjectDashboardComponent {
         })
       }
     })
+  }
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
 }

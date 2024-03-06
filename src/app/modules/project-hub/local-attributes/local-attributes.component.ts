@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-local-attributes',
   templateUrl: './local-attributes.component.html',
   styleUrls: ['./local-attributes.component.scss']
 })
-export class LocalAttributesComponent implements OnInit {
+export class LocalAttributesComponent implements OnInit, OnDestroy {
   localAttributeForm: any = new FormGroup({})
   localAttributeFormRaw: any = new FormGroup({})
   viewContent = false
@@ -18,8 +19,9 @@ export class LocalAttributesComponent implements OnInit {
   data: any
   lookupData: any
   editable= false
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(private _Activatedroute: ActivatedRoute, public auth: AuthService, private projectHubService: ProjectHubService, private apiService: ProjectApiService) {
-    this.projectHubService.submitbutton.subscribe(res => {
+    this.projectHubService.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (res == true) {
         this.ngOnInit()
       }
@@ -156,5 +158,10 @@ export class LocalAttributesComponent implements OnInit {
 
   disabler() {
     this.localAttributeForm.disable()
+  }
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
 }

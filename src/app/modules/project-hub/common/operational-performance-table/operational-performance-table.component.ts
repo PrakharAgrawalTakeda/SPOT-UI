@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../project-api.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-operational-performance-table',
@@ -13,7 +14,7 @@ import { ProjectApiService } from '../project-api.service';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.Default
 })
-export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
+export class OperationalPerformanceTableComponent implements OnInit, OnChanges, OnDestroy {
   @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' | 'Project-Proposal' = 'Normal'
   @Input() projectid: any;
   @Input() projectViewDetails: any;
@@ -25,10 +26,10 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
   bulkEditType: string = 'OperationalPerformanceBulkEdit';
   addSingle: string = 'OperationalPerformanceSingleEdit';
   viewContent: boolean = false
-
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(private projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService,
     public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute) {
-    this.projecthubservice.submitbutton.subscribe(res => {
+    this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (res == true) {
         this.dataloader()
       }
@@ -185,5 +186,10 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
       }else{
           return [];
       }
+  }
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
 }
