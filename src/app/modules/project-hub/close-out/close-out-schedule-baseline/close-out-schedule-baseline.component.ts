@@ -1,14 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-close-out-schedule-baseline',
   templateUrl: './close-out-schedule-baseline.component.html',
   styleUrls: ['./close-out-schedule-baseline.component.scss']
 })
-export class CloseOutScheduleBaselineComponent implements OnInit {
+export class CloseOutScheduleBaselineComponent implements OnInit, OnDestroy {
 
   baselineLogData: any = {}
   viewContent: boolean = false
@@ -19,10 +20,11 @@ export class CloseOutScheduleBaselineComponent implements OnInit {
   logdetails: any = {}
   @Input() editable: boolean
   @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' = 'Baseline-Log'
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(public projecthubservice: ProjectHubService,
     private apiService: ProjectApiService,
     private _Activatedroute: ActivatedRoute) {
-      this.projecthubservice.submitbutton.subscribe(res => {
+      this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       console.log(res)
       if(res == true)
       {
@@ -101,5 +103,9 @@ export class CloseOutScheduleBaselineComponent implements OnInit {
       return  this.logdetails && this.logdetails != '' && this.logdetails.length > 0  ? this.logdetails.some(x=> x.baselineLogId == baselinelogid) : false
       //return
     }
-
+    ngOnDestroy(): void {
+      // Unsubscribe from all subscriptions
+      this._unsubscribeAll.next(null);
+      this._unsubscribeAll.complete();
+    }
 }

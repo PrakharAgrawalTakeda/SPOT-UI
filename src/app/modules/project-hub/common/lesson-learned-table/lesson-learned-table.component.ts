@@ -1,25 +1,27 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../project-api.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-lesson-learned-table',
   templateUrl: './lesson-learned-table.component.html',
   styleUrls: ['./lesson-learned-table.component.scss']
 })
-export class LessonLearnedTableComponent implements OnInit {
+export class LessonLearnedTableComponent implements OnInit, OnDestroy {
   id: string = ""
   lessonLearned: any = []
   @Input() Editable: boolean = false
   lookupdata:any
   @ViewChild('lessonLearnedTable') lessonLearnedTable: any;
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
-    this.projecthubservice.submitbutton.subscribe(res => {
+    this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (res == true) {
         this.dataloader()
       }
@@ -95,5 +97,9 @@ export class LessonLearnedTableComponent implements OnInit {
     // console.log('Toggled Expand Row!', this.scheduleTable);
     this.lessonLearnedTable.rowDetail.toggleExpandRow(row);
   }
-
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
 }

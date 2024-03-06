@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewEncapsulation, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Output, Input, EventEmitter, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MsalService } from '@azure/msal-angular';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 import { EventType } from '@azure/msal-browser';
+import { Subject, takeUntil } from 'rxjs';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { EventType } from '@azure/msal-browser';
   styleUrls: ['./project-team.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ProjectTeamComponent implements OnInit {
+export class ProjectTeamComponent implements OnInit, OnDestroy {
   @Input() mode: 'Normal' | 'Project-Proposal' | 'Project-Charter' | 'Project-Dashboards' = 'Normal'
   teamMembers: any = []
   id: string = ''
@@ -23,8 +24,9 @@ export class ProjectTeamComponent implements OnInit {
   chartercount: string;
   isStrategicInitiative:boolean = false
   @Output() eventName = new EventEmitter<EventType>();
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(private Router: Router, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService) {
-    this.projecthubservice.submitbutton.subscribe(res => {
+    this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (res == true) {
         this.dataloader()
       }
@@ -73,5 +75,9 @@ export class ProjectTeamComponent implements OnInit {
   getNgxDatatableNumberHeader(): any {
     return ' ngx-number-header';
   }
-
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
 }
