@@ -1,12 +1,12 @@
-import {Component, OnInit, SimpleChanges} from '@angular/core';
-import {ProjectHubService} from "../../project-hub.service";
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
-import {ActivatedRoute} from "@angular/router";
-import {ProjectApiService} from "../project-api.service";
-import {FormArray, FormControl, FormGroup} from "@angular/forms";
+import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { ProjectHubService } from "../../project-hub.service";
+import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../../@fuse/services/confirmation";
+import { ActivatedRoute } from "@angular/router";
+import { ProjectApiService } from "../project-api.service";
+import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import * as moment from "moment";
-import {AuthService} from "../../../../core/auth/auth.service";
-import {BehaviorSubject} from "rxjs";
+import { AuthService } from "../../../../core/auth/auth.service";
+import { BehaviorSubject } from "rxjs";
 
 @Component({
     selector: 'app-state-check',
@@ -34,6 +34,8 @@ export class StateCheckComponent implements OnInit {
     id: string = "";
     rows = [];
     scheduleData: any = []
+    askNeedData: any = []
+    riskIssuesData: any = []
     scheduleNgxData = [];
     riskIssuesNgxData = [];
     askNeedsNgxData = [];
@@ -50,9 +52,9 @@ export class StateCheckComponent implements OnInit {
     riTableEditStack = [];
     riskIssueForm = new FormArray([])
     askNeedForm = new FormArray([])
-    showMilestoneTable:boolean = false;
-    showRiskIssueTable:boolean = false;
-    showAskNeedsTable:boolean = false;
+    showMilestoneTable: boolean = false;
+    showRiskIssueTable: boolean = false;
+    showAskNeedsTable: boolean = false;
 
     getRowClass = (row) => {
         return {
@@ -64,8 +66,8 @@ export class StateCheckComponent implements OnInit {
     }
     ngOnInit(): void {
         this.getllookup()
-        this.apiService.getGeneralInfoData(this.id).then((res: any) =>{
-            if(!res.portfolioOwner){
+        this.apiService.getGeneralInfoData(this.id).then((res: any) => {
+            if (!res.portfolioOwner) {
                 var comfirmConfig: FuseConfirmationConfig = {
                     "message": "The project has no Portfolio Owner assigned. In order to change the project state to completed, please assign a portfolio owner- alternatively ask your Portfolio Manager for assistance. The project state has not been changed!",
                     "icon": {
@@ -102,112 +104,118 @@ export class StateCheckComponent implements OnInit {
 
     dataloader() {
         this.apiService.getIncompleteItems(this.id).then((res: any) => {
-            this.scheduleNgxData = res.milestones;
-            this.riskIssuesNgxData = res.riskIssues;
-            this.askNeedsNgxData = res.askNeeds;
-            if(this.scheduleNgxData.length>0){
-                this.showMilestoneTable = true;
-            }
-            if(this.riskIssuesNgxData.length>0){
-                this.showRiskIssueTable = true;
-            }
-            if(this.askNeedsNgxData.length>0){
-                this.showAskNeedsTable = true;
-            }
-            this.scheduledataDb = this.scheduleNgxData.map(x => {
-                return {
-                    "scheduleUniqueId": x.scheduleUniqueId,
-                    "projectId": x.projectId,
-                    "milestone": x.milestone,
-                    "plannedFinish": moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss"),
-                    "baselineFinish": moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss"),
-                    "responsiblePersonName": (x.responsiblePersonId == null || x.responsiblePersonId == '' ? {} : { userAdid: x.responsiblePersonId, userDisplayName: x.responsiblePersonName }),
-                    "functionGroupId": x.functionGroupId,
-                    "function": (this.lookUpData.find(y => y.lookUpId == x.functionGroupId)),
-                    "completionDate": moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss"),
-                    "comments": x.comments,
-                    "includeInReport": x.includeInReport,
-                    "includeInCharter": x.includeInCharter,
-                    "milestoneType": x.milestoneType,
-                    "templateMilestoneId": x.templateMilestoneId,
-                    "includeInCloseout": x.includeInCloseout,
-                    "responsiblePersonId": x.responsiblePersonId,
-                    "indicator": x.indicator
+            this.apiService.getprojectviewdata(this.id).then((response: any) => {
+
+                this.askNeedData = response.askNeedData
+                this.riskIssuesData = response.riskIssuesData
+                this.scheduleData = response.scheduleData
+                this.scheduleNgxData = res.milestones;
+                this.riskIssuesNgxData = res.riskIssues;
+                this.askNeedsNgxData = res.askNeeds;
+                if (this.scheduleNgxData.length > 0) {
+                    this.showMilestoneTable = true;
                 }
-            })
-            for (var i of this.scheduleNgxData) {
-                this.milestoneName = i.milestone
-                this.milestoneForm.push(new FormGroup({
-                    scheduleUniqueId: new FormControl(i.scheduleUniqueId),
-                    projectId: new FormControl(i.projectId),
-                    milestone: new FormControl(i.milestoneType > 0 ? i.milestoneType == 1 ? this.milestoneName.replace('Execution Start - ', '') : i.milestoneType == 2 ? this.milestoneName.replace('Execution End - ', '') : i.milestone : i.milestone),
-                    plannedFinish: new FormControl(i.plannedFinish),
-                    baselineFinish: new FormControl(i.baselineFinish),
-                    responsiblePersonName: new FormControl(i.responsiblePersonId == null || i.responsiblePersonId == '' ? {} : { userAdid: i.responsiblePersonId, userDisplayName: i.responsiblePersonName }),
-                    functionGroupId: new FormControl(i.functionGroupId),
-                    function: new FormControl(this.lookUpData.find(x => x.lookUpId == i.functionGroupId)),
-                    completionDate: new FormControl(i.completionDate),
-                    comments: new FormControl(i.comments),
-                    includeInReport: new FormControl(i.includeInReport),
-                    includeInCharter: new FormControl(i.includeInCharter),
-                    milestoneType: new FormControl(i.milestoneType),
-                    templateMilestoneId: new FormControl(i.templateMilestoneId),
-                    includeInCloseout: new FormControl(i.includeInCloseout),
-                    responsiblePersonId: new FormControl(i.responsiblePersonId),
-                    indicator: new FormControl(i.indicator)
-                }))
-                if (this.milestoneForm.controls.filter(x => x.value.completionDate != null)) {
-                    for (let control of this.milestoneForm.controls.filter(x => x.value.completionDate != null)) {
-                        control['controls']['baselineFinish'].disable()
+                if (this.riskIssuesNgxData.length > 0) {
+                    this.showRiskIssueTable = true;
+                }
+                if (this.askNeedsNgxData.length > 0) {
+                    this.showAskNeedsTable = true;
+                }
+                this.scheduledataDb = this.scheduleNgxData.map(x => {
+                    return {
+                        "scheduleUniqueId": x.scheduleUniqueId,
+                        "projectId": x.projectId,
+                        "milestone": x.milestone,
+                        "plannedFinish": moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss"),
+                        "baselineFinish": moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss"),
+                        "responsiblePersonName": (x.responsiblePersonId == null || x.responsiblePersonId == '' ? {} : { userAdid: x.responsiblePersonId, userDisplayName: x.responsiblePersonName }),
+                        "functionGroupId": x.functionGroupId,
+                        "function": (this.lookUpData.find(y => y.lookUpId == x.functionGroupId)),
+                        "completionDate": moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss"),
+                        "comments": x.comments,
+                        "includeInReport": x.includeInReport,
+                        "includeInCharter": x.includeInCharter,
+                        "milestoneType": x.milestoneType,
+                        "templateMilestoneId": x.templateMilestoneId,
+                        "includeInCloseout": x.includeInCloseout,
+                        "responsiblePersonId": x.responsiblePersonId,
+                        "indicator": x.indicator
+                    }
+                })
+                for (var i of this.scheduleNgxData) {
+                    this.milestoneName = i.milestone
+                    this.milestoneForm.push(new FormGroup({
+                        scheduleUniqueId: new FormControl(i.scheduleUniqueId),
+                        projectId: new FormControl(i.projectId),
+                        milestone: new FormControl(i.milestoneType > 0 ? i.milestoneType == 1 ? this.milestoneName.replace('Execution Start - ', '') : i.milestoneType == 2 ? this.milestoneName.replace('Execution End - ', '') : i.milestone : i.milestone),
+                        plannedFinish: new FormControl(i.plannedFinish),
+                        baselineFinish: new FormControl(i.baselineFinish),
+                        responsiblePersonName: new FormControl(i.responsiblePersonId == null || i.responsiblePersonId == '' ? {} : { userAdid: i.responsiblePersonId, userDisplayName: i.responsiblePersonName }),
+                        functionGroupId: new FormControl(i.functionGroupId),
+                        function: new FormControl(this.lookUpData.find(x => x.lookUpId == i.functionGroupId)),
+                        completionDate: new FormControl(i.completionDate),
+                        comments: new FormControl(i.comments),
+                        includeInReport: new FormControl(i.includeInReport),
+                        includeInCharter: new FormControl(i.includeInCharter),
+                        milestoneType: new FormControl(i.milestoneType),
+                        templateMilestoneId: new FormControl(i.templateMilestoneId),
+                        includeInCloseout: new FormControl(i.includeInCloseout),
+                        responsiblePersonId: new FormControl(i.responsiblePersonId),
+                        indicator: new FormControl(i.indicator)
+                    }))
+                    if (this.milestoneForm.controls.filter(x => x.value.completionDate != null)) {
+                        for (let control of this.milestoneForm.controls.filter(x => x.value.completionDate != null)) {
+                            control['controls']['baselineFinish'].disable()
+                        }
                     }
                 }
-            }
-            if (res.riskIssues?.length > 0) {
-                for (var i of res.riskIssues) {
-                    this.dbRiskIssues.push({
-                        closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                        dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                        functionGroupId: i.functionGroupId,
-                        ifHappens: i.ifHappens,
-                        impactId: i.impactId,
-                        includeInCharter: i.includeInCharter,
-                        includeInReport: i.includeInReport,
-                        indicator: i.indicator,
-                        logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                        mitigation: i.mitigation,
-                        ownerId: i.ownerId,
-                        ownerName: i.ownerName,
-                        postMitigationComments: i.postMitigationComments,
-                        postMitigationImpact: i.postMitigationImpact,
-                        postMitigationProbability: i.postMitigationProbability,
-                        probabilityId: i.probabilityId,
-                        projectId: i.projectId,
-                        riskIssueResult: i.riskIssueResult,
-                        riskIssueTypeId: i.riskIssueTypeId,
-                        riskIssueUniqueId: i.riskIssueUniqueId,
-                    })
+                if (res.riskIssues?.length > 0) {
+                    for (var i of res.riskIssues) {
+                        this.dbRiskIssues.push({
+                            closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                            dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                            functionGroupId: i.functionGroupId,
+                            ifHappens: i.ifHappens,
+                            impactId: i.impactId,
+                            includeInCharter: i.includeInCharter,
+                            includeInReport: i.includeInReport,
+                            indicator: i.indicator,
+                            logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                            mitigation: i.mitigation,
+                            ownerId: i.ownerId,
+                            ownerName: i.ownerName,
+                            postMitigationComments: i.postMitigationComments,
+                            postMitigationImpact: i.postMitigationImpact,
+                            postMitigationProbability: i.postMitigationProbability,
+                            probabilityId: i.probabilityId,
+                            projectId: i.projectId,
+                            riskIssueResult: i.riskIssueResult,
+                            riskIssueTypeId: i.riskIssueTypeId,
+                            riskIssueUniqueId: i.riskIssueUniqueId,
+                        })
+                    }
                 }
-            }
-            this.riskIssuesNgxData.length > 0 ? this.riFormIntializer() : ''
-            if (res.askNeeds.length > 0) {
-                for (var i of res.askNeeds) {
-                    this.dbAskNeeds.push({
-                        askNeedUniqueId: i.askNeedUniqueId,
-                        projectId: i.projectId,
-                        askNeed1: i.askNeed1,
-                        needFromId: i.needFromId,
-                        needFromName: i.needFromName,
-                        needByDate: i.needByDate ? moment(i.needByDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                        comments: i.comments,
-                        logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                        closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                        includeInReport: i.includeInReport,
-                        indicator: i.indicator
-                    })
+                this.riskIssuesNgxData.length > 0 ? this.riFormIntializer() : ''
+                if (res.askNeeds.length > 0) {
+                    for (var i of res.askNeeds) {
+                        this.dbAskNeeds.push({
+                            askNeedUniqueId: i.askNeedUniqueId,
+                            projectId: i.projectId,
+                            askNeed1: i.askNeed1,
+                            needFromId: i.needFromId,
+                            needFromName: i.needFromName,
+                            needByDate: i.needByDate ? moment(i.needByDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                            comments: i.comments,
+                            logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                            closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                            includeInReport: i.includeInReport,
+                            indicator: i.indicator
+                        })
+                    }
+                    this.dbAskNeeds = this.sortByNeedByDate(this.dbAskNeeds)
                 }
-                this.dbAskNeeds = this.sortByNeedByDate(this.dbAskNeeds)
-            }
-            this.askNeedsNgxData.length > 0 ? this.anFormIntializer() : ''
+                this.askNeedsNgxData.length > 0 ? this.anFormIntializer() : ''
+            })
         })
         this.viewContent = true
     }
@@ -368,7 +376,7 @@ export class StateCheckComponent implements OnInit {
         this.dbRiskIssues = []
         var formValue = this.riskIssueForm.getRawValue()
         if (!this.projectHubService.includeClosedItems.riskIssue.value) {
-            this.dbRiskIssues = this.dbRiskIssues.length > 0 ? this.dbRiskIssues.filter(x => x.closeDate != null) : []
+            this.dbRiskIssues = this.riskIssuesData.length > 0 ? this.riskIssuesData.filter(x => x.closeDate != null) : []
         }
         for (var i of formValue) {
             this.dbRiskIssues.push({
@@ -399,7 +407,7 @@ export class StateCheckComponent implements OnInit {
         this.dbAskNeeds = []
         var formValue = this.askNeedForm.getRawValue()
         if (!this.projectHubService.includeClosedItems.askNeed.value) {
-            this.dbAskNeeds = this.dbAskNeeds.length > 0 ? this.dbAskNeeds.filter(x => x.closeDate != null) : []
+            this.dbAskNeeds = this.askNeedData.length > 0 ? this.askNeedData.filter(x => x.closeDate != null) : []
         }
         for (var i of formValue) {
             this.dbAskNeeds.push({
@@ -436,36 +444,36 @@ export class StateCheckComponent implements OnInit {
     }
 
     onSubmit() {
-        var milestonePass =true;
-        var riskIssuesPass =true;
-        var askNeedsPass =true;
+        var milestonePass = true;
+        var riskIssuesPass = true;
+        var askNeedsPass = true;
         this.milestoneForm.controls.forEach(milestone => {
-            if(milestone.value.completionDate == null)
+            if (milestone.value.completionDate == null)
                 milestonePass = false;
         });
         this.riskIssueForm.controls.forEach(riskIssue => {
-            if(riskIssue.value.closeDate == null)
+            if (riskIssue.value.closeDate == null)
                 riskIssuesPass = false;
         });
         this.askNeedForm.controls.forEach(askNeed => {
-            if(askNeed.value.closeDate == null)
+            if (askNeed.value.closeDate == null)
                 askNeedsPass = false;
         });
         var message = "Please enter values for ";
-        if(!milestonePass){
-            message  = message + "Completion Date for all the rows in the Incomplete Milestone Grid"
-            if(!riskIssuesPass || !askNeedsPass){
-                message = message +", ";
+        if (!milestonePass) {
+            message = message + "Completion Date for all the rows in the Incomplete Milestone Grid"
+            if (!riskIssuesPass || !askNeedsPass) {
+                message = message + ", ";
             }
         }
-        if(!riskIssuesPass && !askNeedsPass){
-            message = message +"Close Date for all the rows in Risk/Issue Grid and Ask/Need Grid";
-        }else{
-            if(!riskIssuesPass){
-                message = message +"Close Date for all the rows in Risk/Issue Grid";
+        if (!riskIssuesPass && !askNeedsPass) {
+            message = message + "Close Date for all the rows in Risk/Issue Grid and Ask/Need Grid";
+        } else {
+            if (!riskIssuesPass) {
+                message = message + "Close Date for all the rows in Risk/Issue Grid";
             }
-            if(!askNeedsPass){
-                message = message +"Close Date for all the rows in  Ask/Need Grid";
+            if (!askNeedsPass) {
+                message = message + "Close Date for all the rows in  Ask/Need Grid";
             }
         }
         var comfirmConfig: FuseConfirmationConfig = {
@@ -488,23 +496,23 @@ export class StateCheckComponent implements OnInit {
             "dismissible": true
         }
         const delay = ms => new Promise(res => setTimeout(res, ms));
-        if(!riskIssuesPass || !askNeedsPass || !milestonePass){
+        if (!riskIssuesPass || !askNeedsPass || !milestonePass) {
             this.fuseAlert.open(comfirmConfig)
-        }else{
-            if(this.showMilestoneTable){
+        } else {
+            if (this.showMilestoneTable) {
                 this.saveScheduleBulkEdit()
-            }else{
-                this.checkNumber.next(this.checkNumber.value+1)
+            } else {
+                this.checkNumber.next(this.checkNumber.value + 1)
             }
-            if(this.showRiskIssueTable){
+            if (this.showRiskIssueTable) {
                 this.submitRI();
-            }else{
-                this.checkNumber.next(this.checkNumber.value+1)
+            } else {
+                this.checkNumber.next(this.checkNumber.value + 1)
             }
-            if(this.showAskNeedsTable){
+            if (this.showAskNeedsTable) {
                 this.submitAN();
-            }else{
-                this.checkNumber.next(this.checkNumber.value+1)
+            } else {
+                this.checkNumber.next(this.checkNumber.value + 1)
             }
         }
 
@@ -558,7 +566,7 @@ export class StateCheckComponent implements OnInit {
                 }
             }
             this.apiService.bulkeditSchedule(this.scheduleFormValue, this.id).then(res => {
-                this.checkNumber.next(this.checkNumber.value+1)
+                this.checkNumber.next(this.checkNumber.value + 1)
                 this.projectHubService.submitbutton.next(true)
                 this.projectHubService.isNavChanged.next(true)
             })
@@ -613,31 +621,31 @@ export class StateCheckComponent implements OnInit {
                 }
             }
             this.apiService.bulkeditSchedule(this.scheduleFormValue, this.id).then(res => {
-                this.checkNumber.next(this.checkNumber.value+1)
+                this.checkNumber.next(this.checkNumber.value + 1)
                 this.projectHubService.submitbutton.next(true)
                 this.projectHubService.isNavChanged.next(true)
             })
         }
     }
     submitRI() {
-            this.submitPrepRiskIssues()
-            this.apiService.bulkeditRiskIssue(this.dbRiskIssues, this.id).then(res => {
-                    this.checkNumber.next(this.checkNumber.value+1)
-                    this.projectHubService.submitbutton.next(true)
-                    this.projectHubService.successSave.next(true)
-                    this.projectHubService.isNavChanged.next(true)
-                }
-            )
+        this.submitPrepRiskIssues()
+        this.apiService.bulkeditRiskIssue(this.dbRiskIssues, this.id).then(res => {
+            this.checkNumber.next(this.checkNumber.value + 1)
+            this.projectHubService.submitbutton.next(true)
+            this.projectHubService.successSave.next(true)
+            this.projectHubService.isNavChanged.next(true)
+        }
+        )
     }
     submitAN() {
-            this.submitPrepAskNeeds()
-            this.apiService.bulkeditAskNeeds(this.dbAskNeeds,  this.id).then(res => {
-                this.checkNumber.next(this.checkNumber.value+1)
-                    this.projectHubService.submitbutton.next(true)
-                    this.projectHubService.successSave.next(true)
-                    this.projectHubService.isNavChanged.next(true)
-                }
-            )
+        this.submitPrepAskNeeds()
+        this.apiService.bulkeditAskNeeds(this.dbAskNeeds, this.id).then(res => {
+            this.checkNumber.next(this.checkNumber.value + 1)
+            this.projectHubService.submitbutton.next(true)
+            this.projectHubService.successSave.next(true)
+            this.projectHubService.isNavChanged.next(true)
+        }
+        )
     }
 
 
