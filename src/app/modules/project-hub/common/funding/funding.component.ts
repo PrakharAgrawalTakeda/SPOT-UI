@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
@@ -8,6 +8,7 @@ import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.
 import { GlobalBusinessCaseOptions } from 'app/shared/global-business-case-options';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../project-api.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-funding',
@@ -16,7 +17,7 @@ import { ProjectApiService } from '../project-api.service';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.Default
 })
-export class FundingComponent implements OnInit, OnChanges {
+export class FundingComponent implements OnInit, OnChanges, OnDestroy {
   @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' = 'Normal'
   @Input() optionType: 'recommended-option' | 'option-2' | 'option-3' = 'recommended-option'
   @Input() projectid: any;
@@ -35,11 +36,11 @@ export class FundingComponent implements OnInit, OnChanges {
   localcurrency: any;
   optionId: any;
   fundingBCbulkEditType: string;
-
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(private projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService,
     public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService, private authService: AuthService, private _Activatedroute: ActivatedRoute,
     private portApiService: PortfolioApiService) {
-    this.projecthubservice.submitbutton.subscribe(res => {
+    this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (res == true) {
         this.dataloader()
       }
@@ -243,5 +244,10 @@ export class FundingComponent implements OnInit, OnChanges {
       }
     })
 
+  }
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
 }

@@ -1,16 +1,17 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from '../../project-hub.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { ActivatedRoute } from '@angular/router';
 import { ProjectApiService } from '../project-api.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-shipping-table',
   templateUrl: './shipping-table.component.html',
   styleUrls: ['./shipping-table.component.scss']
 })
-export class ShippingTableComponent {
+export class ShippingTableComponent implements OnInit,OnDestroy {
   id: string = ""
   viewContent: boolean = false
   Shippingngx: any = []
@@ -24,9 +25,10 @@ export class ShippingTableComponent {
   sortDir = ""
   editable= false
   gdlList: any;
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
-    this.projecthubservice.submitbutton.subscribe(res => {
+    this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (res == true) {
         this.dataloader()
       }
@@ -93,5 +95,10 @@ export class ShippingTableComponent {
         })
       }
     })
+  }
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
 }

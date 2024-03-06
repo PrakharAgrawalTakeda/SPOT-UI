@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -6,13 +6,14 @@ import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.
 import { GlobalBusinessCaseOptions } from 'app/shared/global-business-case-options';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../project-api.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-option-info',
   templateUrl: './option-info.component.html',
   styleUrls: ['./option-info.component.scss']
 })
-export class OptionInfoComponent implements OnInit {
+export class OptionInfoComponent implements OnInit, OnDestroy{
   @Input() optionType: 'recommended-option' | 'option-2' | 'option-3' = 'recommended-option'
   optionInfoEditType: 'OptionInfoEditRC' | 'OptionInfoEditO2' | 'OptionInfoEditO3'
   feasibilityEditType: 'FeasibilityEditRC' | 'FeasibilityEditO2' | 'FeasibilityEditO3'
@@ -40,17 +41,18 @@ export class OptionInfoComponent implements OnInit {
     equipmentRatingId: new FormControl(''),
     equipementJustification: new FormControl(''),
   })
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(private apiService: ProjectApiService,
     private _Activatedroute: ActivatedRoute,
     private portApiService: PortfolioApiService,
     private authService: AuthService,
     private projectHubService: ProjectHubService) { 
-      this.projectHubService.submitbutton.subscribe(res=>{
+      this.projectHubService.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res=>{
         if(this.viewContent){
           this.dataloader()
         }
       })
-      this.projectHubService.isNavChanged.subscribe(res=>{
+      this.projectHubService.isNavChanged.pipe(takeUntil(this._unsubscribeAll)).subscribe(res=>{
         if(this.viewContent){
           this.dataloader()
         }
@@ -131,5 +133,10 @@ export class OptionInfoComponent implements OnInit {
         this.viewContent = true
       })
     })
+  }
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
 }

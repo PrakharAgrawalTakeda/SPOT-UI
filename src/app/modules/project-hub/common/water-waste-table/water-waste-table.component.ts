@@ -1,16 +1,17 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ProjectHubService } from '../../project-hub.service';
 import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectApiService } from '../project-api.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-water-waste-table',
   templateUrl: './water-waste-table.component.html',
   styleUrls: ['./water-waste-table.component.scss']
 })
-export class WaterWasteTableComponent {
+export class WaterWasteTableComponent implements OnInit, OnDestroy {
   id: string = ""
   viewContent: boolean = false
   WaterWastengx: any = []
@@ -24,9 +25,10 @@ export class WaterWasteTableComponent {
   @Input() DateMandatory: boolean
   sortDir = ""
   sortDirCost = ""
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
-    this.projecthubservice.submitbutton.subscribe(res => {
+    this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (res == true) {
         this.dataloader()
       }
@@ -123,5 +125,9 @@ export class WaterWasteTableComponent {
       return this.sortDirCost = "desc"
     }
   }
-
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
 }

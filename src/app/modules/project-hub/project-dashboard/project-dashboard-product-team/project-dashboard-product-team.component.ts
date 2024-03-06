@@ -1,18 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseNavigationService } from '@fuse/components/navigation';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-project-dashboard-product-team',
   templateUrl: './project-dashboard-product-team.component.html',
   styleUrls: ['./project-dashboard-product-team.component.scss']
 })
-export class ProjectDashboardProductTeamComponent {
+export class ProjectDashboardProductTeamComponent implements OnInit, OnDestroy {
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(private projectHubService: ProjectHubService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, public fuseAlert: FuseConfirmationService,private router: Router) { 
-    this.projectHubService.submitbutton.subscribe(res=>{
+    this.projectHubService.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res=>{
       if(res == true){
         this.dataloader()
       }
@@ -73,5 +75,10 @@ export class ProjectDashboardProductTeamComponent {
         console.log("API CALL HERE")
       }
     })
+  }
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
 }
