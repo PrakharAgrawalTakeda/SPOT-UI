@@ -12,6 +12,7 @@ import { RoleController } from 'app/shared/role-controller';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubComponent } from '../project-hub.component';
 import { ProjectHubService } from '../project-hub.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-project-view',
@@ -61,7 +62,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
 
   //hubsettings
   hubsetting: any = {}
-
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(private apiService: ProjectApiService,
     private roleController: RoleService,
     private _Activatedroute: ActivatedRoute,
@@ -71,7 +72,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
     private _router: Router,
     private changeDetector: ChangeDetectorRef,
     public fuseAlert: FuseConfirmationService) {
-    this.projecthubservice.submitbutton.subscribe(res => {
+    this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (res == true) {
         this.checkedan = false;
         this.dataloader()
@@ -177,5 +178,8 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
     if (this.projecthubservice.drawerOpenedright == true) {
       this.projecthubservice.toggleDrawerOpen('', '', [], '')
     }
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
 }

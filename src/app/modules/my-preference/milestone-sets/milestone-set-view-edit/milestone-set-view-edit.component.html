@@ -132,11 +132,14 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-        <div *ngIf="orderView"  class="overflow-y-hidden h-[70vh] pl-3"  >
+
+
+        <div *ngIf="orderView" class="overflow-y-auto h-[70vh] pl-3">
             <div (cdkDropListDropped)="drop($event)" cdkDropList class="draggable-list">
                 <div class="draggable-box" *ngFor="let standardMilestone of standardMilestonesTableData" cdkDrag>{{standardMilestone.milestone}}</div>
             </div>
         </div>
+        
         <div class="flex items-start justify-between  px-3">
             <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
                (click)="this.myPreferenceService.toggleDrawerOpen('', '',[],'',true)">

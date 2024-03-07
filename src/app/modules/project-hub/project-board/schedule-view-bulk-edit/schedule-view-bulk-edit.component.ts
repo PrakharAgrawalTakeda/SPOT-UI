@@ -171,15 +171,18 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     //debugger
                     let temp = this.scheduleData.links.find(x => x.linkItemId == control['value']['scheduleUniqueId'])
                     console.log("TEMP", temp)
+                    console.log(res)
+                    console.log(this.scheduleData.scheduleData)
                     if (temp) {
                        // debugger
                         let parentLink = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
                         if (parentLink) {
                             let parentID = temp.parentProjectId
                             console.log("PARENT ID", parentID)
+                            
                             if (res.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId'])) {
                                 // console.log( moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish.value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'))
-                                if (moment(control['controls']['baselineFinish'].value).format('YYYY-MM-DD[T]HH:mm:ss') != res.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish) {
+                                if (moment(control['controls']['baselineFinish'].value).format('YYYY-MM-DD[T]HH:mm:ss') != this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish) {
                                     //this.insertArray(control['controls']['projectId'].value)
                                     this.insertArray(parentID)
                                 }
@@ -191,7 +194,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     //this.scheduleData.scheduleData = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
                     if (res.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId'])) {
                         // console.log( moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish.value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'))
-                        if (moment(control['controls']['baselineFinish'].value).format('YYYY-MM-DD[T]HH:mm:ss') != res.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish) {
+                        if (moment(control['controls']['baselineFinish'].value).format('YYYY-MM-DD[T]HH:mm:ss') != this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId'])?.baselineFinish) {
                             this.insertArray(control['controls']['projectId'].value)
                         }
                     }
@@ -3000,7 +3003,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             templateMilestoneId: new FormControl(sM.milestoneId),
             includeInCloseout: this.mode == 'Project-Close-Out' ? new FormControl(limitPassedCloseOut == false ? sM.includeInReport : false) : new FormControl(false),
             responsiblePersonId: new FormControl(''),
-            indicator: new FormControl('')
+            indicator: new FormControl(''),
+            missedMsreasonCode: new FormControl(null)
         }))
         var j = [{
             scheduleUniqueId: "new",
@@ -3019,7 +3023,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             projectId: this.id,
             responsiblePersonId: null,
             responsiblePersonName: null,
-            templateMilestoneId: sM.milestoneId
+            templateMilestoneId: sM.milestoneId,
+            missedMsreasonCode: null
         }]
         this.schedulengxdata = [...this.schedulengxdata, ...j]
         this.milestoneTableEditRow(this.schedulengxdata.length - 1)

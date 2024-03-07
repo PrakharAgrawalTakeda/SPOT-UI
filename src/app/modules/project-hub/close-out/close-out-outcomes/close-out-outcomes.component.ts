@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-close-out-outcomes',
@@ -11,7 +12,7 @@ import { ProjectHubService } from '../../project-hub.service';
     styleUrls: ['./close-out-outcomes.component.scss']
 })
 
-export class CloseOutOutcomesComponent implements OnInit {
+export class CloseOutOutcomesComponent implements OnInit, OnDestroy {
 
     id: string = ''
     projectViewDetails: any = {}
@@ -25,13 +26,13 @@ export class CloseOutOutcomesComponent implements OnInit {
         targetEndState: new FormControl(''),
         benefitsRealizedOutcome: new FormControl('')
     })
-
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(
         public projectApiService: ProjectApiService,
         public projecthubservice: ProjectHubService,
         public auth: AuthService,
         private _Activatedroute: ActivatedRoute) {
-        this.projecthubservice.submitbutton.subscribe(res => {
+        this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
             if (res == true) {
                 this.dataloader()
             }
@@ -76,5 +77,9 @@ export class CloseOutOutcomesComponent implements OnInit {
     disabler() {
         this.outcomeForm.disable()
     }
-
+    ngOnDestroy(): void {
+        // Unsubscribe from all subscriptions
+        this._unsubscribeAll.next(null);
+        this._unsubscribeAll.complete();
+      }
 }

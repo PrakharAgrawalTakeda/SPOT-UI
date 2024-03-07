@@ -1,14 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ProjectApiService} from '../../common/project-api.service';
 import {ProjectHubService} from '../../project-hub.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-business-case-cost-funding',
     templateUrl: './business-case-cost-funding.component.html',
     styleUrls: ['./business-case-cost-funding.component.scss']
 })
-export class BusinessCaseCostFundingComponent implements OnInit {
+export class BusinessCaseCostFundingComponent implements OnInit, OnDestroy {
 
 
     option: string = ''
@@ -16,11 +17,12 @@ export class BusinessCaseCostFundingComponent implements OnInit {
     id: string;
     cost: any;
     funding: any;
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(public projecthubservice: ProjectHubService,
                 private apiService: ProjectApiService,
                 private _Activatedroute: ActivatedRoute) {
-        this.projecthubservice.submitbutton.subscribe(res => {
+        this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
             if (res == true) {
                 this.dataloader()
             }
@@ -41,5 +43,10 @@ export class BusinessCaseCostFundingComponent implements OnInit {
         this.viewContent = true
 // });
     }
+    ngOnDestroy(): void {
+        // Unsubscribe from all subscriptions
+        this._unsubscribeAll.next(null);
+        this._unsubscribeAll.complete();
+      }
 
 }

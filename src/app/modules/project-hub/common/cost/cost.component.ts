@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -6,13 +6,14 @@ import { GlobalBusinessCaseOptions } from 'app/shared/global-business-case-optio
 import moment from 'moment';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../project-api.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-cost',
   templateUrl: './cost.component.html',
   styleUrls: ['./cost.component.scss']
 })
-export class CostComponent implements OnInit {
+export class CostComponent implements OnInit, OnDestroy {
   @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' = 'Normal'
   @Input() optionType: 'recommended-option' | 'option-2' | 'option-3' = 'recommended-option'
   costfundingData = {}
@@ -61,16 +62,17 @@ export class CostComponent implements OnInit {
   optionId: string;
   costData2 = [];
   costData1 = [];
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(private apiService: ProjectApiService,
     private _Activatedroute: ActivatedRoute,
     private authService: AuthService,
     private projectHubService: ProjectHubService) {
-    this.projectHubService.submitbutton.subscribe(res => {
+    this.projectHubService.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (this.viewContent) {
         this.dataloader()
       }
     })
-    this.projectHubService.isNavChanged.subscribe(res => {
+    this.projectHubService.isNavChanged.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (this.viewContent) {
         this.dataloader()
       }
@@ -383,5 +385,10 @@ export class CostComponent implements OnInit {
   }
   numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
 }
