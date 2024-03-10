@@ -1,0 +1,972 @@
+<div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">
+        Bookmarks Add / Edit
+    </div>
+    <div style="padding-top: 2px">
+        <a
+            (click)="
+                PortfolioCenterService.bookmarkSmallDrawerOpenedChanged(false)
+            "
+            href="javascript:void(0)"
+            title="Close"
+        >
+            <mat-icon
+                class="text-on-primary"
+                svgIcon="heroicons_outline:x"
+            ></mat-icon>
+        </a>
+    </div>
+</div>
+<div class="py-3 px-0">
+    <div class="flex flex-col min-w-0 p-3 pt-3 w-full">
+        <div
+            class="overflow-x-hidden overflow-y-scroll"
+            style="height: calc(calc(100vh / var(--custom-zoom)) - 155px)"
+        >
+            <form [formGroup]="PortfolioFilterForm">
+                <div class="px-3">
+                    <spot-input
+                        class="w-full"
+                        formControlName="BookmarkName"
+                        [label]="'Bookmark Name'"
+                        [placeholder]="'Please enter a bookmark name!'"
+                        [Required]="'true'"
+                    >
+                    </spot-input>
+                </div>
+                <mat-accordion multi>
+                    <mat-expansion-panel
+                        class="my-6"
+                        [expanded]="filterExpanded"
+                    >
+                        <mat-expansion-panel-header class="pt-10 pb-10">
+                            <mat-panel-title class="font-bold">
+                                <h1>Filters</h1>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <div
+                            class="w-full overflow-hidden h-full"
+                            style="overflow-y: scroll"
+                        >
+                            <div
+                                class="overflow-y-scroll"
+                                style="
+                                    height: calc(
+                                        calc(100vh / var(--custom-zoom)) - 80px
+                                    );
+                                "
+                            >
+                                <div *ngIf="!isEdit" class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="IsAppliedFilters"
+                                        [label]="
+                                            'Take Over Currently Applied Filters'
+                                        "
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <spot-multiselect-user-autocomplete
+                                    formControlName="ProjectTeamMember"
+                                    [placeholder]="'Last Name, First Name'"
+                                    [label]="'Project Team Member'"
+                                    name="ProjectTeamMember"
+                                    [showLabel]="true"
+                                >
+                                </spot-multiselect-user-autocomplete>
+                                <spot-multiselect-autocomplete
+                                    formControlName="PortfolioOwner"
+                                    class="w-full"
+                                    name="PortfolioOwner"
+                                    [label]="'Portfolio Owner'"
+                                    [placeholder]="'Portfolio Owner'"
+                                    [valuePointer]="'portfolioOwner'"
+                                    [dropDownArray]="getPortfolioOwner()"
+                                    [idPointer]="'portfolioOwnerId'"
+                                    [sortByType]="'custom'"
+                                    [customSortPointer]="'pfid'"
+                                    [showHint]="true"
+                                    [hint]="
+                                        'The group which is responsible for the oversight and process adherence of the record'
+                                    "
+                                >
+                                </spot-multiselect-autocomplete>
+                                <spot-multiselect-autocomplete
+                                    formControlName="ExecutionScope"
+                                    class="w-full"
+                                    name="ExecutionScope"
+                                    [label]="'Execution Scope'"
+                                    [placeholder]="'Execution Scope'"
+                                    [dropDownArray]="getExcecutionScope()"
+                                    [valuePointer]="'portfolioOwner'"
+                                    [idPointer]="'portfolioOwnerId'"
+                                    [sortByType]="'custom'"
+                                    [customSortPointer]="'pfid'"
+                                    [showHint]="true"
+                                    [hint]="
+                                        'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'
+                                    "
+                                >
+                                </spot-multiselect-autocomplete>
+                                <spot-multiselect-autocomplete
+                                    formControlName="OwningOrganization"
+                                    class="w-full"
+                                    name="OwningOrganization"
+                                    [label]="'Owning Organization'"
+                                    [placeholder]="'Owning Organization'"
+                                    [dropDownArray]="owningOrg"
+                                    [idPointer]="'name'"
+                                    [valuePointer]="'name'"
+                                    [showHint]="true"
+                                    [hint]="
+                                        'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'
+                                    "
+                                >
+                                </spot-multiselect-autocomplete>
+                                <spot-multiselect-autocomplete
+                                    formControlName="ProjectType"
+                                    class="w-full"
+                                    name="ProjectType"
+                                    [label]="'Project Type'"
+                                    [placeholder]="'Project Type'"
+                                    [valuePointer]="'name'"
+                                    [idPointer]="'name'"
+                                    [dropDownArray]="projectType"
+                                >
+                                </spot-multiselect-autocomplete>
+                                <spot-multiselect-autocomplete
+                                    formControlName="ProjectState"
+                                    class="w-full"
+                                    name="ProjectState"
+                                    [label]="'Project State'"
+                                    [placeholder]="'Project State'"
+                                    [valuePointer]="'lookUpName'"
+                                    [idPointer]="'lookUpId'"
+                                    [dropDownArray]="filterlist.state"
+                                    [sortByType]="'custom'"
+                                    [customSortPointer]="'lookUpOrder'"
+                                    [showHint]="true"
+                                    [hint]="
+                                        'Status of the project (Active-Hold-Cancelled-Completed)'
+                                    "
+                                >
+                                </spot-multiselect-autocomplete>
+                                <spot-multiselect-autocomplete
+                                    formControlName="ProjectPhase"
+                                    class="w-full"
+                                    name="ProjectPhase"
+                                    [label]="'Project Phase'"
+                                    [placeholder]="'Project Phase'"
+                                    [valuePointer]="'lookUpName'"
+                                    [idPointer]="'lookUpId'"
+                                    [dropDownArray]="filterlist.phase"
+                                    [sortByType]="'custom'"
+                                    [customSortPointer]="'lookUpOrder'"
+                                >
+                                </spot-multiselect-autocomplete>
+                                <spot-multiselect-autocomplete
+                                    formControlName="CapitalPhase"
+                                    class="w-full"
+                                    name="CapitalPhase"
+                                    [label]="'Capital Phase'"
+                                    [placeholder]="'Capital Phase'"
+                                    [valuePointer]="'capitalPhaseName'"
+                                    [idPointer]="'capitalPhaseID'"
+                                    [dropDownArray]="filteredPhaseArray"
+                                    [sortByType]="'custom'"
+                                    [customSortPointer]="'capitalPhaseOrder'"
+                                >
+                                </spot-multiselect-autocomplete>
+                                <spot-multiselect-autocomplete
+                                    formControlName="OEPhase"
+                                    class="w-full"
+                                    name="OEPhase"
+                                    [label]="'OE Phase'"
+                                    [placeholder]="'OE Phase'"
+                                    [valuePointer]="'capitalPhaseName'"
+                                    [idPointer]="'capitalPhaseID'"
+                                    [dropDownArray]="oePhaseArray"
+                                    [sortByType]="'custom'"
+                                    [customSortPointer]="'capitalPhaseOrder'"
+                                >
+                                </spot-multiselect-autocomplete>
+                                <spot-multiselect-autocomplete
+                                    formControlName="TotalCAPEX"
+                                    class="w-full"
+                                    name="TotalCAPEX"
+                                    [label]="'Total CAPEX'"
+                                    [placeholder]="'Total CAPEX'"
+                                    [valuePointer]="'lookUpName'"
+                                    [idPointer]="'lookUpId'"
+                                    [dropDownArray]="totalCAPEX"
+                                    [sortByType]="'custom'"
+                                    [customSortPointer]="'lookUpOrder'"
+                                >
+                                </spot-multiselect-autocomplete>
+                                <spot-multiselect-autocomplete
+                                    formControlName="GMSBudgetOwner"
+                                    class="w-full"
+                                    name="GMSBudgetOwner"
+                                    [label]="'GMS Budget Owner'"
+                                    [placeholder]="'GMS Budget Owner'"
+                                    [valuePointer]="'portfolioOwner'"
+                                    [idPointer]="'portfolioOwnerId'"
+                                    [sortByType]="'custom'"
+                                    [dropDownArray]="getGMSBudgetOwner()"
+                                    [customSortPointer]="'pfid'"
+                                >
+                                </spot-multiselect-autocomplete>
+                                <spot-multiselect-autocomplete
+                                    formControlName="Product"
+                                    class="w-full"
+                                    name="Product"
+                                    [label]="'Product(s)'"
+                                    [placeholder]="'Product'"
+                                    [valuePointer]="'fullProductName'"
+                                    [idPointer]="'productId'"
+                                    [dropDownArray]="filterlist.products"
+                                    [showHint]="true"
+                                    [hint]="
+                                        'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'
+                                    "
+                                >
+                                </spot-multiselect-autocomplete>
+                                <spot-multiselect-autocomplete
+                                    formControlName="AGILEWorkstream"
+                                    class="w-full"
+                                    name="AGILEWorkstream"
+                                    [label]="'AGILE Workstream'"
+                                    [placeholder]="'AGILE Workstream'"
+                                    [valuePointer]="'lookUpName'"
+                                    [idPointer]="'lookUpId'"
+                                    [dropDownArray]="AgileWorkstream"
+                                >
+                                </spot-multiselect-autocomplete>
+                                <spot-multiselect-autocomplete
+                                    formControlName="AGILEWave"
+                                    class="w-full"
+                                    name="AGILEWave"
+                                    [label]="'AGILE Wave'"
+                                    [placeholder]="'AGILE Wave'"
+                                    [valuePointer]="'lookUpName'"
+                                    [idPointer]="'lookUpId'"
+                                    [dropDownArray]="AgileWave"
+                                >
+                                </spot-multiselect-autocomplete>
+                                <!-- <spot-select class="w-full" formControlName="SPRProjectCategory" name="SPRProjectCategory"
+                        [label]="'SPR Project Category'" [placeholder]="'SPR Project Category'" [showNoneOption]="true"
+                        [dropDownArrayType]="'string'" [dropDownArray]="CAPSDropDrownValues">
+                    </spot-select> -->
+                                <spot-multiselect-autocomplete
+                                    formControlName="SPRProjectCategory"
+                                    class="w-full"
+                                    name="SPRProjectCategory"
+                                    [label]="'SPR Project Category'"
+                                    [placeholder]="'SPR Project Category'"
+                                    [valuePointer]="'lookUpName'"
+                                    [idPointer]="'lookUpId'"
+                                    [dropDownArray]="SPRData"
+                                    [sortByType]="'custom'"
+                                    [customSortPointer]="'lookUpOrder'"
+                                >
+                                </spot-multiselect-autocomplete>
+                                <spot-multiselect-autocomplete
+                                    formControlName="PrimaryValueDriver"
+                                    class="w-full"
+                                    name="PrimaryValueDriver"
+                                    [label]="'Primary Value Driver'"
+                                    [placeholder]="'Primary Value Driver'"
+                                    [valuePointer]="'lookUpName'"
+                                    [idPointer]="'lookUpId'"
+                                    [dropDownArray]="primaryKPI"
+                                    [sortByType]="'custom'"
+                                    [customSortPointer]="'lookUpOrder'"
+                                >
+                                </spot-multiselect-autocomplete>
+                                <spot-select
+                                    class="w-full"
+                                    formControlName="CAPSProject"
+                                    name="CAPSProject"
+                                    [label]="'CAPS Project'"
+                                    [placeholder]="'CAPS Project'"
+                                    [showNoneOption]="true"
+                                    [dropDownArrayType]="'string'"
+                                    [dropDownArray]="CAPSDropDrownValues"
+                                    [showHint]="true"
+                                    [hint]="
+                                        'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'
+                                    "
+                                >
+                                </spot-select>
+
+                                <spot-multiselect-autocomplete
+                                    formControlName="OverallStatus"
+                                    class="w-full"
+                                    name="OverallStatus"
+                                    [label]="'Overall Status'"
+                                    [placeholder]="'Overall Status'"
+                                    [valuePointer]="'lookUpName'"
+                                    [idPointer]="'lookUpId'"
+                                    [dropDownArray]="overallStatus"
+                                    [sortByType]="'custom'"
+                                    [customSortPointer]="'lookUpOrder'"
+                                >
+                                </spot-multiselect-autocomplete>
+                                <app-spot-multiselect-project-autocomplete
+                                    formControlName="projectName"
+                                    [placeholder]="
+                                        'Search for a Project by Project ID / Title / Budget ID'
+                                    "
+                                    [label]="'Project/Program'"
+                                    name="projectName"
+                                    [showLabel]="true"
+                                >
+                                </app-spot-multiselect-project-autocomplete>
+                                <spot-input
+                                    class="w-full"
+                                    formControlName="projectNameKeyword"
+                                    name="projectNameKeyword"
+                                    [label]="'Project Name Keyword'"
+                                    [placeholder]="'Project Name Keyword'"
+                                >
+                                </spot-input>
+
+                                <mat-label
+                                    *ngIf="!showLA"
+                                    id="localAttribute"
+                                    style="color: #a0cbf1; cursor: pointer"
+                                    (click)="OpenLA(false)"
+                                    >+ Show Local Attributes</mat-label
+                                >
+                                <mat-label
+                                    *ngIf="showLA"
+                                    id="localAttribute"
+                                    style="color: #a0cbf1; cursor: pointer"
+                                    (click)="CloseLA()"
+                                    >+ Hide Local Attributes</mat-label
+                                >
+
+                                <form
+                                    class="pl-3 w-full overflow-hidden"
+                                    [formGroup]="localAttributeForm"
+                                    *ngIf="showLA"
+                                >
+                                    <div
+                                        [ngClass]="{
+                                            'overflow-y-scroll overflow-x-hidden h-[80.5vh] pt-3 pr-3':
+                                                viewType == 'SidePanel'
+                                        }"
+                                        *ngIf="showLA"
+                                    >
+                                        <div *ngFor="let item of dataLA">
+                                            <div [ngSwitch]="item.dataType">
+                                                <div
+                                                    *ngSwitchCase="'1'"
+                                                    class="w-full mt-4 mb-6"
+                                                    #checkbox
+                                                >
+                                                    <spot-toggle
+                                                        class="w-full"
+                                                        formControlName="{{
+                                                            item.uniqueId
+                                                        }}"
+                                                        [mode]="'toggle'"
+                                                        [label]="item.name"
+                                                    >
+                                                    </spot-toggle>
+                                                </div>
+                                                <div
+                                                    *ngIf="!item.isMulti"
+                                                    #input
+                                                >
+                                                    <spot-input
+                                                        *ngSwitchCase="'6'"
+                                                        class="w-full"
+                                                        formControlName="{{
+                                                            item.uniqueId
+                                                        }}"
+                                                        name="{{
+                                                            item.uniqueId
+                                                        }}"
+                                                        [label]="item.name"
+                                                        [placeholder]="
+                                                            item.name
+                                                        "
+                                                    >
+                                                    </spot-input>
+                                                </div>
+                                                <div
+                                                    *ngIf="item.isMulti"
+                                                    #textarea
+                                                >
+                                                    <spot-textarea
+                                                        *ngSwitchCase="'6'"
+                                                        formControlName="{{
+                                                            item.uniqueId
+                                                        }}"
+                                                        name="{{
+                                                            item.uniqueId
+                                                        }}"
+                                                        [label]="item.name"
+                                                        [rows]="item.linesCount"
+                                                    >
+                                                    </spot-textarea>
+                                                </div>
+                                                <!-- <div *ngIf="!item.isMulti" #Lookup>
+                                        <spot-singleselect-autocomplete *ngSwitchCase="'3'"
+                                            formControlName={{item.uniqueId}} class="w-full" name={{item.uniqueId}}
+                                            [label]=item.name [placeholder]=item.name [valuePointer]="'lookUpName'"
+                                            [dropDownArray]="getLookup(item.lookupParentId)" [sortByType]="'custom'"
+                                            [customSortPointer]="'lookUpOrder'">
+                                        </spot-singleselect-autocomplete>
+                                    </div> -->
+                                                <div #multiLookup>
+                                                    <spot-multiselect-autocomplete
+                                                        *ngSwitchCase="'3'"
+                                                        formControlName="{{
+                                                            item.uniqueId
+                                                        }}"
+                                                        class="w-full"
+                                                        name="{{
+                                                            item.uniqueId
+                                                        }}"
+                                                        [label]="item.name"
+                                                        [placeholder]="
+                                                            item.name
+                                                        "
+                                                        [valuePointer]="
+                                                            'lookUpName'
+                                                        "
+                                                        [idPointer]="'lookUpId'"
+                                                        [dropDownArray]="
+                                                            getLookup(
+                                                                item.lookupParentId
+                                                            )
+                                                        "
+                                                        [sortByType]="'custom'"
+                                                        [customSortPointer]="
+                                                            'lookUpOrder'
+                                                        "
+                                                    >
+                                                    </spot-multiselect-autocomplete>
+                                                </div>
+                                                <div style="display: flex">
+                                                    <spot-input
+                                                        style="display: flex"
+                                                        *ngSwitchCase="'4'"
+                                                        class="w-full"
+                                                        formControlName="{{
+                                                            item.name
+                                                        }}"
+                                                        name="{{ item.name }}"
+                                                        [label]="item.name"
+                                                        [decimalCount]="
+                                                            item.linesCount
+                                                        "
+                                                        [inputType]="'Number'"
+                                                        [callLocation]="
+                                                            'LocalAttribute'
+                                                        "
+                                                        [placeholder]="'From'"
+                                                    >
+                                                    </spot-input>
+                                                    <spot-input
+                                                        style="
+                                                            display: flex;
+                                                            left: 10px;
+                                                            position: relative;
+                                                        "
+                                                        *ngSwitchCase="'4'"
+                                                        class="w-full"
+                                                        formControlName="{{
+                                                            item.uniqueId
+                                                        }}"
+                                                        name="{{
+                                                            item.uniqueId
+                                                        }}"
+                                                        [decimalCount]="
+                                                            item.linesCount
+                                                        "
+                                                        [inputType]="'Number'"
+                                                        [callLocation]="
+                                                            'LocalAttribute'
+                                                        "
+                                                        [placeholder]="'To'"
+                                                    >
+                                                    </spot-input>
+                                                </div>
+                                                <div style="display: flex">
+                                                    <spot-input-date
+                                                        style="display: flex"
+                                                        *ngSwitchCase="'2'"
+                                                        class="w-full read-only"
+                                                        formControlName="{{
+                                                            item.name
+                                                        }}"
+                                                        name="{{ item.name }}"
+                                                        [label]="item.name"
+                                                        [placeholder]="'From'"
+                                                    >
+                                                    </spot-input-date>
+                                                    <spot-input-date
+                                                        style="
+                                                            display: flex;
+                                                            left: 10px;
+                                                            position: relative;
+                                                        "
+                                                        *ngSwitchCase="'2'"
+                                                        class="w-full read-only"
+                                                        formControlName="{{
+                                                            item.uniqueId
+                                                        }}"
+                                                        name="{{
+                                                            item.uniqueId
+                                                        }}"
+                                                        [placeholder]="'To'"
+                                                    >
+                                                    </spot-input-date>
+                                                </div>
+                                                <!-- <div *ngIf="!item.isMulti" #people>
+                                        <spot-singleselect-user-autocomplete *ngSwitchCase="'5'"
+                                            formControlName={{item.uniqueId}} [label]=item.name name={{item.uniqueId}}
+                                            [showLabel]="true" [placeholder]="'Last Name, First Name'">
+                                        </spot-singleselect-user-autocomplete>
+                                    </div> -->
+                                                <div #multiPeople>
+                                                    <spot-multiselect-user-autocomplete
+                                                        *ngSwitchCase="'5'"
+                                                        formControlName="{{
+                                                            item.uniqueId
+                                                        }}"
+                                                        [label]="item.name"
+                                                        name="{{
+                                                            item.uniqueId
+                                                        }}"
+                                                        [showLabel]="true"
+                                                        [placeholder]="
+                                                            'Last Name, First Name'
+                                                        "
+                                                    >
+                                                    </spot-multiselect-user-autocomplete>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel
+                        class="my-6"
+                        [expanded]="tableValuesExpanded"
+                    >
+                        <mat-expansion-panel-header class="pt-10 pb-10">
+                            <mat-panel-title class="font-bold">
+                                <h1>Attributes to Include/Exclude</h1>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div>
+                            <form [formGroup]="ProjectTableColumns">
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="OverallStatus"
+                                        [label]="'Overall Status'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="ProjectBudgetId"
+                                        [label]="'Project ID/Budget ID'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="ProgramProjectName"
+                                        [label]="'Program / Project Name'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="PhaseProjectCapitalOE"
+                                        [label]="'Phase (Project/Capital/OE)'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="ProjectManager"
+                                        [label]="'Project Manager'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="Sponsor"
+                                        [label]="'Sponsor'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="Schedule"
+                                        [label]="'Schedule'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="RiskIssues"
+                                        [label]="'Risk /Issues'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="AskNeed"
+                                        [label]="'Ask /Need'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="Budget"
+                                        [label]="'Budget'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="Spend"
+                                        [label]="'Spend'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="DQPercent"
+                                        [label]="'DQ%'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="TotalCapexApprovedForcast"
+                                        [label]="
+                                            'Total CAPEX  Approved/Forcast'
+                                        "
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="CarbonImpact"
+                                        [label]="'Carbon Impact ( Tons Co2)'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="WaterImpact"
+                                        [label]="'Water Impact (m3)'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="MilestoneProgression"
+                                        [label]="'Milestone / Progression'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="NextMilestone"
+                                        [label]="'Next Milestone'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="NextMilestonePlannedFinishDate"
+                                        [label]="
+                                            'Next Milestone Planned Finish Date'
+                                        "
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="ExecutionCompleteDate"
+                                        [label]="'Execution Complete Date'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="ExecutionDuration"
+                                        [label]="'Execution Duration (Days)'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="ParentProject"
+                                        [label]="'Parent Project'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="ProjectType"
+                                        [label]="'Project Type'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="PortfolioOwner"
+                                        [label]="'Portfolio Owner'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="OwningOrganization"
+                                        [label]="'Owning Organization'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="EnvironmentalPortfolio"
+                                        [label]="'Environmental Portfolio'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="CAPSProject"
+                                        [label]="'CAPS Project'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="ImpactRealizationDate"
+                                        [label]="'Impact Realization Date'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="PrimaryProduct"
+                                        [label]="'Primary Product'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="PrimaryValueDriver"
+                                        [label]="'Primary Value Driver'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="AGILEPrimaryWorkstream"
+                                        [label]="'AGILE Primary Workstream'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="AssetPlaceInService"
+                                        [label]="'Asset Place In Service'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="CapexRequired"
+                                        [label]="'Capex Required'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="GMSBudgetOwner"
+                                        [label]="'GMS Budget Owner'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="GlobalRegionalPredefinedInvestment"
+                                        [label]="
+                                            'Global / Regional Predefined Investment'
+                                        "
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="Where"
+                                        [label]="'Where'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="Why"
+                                        [label]="'Why'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="FundingApprovalNeedDate"
+                                        [label]="'Funding Approval Need Date'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="OPEXRequired"
+                                        [label]="'OPEX Required'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                            </form>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+                <!-- <spot-textarea
+                    class="w-full"
+                    formControlName="BookmarkName"
+                    [label]="'Bookmark Name'"
+                    [showLabel]="true"
+                    [maxLength]="20"
+                    Required
+                    [hint]="'You Can Define Your Hint Here'"
+                    [showHint]="true"
+                    [placeholder]="'Please Enter Some Values'"
+                    [isQuill]="true"
+                ></spot-textarea> -->
+            </form>
+        </div>
+    </div>
+    <div class="flex items-start justify-between px-3 py-4">
+        <a
+            class="min-w-26"
+            mat-flat-button
+            [color]="'primary'"
+            type="button"
+            (click)="
+                PortfolioCenterService.bookmarkSmallDrawerOpenedChanged(false)
+            "
+        >
+            Cancel
+        </a>
+        <button
+            *ngIf="isEdit"
+            class="min-w-26"
+            mat-flat-button
+            [color]="'primary'"
+            type="button"
+            (click)="onEditBookmark()"
+        >
+            Edit
+        </button>
+        <button
+            *ngIf="!isEdit"
+            class="min-w-26"
+            mat-flat-button
+            [color]="'primary'"
+            type="button"
+            (click)="onAddBookmark()"
+        >
+            Add
+        </button>
+    </div>
+</div>
