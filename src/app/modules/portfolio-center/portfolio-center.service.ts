@@ -73,13 +73,22 @@ export class PortfolioCenterService {
         await this.apiService
             .getBookmarksValue(localAccountId)
             .then((res: any) => {
-                this.bookmarks = res.sort();
+                this.bookmarks = res.sort((a, b) => {
+                    const nameA = a.bookmarkName.toUpperCase(); // Convert names to uppercase for case-insensitive sorting
+                    const nameB = b.bookmarkName.toUpperCase();
+
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    return 0; // Names are equal
+                });
+
                 this.showBookmarkTableContent = true;
             });
     }
-
-
-
 
     constructor(
         private fusealert: FuseConfirmationService,
@@ -167,7 +176,6 @@ export class PortfolioCenterService {
     }
 
     drawerOpenedChanged(event: any): void {
-        debugger;
         if (!this.drawerOpened) {
             if (this.drawerOpenedright != event) {
                 if (event == false) {
@@ -249,7 +257,6 @@ export class PortfolioCenterService {
         fuseDrawerSmall: boolean = false
     ): void {
         console.log(itemtype);
-        debugger;
 
         if (this.drawerOpened == true && this.isFormChanged == true) {
             // const alertopener = this.fusealert.open(this.alert)

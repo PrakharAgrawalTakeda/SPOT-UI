@@ -256,7 +256,6 @@ export class BookmarkEditComponent implements OnInit {
     ) {
         this.PortfolioCenterService.refreshEditBookmarkComponent.subscribe(
             () => {
-                debugger;
                 console.log(this.localAttributeForm);
                 console.log(this.localAttributeFormRaw);
                 if (this.isFirstTimeReload) {
@@ -392,7 +391,6 @@ export class BookmarkEditComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        debugger;
         this.PortfolioFilterForm.reset();
         this.ProjectTableColumns.reset();
 
@@ -648,7 +646,6 @@ export class BookmarkEditComponent implements OnInit {
     }
 
     dataLoader(res) {
-        debugger;
         console.log(this.localAttributeForm);
         res.forEach((data) => {
             var i = Object.assign({}, data);
@@ -1803,8 +1800,6 @@ export class BookmarkEditComponent implements OnInit {
                             ).replaceAll('"', ' /"'),
                         };
 
-                        debugger;
-
                         const isExist =
                             this.PortfolioCenterService.bookmarks.some(
                                 (bookmark) =>
@@ -2477,7 +2472,6 @@ export class BookmarkEditComponent implements OnInit {
                                 localAttributes
                             ).replaceAll('"', ' /"'),
                         };
-                        debugger;
                         const isExist =
                             this.PortfolioCenterService.bookmarks.some(
                                 (bookmark) =>

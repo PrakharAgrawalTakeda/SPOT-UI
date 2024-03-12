@@ -428,7 +428,6 @@ export class PortfolioCenterComponent implements OnInit {
         this.PortfolioFilterForm.controls.ProjectPhase.valueChanges.subscribe(
             (value) => {
                 if (this.showContent) {
-                    debugger;
                     if (value) {
                         this.changePhase(value);
                     }
@@ -1272,7 +1271,6 @@ export class PortfolioCenterComponent implements OnInit {
                             console.log(this.bulkreportdata);
 
                             this.initial = res;
-                            debugger;
                             if (res.budgetTile.fiscalYear) {
                                 this.currfiscalYear = res.budgetTile.fiscalYear;
                             }
@@ -3363,7 +3361,6 @@ export class PortfolioCenterComponent implements OnInit {
     }
 
     captureClose(event) {
-        debugger;
         if (event) {
             this.PortfolioCenterService.drawerOpenedPrakharTemp = true;
         } else {
@@ -5362,7 +5359,6 @@ export class PortfolioCenterComponent implements OnInit {
     }
 
     changePhase(phaseId) {
-        debugger;
         var result = [];
         var resultOE = [];
         this.filteredPhaseArray = [];
@@ -5396,7 +5392,6 @@ export class PortfolioCenterComponent implements OnInit {
             this.PortfolioFilterForm.controls.CapitalPhase.enable();
             this.PortfolioFilterForm.controls.OEPhase.enable();
         }
-        debugger;
         var PO = this.PortfolioFilterForm.controls.ProjectPhase.value
             ? this.PortfolioFilterForm.controls.ProjectPhase.value?.length != 0
                 ? true
@@ -5526,7 +5521,6 @@ export class PortfolioCenterComponent implements OnInit {
         window.open('/portfolio-center/forecast', '_blank');
     }
     openDrawer(type) {
-        debugger;
         this.PortfolioCenterService.drawerOpenedPrakharTemp = true;
         if (type == 'Filter') {
             this.dataLA = [];
