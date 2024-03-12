@@ -657,6 +657,15 @@
                             <div class="mb-4">
                                 <spot-toggle
                                     class="w-full mb-4"
+                                    formControlName="State"
+                                    [label]="'State'"
+                                    [showHint]="false"
+                                >
+                                </spot-toggle>
+                            </div>
+                            <div class="mb-4">
+                                <spot-toggle
+                                    class="w-full mb-4"
                                     formControlName="PhaseProjectCapitalOE"
                                     [label]="'Phase (Project/Capital/OE)'"
                                     [showHint]="false"
@@ -2103,6 +2112,7 @@
                             prop="projStatus"
                             [width]="100"
                             [resizeable]="false"
+                            *ngIf="checkColumnVisible('State')"
                         >
                             <ng-template
                                 let-row="row"

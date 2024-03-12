@@ -177,44 +177,45 @@ export class PortfolioCenterComponent implements OnInit {
     });
 
     ProjectTableColumns = new FormGroup({
-        OverallStatus: new FormControl(),
-        ProjectBudgetId: new FormControl(),
-        ProgramProjectName: new FormControl(),
-        PhaseProjectCapitalOE: new FormControl(),
-        ProjectManager: new FormControl(),
-        Sponsor: new FormControl(),
-        Schedule: new FormControl(),
-        RiskIssues: new FormControl(),
-        AskNeed: new FormControl(),
-        Budget: new FormControl(),
-        Spend: new FormControl(),
-        DQPercent: new FormControl(),
-        TotalCapexApprovedForcast: new FormControl(),
-        CarbonImpact: new FormControl(),
-        WaterImpact: new FormControl(),
-        MilestoneProgression: new FormControl(),
-        NextMilestone: new FormControl(),
-        NextMilestonePlannedFinishDate: new FormControl(),
-        ExecutionCompleteDate: new FormControl(),
-        ExecutionDuration: new FormControl(),
-        ParentProject: new FormControl(),
-        ProjectType: new FormControl(),
-        PortfolioOwner: new FormControl(),
-        OwningOrganization: new FormControl(),
-        EnvironmentalPortfolio: new FormControl(),
-        CAPSProject: new FormControl(),
-        ImpactRealizationDate: new FormControl(),
-        PrimaryProduct: new FormControl(),
-        PrimaryValueDriver: new FormControl(),
-        AGILEPrimaryWorkstream: new FormControl(),
-        AssetPlaceInService: new FormControl(),
-        CapexRequired: new FormControl(),
-        GMSBudgetOwner: new FormControl(),
-        GlobalRegionalPredefinedInvestment: new FormControl(),
-        Where: new FormControl(),
-        Why: new FormControl(),
-        FundingApprovalNeedDate: new FormControl(),
-        OPEXRequired: new FormControl(),
+        OverallStatus: new FormControl(false),
+        ProjectBudgetId: new FormControl(false),
+        ProgramProjectName: new FormControl(false),
+        State: new FormControl(false),
+        PhaseProjectCapitalOE: new FormControl(false),
+        ProjectManager: new FormControl(false),
+        Sponsor: new FormControl(false),
+        Schedule: new FormControl(false),
+        RiskIssues: new FormControl(false),
+        AskNeed: new FormControl(false),
+        Budget: new FormControl(false),
+        Spend: new FormControl(false),
+        DQPercent: new FormControl(false),
+        TotalCapexApprovedForcast: new FormControl(false),
+        CarbonImpact: new FormControl(false),
+        WaterImpact: new FormControl(false),
+        MilestoneProgression: new FormControl(false),
+        NextMilestone: new FormControl(false),
+        NextMilestonePlannedFinishDate: new FormControl(false),
+        ExecutionCompleteDate: new FormControl(false),
+        ExecutionDuration: new FormControl(false),
+        ParentProject: new FormControl(false),
+        ProjectType: new FormControl(false),
+        PortfolioOwner: new FormControl(false),
+        OwningOrganization: new FormControl(false),
+        EnvironmentalPortfolio: new FormControl(false),
+        CAPSProject: new FormControl(false),
+        ImpactRealizationDate: new FormControl(false),
+        PrimaryProduct: new FormControl(false),
+        PrimaryValueDriver: new FormControl(false),
+        AGILEPrimaryWorkstream: new FormControl(false),
+        AssetPlaceInService: new FormControl(false),
+        CapexRequired: new FormControl(false),
+        GMSBudgetOwner: new FormControl(false),
+        GlobalRegionalPredefinedInvestment: new FormControl(false),
+        Where: new FormControl(false),
+        Why: new FormControl(false),
+        FundingApprovalNeedDate: new FormControl(false),
+        OPEXRequired: new FormControl(false),
     });
 
     //Boookmarks
@@ -304,6 +305,7 @@ export class PortfolioCenterComponent implements OnInit {
         'OverallStatus',
         'ProjectBudgetId',
         'ProgramProjectName',
+        'State',
         'PhaseProjectCapitalOE',
         'ProjectManager',
         'Sponsor',
@@ -1782,7 +1784,7 @@ export class PortfolioCenterComponent implements OnInit {
                             this.showdefault = false;
 
                             // if (!this.isInitial) {
-                            //     this.initializePrefrencesTile();
+                            this.initializePrefrencesTile();
                             // }
 
                             // this.isInitial = false;
@@ -2716,7 +2718,6 @@ export class PortfolioCenterComponent implements OnInit {
             });
     }
     applyPortfoliofilters() {
-        this.showContent = false;
         if (
             this.PortfolioFilterForm.controls.ProjectPhase.value == null ||
             this.PortfolioFilterForm.controls.ProjectPhase.value.length == 0
@@ -3314,6 +3315,7 @@ export class PortfolioCenterComponent implements OnInit {
 
                     this.fuseAlert.open(comfirmConfig);
                 } else {
+                    this.showContent = false;
                     this.filterDrawer.close();
                     this.PortfolioCenterService.drawerOpenedPrakharTemp = false;
                     this.IsFilterApplyingFromPortfolio = true;
