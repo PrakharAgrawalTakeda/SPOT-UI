@@ -428,7 +428,10 @@ export class PortfolioCenterComponent implements OnInit {
         this.PortfolioFilterForm.controls.ProjectPhase.valueChanges.subscribe(
             (value) => {
                 if (this.showContent) {
-                    this.changePhase(value);
+                    debugger;
+                    if (value) {
+                        this.changePhase(value);
+                    }
                 }
             }
         );
@@ -3360,6 +3363,7 @@ export class PortfolioCenterComponent implements OnInit {
     }
 
     captureClose(event) {
+        debugger;
         if (event) {
             this.PortfolioCenterService.drawerOpenedPrakharTemp = true;
         } else {
@@ -4837,7 +4841,7 @@ export class PortfolioCenterComponent implements OnInit {
 
         var noChangePO = false;
         var noChangeES = false;
-        var filtersnew = this.PortfolioFilterForm.value;
+        var filtersnew = this.PortfolioFilterForm.getRawValue();
         if (
             portfolioOwners != '' &&
             filtersnew != null &&
@@ -5358,6 +5362,7 @@ export class PortfolioCenterComponent implements OnInit {
     }
 
     changePhase(phaseId) {
+        debugger;
         var result = [];
         var resultOE = [];
         this.filteredPhaseArray = [];
@@ -5391,13 +5396,14 @@ export class PortfolioCenterComponent implements OnInit {
             this.PortfolioFilterForm.controls.CapitalPhase.enable();
             this.PortfolioFilterForm.controls.OEPhase.enable();
         }
+        debugger;
         var PO = this.PortfolioFilterForm.controls.ProjectPhase.value
-            ? this.PortfolioFilterForm.controls.ProjectPhase.value.length != 0
+            ? this.PortfolioFilterForm.controls.ProjectPhase.value?.length != 0
                 ? true
                 : false
             : false;
         var CP = this.PortfolioFilterForm.controls.CapitalPhase.value
-            ? this.PortfolioFilterForm.controls.CapitalPhase.value.length != 0
+            ? this.PortfolioFilterForm.controls.CapitalPhase.value?.length != 0
                 ? true
                 : false
             : false;
@@ -5520,6 +5526,7 @@ export class PortfolioCenterComponent implements OnInit {
         window.open('/portfolio-center/forecast', '_blank');
     }
     openDrawer(type) {
+        debugger;
         this.PortfolioCenterService.drawerOpenedPrakharTemp = true;
         if (type == 'Filter') {
             this.dataLA = [];
@@ -5540,12 +5547,13 @@ export class PortfolioCenterComponent implements OnInit {
             if (localAttributeArray.length > 0) {
                 this.isLA = true;
                 this.initializeLocalAttributes(localAttributeArray);
+            } else {
+                this.showFilter = true;
             }
-            this.showFilter = true;
         } else {
             this.showFilter = false;
         }
-        this.filterDrawer.toggle();
+        this.filterDrawer.open();
     }
 
     initializeLocalAttributes(localAttributeArray) {

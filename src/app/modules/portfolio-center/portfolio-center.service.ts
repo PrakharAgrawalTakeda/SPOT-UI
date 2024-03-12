@@ -73,10 +73,13 @@ export class PortfolioCenterService {
         await this.apiService
             .getBookmarksValue(localAccountId)
             .then((res: any) => {
-                this.bookmarks = res;
+                this.bookmarks = res.sort();
                 this.showBookmarkTableContent = true;
             });
     }
+
+
+
 
     constructor(
         private fusealert: FuseConfirmationService,

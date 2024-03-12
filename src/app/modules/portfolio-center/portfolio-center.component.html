@@ -254,7 +254,7 @@
                     <spot-multiselect-autocomplete
                         *ngIf="
                             PortfolioFilterForm.controls.ProjectPhase.value
-                                .length != 0
+                                ?.length != 0
                         "
                         formControlName="CapitalPhase"
                         class="w-full"
@@ -271,7 +271,7 @@
                     <spot-multiselect-autocomplete
                         *ngIf="
                             PortfolioFilterForm.controls.ProjectPhase.value
-                                .length != 0
+                                ?.length != 0
                         "
                         formControlName="OEPhase"
                         class="w-full"
@@ -615,14 +615,16 @@
                             id="localAttribute"
                             style="color: #a0cbf1; cursor: pointer"
                             (click)="OpenPA()"
-                            >+ Show Portfolio Center Attributes</mat-label
+                            >+ Select Columns to Display in the Portfolio
+                            Center</mat-label
                         >
                         <mat-label
                             *ngIf="showPA"
                             id="localAttribute"
                             style="color: #a0cbf1; cursor: pointer"
                             (click)="ClosePA()"
-                            >+ Hide Portfolio Center Attributes</mat-label
+                            >+ Hide Columns to Display in the Portfolio
+                            Center</mat-label
                         >
                     </div>
                     <div *ngIf="showPA" class="mt-4">
@@ -1551,7 +1553,8 @@
 
                         <button
                             class="ml-4 bookmark-button"
-                            mat-flat-button
+                            mat-raised-button
+                            matTooltip="Quick Bookmark Creator - Create a bookmark based on the current filter applied"
                             [color]="'primary'"
                             (click)="saveAsBookmark()"
                         >
