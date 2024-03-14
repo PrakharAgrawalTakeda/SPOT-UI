@@ -389,13 +389,23 @@ export class PortfolioCenterComponent implements OnInit {
                     if (this.IsFilterApplyingFromPortfolio) {
                         this.IsFilterApplyingFromPortfolio = false;
                     } else {
-                        localStorage.removeItem('spot-tableColumns');
-                        localStorage.removeItem('spot-localattribute');
-                        localStorage.removeItem('spot-filtersNew');
+                        if (
+                            localStorage.getItem('spot-customFiltersApplied') !=
+                            'true'
+                        ) {
+                            localStorage.setItem(
+                                'spot-customFiltersApplied',
+                                'false'
+                            );
+                            localStorage.removeItem('spot-tableColumns');
+                            localStorage.removeItem('spot-localattribute');
+                            localStorage.removeItem('spot-filtersNew');
+                        }
                     }
 
                     this.applyAllFilters();
                 } else {
+                    localStorage.setItem('spot-customFiltersApplied', 'false');
                     this.initializeBookmark(res);
                 }
             }
@@ -569,7 +579,7 @@ export class PortfolioCenterComponent implements OnInit {
 
     defaultFilterObject = {
         bookmarkId: 'DefaultFilter',
-        bookmarkName: 'Default',
+        bookmarkName: 'Default View',
     };
 
     async applyAllFilters() {
@@ -1880,7 +1890,7 @@ export class PortfolioCenterComponent implements OnInit {
                 );
             } else {
                 this.bookmarkId = 'DefaultFilter';
-
+                localStorage.setItem('spot-customFiltersApplied', 'false');
                 this.BookmarksForm.controls.BookmarkName.patchValue(
                     'DefaultFilter'
                 );
@@ -3334,6 +3344,9 @@ export class PortfolioCenterComponent implements OnInit {
                         'spot-tableColumns',
                         JSON.stringify(this.filteredColumnValuesSelected)
                     );
+
+                    localStorage.setItem('spot-customFiltersApplied', 'true');
+
                     this.BookmarksForm.controls.BookmarkName.patchValue(
                         'DefaultFilter'
                     );
@@ -4058,6 +4071,9 @@ export class PortfolioCenterComponent implements OnInit {
     setPage(res: any, offset) {
         if (res != '') {
             this.projectOverview = res.portfolioDetails;
+            debugger;
+            console.log(this.lookup);
+
             this.status = this.projectOverview.projStatus;
             this.bulkreportdata = res.portfolioDetails;
             for (var i = 0; i < this.projectOverview.length; i++) {
@@ -4104,6 +4120,7 @@ export class PortfolioCenterComponent implements OnInit {
                     : this.projectOverview[i].budgetSpendIndicator;
 
                 var preffix = '';
+
                 if (
                     res.projectDetails[i].isArchived &&
                     !res.projectDetails[i].isConfidential
@@ -4254,6 +4271,123 @@ export class PortfolioCenterComponent implements OnInit {
                                   this.projectOverview[i].projectUid
                           )[0].redExecutionCompleteDate
                         : '';
+
+                this.projectOverview[i].isCAPSProject = res.projectDetails[i]
+                    .isCapsProject
+                    ? 'Yes'
+                    : 'No';
+                this.projectOverview[i].CAPEXRequired = res.budgetDetails[i]
+                    .capExRequired
+                    ? 'Yes'
+                    : 'No';
+                this.projectOverview[i].OPEXRequired = res.budgetDetails[i]
+                    .opExRequired
+                    ? 'Yes'
+                    : 'No';
+
+                const budgetOwner = this.filterlist.portfolioOwner.filter(
+                    (item) => {
+                        return (
+                            item.portfolioOwnerId ==
+                            res.budgetDetails[i].budgetOwner
+                        );
+                    }
+                );
+                const portfolioOwner = this.filterlist.portfolioOwner.filter(
+                    (item) => {
+                        return (
+                            item.portfolioOwnerId ==
+                            res.projectDetails[i].portfolioOwnerId
+                        );
+                    }
+                );
+                const emissionOwner = this.filterlist.portfolioOwner.filter(
+                    (item) => {
+                        return (
+                            item.portfolioOwnerId ==
+                            res.projectDetails[i].emissionPortfolioId
+                        );
+                    }
+                );
+
+                const primaryProduct = this.filterlist.products.filter(
+                    (item) => {
+                        return (
+                            item.productId ==
+                            res.projectDetails[i].primaryProductId
+                        );
+                    }
+                );
+                const predefinedInvestmentId = this.getLookupMaster(
+                    res.budgetDetails[i].predefinedInvestmentId
+                );
+                const agilePrimaryWorkstream = this.getLookupMaster(
+                    res.portfolioDetails[i].AGILEPrimaryWorkstream
+                );
+                const whereId = this.getLookupMaster(
+                    res.budgetDetails[i].whereId
+                );
+                const whyId = this.getLookupMaster(res.budgetDetails[i].whyId);
+                const primaryKPI = this.getLookupMaster(
+                    res.projectDetails[i].primaryKpi
+                );
+
+                this.projectOverview[i].predefinedInvestmentID =
+                    predefinedInvestmentId.length > 0
+                        ? predefinedInvestmentId[0].lookUpName
+                        : '';
+
+                this.projectOverview[i].whereID =
+                    whereId.length > 0 ? whereId[0].lookUpName : '';
+
+                this.projectOverview[i].whyID =
+                    whyId.length > 0 ? whyId[0].lookUpName : '';
+
+                this.projectOverview[i].primaryKPI =
+                    primaryKPI.length > 0 ? primaryKPI[0].lookUpName : '';
+
+
+                this.projectOverview[i].agilePrimaryWorkstream =
+                    agilePrimaryWorkstream.length > 0 ? agilePrimaryWorkstream[0].lookUpName : '';
+
+                this.projectOverview[i].budgetOwner =
+                    budgetOwner.length > 0 ? budgetOwner[0].portfolioOwner : '';
+
+                this.projectOverview[i].fundingApprovalNeedDate =
+                    res.budgetDetails[i].fundingApprovalNeedDate;
+                this.projectOverview[i].emissionsImpactRealizationDate =
+                    res.projectDetails[i].emissionsImpactRealizationDate;
+
+                this.projectOverview[i].portfolioOwnerID =
+                    portfolioOwner.length > 0
+                        ? portfolioOwner[0].portfolioOwner
+                        : '';
+                this.projectOverview[i].emissionPortfolioID =
+                    emissionOwner.length > 0
+                        ? emissionOwner[0].portfolioOwner
+                        : '';
+                this.projectOverview[i].primaryProductId =
+                    primaryProduct.length > 0
+                        ? primaryProduct[0].fullProductName
+                        : '';
+
+                this.projectOverview[i].APISDate =
+                    res.budgetDetails[i].apisdate;
+                this.projectOverview[i].problemType =
+                    res.projectDetails[i].problemType;
+                this.projectOverview[i].defaultOwningOrganizationId =
+                    res.projectDetails[i].defaultOwningOrganizationId;
+
+                debugger;
+                console.log(this.filterlist);
+                console.log(
+                    this.filterlist.portfolioOwner.filter((item) => {
+                        return (
+                            item.portfolioOwnerId ==
+                            res.budgetDetails[i].budgetOwner
+                        );
+                    })
+                );
             }
             this.size = 100;
             this.totalElements = this.totalproject;
@@ -4775,6 +4909,7 @@ export class PortfolioCenterComponent implements OnInit {
                     localAttributeObject: localStorage
                         .getItem('spot-localattribute')
                         .replaceAll('"', ' /"'),
+                    createdDate: new Date().toISOString(),
                 };
 
                 this.apiService.addBookmarkValue(tempObj).then((res: any) => {
@@ -5357,6 +5492,9 @@ export class PortfolioCenterComponent implements OnInit {
     getLookup(key) {
         return this.lookup.filter((x) => x.lookUpParentId == key);
     }
+    getLookupMaster(key) {
+        return this.lookup.filter((x) => x.lookUpId == key);
+    }
 
     changePhase(phaseId) {
         var result = [];
@@ -5525,24 +5663,78 @@ export class PortfolioCenterComponent implements OnInit {
         if (type == 'Filter') {
             this.dataLA = [];
             this.showLA = false;
+
+            const defaultView =
+                localStorage.getItem('spot-currentBookmark') ==
+                    'DefaultFilter' &&
+                localStorage.getItem('spot-customFiltersApplied') == 'false'
+                    ? true
+                    : false;
+
             this.localAttributeFormRaw.controls = {};
             this.localAttributeFormRaw.value = {};
             this.localAttributeForm.controls = {};
             this.localAttributeForm.value = {};
-            const filterObj = JSON.parse(
-                localStorage.getItem('spot-filtersNew')
-            );
-            this.PortfolioFilterForm.patchValue(filterObj);
 
-            const localAttributeArray = JSON.parse(
-                localStorage.getItem('spot-localattribute')
-            );
+            if (defaultView) {
+                const defaultFilter = {
+                    PortfolioOwner: [],
+                    ProjectTeamMember: this.user,
+                    ExecutionScope: [],
+                    OwningOrganization: [],
+                    ProjectState: this.state,
+                    ProjectPhase: [],
+                    CapitalPhase: [],
+                    OEPhase: [],
+                    ProjectType: [],
+                    Product: [],
+                    TotalCAPEX: [],
+                    GMSBudgetOwner: [],
+                    AGILEWorkstream: [],
+                    AGILEWave: [],
+                    CAPSProject: [],
+                    'Project/Program': [],
+                    OverallStatus: [],
+                    PrimaryValueDriver: [],
+                    SPRProjectCategory: [],
+                    projectNameKeyword: [],
+                };
 
-            if (localAttributeArray.length > 0) {
-                this.isLA = true;
-                this.initializeLocalAttributes(localAttributeArray);
-            } else {
+                this.filteredColumnValuesSelected =
+                    this.defaultColumnValuesSelected;
+                const tableObj = this.patchAllSelectedColumns(
+                    this.defaultColumnValuesSelected
+                );
+
+                this.PortfolioFilterForm.patchValue(defaultFilter);
+                this.ProjectTableColumns.patchValue(tableObj);
                 this.showFilter = true;
+            } else {
+                const filterObj = JSON.parse(
+                    localStorage.getItem('spot-filtersNew')
+                );
+                this.PortfolioFilterForm.patchValue(filterObj);
+
+                this.filteredColumnValuesSelected = JSON.parse(
+                    localStorage.getItem('spot-tableColumns')
+                );
+
+                const tableObj = this.patchAllSelectedColumns(
+                    this.filteredColumnValuesSelected
+                );
+
+                this.ProjectTableColumns.patchValue(tableObj);
+
+                const localAttributeArray = JSON.parse(
+                    localStorage.getItem('spot-localattribute')
+                );
+
+                if (localAttributeArray.length > 0) {
+                    this.isLA = true;
+                    this.initializeLocalAttributes(localAttributeArray);
+                } else {
+                    this.showFilter = true;
+                }
             }
         } else {
             this.showFilter = false;

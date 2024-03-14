@@ -22,7 +22,7 @@ export class BookmarksComponent implements OnInit {
     ) {}
 
 
-    viewElements: any = ['bookmarkId', 'bookmarkName', 'actions'];
+    viewElements: any = ['bookmarkId', 'bookmarkName','createdDate', 'actions'];
 
     viewElementChecker(element: string): boolean {
         return this.viewElements.some((x) => x == element);

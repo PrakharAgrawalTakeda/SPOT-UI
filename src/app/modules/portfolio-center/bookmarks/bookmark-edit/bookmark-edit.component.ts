@@ -2471,6 +2471,7 @@ export class BookmarkEditComponent implements OnInit {
                             localAttributeObject: JSON.stringify(
                                 localAttributes
                             ).replaceAll('"', ' /"'),
+                            createdDate: new Date().toISOString(),
                         };
                         const isExist =
                             this.PortfolioCenterService.bookmarks.some(

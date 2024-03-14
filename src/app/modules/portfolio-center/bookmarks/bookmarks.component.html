@@ -62,7 +62,7 @@
                     </div>
                 </div>
             </div>
-            <div class="p-6 overflow-x-auto h-full ">
+            <div class="p-6 overflow-x-auto h-full">
                 <ngx-datatable
                     [headerHeight]="'auto'"
                     [rowHeight]="'auto'"
@@ -73,7 +73,7 @@
                     <ngx-datatable-column
                         name="Bookmark Name"
                         prop="bookmarkName"
-                        [flexGrow]="13"
+                        [flexGrow]="4"
                         *ngIf="viewElementChecker('bookmarkName')"
                     >
                         <ng-template
@@ -84,22 +84,22 @@
                             <p>{{ value }}</p>
                         </ng-template>
                     </ngx-datatable-column>
-                    <!-- <ngx-datatable-column
+                    <ngx-datatable-column
                         name="Creation Date"
-                        prop="creationDate"
-                        [flexGrow]="1"
-                        *ngIf="viewElementChecker('creationDate')"
+                        prop="createdDate"
+                        [flexGrow]="17"
+                        *ngIf="viewElementChecker('createdDate')"
                     >
                         <ng-template
                             let-row="row"
                             let-value="value"
                             ngx-datatable-cell-template
                         >
-                            <p>{{ value }}</p>
+                            <p>{{ value | date : "dd-MMM-yyyy hh:mm a" }}</p>
                         </ng-template>
-                    </ngx-datatable-column> -->
+                    </ngx-datatable-column>
                     <ngx-datatable-column
-                        [flexGrow]="1"
+                        [flexGrow]="2"
                         [resizeable]="false"
                         [sortable]="false"
                         [draggable]="false"
@@ -133,9 +133,9 @@
                     </ngx-datatable-column>
                 </ngx-datatable>
             </div>
-            <div class="flex items-start justify-between h-auto mb-6 py-6">
+            <div class="flex items-start justify-end h-auto mb-6 py-6">
                 <a
-                    class="min-w-26"
+                    class="min-w-26 mx-3"
                     mat-flat-button
                     [color]="'primary'"
                     type="button"
