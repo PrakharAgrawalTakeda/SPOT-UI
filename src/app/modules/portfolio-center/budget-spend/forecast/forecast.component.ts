@@ -20,6 +20,7 @@ export class ForecastComponent {
   fundingRequests: any = []
   projectFunding:any = []
   id: string = ''
+  ForecastBulkEdit: string = 'ForecastBulkEdit';
   ForecastForm = new FormGroup({
     ForecastType: new FormControl(null),
     Currency: new FormControl(null),

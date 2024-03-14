@@ -1,0 +1,28 @@
+<div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Forecast Bulk Edit</div>
+    <div style="padding-top: 2px"><a
+            (click)="PortfolioCenterService.toggleForecastDrawerOpen('ForecastBulkEdit','',[],false)"
+            href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+    </div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 overflow-hidden">
+    <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl"
+        style="margin-right: 10px; margin-left: 10px;">
+        <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full">
+            <div>
+                <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden"
+                    *ngIf="showContent" #ForecastTable>
+                    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarH]="true" [scrollbarV]="false"
+                        columnMode="force" class="font-medium text-sm text-default whitespace-nowrap datatable-PB-80"
+                        [rows]="forecastData">
+
+
+
+                        
+                        </ngx-datatable>
+            </div>
+        </div>
+    </div>
+</div>

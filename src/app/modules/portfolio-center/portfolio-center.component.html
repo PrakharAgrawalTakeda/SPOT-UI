@@ -14,6 +14,7 @@
                 PortfolioCenterService.itemtype == 'FXRateOpen'
             "
         ></app-budget-spend>
+       
     </div>
     <fuse-drawer
         [name]="'rightDrawer'"
@@ -34,6 +35,22 @@
         </div>
     </fuse-drawer>
 </fuse-drawer>
+
+<fuse-drawer
+    [name]="'rightDrawer'"
+    [opened]="PortfolioCenterService.forecastDrawerOpened"
+    (openedChanged)="PortfolioCenterService.forecastDrawerOpenedChanged($event)"
+    [mode]="'over'"
+    [position]="'right'"
+    [ngClass]="{
+        'fuse-drawer-large': PortfolioCenterService.forecastDrawerLarge
+    }"
+>
+    <div>
+        <app-forecast-bulk-edit
+        *ngIf="PortfolioCenterService.forecastItemType == 'ForecastBulkEdit'"></app-forecast-bulk-edit>
+    </div>
+</fuse-drawer>    
 
 <fuse-drawer
     [name]="'rightDrawer'"
