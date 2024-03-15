@@ -153,9 +153,6 @@ export class BookmarkEditComponent implements OnInit {
     });
 
     ProjectTableColumns = new FormGroup({
-        OverallStatus: new FormControl(false),
-        ProjectBudgetId: new FormControl(false),
-        ProgramProjectName: new FormControl(false),
         State: new FormControl(false),
         PhaseProjectCapitalOE: new FormControl(false),
         ProjectManager: new FormControl(false),
@@ -221,9 +218,6 @@ export class BookmarkEditComponent implements OnInit {
     isFirstTimeReload = true;
 
     defaultColumnValuesSelected = [
-        'OverallStatus',
-        'ProjectBudgetId',
-        'ProgramProjectName',
         'State',
         'PhaseProjectCapitalOE',
         'ProjectManager',

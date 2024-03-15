@@ -177,9 +177,6 @@ export class PortfolioCenterComponent implements OnInit {
     });
 
     ProjectTableColumns = new FormGroup({
-        OverallStatus: new FormControl(false),
-        ProjectBudgetId: new FormControl(false),
-        ProgramProjectName: new FormControl(false),
         State: new FormControl(false),
         PhaseProjectCapitalOE: new FormControl(false),
         ProjectManager: new FormControl(false),
@@ -302,9 +299,6 @@ export class PortfolioCenterComponent implements OnInit {
     filteredColumnValuesSelected = [];
 
     defaultColumnValuesSelected = [
-        'OverallStatus',
-        'ProjectBudgetId',
-        'ProgramProjectName',
         'State',
         'PhaseProjectCapitalOE',
         'ProjectManager',
@@ -4293,6 +4287,7 @@ export class PortfolioCenterComponent implements OnInit {
                         );
                     }
                 );
+
                 const portfolioOwner = this.filterlist.portfolioOwner.filter(
                     (item) => {
                         return (
@@ -4301,6 +4296,7 @@ export class PortfolioCenterComponent implements OnInit {
                         );
                     }
                 );
+
                 const emissionOwner = this.filterlist.portfolioOwner.filter(
                     (item) => {
                         return (
@@ -4318,11 +4314,12 @@ export class PortfolioCenterComponent implements OnInit {
                         );
                     }
                 );
+
                 const predefinedInvestmentId = this.getLookupMaster(
                     res.budgetDetails[i].predefinedInvestmentId
                 );
                 const agilePrimaryWorkstream = this.getLookupMaster(
-                    res.portfolioDetails[i].AGILEPrimaryWorkstream
+                    res.projectDetails[i].agilePrimaryWorkstream
                 );
                 const whereId = this.getLookupMaster(
                     res.budgetDetails[i].whereId
@@ -4346,9 +4343,10 @@ export class PortfolioCenterComponent implements OnInit {
                 this.projectOverview[i].primaryKPI =
                     primaryKPI.length > 0 ? primaryKPI[0].lookUpName : '';
 
-
                 this.projectOverview[i].agilePrimaryWorkstream =
-                    agilePrimaryWorkstream.length > 0 ? agilePrimaryWorkstream[0].lookUpName : '';
+                    agilePrimaryWorkstream.length > 0
+                        ? agilePrimaryWorkstream[0].lookUpName
+                        : '';
 
                 this.projectOverview[i].budgetOwner =
                     budgetOwner.length > 0 ? budgetOwner[0].portfolioOwner : '';
@@ -4377,6 +4375,9 @@ export class PortfolioCenterComponent implements OnInit {
                     res.projectDetails[i].problemType;
                 this.projectOverview[i].defaultOwningOrganizationId =
                     res.projectDetails[i].defaultOwningOrganizationId;
+
+                this.projectOverview[i].parentProjectId =
+                    res.projectDetails[i].parentProgramId;
 
                 debugger;
                 console.log(this.filterlist);
@@ -5492,6 +5493,7 @@ export class PortfolioCenterComponent implements OnInit {
     getLookup(key) {
         return this.lookup.filter((x) => x.lookUpParentId == key);
     }
+
     getLookupMaster(key) {
         return this.lookup.filter((x) => x.lookUpId == key);
     }

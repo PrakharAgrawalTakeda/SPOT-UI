@@ -632,33 +632,6 @@
                             <div class="mb-4">
                                 <spot-toggle
                                     class="w-full mb-4"
-                                    formControlName="OverallStatus"
-                                    [label]="'Overall Status'"
-                                    [showHint]="false"
-                                >
-                                </spot-toggle>
-                            </div>
-                            <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="ProjectBudgetId"
-                                    [label]="'Project ID/Budget ID'"
-                                    [showHint]="false"
-                                >
-                                </spot-toggle>
-                            </div>
-                            <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="ProgramProjectName"
-                                    [label]="'Program / Project Name'"
-                                    [showHint]="false"
-                                >
-                                </spot-toggle>
-                            </div>
-                            <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
                                     formControlName="State"
                                     [label]="'State'"
                                     [showHint]="false"
@@ -1983,7 +1956,7 @@
                             { prop: 'overallStatus', dir: 'desc' },
                             { prop: 'problemTitle', dir: 'asc' }
                         ]"
-                        class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap"
+                        class="datatable-PO-80 datatable-ProjectOverview font-medium text-sm text-default whitespace-nowrap"
                         [rows]="projectOverview"
                         #projectOverviewTable
                     >
@@ -2044,7 +2017,6 @@
                             [sortable]="true"
                             [frozenLeft]="true"
                             [resizeable]="false"
-                            *ngIf="checkColumnVisible('OverallStatus')"
                         >
                             <ng-template
                                 let-row="row"
@@ -2077,7 +2049,6 @@
                             [frozenLeft]="true"
                             [headerClass]="getFrozenHeaderClassID"
                             [resizeable]="false"
-                            *ngIf="checkColumnVisible('ProjectBudgetId')"
                         >
                             <ng-template
                                 let-row="row"
@@ -2099,7 +2070,6 @@
                             [frozenLeft]="true"
                             [headerClass]="getFrozenHeaderClass"
                             [resizeable]="false"
-                            *ngIf="checkColumnVisible('ProgramProjectName')"
                         >
                             <ng-template
                                 let-row="row"
@@ -2622,6 +2592,102 @@
                                 </p>
                             </ng-template>
                         </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="Project Type"
+                            prop="problemType"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('ProjectType')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="Owning Organization"
+                            prop="defaultOwningOrganizationId"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('OwningOrganization')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="Portfolio Owner"
+                            prop="portfolioOwnerID"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('PortfolioOwner')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="Parent Project"
+                            prop="parentProjectId"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('ParentProject')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="Primary Product"
+                            prop="primaryProductId"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('PrimaryProduct')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column
+                            name="Primary Value Driver"
+                            prop="primaryKPI"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('PrimaryValueDriver')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
                         <ngx-datatable-column
                             name="Agile Primary Workstream"
                             prop="agilePrimaryWorkstream"
@@ -2637,123 +2703,7 @@
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="Funding Approval Need Date"
-                            prop="fundingApprovalNeedDate"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="
-                                checkColumnVisible('FundingApprovalNeedDate')
-                            "
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                {{ value | date : "dd-MMM-yyyy" }}
-                            </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="Primary Product"
-                            prop="primaryProductId"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="
-                                checkColumnVisible('PrimaryProduct')
-                            "
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                {{ value }}
-                            </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="Where"
-                            prop="whereID"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="
-                                checkColumnVisible('Where')
-                            "
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                {{ value }}
-                            </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="Why"
-                            prop="whyID"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="
-                                checkColumnVisible('Why')
-                            "
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                {{ value }}
-                            </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="Global/Regional Predefined Investment"
-                            prop="predefinedInvestmentID"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="
-                                checkColumnVisible('GlobalRegionalPredefinedInvestment')
-                            "
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                {{ value }}
-                            </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="Impact Realization Date"
-                            prop="emissionsImpactRealizationDate"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="
-                                checkColumnVisible('ImpactRealizationDate')
-                            "
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                {{ value | date : "dd-MMM-yyyy" }}
-                            </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="CAPS Project"
-                            prop="isCAPSProject"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('CAPSProject')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                {{ value }}
-                            </ng-template>
-                        </ngx-datatable-column>
+
                         <ngx-datatable-column
                             name="CAPEX Required"
                             prop="CAPEXRequired"
@@ -2784,6 +2734,7 @@
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
+
                         <ngx-datatable-column
                             name="GMS Budget Owner"
                             prop="budgetOwner"
@@ -2800,6 +2751,73 @@
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column
+                            name="Global/Regional Predefined Investment"
+                            prop="predefinedInvestmentID"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="
+                                checkColumnVisible(
+                                    'GlobalRegionalPredefinedInvestment'
+                                )
+                            "
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column
+                            name="Where"
+                            prop="whereID"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('Where')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column
+                            name="Why"
+                            prop="whyID"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('Why')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column
+                            name="Funding Approval Need Date"
+                            prop="fundingApprovalNeedDate"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="
+                                checkColumnVisible('FundingApprovalNeedDate')
+                            "
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value | date : "dd-MMM-yyyy" }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
                             name="Asset Placed In Service (Estimate)"
                             prop="APISDate"
                             [resizeable]="false"
@@ -2814,51 +2832,7 @@
                                 {{ value | date : "dd-MMM-yyyy" }}
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="Project Type"
-                            prop="problemType"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('ProjectType')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                {{ value }}
-                            </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="Owning Organization"
-                            prop="defaultOwningOrganizationId"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('OwningOrganization')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                {{ value }}
-                            </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="Portfolio Owner"
-                            prop="portfolioOwnerID"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('PortfolioOwner')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                {{ value }}
-                            </ng-template>
-                        </ngx-datatable-column>
+
                         <ngx-datatable-column
                             name="Environment Portfolio"
                             prop="emissionPortfolioID"
@@ -2872,6 +2846,37 @@
                                 ngx-datatable-cell-template
                             >
                                 {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="CAPS Project"
+                            prop="isCAPSProject"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('CAPSProject')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column
+                            name="Impact Realization Date"
+                            prop="emissionsImpactRealizationDate"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('ImpactRealizationDate')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value | date : "dd-MMM-yyyy" }}
                             </ng-template>
                         </ngx-datatable-column>
                     </ngx-datatable>
