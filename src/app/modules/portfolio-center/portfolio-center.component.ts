@@ -4913,13 +4913,22 @@ export class PortfolioCenterComponent implements OnInit {
                     createdDate: new Date().toISOString(),
                 };
 
-                this.apiService.addBookmarkValue(tempObj).then((res: any) => {
-                    localStorage.setItem(
-                        'spot-currentBookmark',
-                        res.bookmarkId
-                    );
-                    window.location.reload();
-                });
+                const isExist = this.PortfolioCenterService.bookmarks.some(
+                    (bookmark) => bookmark.bookmarkName === result
+                );
+
+                if (isExist) {
+                } else {
+                    this.apiService
+                        .addBookmarkValue(tempObj)
+                        .then((res: any) => {
+                            localStorage.setItem(
+                                'spot-currentBookmark',
+                                res.bookmarkId
+                            );
+                            window.location.reload();
+                        });
+                }
             }
         });
     }
