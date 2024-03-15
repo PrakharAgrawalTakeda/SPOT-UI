@@ -8,6 +8,7 @@ import { PortfolioApiService } from "../../portfolio-center/portfolio-api.servic
 import { BudgetService } from "./budget.service";
 import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../@fuse/services/confirmation";
 import { Subject, takeUntil } from 'rxjs';
+import moment from 'moment';
 
 @Component({
     selector: 'app-budget',
@@ -168,7 +169,7 @@ export class BudgetComponent implements OnInit, OnDestroy {
         this.budgetForecastForm.patchValue({
             referenceCurrent: forecast.find(x => x.active == 'Current').active,
             periodCurrent: forecast.find(x => x.active == 'Current').periodName,
-            lastSubmittedCurrent: forecast.find(x => x.active == 'Current').lastSubmitted,
+            lastSubmittedCurrent: this.formatDateTime(forecast.find(x => x.active == 'Current').lastSubmitted),
             submittedByCurrent: forecast.find(x => x.active == 'Current').userName,
             afpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').afpDeviationCodeID),
             mtdpCodeId: this.getLookUpName(this.budgetService.currentEntry.mtdpDeviationCodeID),
@@ -177,7 +178,10 @@ export class BudgetComponent implements OnInit, OnDestroy {
         this.budgetService.headerLabel = "Current " + forecast.find(x => x.active == 'Current').periodName + " versus Plan " + forecast.find(x => x.active == 'Plan').periodName
     }
 
-
+    formatDateTime(isoString: string): string {
+        return moment(isoString).format('DD-MMM-YYYY HH:mm:ss');
+    }
+    
     getLookUpName(id: string): string {
         return id && id != '' ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == id)?.lookUpName : ''
     }
