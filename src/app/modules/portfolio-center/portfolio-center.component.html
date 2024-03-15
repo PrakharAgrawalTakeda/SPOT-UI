@@ -254,7 +254,7 @@
                     <spot-multiselect-autocomplete
                         *ngIf="
                             PortfolioFilterForm.controls.ProjectPhase.value
-                                .length != 0
+                                ?.length != 0
                         "
                         formControlName="CapitalPhase"
                         class="w-full"
@@ -271,7 +271,7 @@
                     <spot-multiselect-autocomplete
                         *ngIf="
                             PortfolioFilterForm.controls.ProjectPhase.value
-                                .length != 0
+                                ?.length != 0
                         "
                         formControlName="OEPhase"
                         class="w-full"
@@ -615,14 +615,16 @@
                             id="localAttribute"
                             style="color: #a0cbf1; cursor: pointer"
                             (click)="OpenPA()"
-                            >+ Show Portfolio Center Attributes</mat-label
+                            >+ Select Columns to Display in the Portfolio
+                            Center</mat-label
                         >
                         <mat-label
                             *ngIf="showPA"
                             id="localAttribute"
                             style="color: #a0cbf1; cursor: pointer"
                             (click)="ClosePA()"
-                            >+ Hide Portfolio Center Attributes</mat-label
+                            >+ Hide Columns to Display in the Portfolio
+                            Center</mat-label
                         >
                     </div>
                     <div *ngIf="showPA" class="mt-4">
@@ -630,26 +632,8 @@
                             <div class="mb-4">
                                 <spot-toggle
                                     class="w-full mb-4"
-                                    formControlName="OverallStatus"
-                                    [label]="'Overall Status'"
-                                    [showHint]="false"
-                                >
-                                </spot-toggle>
-                            </div>
-                            <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="ProjectBudgetId"
-                                    [label]="'Project ID/Budget ID'"
-                                    [showHint]="false"
-                                >
-                                </spot-toggle>
-                            </div>
-                            <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="ProgramProjectName"
-                                    [label]="'Program / Project Name'"
+                                    formControlName="State"
+                                    [label]="'State'"
                                     [showHint]="false"
                                 >
                                 </spot-toggle>
@@ -694,7 +678,7 @@
                                 <spot-toggle
                                     class="w-full mb-4"
                                     formControlName="RiskIssues"
-                                    [label]="'Risk /Issues'"
+                                    [label]="'Risk/Issue'"
                                     [showHint]="false"
                                 >
                                 </spot-toggle>
@@ -703,7 +687,7 @@
                                 <spot-toggle
                                     class="w-full mb-4"
                                     formControlName="AskNeed"
-                                    [label]="'Ask /Need'"
+                                    [label]="'Ask/Need'"
                                     [showHint]="false"
                                 >
                                 </spot-toggle>
@@ -812,26 +796,8 @@
                             <div class="mb-4">
                                 <spot-toggle
                                     class="w-full mb-4"
-                                    formControlName="ParentProject"
-                                    [label]="'Parent Project'"
-                                    [showHint]="false"
-                                >
-                                </spot-toggle>
-                            </div>
-                            <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
                                     formControlName="ProjectType"
                                     [label]="'Project Type'"
-                                    [showHint]="false"
-                                >
-                                </spot-toggle>
-                            </div>
-                            <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="PortfolioOwner"
-                                    [label]="'Portfolio Owner'"
                                     [showHint]="false"
                                 >
                                 </spot-toggle>
@@ -845,11 +811,12 @@
                                 >
                                 </spot-toggle>
                             </div>
+
                             <div class="mb-4">
                                 <spot-toggle
                                     class="w-full mb-4"
-                                    formControlName="EnvironmentalPortfolio"
-                                    [label]="'Environmental Portfolio'"
+                                    formControlName="PortfolioOwner"
+                                    [label]="'Portfolio Owner'"
                                     [showHint]="false"
                                 >
                                 </spot-toggle>
@@ -857,21 +824,13 @@
                             <div class="mb-4">
                                 <spot-toggle
                                     class="w-full mb-4"
-                                    formControlName="CAPSProject"
-                                    [label]="'CAPS Project'"
+                                    formControlName="ParentProject"
+                                    [label]="'Parent Project'"
                                     [showHint]="false"
                                 >
                                 </spot-toggle>
                             </div>
-                            <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="ImpactRealizationDate"
-                                    [label]="'Impact Realization Date'"
-                                    [showHint]="false"
-                                >
-                                </spot-toggle>
-                            </div>
+
                             <div class="mb-4">
                                 <spot-toggle
                                     class="w-full mb-4"
@@ -902,17 +861,18 @@
                             <div class="mb-4">
                                 <spot-toggle
                                     class="w-full mb-4"
-                                    formControlName="AssetPlaceInService"
-                                    [label]="'Asset Place In Service'"
+                                    formControlName="CapexRequired"
+                                    [label]="'Capex Required'"
                                     [showHint]="false"
                                 >
                                 </spot-toggle>
                             </div>
+
                             <div class="mb-4">
                                 <spot-toggle
                                     class="w-full mb-4"
-                                    formControlName="CapexRequired"
-                                    [label]="'Capex Required'"
+                                    formControlName="OPEXRequired"
+                                    [label]="'OPEX Required'"
                                     [showHint]="false"
                                 >
                                 </spot-toggle>
@@ -926,6 +886,7 @@
                                 >
                                 </spot-toggle>
                             </div>
+
                             <div class="mb-4">
                                 <spot-toggle
                                     class="w-full mb-4"
@@ -964,11 +925,39 @@
                                 >
                                 </spot-toggle>
                             </div>
+
                             <div class="mb-4">
                                 <spot-toggle
                                     class="w-full mb-4"
-                                    formControlName="OPEXRequired"
-                                    [label]="'OPEX Required'"
+                                    formControlName="AssetPlaceInService"
+                                    [label]="'Asset Place In Service'"
+                                    [showHint]="false"
+                                >
+                                </spot-toggle>
+                            </div>
+                            <div class="mb-4">
+                                <spot-toggle
+                                    class="w-full mb-4"
+                                    formControlName="EnvironmentalPortfolio"
+                                    [label]="'Environmental Portfolio'"
+                                    [showHint]="false"
+                                >
+                                </spot-toggle>
+                            </div>
+                            <div class="mb-4">
+                                <spot-toggle
+                                    class="w-full mb-4"
+                                    formControlName="CAPSProject"
+                                    [label]="'CAPS Project'"
+                                    [showHint]="false"
+                                >
+                                </spot-toggle>
+                            </div>
+                            <div class="mb-4">
+                                <spot-toggle
+                                    class="w-full mb-4"
+                                    formControlName="ImpactRealizationDate"
+                                    [label]="'Impact Realization Date'"
                                     [showHint]="false"
                                 >
                                 </spot-toggle>
@@ -1542,7 +1531,8 @@
 
                         <button
                             class="ml-4 bookmark-button"
-                            mat-flat-button
+                            mat-raised-button
+                            matTooltip="Quick Bookmark Creator - Create a bookmark based on the current filter applied"
                             [color]="'primary'"
                             (click)="saveAsBookmark()"
                         >
@@ -1966,7 +1956,7 @@
                             { prop: 'overallStatus', dir: 'desc' },
                             { prop: 'problemTitle', dir: 'asc' }
                         ]"
-                        class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap"
+                        class="datatable-PO-80 datatable-ProjectOverview font-medium text-sm text-default whitespace-nowrap"
                         [rows]="projectOverview"
                         #projectOverviewTable
                     >
@@ -2027,7 +2017,6 @@
                             [sortable]="true"
                             [frozenLeft]="true"
                             [resizeable]="false"
-                            *ngIf="checkColumnVisible('OverallStatus')"
                         >
                             <ng-template
                                 let-row="row"
@@ -2060,7 +2049,6 @@
                             [frozenLeft]="true"
                             [headerClass]="getFrozenHeaderClassID"
                             [resizeable]="false"
-                            *ngIf="checkColumnVisible('ProjectBudgetId')"
                         >
                             <ng-template
                                 let-row="row"
@@ -2082,7 +2070,6 @@
                             [frozenLeft]="true"
                             [headerClass]="getFrozenHeaderClass"
                             [resizeable]="false"
-                            *ngIf="checkColumnVisible('ProgramProjectName')"
                         >
                             <ng-template
                                 let-row="row"
@@ -2103,6 +2090,7 @@
                             prop="projStatus"
                             [width]="100"
                             [resizeable]="false"
+                            *ngIf="checkColumnVisible('State')"
                         >
                             <ng-template
                                 let-row="row"
@@ -2607,7 +2595,7 @@
 
                         <ngx-datatable-column
                             name="Project Type"
-                            prop="oeprojectType"
+                            prop="problemType"
                             [resizeable]="false"
                             [width]="180"
                             *ngIf="checkColumnVisible('ProjectType')"
@@ -2620,12 +2608,188 @@
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="Owning Organization"
+                            prop="defaultOwningOrganizationId"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('OwningOrganization')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="Portfolio Owner"
+                            prop="portfolioOwnerID"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('PortfolioOwner')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="Parent Project"
+                            prop="parentProjectId"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('ParentProject')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="Primary Product"
+                            prop="primaryProductId"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('PrimaryProduct')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column
+                            name="Primary Value Driver"
+                            prop="primaryKPI"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('PrimaryValueDriver')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
                         <ngx-datatable-column
                             name="Agile Primary Workstream"
                             prop="agilePrimaryWorkstream"
                             [resizeable]="false"
                             [width]="180"
                             *ngIf="checkColumnVisible('AGILEPrimaryWorkstream')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="CAPEX Required"
+                            prop="CAPEXRequired"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('CapexRequired')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column
+                            name="OPEX Required"
+                            prop="OPEXRequired"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('OPEXRequired')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="GMS Budget Owner"
+                            prop="budgetOwner"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('GMSBudgetOwner')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column
+                            name="Global/Regional Predefined Investment"
+                            prop="predefinedInvestmentID"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="
+                                checkColumnVisible(
+                                    'GlobalRegionalPredefinedInvestment'
+                                )
+                            "
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column
+                            name="Where"
+                            prop="whereID"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('Where')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column
+                            name="Why"
+                            prop="whyID"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('Why')"
                         >
                             <ng-template
                                 let-row="row"
@@ -2643,6 +2807,69 @@
                             *ngIf="
                                 checkColumnVisible('FundingApprovalNeedDate')
                             "
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value | date : "dd-MMM-yyyy" }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="Asset Placed In Service (Estimate)"
+                            prop="APISDate"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('AssetPlaceInService')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value | date : "dd-MMM-yyyy" }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="Environment Portfolio"
+                            prop="emissionPortfolioID"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('PortfolioOwner')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                            name="CAPS Project"
+                            prop="isCAPSProject"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('CAPSProject')"
+                        >
+                            <ng-template
+                                let-row="row"
+                                let-value="value"
+                                ngx-datatable-cell-template
+                            >
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column
+                            name="Impact Realization Date"
+                            prop="emissionsImpactRealizationDate"
+                            [resizeable]="false"
+                            [width]="180"
+                            *ngIf="checkColumnVisible('ImpactRealizationDate')"
                         >
                             <ng-template
                                 let-row="row"

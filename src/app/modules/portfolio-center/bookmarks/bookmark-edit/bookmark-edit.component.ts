@@ -153,9 +153,7 @@ export class BookmarkEditComponent implements OnInit {
     });
 
     ProjectTableColumns = new FormGroup({
-        OverallStatus: new FormControl(false),
-        ProjectBudgetId: new FormControl(false),
-        ProgramProjectName: new FormControl(false),
+        State: new FormControl(false),
         PhaseProjectCapitalOE: new FormControl(false),
         ProjectManager: new FormControl(false),
         Sponsor: new FormControl(false),
@@ -220,9 +218,7 @@ export class BookmarkEditComponent implements OnInit {
     isFirstTimeReload = true;
 
     defaultColumnValuesSelected = [
-        'OverallStatus',
-        'ProjectBudgetId',
-        'ProgramProjectName',
+        'State',
         'PhaseProjectCapitalOE',
         'ProjectManager',
         'Sponsor',
@@ -254,7 +250,6 @@ export class BookmarkEditComponent implements OnInit {
     ) {
         this.PortfolioCenterService.refreshEditBookmarkComponent.subscribe(
             () => {
-                debugger;
                 console.log(this.localAttributeForm);
                 console.log(this.localAttributeFormRaw);
                 if (this.isFirstTimeReload) {
@@ -390,7 +385,6 @@ export class BookmarkEditComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        debugger;
         this.PortfolioFilterForm.reset();
         this.ProjectTableColumns.reset();
 
@@ -646,7 +640,6 @@ export class BookmarkEditComponent implements OnInit {
     }
 
     dataLoader(res) {
-        debugger;
         console.log(this.localAttributeForm);
         res.forEach((data) => {
             var i = Object.assign({}, data);
@@ -1800,29 +1793,46 @@ export class BookmarkEditComponent implements OnInit {
                                 localAttributes
                             ).replaceAll('"', ' /"'),
                         };
-                        this.apiService
-                            .updateBookmarkValue(
-                                this.PortfolioCenterService.bookmarkItemId,
-                                tempObj
-                            )
-                            .then((res: any) => {
-                                this.PortfolioCenterService.getAllBookmarks();
-                                this.PortfolioCenterService.bookmarkSmallDrawerOpenedChanged(
-                                    false
-                                );
-                                this.PortfolioFilterForm.reset();
-                                this.ProjectTableColumns.reset();
-                                this.PortfolioFilterForm.markAsUntouched();
-                                this.PortfolioFilterForm.markAsPristine();
 
-                                if (
-                                    this.PortfolioCenterService
-                                        .bookmarkItemId ==
-                                    localStorage.getItem('spot-currentBookmark')
-                                ) {
-                                    window.location.reload();
-                                }
-                            });
+                        const isExist =
+                            this.PortfolioCenterService.bookmarks.some(
+                                (bookmark) =>
+                                    bookmark.bookmarkName ===
+                                        this.PortfolioFilterForm.controls
+                                            .BookmarkName.value &&
+                                    bookmark.bookmarkId !=
+                                        this.PortfolioCenterService
+                                            .bookmarkItemId
+                            );
+
+                        if (isExist) {
+                        } else {
+                            this.apiService
+                                .updateBookmarkValue(
+                                    this.PortfolioCenterService.bookmarkItemId,
+                                    tempObj
+                                )
+                                .then((res: any) => {
+                                    this.PortfolioCenterService.getAllBookmarks();
+                                    this.PortfolioCenterService.bookmarkSmallDrawerOpenedChanged(
+                                        false
+                                    );
+                                    this.PortfolioFilterForm.reset();
+                                    this.ProjectTableColumns.reset();
+                                    this.PortfolioFilterForm.markAsUntouched();
+                                    this.PortfolioFilterForm.markAsPristine();
+
+                                    if (
+                                        this.PortfolioCenterService
+                                            .bookmarkItemId ==
+                                        localStorage.getItem(
+                                            'spot-currentBookmark'
+                                        )
+                                    ) {
+                                        window.location.reload();
+                                    }
+                                });
+                        }
                     }
 
                     // COMMENTED CODE
@@ -2455,19 +2465,31 @@ export class BookmarkEditComponent implements OnInit {
                             localAttributeObject: JSON.stringify(
                                 localAttributes
                             ).replaceAll('"', ' /"'),
+                            createdDate: new Date().toISOString(),
                         };
-                        this.apiService
-                            .addBookmarkValue(tempObj)
-                            .then((res: any) => {
-                                this.PortfolioCenterService.getAllBookmarks();
-                                this.PortfolioCenterService.bookmarkSmallDrawerOpenedChanged(
-                                    false
-                                );
-                                this.PortfolioFilterForm.reset();
-                                this.ProjectTableColumns.reset();
-                                this.PortfolioFilterForm.markAsUntouched();
-                                this.PortfolioFilterForm.markAsPristine();
-                            });
+                        const isExist =
+                            this.PortfolioCenterService.bookmarks.some(
+                                (bookmark) =>
+                                    bookmark.bookmarkName ===
+                                    this.PortfolioFilterForm.controls
+                                        .BookmarkName.value
+                            );
+
+                        if (isExist) {
+                        } else {
+                            this.apiService
+                                .addBookmarkValue(tempObj)
+                                .then((res: any) => {
+                                    this.PortfolioCenterService.getAllBookmarks();
+                                    this.PortfolioCenterService.bookmarkSmallDrawerOpenedChanged(
+                                        false
+                                    );
+                                    this.PortfolioFilterForm.reset();
+                                    this.ProjectTableColumns.reset();
+                                    this.PortfolioFilterForm.markAsUntouched();
+                                    this.PortfolioFilterForm.markAsPristine();
+                                });
+                        }
                     }
 
                     // COMMENTED CODE
