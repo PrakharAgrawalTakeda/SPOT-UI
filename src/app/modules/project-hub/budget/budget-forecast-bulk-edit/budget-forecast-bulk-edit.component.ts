@@ -149,6 +149,7 @@ export class BudgetForecastBulkEditComponent {
     }
 
     dataloader() {
+        console.log(this.projecthubservice.all.budgetForecasts)
         this.forecastPatchGeneralForm(this.projecthubservice.all.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"), this.projecthubservice.all.budget);
         if (this.forecasts.length > 0) {
             this.forecastsDb = this.forecasts.map(x => {
@@ -420,6 +421,7 @@ export class BudgetForecastBulkEditComponent {
         if (JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit)) {
             this.projecthubservice.isFormChanged = false
             const mainObj = this.projecthubservice.all;
+            mainObj.updateSubmitted = true
             mainObj.budgetForecasts = this.forecastsSubmit;
             mainObj.budgetForecastsY1 = this.forecastsY1Submit;
             mainObj.budgetForecasts.find(x => x.isopen === true).committedSpend = this.budgetForecastForm.controls.committedSpend.value;
@@ -430,6 +432,7 @@ export class BudgetForecastBulkEditComponent {
                 mainObj.budgetForecastsY1.push(x);
             });
             const formValue = this.budgetForecastForm.getRawValue();
+            console.log("CAPEX", mainObj)
             if(this.mode=='Capex'){
                 mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").submittedByID = this.msalService.instance.getActiveAccount().localAccountId;
                 mainObj.budgetForecasts.forEach(obj => {

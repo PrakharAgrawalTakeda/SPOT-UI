@@ -564,7 +564,10 @@
                     >
                         <mat-expansion-panel-header class="pt-10 pb-10">
                             <mat-panel-title class="font-bold">
-                                <h1>Attributes to Include/Exclude</h1>
+                                <h1>
+                                    Select Columns to Display in the Portfolio
+                                    Center
+                                </h1>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
@@ -572,26 +575,8 @@
                                 <div class="mb-4">
                                     <spot-toggle
                                         class="w-full mb-4"
-                                        formControlName="OverallStatus"
-                                        [label]="'Overall Status'"
-                                        [showHint]="false"
-                                    >
-                                    </spot-toggle>
-                                </div>
-                                <div class="mb-4">
-                                    <spot-toggle
-                                        class="w-full mb-4"
-                                        formControlName="ProjectBudgetId"
-                                        [label]="'Project ID/Budget ID'"
-                                        [showHint]="false"
-                                    >
-                                    </spot-toggle>
-                                </div>
-                                <div class="mb-4">
-                                    <spot-toggle
-                                        class="w-full mb-4"
-                                        formControlName="ProgramProjectName"
-                                        [label]="'Program / Project Name'"
+                                        formControlName="State"
+                                        [label]="'State'"
                                         [showHint]="false"
                                     >
                                     </spot-toggle>
@@ -636,7 +621,7 @@
                                     <spot-toggle
                                         class="w-full mb-4"
                                         formControlName="RiskIssues"
-                                        [label]="'Risk /Issues'"
+                                        [label]="'Risk/Issue'"
                                         [showHint]="false"
                                     >
                                     </spot-toggle>
@@ -645,7 +630,7 @@
                                     <spot-toggle
                                         class="w-full mb-4"
                                         formControlName="AskNeed"
-                                        [label]="'Ask /Need'"
+                                        [label]="'Ask/Need'"
                                         [showHint]="false"
                                     >
                                     </spot-toggle>
@@ -756,26 +741,8 @@
                                 <div class="mb-4">
                                     <spot-toggle
                                         class="w-full mb-4"
-                                        formControlName="ParentProject"
-                                        [label]="'Parent Project'"
-                                        [showHint]="false"
-                                    >
-                                    </spot-toggle>
-                                </div>
-                                <div class="mb-4">
-                                    <spot-toggle
-                                        class="w-full mb-4"
                                         formControlName="ProjectType"
                                         [label]="'Project Type'"
-                                        [showHint]="false"
-                                    >
-                                    </spot-toggle>
-                                </div>
-                                <div class="mb-4">
-                                    <spot-toggle
-                                        class="w-full mb-4"
-                                        formControlName="PortfolioOwner"
-                                        [label]="'Portfolio Owner'"
                                         [showHint]="false"
                                     >
                                     </spot-toggle>
@@ -789,11 +756,12 @@
                                     >
                                     </spot-toggle>
                                 </div>
+
                                 <div class="mb-4">
                                     <spot-toggle
                                         class="w-full mb-4"
-                                        formControlName="EnvironmentalPortfolio"
-                                        [label]="'Environmental Portfolio'"
+                                        formControlName="PortfolioOwner"
+                                        [label]="'Portfolio Owner'"
                                         [showHint]="false"
                                     >
                                     </spot-toggle>
@@ -801,21 +769,13 @@
                                 <div class="mb-4">
                                     <spot-toggle
                                         class="w-full mb-4"
-                                        formControlName="CAPSProject"
-                                        [label]="'CAPS Project'"
+                                        formControlName="ParentProject"
+                                        [label]="'Parent Project'"
                                         [showHint]="false"
                                     >
                                     </spot-toggle>
                                 </div>
-                                <div class="mb-4">
-                                    <spot-toggle
-                                        class="w-full mb-4"
-                                        formControlName="ImpactRealizationDate"
-                                        [label]="'Impact Realization Date'"
-                                        [showHint]="false"
-                                    >
-                                    </spot-toggle>
-                                </div>
+
                                 <div class="mb-4">
                                     <spot-toggle
                                         class="w-full mb-4"
@@ -846,17 +806,18 @@
                                 <div class="mb-4">
                                     <spot-toggle
                                         class="w-full mb-4"
-                                        formControlName="AssetPlaceInService"
-                                        [label]="'Asset Place In Service'"
+                                        formControlName="CapexRequired"
+                                        [label]="'Capex Required'"
                                         [showHint]="false"
                                     >
                                     </spot-toggle>
                                 </div>
+
                                 <div class="mb-4">
                                     <spot-toggle
                                         class="w-full mb-4"
-                                        formControlName="CapexRequired"
-                                        [label]="'Capex Required'"
+                                        formControlName="OPEXRequired"
+                                        [label]="'OPEX Required'"
                                         [showHint]="false"
                                     >
                                     </spot-toggle>
@@ -870,6 +831,7 @@
                                     >
                                     </spot-toggle>
                                 </div>
+
                                 <div class="mb-4">
                                     <spot-toggle
                                         class="w-full mb-4"
@@ -908,11 +870,39 @@
                                     >
                                     </spot-toggle>
                                 </div>
+
                                 <div class="mb-4">
                                     <spot-toggle
                                         class="w-full mb-4"
-                                        formControlName="OPEXRequired"
-                                        [label]="'OPEX Required'"
+                                        formControlName="AssetPlaceInService"
+                                        [label]="'Asset Place In Service'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="EnvironmentalPortfolio"
+                                        [label]="'Environmental Portfolio'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="CAPSProject"
+                                        [label]="'CAPS Project'"
+                                        [showHint]="false"
+                                    >
+                                    </spot-toggle>
+                                </div>
+                                <div class="mb-4">
+                                    <spot-toggle
+                                        class="w-full mb-4"
+                                        formControlName="ImpactRealizationDate"
+                                        [label]="'Impact Realization Date'"
                                         [showHint]="false"
                                     >
                                     </spot-toggle>
@@ -956,7 +946,7 @@
             type="button"
             (click)="onEditBookmark()"
         >
-            Edit
+            Submit
         </button>
         <button
             *ngIf="!isEdit"
@@ -966,7 +956,7 @@
             type="button"
             (click)="onAddBookmark()"
         >
-            Add
+            Submit
         </button>
     </div>
 </div>

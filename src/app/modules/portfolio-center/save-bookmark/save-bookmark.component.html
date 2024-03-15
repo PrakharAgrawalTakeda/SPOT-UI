@@ -13,7 +13,7 @@
 
     <!-- Content -->
     <div
-        class="flex flex-col sm:flex-row flex-auto items-center sm:items-start "
+        class="flex flex-col sm:flex-row flex-auto items-center sm:items-start"
     >
         <ng-container>
             <div
@@ -34,7 +34,13 @@
                     </div>
                 </ng-container>
                 <ng-container>
-                    <spot-input [(ngModel)]="bookmarkName" Required class="w-full pt-4" [placeholder]="'Enter Bookmark Name'" [label]="'Bookmark Name'" />
+                    <spot-input
+                        [(ngModel)]="bookmarkName"
+                        Required
+                        class="w-full pt-4"
+                        [placeholder]="'Enter Bookmark Name'"
+                        [label]="'Bookmark Name'"
+                    />
                 </ng-container>
             </div>
         </ng-container>
@@ -47,10 +53,9 @@
         >
             <!-- Cancel -->
             <ng-container>
-                <button
-                    mat-stroked-button
-                    [matDialogClose]="'cancelled'"
-                >Cancel</button>
+                <button mat-stroked-button [matDialogClose]="undefined">
+                    Cancel
+                </button>
             </ng-container>
 
             <!-- Confirm -->
@@ -59,7 +64,9 @@
                     mat-flat-button
                     [color]="'primary'"
                     (click)="onSaveBookmark()"
-                >Submit</button>
+                >
+                    Submit
+                </button>
             </ng-container>
         </div>
     </ng-container>

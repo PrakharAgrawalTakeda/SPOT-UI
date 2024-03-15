@@ -177,44 +177,42 @@ export class PortfolioCenterComponent implements OnInit {
     });
 
     ProjectTableColumns = new FormGroup({
-        OverallStatus: new FormControl(),
-        ProjectBudgetId: new FormControl(),
-        ProgramProjectName: new FormControl(),
-        PhaseProjectCapitalOE: new FormControl(),
-        ProjectManager: new FormControl(),
-        Sponsor: new FormControl(),
-        Schedule: new FormControl(),
-        RiskIssues: new FormControl(),
-        AskNeed: new FormControl(),
-        Budget: new FormControl(),
-        Spend: new FormControl(),
-        DQPercent: new FormControl(),
-        TotalCapexApprovedForcast: new FormControl(),
-        CarbonImpact: new FormControl(),
-        WaterImpact: new FormControl(),
-        MilestoneProgression: new FormControl(),
-        NextMilestone: new FormControl(),
-        NextMilestonePlannedFinishDate: new FormControl(),
-        ExecutionCompleteDate: new FormControl(),
-        ExecutionDuration: new FormControl(),
-        ParentProject: new FormControl(),
-        ProjectType: new FormControl(),
-        PortfolioOwner: new FormControl(),
-        OwningOrganization: new FormControl(),
-        EnvironmentalPortfolio: new FormControl(),
-        CAPSProject: new FormControl(),
-        ImpactRealizationDate: new FormControl(),
-        PrimaryProduct: new FormControl(),
-        PrimaryValueDriver: new FormControl(),
-        AGILEPrimaryWorkstream: new FormControl(),
-        AssetPlaceInService: new FormControl(),
-        CapexRequired: new FormControl(),
-        GMSBudgetOwner: new FormControl(),
-        GlobalRegionalPredefinedInvestment: new FormControl(),
-        Where: new FormControl(),
-        Why: new FormControl(),
-        FundingApprovalNeedDate: new FormControl(),
-        OPEXRequired: new FormControl(),
+        State: new FormControl(false),
+        PhaseProjectCapitalOE: new FormControl(false),
+        ProjectManager: new FormControl(false),
+        Sponsor: new FormControl(false),
+        Schedule: new FormControl(false),
+        RiskIssues: new FormControl(false),
+        AskNeed: new FormControl(false),
+        Budget: new FormControl(false),
+        Spend: new FormControl(false),
+        DQPercent: new FormControl(false),
+        TotalCapexApprovedForcast: new FormControl(false),
+        CarbonImpact: new FormControl(false),
+        WaterImpact: new FormControl(false),
+        MilestoneProgression: new FormControl(false),
+        NextMilestone: new FormControl(false),
+        NextMilestonePlannedFinishDate: new FormControl(false),
+        ExecutionCompleteDate: new FormControl(false),
+        ExecutionDuration: new FormControl(false),
+        ParentProject: new FormControl(false),
+        ProjectType: new FormControl(false),
+        PortfolioOwner: new FormControl(false),
+        OwningOrganization: new FormControl(false),
+        EnvironmentalPortfolio: new FormControl(false),
+        CAPSProject: new FormControl(false),
+        ImpactRealizationDate: new FormControl(false),
+        PrimaryProduct: new FormControl(false),
+        PrimaryValueDriver: new FormControl(false),
+        AGILEPrimaryWorkstream: new FormControl(false),
+        AssetPlaceInService: new FormControl(false),
+        CapexRequired: new FormControl(false),
+        GMSBudgetOwner: new FormControl(false),
+        GlobalRegionalPredefinedInvestment: new FormControl(false),
+        Where: new FormControl(false),
+        Why: new FormControl(false),
+        FundingApprovalNeedDate: new FormControl(false),
+        OPEXRequired: new FormControl(false),
     });
 
     //Boookmarks
@@ -301,9 +299,7 @@ export class PortfolioCenterComponent implements OnInit {
     filteredColumnValuesSelected = [];
 
     defaultColumnValuesSelected = [
-        'OverallStatus',
-        'ProjectBudgetId',
-        'ProgramProjectName',
+        'State',
         'PhaseProjectCapitalOE',
         'ProjectManager',
         'Sponsor',
@@ -387,13 +383,23 @@ export class PortfolioCenterComponent implements OnInit {
                     if (this.IsFilterApplyingFromPortfolio) {
                         this.IsFilterApplyingFromPortfolio = false;
                     } else {
-                        localStorage.removeItem('spot-tableColumns');
-                        localStorage.removeItem('spot-localattribute');
-                        localStorage.removeItem('spot-filtersNew');
+                        if (
+                            localStorage.getItem('spot-customFiltersApplied') !=
+                            'true'
+                        ) {
+                            localStorage.setItem(
+                                'spot-customFiltersApplied',
+                                'false'
+                            );
+                            localStorage.removeItem('spot-tableColumns');
+                            localStorage.removeItem('spot-localattribute');
+                            localStorage.removeItem('spot-filtersNew');
+                        }
                     }
 
                     this.applyAllFilters();
                 } else {
+                    localStorage.setItem('spot-customFiltersApplied', 'false');
                     this.initializeBookmark(res);
                 }
             }
@@ -426,7 +432,9 @@ export class PortfolioCenterComponent implements OnInit {
         this.PortfolioFilterForm.controls.ProjectPhase.valueChanges.subscribe(
             (value) => {
                 if (this.showContent) {
-                    this.changePhase(value);
+                    if (value) {
+                        this.changePhase(value);
+                    }
                 }
             }
         );
@@ -565,7 +573,7 @@ export class PortfolioCenterComponent implements OnInit {
 
     defaultFilterObject = {
         bookmarkId: 'DefaultFilter',
-        bookmarkName: 'Default',
+        bookmarkName: 'Default View',
     };
 
     async applyAllFilters() {
@@ -1267,7 +1275,6 @@ export class PortfolioCenterComponent implements OnInit {
                             console.log(this.bulkreportdata);
 
                             this.initial = res;
-                            debugger;
                             if (res.budgetTile.fiscalYear) {
                                 this.currfiscalYear = res.budgetTile.fiscalYear;
                             }
@@ -1782,7 +1789,7 @@ export class PortfolioCenterComponent implements OnInit {
                             this.showdefault = false;
 
                             // if (!this.isInitial) {
-                            //     this.initializePrefrencesTile();
+                            this.initializePrefrencesTile();
                             // }
 
                             // this.isInitial = false;
@@ -1877,7 +1884,7 @@ export class PortfolioCenterComponent implements OnInit {
                 );
             } else {
                 this.bookmarkId = 'DefaultFilter';
-
+                localStorage.setItem('spot-customFiltersApplied', 'false');
                 this.BookmarksForm.controls.BookmarkName.patchValue(
                     'DefaultFilter'
                 );
@@ -2716,7 +2723,6 @@ export class PortfolioCenterComponent implements OnInit {
             });
     }
     applyPortfoliofilters() {
-        this.showContent = false;
         if (
             this.PortfolioFilterForm.controls.ProjectPhase.value == null ||
             this.PortfolioFilterForm.controls.ProjectPhase.value.length == 0
@@ -3314,6 +3320,7 @@ export class PortfolioCenterComponent implements OnInit {
 
                     this.fuseAlert.open(comfirmConfig);
                 } else {
+                    this.showContent = false;
                     this.filterDrawer.close();
                     this.PortfolioCenterService.drawerOpenedPrakharTemp = false;
                     this.IsFilterApplyingFromPortfolio = true;
@@ -3331,6 +3338,9 @@ export class PortfolioCenterComponent implements OnInit {
                         'spot-tableColumns',
                         JSON.stringify(this.filteredColumnValuesSelected)
                     );
+
+                    localStorage.setItem('spot-customFiltersApplied', 'true');
+
                     this.BookmarksForm.controls.BookmarkName.patchValue(
                         'DefaultFilter'
                     );
@@ -4055,6 +4065,9 @@ export class PortfolioCenterComponent implements OnInit {
     setPage(res: any, offset) {
         if (res != '') {
             this.projectOverview = res.portfolioDetails;
+            debugger;
+            console.log(this.lookup);
+
             this.status = this.projectOverview.projStatus;
             this.bulkreportdata = res.portfolioDetails;
             for (var i = 0; i < this.projectOverview.length; i++) {
@@ -4101,6 +4114,7 @@ export class PortfolioCenterComponent implements OnInit {
                     : this.projectOverview[i].budgetSpendIndicator;
 
                 var preffix = '';
+
                 if (
                     res.projectDetails[i].isArchived &&
                     !res.projectDetails[i].isConfidential
@@ -4251,6 +4265,130 @@ export class PortfolioCenterComponent implements OnInit {
                                   this.projectOverview[i].projectUid
                           )[0].redExecutionCompleteDate
                         : '';
+
+                this.projectOverview[i].isCAPSProject = res.projectDetails[i]
+                    .isCapsProject
+                    ? 'Yes'
+                    : 'No';
+                this.projectOverview[i].CAPEXRequired = res.budgetDetails[i]
+                    .capExRequired
+                    ? 'Yes'
+                    : 'No';
+                this.projectOverview[i].OPEXRequired = res.budgetDetails[i]
+                    .opExRequired
+                    ? 'Yes'
+                    : 'No';
+
+                const budgetOwner = this.filterlist.portfolioOwner.filter(
+                    (item) => {
+                        return (
+                            item.portfolioOwnerId ==
+                            res.budgetDetails[i].budgetOwner
+                        );
+                    }
+                );
+
+                const portfolioOwner = this.filterlist.portfolioOwner.filter(
+                    (item) => {
+                        return (
+                            item.portfolioOwnerId ==
+                            res.projectDetails[i].portfolioOwnerId
+                        );
+                    }
+                );
+
+                const emissionOwner = this.filterlist.portfolioOwner.filter(
+                    (item) => {
+                        return (
+                            item.portfolioOwnerId ==
+                            res.projectDetails[i].emissionPortfolioId
+                        );
+                    }
+                );
+
+                const primaryProduct = this.filterlist.products.filter(
+                    (item) => {
+                        return (
+                            item.productId ==
+                            res.projectDetails[i].primaryProductId
+                        );
+                    }
+                );
+
+                const predefinedInvestmentId = this.getLookupMaster(
+                    res.budgetDetails[i].predefinedInvestmentId
+                );
+                const agilePrimaryWorkstream = this.getLookupMaster(
+                    res.projectDetails[i].agilePrimaryWorkstream
+                );
+                const whereId = this.getLookupMaster(
+                    res.budgetDetails[i].whereId
+                );
+                const whyId = this.getLookupMaster(res.budgetDetails[i].whyId);
+                const primaryKPI = this.getLookupMaster(
+                    res.projectDetails[i].primaryKpi
+                );
+
+                this.projectOverview[i].predefinedInvestmentID =
+                    predefinedInvestmentId.length > 0
+                        ? predefinedInvestmentId[0].lookUpName
+                        : '';
+
+                this.projectOverview[i].whereID =
+                    whereId.length > 0 ? whereId[0].lookUpName : '';
+
+                this.projectOverview[i].whyID =
+                    whyId.length > 0 ? whyId[0].lookUpName : '';
+
+                this.projectOverview[i].primaryKPI =
+                    primaryKPI.length > 0 ? primaryKPI[0].lookUpName : '';
+
+                this.projectOverview[i].agilePrimaryWorkstream =
+                    agilePrimaryWorkstream.length > 0
+                        ? agilePrimaryWorkstream[0].lookUpName
+                        : '';
+
+                this.projectOverview[i].budgetOwner =
+                    budgetOwner.length > 0 ? budgetOwner[0].portfolioOwner : '';
+
+                this.projectOverview[i].fundingApprovalNeedDate =
+                    res.budgetDetails[i].fundingApprovalNeedDate;
+                this.projectOverview[i].emissionsImpactRealizationDate =
+                    res.projectDetails[i].emissionsImpactRealizationDate;
+
+                this.projectOverview[i].portfolioOwnerID =
+                    portfolioOwner.length > 0
+                        ? portfolioOwner[0].portfolioOwner
+                        : '';
+                this.projectOverview[i].emissionPortfolioID =
+                    emissionOwner.length > 0
+                        ? emissionOwner[0].portfolioOwner
+                        : '';
+                this.projectOverview[i].primaryProductId =
+                    primaryProduct.length > 0
+                        ? primaryProduct[0].fullProductName
+                        : '';
+
+                this.projectOverview[i].APISDate =
+                    res.budgetDetails[i].apisdate;
+                this.projectOverview[i].problemType =
+                    res.projectDetails[i].problemType;
+                this.projectOverview[i].defaultOwningOrganizationId =
+                    res.projectDetails[i].defaultOwningOrganizationId;
+
+                this.projectOverview[i].parentProjectId =
+                    res.projectDetails[i].parentProgramId;
+
+                debugger;
+                console.log(this.filterlist);
+                console.log(
+                    this.filterlist.portfolioOwner.filter((item) => {
+                        return (
+                            item.portfolioOwnerId ==
+                            res.budgetDetails[i].budgetOwner
+                        );
+                    })
+                );
             }
             this.size = 100;
             this.totalElements = this.totalproject;
@@ -4772,15 +4910,25 @@ export class PortfolioCenterComponent implements OnInit {
                     localAttributeObject: localStorage
                         .getItem('spot-localattribute')
                         .replaceAll('"', ' /"'),
+                    createdDate: new Date().toISOString(),
                 };
 
-                this.apiService.addBookmarkValue(tempObj).then((res: any) => {
-                    localStorage.setItem(
-                        'spot-currentBookmark',
-                        res.bookmarkId
-                    );
-                    window.location.reload();
-                });
+                const isExist = this.PortfolioCenterService.bookmarks.some(
+                    (bookmark) => bookmark.bookmarkName === result
+                );
+
+                if (isExist) {
+                } else {
+                    this.apiService
+                        .addBookmarkValue(tempObj)
+                        .then((res: any) => {
+                            localStorage.setItem(
+                                'spot-currentBookmark',
+                                res.bookmarkId
+                            );
+                            window.location.reload();
+                        });
+                }
             }
         });
     }
@@ -4835,7 +4983,7 @@ export class PortfolioCenterComponent implements OnInit {
 
         var noChangePO = false;
         var noChangeES = false;
-        var filtersnew = this.PortfolioFilterForm.value;
+        var filtersnew = this.PortfolioFilterForm.getRawValue();
         if (
             portfolioOwners != '' &&
             filtersnew != null &&
@@ -5355,6 +5503,10 @@ export class PortfolioCenterComponent implements OnInit {
         return this.lookup.filter((x) => x.lookUpParentId == key);
     }
 
+    getLookupMaster(key) {
+        return this.lookup.filter((x) => x.lookUpId == key);
+    }
+
     changePhase(phaseId) {
         var result = [];
         var resultOE = [];
@@ -5390,12 +5542,12 @@ export class PortfolioCenterComponent implements OnInit {
             this.PortfolioFilterForm.controls.OEPhase.enable();
         }
         var PO = this.PortfolioFilterForm.controls.ProjectPhase.value
-            ? this.PortfolioFilterForm.controls.ProjectPhase.value.length != 0
+            ? this.PortfolioFilterForm.controls.ProjectPhase.value?.length != 0
                 ? true
                 : false
             : false;
         var CP = this.PortfolioFilterForm.controls.CapitalPhase.value
-            ? this.PortfolioFilterForm.controls.CapitalPhase.value.length != 0
+            ? this.PortfolioFilterForm.controls.CapitalPhase.value?.length != 0
                 ? true
                 : false
             : false;
@@ -5522,28 +5674,83 @@ export class PortfolioCenterComponent implements OnInit {
         if (type == 'Filter') {
             this.dataLA = [];
             this.showLA = false;
+
+            const defaultView =
+                localStorage.getItem('spot-currentBookmark') ==
+                    'DefaultFilter' &&
+                localStorage.getItem('spot-customFiltersApplied') == 'false'
+                    ? true
+                    : false;
+
             this.localAttributeFormRaw.controls = {};
             this.localAttributeFormRaw.value = {};
             this.localAttributeForm.controls = {};
             this.localAttributeForm.value = {};
-            const filterObj = JSON.parse(
-                localStorage.getItem('spot-filtersNew')
-            );
-            this.PortfolioFilterForm.patchValue(filterObj);
 
-            const localAttributeArray = JSON.parse(
-                localStorage.getItem('spot-localattribute')
-            );
+            if (defaultView) {
+                const defaultFilter = {
+                    PortfolioOwner: [],
+                    ProjectTeamMember: this.user,
+                    ExecutionScope: [],
+                    OwningOrganization: [],
+                    ProjectState: this.state,
+                    ProjectPhase: [],
+                    CapitalPhase: [],
+                    OEPhase: [],
+                    ProjectType: [],
+                    Product: [],
+                    TotalCAPEX: [],
+                    GMSBudgetOwner: [],
+                    AGILEWorkstream: [],
+                    AGILEWave: [],
+                    CAPSProject: [],
+                    'Project/Program': [],
+                    OverallStatus: [],
+                    PrimaryValueDriver: [],
+                    SPRProjectCategory: [],
+                    projectNameKeyword: [],
+                };
 
-            if (localAttributeArray.length > 0) {
-                this.isLA = true;
-                this.initializeLocalAttributes(localAttributeArray);
+                this.filteredColumnValuesSelected =
+                    this.defaultColumnValuesSelected;
+                const tableObj = this.patchAllSelectedColumns(
+                    this.defaultColumnValuesSelected
+                );
+
+                this.PortfolioFilterForm.patchValue(defaultFilter);
+                this.ProjectTableColumns.patchValue(tableObj);
+                this.showFilter = true;
+            } else {
+                const filterObj = JSON.parse(
+                    localStorage.getItem('spot-filtersNew')
+                );
+                this.PortfolioFilterForm.patchValue(filterObj);
+
+                this.filteredColumnValuesSelected = JSON.parse(
+                    localStorage.getItem('spot-tableColumns')
+                );
+
+                const tableObj = this.patchAllSelectedColumns(
+                    this.filteredColumnValuesSelected
+                );
+
+                this.ProjectTableColumns.patchValue(tableObj);
+
+                const localAttributeArray = JSON.parse(
+                    localStorage.getItem('spot-localattribute')
+                );
+
+                if (localAttributeArray.length > 0) {
+                    this.isLA = true;
+                    this.initializeLocalAttributes(localAttributeArray);
+                } else {
+                    this.showFilter = true;
+                }
             }
-            this.showFilter = true;
         } else {
             this.showFilter = false;
         }
-        this.filterDrawer.toggle();
+        this.filterDrawer.open();
     }
 
     initializeLocalAttributes(localAttributeArray) {
