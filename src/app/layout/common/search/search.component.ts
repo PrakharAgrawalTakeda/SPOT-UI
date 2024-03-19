@@ -109,7 +109,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
                 takeUntil(this._unsubscribeAll),
                 startWith(''),
                 map((value) => {
-
+                        this.resultSets = null;
                     // Set the resultSets to null if there is no value or
                     // the length of the value is smaller than the minLength
                     // so the autocomplete panel can be closed

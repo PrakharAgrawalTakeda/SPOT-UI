@@ -233,3 +233,31 @@ fuse-drawer .fuse-drawer-content {
     padding: 0px !important;
     min-width: 43px !important;
 }
+
+.datatable-ProjectOverview {
+    $widths: (20px, 70px, 95px, 350px);
+
+    .datatable-header {
+        .datatable-row-left {
+            width: 535px !important;
+
+            @for $i from 1 through length($widths) {
+                .datatable-header-cell:nth-child(#{$i}) {
+                    width: nth($widths, $i) !important;
+                }
+            }
+        }
+    }
+
+    .datatable-body {
+        .datatable-row-left {
+            width: 535px !important;
+
+            @for $i from 1 through length($widths) {
+                .datatable-body-cell:nth-child(#{$i}) {
+                    width: nth($widths, $i) !important;
+                }
+            }
+        }
+    }
+}
