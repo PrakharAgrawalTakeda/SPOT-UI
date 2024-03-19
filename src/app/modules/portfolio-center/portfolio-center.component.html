@@ -48,7 +48,7 @@
 >
     <div>
         <app-forecast-bulk-edit
-        *ngIf="PortfolioCenterService.forecastItemType == 'ForecastBulkEdit'"></app-forecast-bulk-edit>
+        *ngIf="PortfolioCenterService.forecastItemType == 'ForecastBulkEdit'" [projectFunding]="this.projectFunding"></app-forecast-bulk-edit>
     </div>
 </fuse-drawer>    
 

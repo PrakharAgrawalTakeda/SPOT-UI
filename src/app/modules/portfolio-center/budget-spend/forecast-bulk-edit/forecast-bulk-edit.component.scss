@@ -1,0 +1,99 @@
+:host {
+    ::ng-deep .ngx-datatable .datatable-PB-80 .datatable-body .datatable-scroll {
+        height: 30vh !important;
+        width: 100vw !important;
+        overflow-x: scroll !important;
+        overflow-y: scroll !important;
+    }
+}
+:host{
+    ::ng-deep .datatable-PB-80{
+        ::ng-deep .datatable-body {
+    height: 70vh !important;
+        }
+}
+}
+:host {
+    ::ng-deep .sort-btn { display: none !important; }}
+
+:host {
+    ::ng-deep .sort-btn datatable-icon-up sort-asc { display: none !important; }}
+
+:host {
+    ::ng-deep .sort-btn datatable-icon-down sort-desc { display: none !important; }}
+
+.custom {
+    width: 80% !important;
+}
+
+.customIcon {
+    top: 42px;
+    position: relative;
+    right: -25px;
+    height: 40px;
+    width: 25px;
+}
+.customButton{
+    position: relative !important;
+    width: 49% !important;
+    top: 30px !important;
+}
+.w-1qua {
+    width: 55vw;
+}
+
+.apply-button {
+    width: 10% !important;
+}
+
+:host{
+    ::ng-deep .datatable-row-left {
+    background: white !important;
+    height: 64px !important;
+}
+}
+
+
+:host{
+    ::ng-deep .datatable-row-center {
+    height: 50px !important;
+}
+}
+
+.blueBg {
+    background: #89B4E0 !important;
+}
+
+.greenBg {
+    background: #81FD84 !important;
+}
+
+.pinkBg {
+    background-color: #FCC2C2 !important;
+}
+
+.headBgHeight {
+    display: block !important;
+    height: 30px !important;
+    margin: 0em -.0em .4em -.0em !important;
+}
+.headBgHeightCapex {
+    display: block !important;
+    height: 30px !important;
+    margin: 0em 0em 0.4em -2em !important;
+}
+.projectNames {
+    cursor: pointer !important;
+    margin-left: 15px !important;
+    color: rgb(81, 174, 245);
+
+}
+
+.projectNames:hover {
+    text-decoration: underline;
+    cursor: pointer !important;
+}
+
+.datatable{
+    margin-top: -1.5rem !important;
+}
