@@ -1514,7 +1514,7 @@
                             [dropDownArray]="BookmarksDropValues"
                         >
                         </spot-select> -->
-                        <form [formGroup]="BookmarksForm" class="w-[200px]">
+                        <form [formGroup]="BookmarksForm" class="w-[400px]">
                             <spot-select
                                 formControlName="BookmarkName"
                                 class="w-full bookmark-dropdown"
@@ -1525,6 +1525,7 @@
                                 [showNoneOption]="false"
                                 [valuePointer]="'bookmarkName'"
                                 [sortByType]="'custom'"
+                                [matTooltip]="selectedBookmarkName"
                             >
                             </spot-select>
                         </form>
