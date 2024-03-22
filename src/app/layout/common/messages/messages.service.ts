@@ -159,4 +159,10 @@ export class MessagesService
         const response = await lastValueFrom(abc$)
         return response
     }
+    async bulkEditGlobalMessageUserLog(userId: string, gloabalMessageUserLog: any){
+        var url = GlobalVariables.apiurl + "GlobalMessages/BulkEditGlobalMessageUserLog/" + userId
+        const abc$ = this._httpClient.put(url, gloabalMessageUserLog)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
 }

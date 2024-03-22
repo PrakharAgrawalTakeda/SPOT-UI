@@ -60,7 +60,7 @@ export class MessagesComponent implements OnInit, OnDestroy
         console.log("routes", this.router.url)
         if(messages.unreadMessages?.length>0){
             if(this.router.url.includes('project-hub')){
-                this.projectHubService.toggleDrawerOpen("GlobalMessagesPanel","",messages.historicalMessages,this.projectHubService.projectid,true,false)
+                this.projectHubService.toggleDrawerOpen("GlobalMessagesPanel","",messages.unreadMessages,this.projectHubService.projectid,true,false)
             }
             else if(this.router.url.includes('my-preference')){
                 this.myPreferenceService.toggleDrawerOpen("GlobalMessagesPanel","",messages.unreadMessages,'',true)

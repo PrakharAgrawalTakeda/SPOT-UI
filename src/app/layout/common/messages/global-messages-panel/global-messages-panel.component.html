@@ -1,6 +1,6 @@
 <div class="flex items-start justify-between bg-primary sidepanel-header">
     <div class="text-on-primary" style="padding-top: 6px">Messages</div>
-    <div style="padding-top: 2px"><a (click)="closePanel()" href="javascript:void(0)"
+    <div style="padding-top: 2px"><a (click)="readLaterAndClose()" href="javascript:void(0)"
             title="Close">
             <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
         </a>
@@ -26,10 +26,10 @@
 <div class="absolute bottom-2 w-full px-3">
     <div class="pr-3 flex items-start justify-between mt-6">
         <a class="min-w-26" mat-flat-button [color]="'primary'"
-            (click)="closePanel()">
+            (click)="readLaterAndClose()">
             Read Later
         </a>
-        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="closePanel()">
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="readAndUnderstood()">
             Read and Understood
         </button>
     </div>
