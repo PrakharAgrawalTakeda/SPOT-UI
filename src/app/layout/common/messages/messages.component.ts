@@ -5,6 +5,11 @@ import { MatButton } from '@angular/material/button';
 import { Subject, takeUntil } from 'rxjs';
 import { Message } from 'app/layout/common/messages/messages.types';
 import { MessagesService } from 'app/layout/common/messages/messages.service';
+import { MsalService } from '@azure/msal-angular';
+import { Router } from '@angular/router';
+import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { PortfolioCenterService } from 'app/modules/portfolio-center/portfolio-center.service';
+import { MyPreferenceService } from 'app/modules/my-preference/my-preference.service';
 
 @Component({
     selector       : 'messages',
@@ -19,6 +24,7 @@ export class MessagesComponent implements OnInit, OnDestroy
     @ViewChild('messagesPanel') private _messagesPanel: TemplateRef<any>;
 
     messages: Message[];
+    historicalMessages: any = [];
     unreadCount: number = 0;
     private _overlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -30,7 +36,10 @@ export class MessagesComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         private _messagesService: MessagesService,
         private _overlay: Overlay,
-        private _viewContainerRef: ViewContainerRef
+        private _viewContainerRef: ViewContainerRef,
+        private msalSerive: MsalService,
+        private router: Router,
+        private projectHubService: ProjectHubService, private portfolioCenterService: PortfolioCenterService, private myPreferenceService: MyPreferenceService
     )
     {
     }
@@ -44,6 +53,23 @@ export class MessagesComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+        
+        this._messagesService.getUserGlobalMessage(this.msalSerive.instance.getActiveAccount().localAccountId).then((messages: any) => {
+        this.historicalMessages = messages.historicalMessages
+        console.log("GLOBAL MESSAGES", messages)
+        console.log("routes", this.router.url)
+        if(messages.unreadMessages?.length>0){
+            if(this.router.url.includes('project-hub')){
+                this.projectHubService.toggleDrawerOpen("GlobalMessagesPanel","",messages.unreadMessages,this.projectHubService.projectid,true,false)
+            }
+            else if(this.router.url.includes('my-preference')){
+                this.myPreferenceService.toggleDrawerOpen("GlobalMessagesPanel","",messages.unreadMessages,'',true)
+            }
+            else if(this.router.url.includes('portfolio-center')){
+                this.portfolioCenterService.toggleDrawerOpen("GlobalMessagesPanel","",messages.unreadMessages,'',true)
+            }
+        }
+        });
         // Subscribe to message changes
         this._messagesService.messages$
             .pipe(takeUntil(this._unsubscribeAll))
