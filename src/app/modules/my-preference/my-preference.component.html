@@ -2,6 +2,7 @@
              (openedChanged)="myPreferenceService.drawerOpenedChanged($event)" [mode]="'over'" [position]="'right'"
              [ngClass]="{'fuse-drawer-large':myPreferenceService.fuseDrawerLarge}">
     <div>
+        <app-global-messages-panel *ngIf="myPreferenceService.itemtype == 'GlobalMessagesPanel'"></app-global-messages-panel>
         <app-milestone-set-view-edit *ngIf="myPreferenceService.itemtype == 'MilestoneSetsAddNew'"></app-milestone-set-view-edit>
         <app-email-notifications-edit
             *ngIf="myPreferenceService.itemtype == 'EmailNotiEdit'"></app-email-notifications-edit>
