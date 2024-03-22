@@ -58,7 +58,7 @@
     </div>
 
     <!-- Content -->
-    <div class="flex flex-col flex-auto w-full" [ngClass]="{'pb-6': !projecthubservice.drawerOpenedright && !myPreferenceService.drawerOpenedright && !adminService.drawerOpenedright}">
+    <div class="flex flex-col flex-auto w-full" [ngClass]="{'pb-6': !projecthubservice.drawerOpenedright && !myPreferenceService.drawerOpenedright && !adminService.drawerOpenedright && !portService.drawerOpenedPrakharTemp}">
         <!-- *ngIf="true" hack is required here for router-outlet to work correctly.
              Otherwise, layout changes won't be registered and the view won't be updated! -->
         <router-outlet *ngIf="true"></router-outlet>
