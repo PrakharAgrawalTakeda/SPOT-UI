@@ -109,6 +109,7 @@ export class PortfolioCenterService {
             if (this.bookmarkDrawerOpened != event) {
                 if (event == false) {
                     this.bookmarkDrawerOpened = event;
+                    this.drawerOpenedPrakharTemp = event;
                     if (this.isFormChanged == true) {
                         console.log(this.isFormChanged);
                         this.alertopener();
@@ -156,6 +157,7 @@ export class PortfolioCenterService {
         this.bookmarkItemType = bookmarkType;
         this.bookmarkData = bookmarkData;
         this.bookmarkDrawerOpened = !this.bookmarkDrawerOpened;
+        this.drawerOpenedPrakharTemp = !this.drawerOpenedPrakharTemp
         this.bookmarkDrawerLarge = bookmarkDrawerLarge;
     }
 
@@ -180,6 +182,7 @@ export class PortfolioCenterService {
             if (this.drawerOpenedright != event) {
                 if (event == false) {
                     this.drawerOpenedright = event;
+                    this.drawerOpenedPrakharTemp = event;
                     if (this.isFormChanged == true) {
                         console.log(this.isFormChanged);
                         this.alertopener();
@@ -246,6 +249,7 @@ export class PortfolioCenterService {
             this.projectid = pid;
             this.drawerOpenedright = !this.drawerOpenedright;
         }
+        this.drawerOpenedPrakharTemp = !this.drawerOpenedPrakharTemp;
         this.fuseDrawerLarge = fuseDrawerLarge;
     }
 
