@@ -7,6 +7,8 @@ import { FuseMediaWatcherModule } from '@fuse/services/media-watcher/media-watch
 import { FusePlatformModule } from '@fuse/services/platform/platform.module';
 import { FuseSplashScreenModule } from '@fuse/services/splash-screen/splash-screen.module';
 import { FuseUtilsModule } from '@fuse/services/utils/utils.module';
+import { OverlayComponent } from './components/overlay/overlay.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
     imports  : [
@@ -15,7 +17,8 @@ import { FuseUtilsModule } from '@fuse/services/utils/utils.module';
         FuseMediaWatcherModule,
         FusePlatformModule,
         FuseSplashScreenModule,
-        FuseUtilsModule
+        FuseUtilsModule,
+        CommonModule
     ],
     providers: [
         {
@@ -34,10 +37,17 @@ import { FuseUtilsModule } from '@fuse/services/utils/utils.module';
                 appearance: 'fill'
             }
         }
-    ]
+    ],
+    declarations: [
+      OverlayComponent
+    ],
+    exports: [OverlayComponent,]
+        
+    
 })
 export class FuseModule
 {
+
     /**
      * Constructor
      */
