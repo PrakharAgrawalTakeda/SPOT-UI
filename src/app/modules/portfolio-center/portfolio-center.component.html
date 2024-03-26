@@ -1,100 +1,53 @@
 <!-- Budget/Spend -->
-<fuse-drawer
-    [name]="'rightDrawer'"
-    [opened]="PortfolioCenterService.drawerOpenedright"
-    (openedChanged)="PortfolioCenterService.drawerOpenedChanged($event)"
-    [mode]="'over'"
-    [position]="'right'"
-    [ngClass]="{ 'fuse-drawer-large': PortfolioCenterService.fuseDrawerLarge }"
->
-    <div>
-        <app-budget-spend
-            *ngIf="
+<fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.drawerOpenedright"
+    (openedChanged)="PortfolioCenterService.drawerOpenedChanged($event)" [mode]="'over'" [position]="'right'"
+    [ngClass]="{ 'fuse-drawer-large': PortfolioCenterService.fuseDrawerLarge }">
+    <app-budget-spend *ngIf="
                 PortfolioCenterService.itemtype == 'BudgetSpendOpen' ||
                 PortfolioCenterService.itemtype == 'FXRateOpen'
-            "
-        ></app-budget-spend>
+            "></app-budget-spend>
        
-    </div>
-    <fuse-drawer
-        [name]="'rightDrawer'"
-        [opened]="PortfolioCenterService.drawerOpened"
-        (openedChanged)="
+    <fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.drawerOpened" (openedChanged)="
             PortfolioCenterService.drawerOpenedChangedSmall($event)
-        "
-        [mode]="'over'"
-        [position]="'right'"
-        [ngClass]="{
+        " [mode]="'over'" [position]="'right'" [ngClass]="{
             'fuse-drawer-small': PortfolioCenterService.fuseDrawerSmall
-        }"
-    >
-        <div>
-            <app-fx-rate
-                *ngIf="PortfolioCenterService.itemtype == 'FXRateOpen'"
-            ></app-fx-rate>
-        </div>
+        }">
+
+      <app-fx-rate *ngIf="PortfolioCenterService.itemtype == 'FXRateOpen'"></app-fx-rate>
     </fuse-drawer>
+    <app-global-messages-panel *ngIf="PortfolioCenterService.itemtype == 'GlobalMessagesPanel'"></app-global-messages-panel>
 </fuse-drawer>
 
-<fuse-drawer
-    [name]="'rightDrawer'"
-    [opened]="PortfolioCenterService.forecastDrawerOpened"
-    (openedChanged)="PortfolioCenterService.forecastDrawerOpenedChanged($event)"
-    [mode]="'over'"
-    [position]="'right'"
-    [ngClass]="{
-        'fuse-drawer-large': PortfolioCenterService.forecastDrawerLarge
-    }"
->
-    <div>
-        <app-forecast-bulk-edit
-        *ngIf="PortfolioCenterService.forecastItemType == 'ForecastBulkEdit'" [projectFunding]="this.projectFunding"></app-forecast-bulk-edit>
-    </div>
-</fuse-drawer>    
-
-<fuse-drawer
-    [name]="'rightDrawer'"
-    [opened]="PortfolioCenterService.bookmarkDrawerOpened"
-    (openedChanged)="PortfolioCenterService.bookmarkDrawerOpenedChanged($event)"
-    [mode]="'over'"
-    [position]="'right'"
+<fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.bookmarkDrawerOpened"
+    (openedChanged)="PortfolioCenterService.bookmarkDrawerOpenedChanged($event)" [mode]="'over'" [position]="'right'"
     [ngClass]="{
         'fuse-drawer-large': PortfolioCenterService.bookmarkDrawerLarge
-    }"
->
+    }">
     <div>
-        <app-bookmarks
-            *ngIf="
+        <app-bookmarks *ngIf="
                 PortfolioCenterService.bookmarkItemType == 'BookmarksOpen' ||
                 PortfolioCenterService.bookmarkItemType == 'BookmarksEditOpen'
-            "
-        >
+            ">
         </app-bookmarks>
     </div>
 
-    <fuse-drawer
-        [name]="'rightDrawer'"
-        [opened]="PortfolioCenterService.bookmarkSmallDrawerOpened"
-        (openedChanged)="
+    <fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.bookmarkSmallDrawerOpened" (openedChanged)="
             PortfolioCenterService.bookmarkSmallDrawerOpenedChanged($event)
-        "
-        [mode]="'over'"
-        [position]="'right'"
-        [ngClass]="{
+        " [mode]="'over'" [position]="'right'" [ngClass]="{
             'fuse-drawer-small': PortfolioCenterService.bookmarkDrawerSmall
-        }"
-    >
+        }">
         <div>
-            <app-bookmark-edit
-                *ngIf="
+            <app-bookmark-edit *ngIf="
                     PortfolioCenterService.bookmarkItemType ==
                     'BookmarksEditOpen'
-                "
-            >
+                ">
             </app-bookmark-edit>
         </div>
     </fuse-drawer>
 </fuse-drawer>
+
+
+
 <!--
 <fuse-drawer
     [name]="'rightDrawer'"
@@ -118,398 +71,178 @@
     </div>
 </fuse-drawer> -->
 <!-- Budget/Spend -->
-<div
-    class="flex flex-col min-w-0 overflow-hidden w-full"
-    [ngClass]="{ 'pt-12': !PortfolioCenterService.drawerOpenedPrakharTemp }"
->
-    <mat-drawer-container
-        class="flex-auto h-full"
-        [ngStyle]="{
+<div class="flex flex-col min-w-0 overflow-hidden w-full"
+    [ngClass]="{ 'pt-12': !PortfolioCenterService.drawerOpenedPrakharTemp }">
+    <mat-drawer-container class="flex-auto h-full" [ngStyle]="{
             position: PortfolioCenterService.drawerOpenedPrakharTemp
                 ? 'fixed'
                 : 'relative'
-        }"
-    >
+        }">
         <!-- Drawer -->
-        <mat-drawer
-            [ngClass]="{
+        <mat-drawer [ngClass]="{
                 'w-full': showContent && !showFilter,
                 'w-2qua': showContent && showFilter,
                 'dark:bg-gray-900': true,
                 'overflow-hidden': true
-            }"
-            [autoFocus]="false"
-            [mode]="'over'"
-            [position]="'end'"
-            #filterDrawer
-            (openedChange)="captureClose($event)"
-        >
+            }" [autoFocus]="false" [mode]="'over'" [position]="'end'" #filterDrawer
+            (openedChange)="captureClose($event)">
             <!-- FILTER -->
-            <form
-                class="w-full overflow-hidden h-full"
-                [formGroup]="PortfolioFilterForm"
-                *ngIf="showContent && showFilter"
-                style="overflow-y: scroll"
-            >
-                <div
-                    class="form-ask-need overflow-y-scroll"
-                    style="
+            <form class="w-full overflow-hidden h-full" [formGroup]="PortfolioFilterForm"
+                *ngIf="showContent && showFilter" style="overflow-y: scroll">
+                <div class="form-ask-need overflow-y-scroll" style="
                         height: calc(calc(100vh / var(--custom-zoom)) - 80px);
-                    "
-                >
+                    ">
                     <div class="flex justify-end items-center">
-                        <button
-                            (click)="resetfilters()"
-                            class="ml-4 text-primary bg-gray-200"
-                            mat-flat-button
-                            [color]="'primary-200'"
-                        >
-                            <mat-icon
-                                svgIcon="heroicons_solid:pencil"
-                            ></mat-icon
-                            >&nbsp; Default filters
+                        <button (click)="resetfilters()" class="ml-4 text-primary bg-gray-200" mat-flat-button
+                            [color]="'primary-200'">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Default filters
                         </button>
                     </div>
-                    <spot-multiselect-user-autocomplete
-                        formControlName="ProjectTeamMember"
-                        [placeholder]="'Last Name, First Name'"
-                        [label]="'Project Team Member'"
-                        name="ProjectTeamMember"
-                        [showLabel]="true"
-                    >
+                    <spot-multiselect-user-autocomplete formControlName="ProjectTeamMember"
+                        [placeholder]="'Last Name, First Name'" [label]="'Project Team Member'" name="ProjectTeamMember"
+                        [showLabel]="true">
                     </spot-multiselect-user-autocomplete>
-                    <spot-multiselect-autocomplete
-                        formControlName="PortfolioOwner"
-                        class="w-full"
-                        name="PortfolioOwner"
-                        [label]="'Portfolio Owner'"
-                        [placeholder]="'Portfolio Owner'"
-                        [valuePointer]="'portfolioOwner'"
-                        [idPointer]="'portfolioOwnerId'"
-                        [dropDownArray]="getPortfolioOwner()"
-                        [sortByType]="'custom'"
-                        [customSortPointer]="'pfid'"
-                        [showHint]="true"
-                        [hint]="
+                    <spot-multiselect-autocomplete formControlName="PortfolioOwner" class="w-full" name="PortfolioOwner"
+                        [label]="'Portfolio Owner'" [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
+                        [idPointer]="'portfolioOwnerId'" [dropDownArray]="getPortfolioOwner()" [sortByType]="'custom'"
+                        [customSortPointer]="'pfid'" [showHint]="true" [hint]="
                             'The group which is responsible for the oversight and process adherence of the record'
-                        "
-                    >
+                        ">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete
-                        formControlName="ExecutionScope"
-                        class="w-full"
-                        name="ExecutionScope"
-                        [label]="'Execution Scope'"
-                        [placeholder]="'Execution Scope'"
-                        [valuePointer]="'portfolioOwner'"
-                        [idPointer]="'portfolioOwnerId'"
-                        [dropDownArray]="getExcecutionScope()"
-                        [sortByType]="'custom'"
-                        [customSortPointer]="'pfid'"
-                        [showHint]="true"
-                        [hint]="
+                    <spot-multiselect-autocomplete formControlName="ExecutionScope" class="w-full" name="ExecutionScope"
+                        [label]="'Execution Scope'" [placeholder]="'Execution Scope'" [valuePointer]="'portfolioOwner'"
+                        [idPointer]="'portfolioOwnerId'" [dropDownArray]="getExcecutionScope()" [sortByType]="'custom'"
+                        [customSortPointer]="'pfid'" [showHint]="true" [hint]="
                             'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'
-                        "
-                    >
+                        ">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete
-                        formControlName="OwningOrganization"
-                        class="w-full"
-                        name="OwningOrganization"
-                        [label]="'Owning Organization'"
-                        [placeholder]="'Owning Organization'"
-                        [dropDownArray]="owningOrg"
-                        [idPointer]="'name'"
-                        [valuePointer]="'name'"
-                        [showHint]="true"
+                    <spot-multiselect-autocomplete formControlName="OwningOrganization" class="w-full"
+                        name="OwningOrganization" [label]="'Owning Organization'" [placeholder]="'Owning Organization'"
+                        [dropDownArray]="owningOrg" [idPointer]="'name'" [valuePointer]="'name'" [showHint]="true"
                         [hint]="
                             'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'
-                        "
-                    >
+                        ">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete
-                        formControlName="ProjectType"
-                        class="w-full"
-                        name="ProjectType"
-                        [label]="'Project Type'"
-                        [placeholder]="'Project Type'"
-                        [valuePointer]="'name'"
-                        [idPointer]="'name'"
-                        [dropDownArray]="projectType"
-                    >
+                    <spot-multiselect-autocomplete formControlName="ProjectType" class="w-full" name="ProjectType"
+                        [label]="'Project Type'" [placeholder]="'Project Type'" [valuePointer]="'name'"
+                        [idPointer]="'name'" [dropDownArray]="projectType">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete
-                        formControlName="ProjectState"
-                        class="w-full"
-                        name="ProjectState"
-                        [label]="'Project State'"
-                        [placeholder]="'Project State'"
-                        [valuePointer]="'lookUpName'"
-                        [idPointer]="'lookUpId'"
-                        [dropDownArray]="filterlist.state"
-                        [sortByType]="'custom'"
-                        [customSortPointer]="'lookUpOrder'"
-                        [showHint]="true"
-                        [hint]="
+                    <spot-multiselect-autocomplete formControlName="ProjectState" class="w-full" name="ProjectState"
+                        [label]="'Project State'" [placeholder]="'Project State'" [valuePointer]="'lookUpName'"
+                        [idPointer]="'lookUpId'" [dropDownArray]="filterlist.state" [sortByType]="'custom'"
+                        [customSortPointer]="'lookUpOrder'" [showHint]="true" [hint]="
                             'Status of the project (Active-Hold-Cancelled-Completed)'
-                        "
-                    >
+                        ">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete
-                        formControlName="ProjectPhase"
-                        class="w-full"
-                        name="ProjectPhase"
-                        [label]="'Project Phase'"
-                        [placeholder]="'Project Phase'"
-                        [valuePointer]="'lookUpName'"
-                        [idPointer]="'lookUpId'"
-                        [dropDownArray]="filterlist.phase"
-                        [sortByType]="'custom'"
-                        [customSortPointer]="'lookUpOrder'"
-                    >
+                    <spot-multiselect-autocomplete formControlName="ProjectPhase" class="w-full" name="ProjectPhase"
+                        [label]="'Project Phase'" [placeholder]="'Project Phase'" [valuePointer]="'lookUpName'"
+                        [idPointer]="'lookUpId'" [dropDownArray]="filterlist.phase" [sortByType]="'custom'"
+                        [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete
-                        *ngIf="
+                    <spot-multiselect-autocomplete *ngIf="
                             PortfolioFilterForm.controls.ProjectPhase.value
                                 ?.length != 0
-                        "
-                        formControlName="CapitalPhase"
-                        class="w-full"
-                        name="CapitalPhase"
-                        [label]="'Capital Phase'"
-                        [placeholder]="'Capital Phase'"
-                        [valuePointer]="'capitalPhaseName'"
-                        [idPointer]="'capitalPhaseID'"
-                        [dropDownArray]="filteredPhaseArray"
-                        [sortByType]="'custom'"
-                        [customSortPointer]="'capitalPhaseOrder'"
-                    >
+                        " formControlName="CapitalPhase" class="w-full" name="CapitalPhase" [label]="'Capital Phase'"
+                        [placeholder]="'Capital Phase'" [valuePointer]="'capitalPhaseName'"
+                        [idPointer]="'capitalPhaseID'" [dropDownArray]="filteredPhaseArray" [sortByType]="'custom'"
+                        [customSortPointer]="'capitalPhaseOrder'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete
-                        *ngIf="
+                    <spot-multiselect-autocomplete *ngIf="
                             PortfolioFilterForm.controls.ProjectPhase.value
                                 ?.length != 0
-                        "
-                        formControlName="OEPhase"
-                        class="w-full"
-                        name="OEPhase"
-                        [label]="'OE Phase'"
-                        [placeholder]="'OE Phase'"
-                        [valuePointer]="'capitalPhaseName'"
-                        [idPointer]="'capitalPhaseID'"
-                        [dropDownArray]="oePhaseArray"
-                        [sortByType]="'custom'"
-                        [customSortPointer]="'capitalPhaseOrder'"
-                    >
+                        " formControlName="OEPhase" class="w-full" name="OEPhase" [label]="'OE Phase'"
+                        [placeholder]="'OE Phase'" [valuePointer]="'capitalPhaseName'" [idPointer]="'capitalPhaseID'"
+                        [dropDownArray]="oePhaseArray" [sortByType]="'custom'"
+                        [customSortPointer]="'capitalPhaseOrder'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete
-                        formControlName="TotalCAPEX"
-                        class="w-full"
-                        name="TotalCAPEX"
-                        [label]="'Total CAPEX'"
-                        [placeholder]="'Total CAPEX'"
-                        [valuePointer]="'lookUpName'"
-                        [idPointer]="'lookUpId'"
-                        [dropDownArray]="totalCAPEX"
-                        [sortByType]="'custom'"
-                        [customSortPointer]="'lookUpOrder'"
-                    >
+                    <spot-multiselect-autocomplete formControlName="TotalCAPEX" class="w-full" name="TotalCAPEX"
+                        [label]="'Total CAPEX'" [placeholder]="'Total CAPEX'" [valuePointer]="'lookUpName'"
+                        [idPointer]="'lookUpId'" [dropDownArray]="totalCAPEX" [sortByType]="'custom'"
+                        [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete
-                        formControlName="GMSBudgetOwner"
-                        class="w-full"
-                        name="GMSBudgetOwner"
-                        [label]="'GMS Budget Owner'"
-                        [placeholder]="'GMS Budget Owner'"
-                        [valuePointer]="'portfolioOwner'"
-                        [idPointer]="'portfolioOwnerId'"
-                        [dropDownArray]="getGMSBudgetOwner()"
-                        [sortByType]="'custom'"
-                        [customSortPointer]="'pfid'"
-                    >
+                    <spot-multiselect-autocomplete formControlName="GMSBudgetOwner" class="w-full" name="GMSBudgetOwner"
+                        [label]="'GMS Budget Owner'" [placeholder]="'GMS Budget Owner'"
+                        [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
+                        [dropDownArray]="getGMSBudgetOwner()" [sortByType]="'custom'" [customSortPointer]="'pfid'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete
-                        formControlName="Product"
-                        class="w-full"
-                        name="Product"
-                        [label]="'Product(s)'"
-                        [placeholder]="'Product'"
-                        [valuePointer]="'fullProductName'"
-                        [idPointer]="'productId'"
-                        [dropDownArray]="filterlist.products"
-                        [showHint]="true"
-                        [hint]="
+                    <spot-multiselect-autocomplete formControlName="Product" class="w-full" name="Product"
+                        [label]="'Product(s)'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
+                        [idPointer]="'productId'" [dropDownArray]="filterlist.products" [showHint]="true" [hint]="
                             'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'
-                        "
-                    >
+                        ">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete
-                        formControlName="AGILEWorkstream"
-                        class="w-full"
-                        name="AGILEWorkstream"
-                        [label]="'AGILE Workstream'"
-                        [placeholder]="'AGILE Workstream'"
-                        [valuePointer]="'lookUpName'"
-                        [idPointer]="'lookUpId'"
-                        [dropDownArray]="AgileWorkstream"
-                    >
+                    <spot-multiselect-autocomplete formControlName="AGILEWorkstream" class="w-full"
+                        name="AGILEWorkstream" [label]="'AGILE Workstream'" [placeholder]="'AGILE Workstream'"
+                        [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" [dropDownArray]="AgileWorkstream">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete
-                        formControlName="AGILEWave"
-                        class="w-full"
-                        name="AGILEWave"
-                        [label]="'AGILE Wave'"
-                        [placeholder]="'AGILE Wave'"
-                        [valuePointer]="'lookUpName'"
-                        [idPointer]="'lookUpId'"
-                        [dropDownArray]="AgileWave"
-                    >
+                    <spot-multiselect-autocomplete formControlName="AGILEWave" class="w-full" name="AGILEWave"
+                        [label]="'AGILE Wave'" [placeholder]="'AGILE Wave'" [valuePointer]="'lookUpName'"
+                        [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
                     </spot-multiselect-autocomplete>
                     <!-- <spot-select class="w-full" formControlName="SPRProjectCategory" name="SPRProjectCategory"
                         [label]="'SPR Project Category'" [placeholder]="'SPR Project Category'" [showNoneOption]="true"
                         [dropDownArrayType]="'string'" [dropDownArray]="CAPSDropDrownValues">
                     </spot-select> -->
-                    <spot-multiselect-autocomplete
-                        formControlName="SPRProjectCategory"
-                        class="w-full"
-                        name="SPRProjectCategory"
-                        [label]="'SPR Project Category'"
-                        [placeholder]="'SPR Project Category'"
-                        [valuePointer]="'lookUpName'"
-                        [idPointer]="'lookUpId'"
-                        [dropDownArray]="SPRData"
-                        [sortByType]="'custom'"
-                        [customSortPointer]="'lookUpOrder'"
-                    >
+                    <spot-multiselect-autocomplete formControlName="SPRProjectCategory" class="w-full"
+                        name="SPRProjectCategory" [label]="'SPR Project Category'"
+                        [placeholder]="'SPR Project Category'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                        [dropDownArray]="SPRData" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete
-                        formControlName="PrimaryValueDriver"
-                        class="w-full"
-                        name="PrimaryValueDriver"
-                        [label]="'Primary Value Driver'"
-                        [placeholder]="'Primary Value Driver'"
-                        [valuePointer]="'lookUpName'"
-                        [idPointer]="'lookUpId'"
-                        [dropDownArray]="primaryKPI"
-                        [sortByType]="'custom'"
-                        [customSortPointer]="'lookUpOrder'"
-                    >
+                    <spot-multiselect-autocomplete formControlName="PrimaryValueDriver" class="w-full"
+                        name="PrimaryValueDriver" [label]="'Primary Value Driver'"
+                        [placeholder]="'Primary Value Driver'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                        [dropDownArray]="primaryKPI" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
-                    <spot-select
-                        class="w-full"
-                        formControlName="CAPSProject"
-                        name="CAPSProject"
-                        [label]="'CAPS Project'"
-                        [placeholder]="'CAPS Project'"
-                        [showNoneOption]="true"
-                        [dropDownArrayType]="'string'"
-                        [dropDownArray]="CAPSDropDrownValues"
-                        [showHint]="true"
-                        [hint]="
+                    <spot-select class="w-full" formControlName="CAPSProject" name="CAPSProject"
+                        [label]="'CAPS Project'" [placeholder]="'CAPS Project'" [showNoneOption]="true"
+                        [dropDownArrayType]="'string'" [dropDownArray]="CAPSDropDrownValues" [showHint]="true" [hint]="
                             'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'
-                        "
-                    >
+                        ">
                     </spot-select>
 
-                    <spot-multiselect-autocomplete
-                        formControlName="OverallStatus"
-                        class="w-full"
-                        name="OverallStatus"
-                        [label]="'Overall Status'"
-                        [placeholder]="'Overall Status'"
-                        [valuePointer]="'lookUpName'"
-                        [idPointer]="'lookUpId'"
-                        [dropDownArray]="overallStatus"
-                        [sortByType]="'custom'"
-                        [customSortPointer]="'lookUpOrder'"
-                    >
+                    <spot-multiselect-autocomplete formControlName="OverallStatus" class="w-full" name="OverallStatus"
+                        [label]="'Overall Status'" [placeholder]="'Overall Status'" [valuePointer]="'lookUpName'"
+                        [idPointer]="'lookUpId'" [dropDownArray]="overallStatus" [sortByType]="'custom'"
+                        [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
-                    <app-spot-multiselect-project-autocomplete
-                        formControlName="projectName"
-                        [placeholder]="
+                    <app-spot-multiselect-project-autocomplete formControlName="projectName" [placeholder]="
                             'Search for a Project by Project ID / Title / Budget ID'
-                        "
-                        [label]="'Project/Program'"
-                        name="projectName"
-                        [showLabel]="true"
-                    >
+                        " [label]="'Project/Program'" name="projectName" [showLabel]="true">
                     </app-spot-multiselect-project-autocomplete>
-                    <spot-input
-                        class="w-full"
-                        formControlName="projectNameKeyword"
-                        name="projectNameKeyword"
-                        [label]="'Project Name Keyword'"
-                        [placeholder]="'Project Name Keyword'"
-                    >
+                    <spot-input class="w-full" formControlName="projectNameKeyword" name="projectNameKeyword"
+                        [label]="'Project Name Keyword'" [placeholder]="'Project Name Keyword'">
                     </spot-input>
 
-                    <mat-label
-                        *ngIf="!showLA"
-                        id="localAttribute"
-                        style="color: #a0cbf1; cursor: pointer"
-                        (click)="OpenLA()"
-                        >+ Show Local Attributes</mat-label
-                    >
-                    <mat-label
-                        *ngIf="showLA"
-                        id="localAttribute"
-                        style="color: #a0cbf1; cursor: pointer"
-                        (click)="CloseLA()"
-                        >+ Hide Local Attributes</mat-label
-                    >
+                    <mat-label *ngIf="!showLA" id="localAttribute" style="color: #a0cbf1; cursor: pointer"
+                        (click)="OpenLA()">+ Show Local Attributes</mat-label>
+                    <mat-label *ngIf="showLA" id="localAttribute" style="color: #a0cbf1; cursor: pointer"
+                        (click)="CloseLA()">+ Hide Local Attributes</mat-label>
 
-                    <form
-                        class="pl-3 w-full overflow-hidden"
-                        [formGroup]="localAttributeForm"
-                        *ngIf="showLA"
-                    >
-                        <div
-                            [ngClass]="{
+                    <form class="pl-3 w-full overflow-hidden" [formGroup]="localAttributeForm" *ngIf="showLA">
+                        <div [ngClass]="{
                                 'overflow-y-scroll overflow-x-hidden h-[80.5vh] pt-3 pr-3':
                                     viewType == 'SidePanel'
-                            }"
-                            *ngIf="showLA"
-                        >
+                            }" *ngIf="showLA">
                             <div *ngFor="let item of dataLA">
                                 <div [ngSwitch]="item.dataType">
-                                    <div
-                                        *ngSwitchCase="'1'"
-                                        class="w-full mt-4 mb-6"
-                                        #checkbox
-                                    >
-                                        <spot-toggle
-                                            class="w-full"
-                                            formControlName="{{
+                                    <div *ngSwitchCase="'1'" class="w-full mt-4 mb-6" #checkbox>
+                                        <spot-toggle class="w-full" formControlName="{{
                                                 item.uniqueId
-                                            }}"
-                                            [mode]="'toggle'"
-                                            [label]="item.name"
-                                        >
+                                            }}" [mode]="'toggle'" [label]="item.name">
                                         </spot-toggle>
                                     </div>
                                     <div *ngIf="!item.isMulti" #input>
-                                        <spot-input
-                                            *ngSwitchCase="'6'"
-                                            class="w-full"
-                                            formControlName="{{
+                                        <spot-input *ngSwitchCase="'6'" class="w-full" formControlName="{{
                                                 item.uniqueId
-                                            }}"
-                                            name="{{ item.uniqueId }}"
-                                            [label]="item.name"
-                                            [placeholder]="item.name"
-                                        >
+                                            }}" name="{{ item.uniqueId }}" [label]="item.name"
+                                            [placeholder]="item.name">
                                         </spot-input>
                                     </div>
                                     <div *ngIf="item.isMulti" #textarea>
-                                        <spot-textarea
-                                            *ngSwitchCase="'6'"
-                                            formControlName="{{
+                                        <spot-textarea *ngSwitchCase="'6'" formControlName="{{
                                                 item.uniqueId
-                                            }}"
-                                            name="{{ item.uniqueId }}"
-                                            [label]="item.name"
-                                            [rows]="item.linesCount"
-                                        >
+                                            }}" name="{{ item.uniqueId }}" [label]="item.name"
+                                            [rows]="item.linesCount">
                                         </spot-textarea>
                                     </div>
                                     <!-- <div *ngIf="!item.isMulti" #Lookup>
@@ -521,83 +254,44 @@
                                         </spot-singleselect-autocomplete>
                                     </div> -->
                                     <div #multiLookup>
-                                        <spot-multiselect-autocomplete
-                                            *ngSwitchCase="'3'"
-                                            formControlName="{{
+                                        <spot-multiselect-autocomplete *ngSwitchCase="'3'" formControlName="{{
                                                 item.uniqueId
-                                            }}"
-                                            class="w-full"
-                                            name="{{ item.uniqueId }}"
-                                            [label]="item.name"
-                                            [placeholder]="item.name"
-                                            [valuePointer]="'lookUpName'"
-                                            [idPointer]="'lookUpId'"
-                                            [dropDownArray]="
+                                            }}" class="w-full" name="{{ item.uniqueId }}" [label]="item.name"
+                                            [placeholder]="item.name" [valuePointer]="'lookUpName'"
+                                            [idPointer]="'lookUpId'" [dropDownArray]="
                                                 getLookup(item.lookupParentId)
-                                            "
-                                            [sortByType]="'custom'"
-                                            [customSortPointer]="'lookUpOrder'"
-                                        >
+                                            " [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                                         </spot-multiselect-autocomplete>
                                     </div>
                                     <div style="display: flex">
-                                        <spot-input
-                                            style="display: flex"
-                                            *ngSwitchCase="'4'"
-                                            class="w-full"
-                                            formControlName="{{ item.name }}"
-                                            name="{{ item.name }}"
-                                            [label]="item.name"
-                                            [decimalCount]="item.linesCount"
-                                            [inputType]="'Number'"
-                                            [callLocation]="'LocalAttribute'"
-                                            [placeholder]="'From'"
-                                        >
+                                        <spot-input style="display: flex" *ngSwitchCase="'4'" class="w-full"
+                                            formControlName="{{ item.name }}" name="{{ item.name }}" [label]="item.name"
+                                            [decimalCount]="item.linesCount" [inputType]="'Number'"
+                                            [callLocation]="'LocalAttribute'" [placeholder]="'From'">
                                         </spot-input>
-                                        <spot-input
-                                            style="
+                                        <spot-input style="
                                                 display: flex;
                                                 left: 10px;
                                                 position: relative;
-                                            "
-                                            *ngSwitchCase="'4'"
-                                            class="w-full"
-                                            formControlName="{{
+                                            " *ngSwitchCase="'4'" class="w-full" formControlName="{{
                                                 item.uniqueId
-                                            }}"
-                                            name="{{ item.uniqueId }}"
-                                            [decimalCount]="item.linesCount"
-                                            [inputType]="'Number'"
-                                            [callLocation]="'LocalAttribute'"
-                                            [placeholder]="'To'"
-                                        >
+                                            }}" name="{{ item.uniqueId }}" [decimalCount]="item.linesCount"
+                                            [inputType]="'Number'" [callLocation]="'LocalAttribute'"
+                                            [placeholder]="'To'">
                                         </spot-input>
                                     </div>
                                     <div style="display: flex">
-                                        <spot-input-date
-                                            style="display: flex"
-                                            *ngSwitchCase="'2'"
-                                            class="w-full read-only"
-                                            formControlName="{{ item.name }}"
-                                            name="{{ item.name }}"
-                                            [label]="item.name"
-                                            [placeholder]="'From'"
-                                        >
+                                        <spot-input-date style="display: flex" *ngSwitchCase="'2'"
+                                            class="w-full read-only" formControlName="{{ item.name }}"
+                                            name="{{ item.name }}" [label]="item.name" [placeholder]="'From'">
                                         </spot-input-date>
-                                        <spot-input-date
-                                            style="
+                                        <spot-input-date style="
                                                 display: flex;
                                                 left: 10px;
                                                 position: relative;
-                                            "
-                                            *ngSwitchCase="'2'"
-                                            class="w-full read-only"
-                                            formControlName="{{
+                                            " *ngSwitchCase="'2'" class="w-full read-only" formControlName="{{
                                                 item.uniqueId
-                                            }}"
-                                            name="{{ item.uniqueId }}"
-                                            [placeholder]="'To'"
-                                        >
+                                            }}" name="{{ item.uniqueId }}" [placeholder]="'To'">
                                         </spot-input-date>
                                     </div>
                                     <!-- <div *ngIf="!item.isMulti" #people>
@@ -607,18 +301,12 @@
                                         </spot-singleselect-user-autocomplete>
                                     </div> -->
                                     <div #multiPeople>
-                                        <spot-multiselect-user-autocomplete
-                                            *ngSwitchCase="'5'"
-                                            formControlName="{{
+                                        <spot-multiselect-user-autocomplete *ngSwitchCase="'5'" formControlName="{{
                                                 item.uniqueId
-                                            }}"
-                                            [label]="item.name"
-                                            name="{{ item.uniqueId }}"
-                                            [showLabel]="true"
+                                            }}" [label]="item.name" name="{{ item.uniqueId }}" [showLabel]="true"
                                             [placeholder]="
                                                 'Last Name, First Name'
-                                            "
-                                        >
+                                            ">
                                         </spot-multiselect-user-autocomplete>
                                     </div>
                                 </div>
@@ -627,613 +315,327 @@
                     </form>
 
                     <div class="my-2">
-                        <mat-label
-                            *ngIf="!showPA"
-                            id="localAttribute"
-                            style="color: #a0cbf1; cursor: pointer"
-                            (click)="OpenPA()"
-                            >+ Select Columns to Display in the Portfolio
-                            Center</mat-label
-                        >
-                        <mat-label
-                            *ngIf="showPA"
-                            id="localAttribute"
-                            style="color: #a0cbf1; cursor: pointer"
-                            (click)="ClosePA()"
-                            >+ Hide Columns to Display in the Portfolio
-                            Center</mat-label
-                        >
+                        <mat-label *ngIf="!showPA" id="localAttribute" style="color: #a0cbf1; cursor: pointer"
+                            (click)="OpenPA()">+ Select Columns to Display in the Portfolio
+                            Center</mat-label>
+                        <mat-label *ngIf="showPA" id="localAttribute" style="color: #a0cbf1; cursor: pointer"
+                            (click)="ClosePA()">+ Hide Columns to Display in the Portfolio
+                            Center</mat-label>
                     </div>
                     <div *ngIf="showPA" class="mt-4">
                         <form [formGroup]="ProjectTableColumns">
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="State"
-                                    [label]="'State'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="State" [label]="'State'"
+                                    [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="PhaseProjectCapitalOE"
-                                    [label]="'Phase (Project/Capital/OE)'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="PhaseProjectCapitalOE"
+                                    [label]="'Phase (Project/Capital/OE)'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="ProjectManager"
-                                    [label]="'Project Manager'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="ProjectManager"
+                                    [label]="'Project Manager'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="Sponsor"
-                                    [label]="'Sponsor'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="Sponsor" [label]="'Sponsor'"
+                                    [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="Schedule"
-                                    [label]="'Schedule'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="Schedule" [label]="'Schedule'"
+                                    [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="RiskIssues"
-                                    [label]="'Risk/Issue'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="RiskIssues" [label]="'Risk/Issue'"
+                                    [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="AskNeed"
-                                    [label]="'Ask/Need'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="AskNeed" [label]="'Ask/Need'"
+                                    [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="Budget"
-                                    [label]="'Budget'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="Budget" [label]="'Budget'"
+                                    [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="Spend"
-                                    [label]="'Spend'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="Spend" [label]="'Spend'"
+                                    [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="DQPercent"
-                                    [label]="'DQ%'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="DQPercent" [label]="'DQ%'"
+                                    [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="TotalCapexApprovedForcast"
-                                    [label]="'Total CAPEX  Approved/Forcast'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="TotalCapexApprovedForcast"
+                                    [label]="'Total CAPEX  Approved/Forcast'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="CarbonImpact"
-                                    [label]="'Carbon Impact ( Tons Co2)'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="CarbonImpact"
+                                    [label]="'Carbon Impact ( Tons Co2)'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="WaterImpact"
-                                    [label]="'Water Impact (m3)'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="WaterImpact"
+                                    [label]="'Water Impact (m3)'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="MilestoneProgression"
-                                    [label]="'Milestone / Progression'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="MilestoneProgression"
+                                    [label]="'Milestone / Progression'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="NextMilestone"
-                                    [label]="'Next Milestone'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="NextMilestone"
+                                    [label]="'Next Milestone'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="NextMilestonePlannedFinishDate"
+                                <spot-toggle class="w-full mb-4" formControlName="NextMilestonePlannedFinishDate"
                                     [label]="
                                         'Next Milestone Planned Finish Date'
-                                    "
-                                    [showHint]="false"
-                                >
+                                    " [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="ExecutionCompleteDate"
-                                    [label]="'Execution Complete Date'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="ExecutionCompleteDate"
+                                    [label]="'Execution Complete Date'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="ExecutionDuration"
-                                    [label]="'Execution Duration (Days)'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="ExecutionDuration"
+                                    [label]="'Execution Duration (Days)'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="ProjectType"
-                                    [label]="'Project Type'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="ProjectType" [label]="'Project Type'"
+                                    [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="OwningOrganization"
-                                    [label]="'Owning Organization'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="OwningOrganization"
+                                    [label]="'Owning Organization'" [showHint]="false">
                                 </spot-toggle>
                             </div>
 
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="PortfolioOwner"
-                                    [label]="'Portfolio Owner'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="PortfolioOwner"
+                                    [label]="'Portfolio Owner'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="ParentProject"
-                                    [label]="'Parent Project'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="ParentProject"
+                                    [label]="'Parent Project'" [showHint]="false">
                                 </spot-toggle>
                             </div>
 
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="PrimaryProduct"
-                                    [label]="'Primary Product'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="PrimaryProduct"
+                                    [label]="'Primary Product'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="PrimaryValueDriver"
-                                    [label]="'Primary Value Driver'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="PrimaryValueDriver"
+                                    [label]="'Primary Value Driver'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="AGILEPrimaryWorkstream"
-                                    [label]="'AGILE Primary Workstream'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="AGILEPrimaryWorkstream"
+                                    [label]="'AGILE Primary Workstream'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="CapexRequired"
-                                    [label]="'Capex Required'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="CapexRequired"
+                                    [label]="'Capex Required'" [showHint]="false">
                                 </spot-toggle>
                             </div>
 
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="OPEXRequired"
-                                    [label]="'OPEX Required'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="OPEXRequired"
+                                    [label]="'OPEX Required'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="GMSBudgetOwner"
-                                    [label]="'GMS Budget Owner'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="GMSBudgetOwner"
+                                    [label]="'GMS Budget Owner'" [showHint]="false">
                                 </spot-toggle>
                             </div>
 
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="GlobalRegionalPredefinedInvestment"
+                                <spot-toggle class="w-full mb-4" formControlName="GlobalRegionalPredefinedInvestment"
                                     [label]="
                                         'Global / Regional Predefined Investment'
-                                    "
-                                    [showHint]="false"
-                                >
+                                    " [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="Where"
-                                    [label]="'Where'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="Where" [label]="'Where'"
+                                    [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="Why"
-                                    [label]="'Why'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="Why" [label]="'Why'"
+                                    [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="FundingApprovalNeedDate"
-                                    [label]="'Funding Approval Need Date'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="FundingApprovalNeedDate"
+                                    [label]="'Funding Approval Need Date'" [showHint]="false">
                                 </spot-toggle>
                             </div>
 
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="AssetPlaceInService"
-                                    [label]="'Asset Place In Service'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="AssetPlaceInService"
+                                    [label]="'Asset Place In Service'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="EnvironmentalPortfolio"
-                                    [label]="'Environmental Portfolio'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="EnvironmentalPortfolio"
+                                    [label]="'Environmental Portfolio'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="CAPSProject"
-                                    [label]="'CAPS Project'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="CAPSProject" [label]="'CAPS Project'"
+                                    [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
-                                <spot-toggle
-                                    class="w-full mb-4"
-                                    formControlName="ImpactRealizationDate"
-                                    [label]="'Impact Realization Date'"
-                                    [showHint]="false"
-                                >
+                                <spot-toggle class="w-full mb-4" formControlName="ImpactRealizationDate"
+                                    [label]="'Impact Realization Date'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                         </form>
                     </div>
                 </div>
 
-                <div
-                    class="flex justify-between gap-8 mt-2"
-                    style="margin-bottom: -20px"
-                >
-                    <button
-                        class="apply-button"
-                        mat-flat-button
-                        [color]="'primary'"
-                        (click)="Closefilter()"
-                    >
+                <div class="flex justify-between gap-8 mt-2" style="margin-bottom: -20px">
+                    <button class="apply-button" mat-flat-button [color]="'primary'" (click)="Closefilter()">
                         Cancel
                     </button>
-                    <button
-                        class="apply-button"
-                        mat-flat-button
-                        [color]="'primary'"
-                        (click)="applyPortfoliofilters()"
-                    >
+                    <button class="apply-button" mat-flat-button [color]="'primary'" (click)="applyPortfoliofilters()">
                         Apply Filters
                     </button>
                 </div>
             </form>
             <!-- GENERATE REPORT -->
-            <div
-                class="mt-3 pl-3 pr-3 w-full"
-                #target
-                id="scheduleTableDiv"
-                style="height: calc(calc(100vh / var(--custom-zoom)) - 100px)"
-                *ngIf="showContent && !showFilter"
-            >
-                <ngx-datatable
-                    [headerHeight]="'auto'"
-                    [rowHeight]="'auto'"
-                    [scrollbarV]="true"
-                    [scrollbarH]="false"
-                    columnMode="force"
-                    [externalPaging]="true"
-                    [count]="totalElements"
-                    [offset]="pageNumber"
-                    [limit]="size"
-                    (page)="setPage('', $event)"
-                    (sort)="sort($event)"
-                    [virtualization]="false"
-                    [footerHeight]="20"
-                    [sorts]="[{ prop: 'problemId', dir: 'asc' }]"
+            <div class="mt-3 pl-3 pr-3 w-full" #target id="scheduleTableDiv"
+                style="height: calc(calc(100vh / var(--custom-zoom)) - 100px)" *ngIf="showContent && !showFilter">
+                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="true" [scrollbarH]="false"
+                    columnMode="force" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
+                    [limit]="size" (page)="setPage('', $event)" (sort)="sort($event)" [virtualization]="false"
+                    [footerHeight]="20" [sorts]="[{ prop: 'problemId', dir: 'asc' }]"
                     class="font-medium h-full reportTable text-sm text-default whitespace-nowrap overflow-y-scroll"
-                    [rows]="projectOverview"
-                    #projectOverviewTable
-                >
+                    [rows]="projectOverview" #projectOverviewTable>
                     <!-- Define columns -->
-                    <ngx-datatable-column
-                        name="Project ID"
-                        prop="problemId"
-                        [resizeable]="false"
-                        [sortable]="false"
-                        [width]="25"
-                    >
-                        <ng-template
-                            let-row="row"
-                            let-rowIndex="rowIndex"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
+                    <ngx-datatable-column name="Project ID" prop="problemId" [resizeable]="false" [sortable]="false"
+                        [width]="25">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
                             {{ value }}
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column
-                        name="Budget ID"
-                        prop="budgetId"
-                        [resizeable]="false"
-                        [sortable]="false"
-                        [width]="40"
-                    >
-                        <ng-template
-                            let-row="row"
-                            let-rowIndex="rowIndex"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
+                    <ngx-datatable-column name="Budget ID" prop="budgetId" [resizeable]="false" [sortable]="false"
+                        [width]="40">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
                             {{ value }}
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column
-                        name="Project Name"
-                        prop="problemTitle"
-                        [resizeable]="false"
-                        [sortable]="false"
-                        [width]="200"
-                    >
-                        <ng-template
-                            let-row="row"
-                            let-rowIndex="rowIndex"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
+                    <ngx-datatable-column name="Project Name" prop="problemTitle" [resizeable]="false"
+                        [sortable]="false" [width]="200">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
                             <p (click)="OpenProject(value)" class="projectName">
                                 {{ value }}
                             </p>
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column
-                        name="PM"
-                        prop="pm"
-                        [resizeable]="false"
-                        [sortable]="false"
-                        [width]="50"
-                    >
-                        <ng-template
-                            let-row="row"
-                            let-rowIndex="rowIndex"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
+                    <ngx-datatable-column name="PM" prop="pm" [resizeable]="false" [sortable]="false" [width]="50">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
                             {{ value }}
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column
-                        name="Sponsor"
-                        prop="sponsor"
-                        [resizeable]="false"
-                        [sortable]="false"
-                        [width]="50"
-                    >
-                        <ng-template
-                            let-row="row"
-                            let-rowIndex="rowIndex"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
+                    <ngx-datatable-column name="Sponsor" prop="sponsor" [resizeable]="false" [sortable]="false"
+                        [width]="50">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
                             {{ value }}
                         </ng-template>
                     </ngx-datatable-column>
 
                     <!-- Toggle column -->
-                    <ngx-datatable-column
-                        [width]="48"
-                        [sortable]="false"
-                        [resizeable]="false"
-                    >
-                        <ng-template
-                            ngx-datatable-header-template
-                            let-value="value"
-                            let-allRowsSelected="allRowsSelectedToggleName"
-                            let-selectFn="selectFnToggleName"
-                        >
-                            <mat-slide-toggle
-                                class="h-full min-h-[2pc] overflow-hidden"
-                                [checked]="
+                    <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value"
+                            let-allRowsSelected="allRowsSelectedToggleName" let-selectFn="selectFnToggleName">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
                                     toggles['Project Proposal'].allToggledFn()
-                                "
-                                (change)="
+                                " (change)="
                                     toggles['Project Proposal'].selectAllFn(
                                         !toggles[
                                             'Project Proposal'
                                         ].allToggledFn()
                                     )
-                                "
-                            ></mat-slide-toggle>
+                                "></mat-slide-toggle>
                             Project Proposal
                         </ng-template>
-                        <ng-template
-                            ngx-datatable-cell-template
-                            let-value="value"
-                            let-isSelected="isSelectedToggleName"
-                            let-onCheckboxChangeFn="onCheckboxChangeFnToggleName"
-                            let-row="row"
-                            let-rowIndex="rowIndex"
-                        >
-                            <mat-slide-toggle
-                                class="h-full min-h-[2pc] overflow-hidden"
-                                [checked]="
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelectedToggleName"
+                            let-onCheckboxChangeFn="onCheckboxChangeFnToggleName" let-row="row" let-rowIndex="rowIndex">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
                                     toggles['Project Proposal'].states[rowIndex]
-                                "
-                                (change)="
+                                " (change)="
                                     toggles['Project Proposal'].toggleFn(
                                         rowIndex
                                     )
-                                "
-                            ></mat-slide-toggle>
+                                "></mat-slide-toggle>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column
-                        [width]="48"
-                        [sortable]="false"
-                        [resizeable]="false"
-                    >
-                        <ng-template
-                            ngx-datatable-header-template
-                            let-value="value"
-                            let-allRowsSelected="allRowsSelectedToggleName"
-                            let-selectFn="selectFnToggleName"
-                        >
-                            <mat-slide-toggle
-                                class="h-full min-h-[2pc] overflow-hidden"
-                                [checked]="
+                    <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value"
+                            let-allRowsSelected="allRowsSelectedToggleName" let-selectFn="selectFnToggleName">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
                                     toggles['Project Charter'].allToggledFn()
-                                "
-                                (change)="
+                                " (change)="
                                     toggles['Project Charter'].selectAllFn(
                                         !toggles[
                                             'Project Charter'
                                         ].allToggledFn()
                                     )
-                                "
-                            ></mat-slide-toggle>
+                                "></mat-slide-toggle>
                             Project Charter
                         </ng-template>
-                        <ng-template
-                            ngx-datatable-cell-template
-                            let-value="value"
-                            let-isSelected="isSelectedToggleName"
-                            let-onCheckboxChangeFn="onCheckboxChangeFnToggleName"
-                            let-row="row"
-                            let-rowIndex="rowIndex"
-                        >
-                            <mat-slide-toggle
-                                class="h-full min-h-[2pc] overflow-hidden"
-                                [checked]="
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelectedToggleName"
+                            let-onCheckboxChangeFn="onCheckboxChangeFnToggleName" let-row="row" let-rowIndex="rowIndex">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
                                     toggles['Project Charter'].states[rowIndex]
-                                "
-                                (change)="
+                                " (change)="
                                     toggles['Project Charter'].toggleFn(
                                         rowIndex
                                     )
-                                "
-                            ></mat-slide-toggle>
+                                "></mat-slide-toggle>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column
-                        [width]="48"
-                        [sortable]="false"
-                        [resizeable]="false"
-                    >
-                        <ng-template
-                            ngx-datatable-header-template
-                            let-value="value"
-                            let-allRowsSelected="allRowsSelectedToggleName"
-                            let-selectFn="selectFnToggleName"
-                        >
-                            <mat-slide-toggle
-                                class="h-full min-h-[2pc] overflow-hidden"
-                                [checked]="
+                    <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value"
+                            let-allRowsSelected="allRowsSelectedToggleName" let-selectFn="selectFnToggleName">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
                                     toggles[
                                         'Performance Dashboard'
                                     ].allToggledFn()
-                                "
-                                (change)="
+                                " (change)="
                                     toggles[
                                         'Performance Dashboard'
                                     ].selectAllFn(
@@ -1241,192 +643,106 @@
                                             'Performance Dashboard'
                                         ].allToggledFn()
                                     )
-                                "
-                            ></mat-slide-toggle>
+                                "></mat-slide-toggle>
                             Performance Dashboard
                         </ng-template>
-                        <ng-template
-                            ngx-datatable-cell-template
-                            let-value="value"
-                            let-isSelected="isSelectedToggleName"
-                            let-onCheckboxChangeFn="onCheckboxChangeFnToggleName"
-                            let-row="row"
-                            let-rowIndex="rowIndex"
-                        >
-                            <mat-slide-toggle
-                                class="h-full min-h-[2pc] overflow-hidden"
-                                [checked]="
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelectedToggleName"
+                            let-onCheckboxChangeFn="onCheckboxChangeFnToggleName" let-row="row" let-rowIndex="rowIndex">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
                                     toggles['Performance Dashboard'].states[
                                         rowIndex
                                     ]
-                                "
-                                (change)="
+                                " (change)="
                                     toggles['Performance Dashboard'].toggleFn(
                                         rowIndex
                                     )
-                                "
-                            ></mat-slide-toggle>
+                                "></mat-slide-toggle>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column
-                        [width]="48"
-                        [sortable]="false"
-                        [resizeable]="false"
-                    >
-                        <ng-template
-                            ngx-datatable-header-template
-                            let-value="value"
-                            let-allRowsSelected="allRowsSelectedToggleName"
-                            let-selectFn="selectFnToggleName"
-                        >
-                            <mat-slide-toggle
-                                class="h-full min-h-[2pc] overflow-hidden"
-                                [checked]="
+                    <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value"
+                            let-allRowsSelected="allRowsSelectedToggleName" let-selectFn="selectFnToggleName">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
                                     toggles['Budget Dashboard'].allToggledFn()
-                                "
-                                (change)="
+                                " (change)="
                                     toggles['Budget Dashboard'].selectAllFn(
                                         !toggles[
                                             'Budget Dashboard'
                                         ].allToggledFn()
                                     )
-                                "
-                            ></mat-slide-toggle>
+                                "></mat-slide-toggle>
                             Budget Dashboard
                         </ng-template>
-                        <ng-template
-                            ngx-datatable-cell-template
-                            let-value="value"
-                            let-isSelected="isSelectedToggleName"
-                            let-onCheckboxChangeFn="onCheckboxChangeFnToggleName"
-                            let-row="row"
-                            let-rowIndex="rowIndex"
-                        >
-                            <mat-slide-toggle
-                                class="h-full min-h-[2pc] overflow-hidden"
-                                [checked]="
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelectedToggleName"
+                            let-onCheckboxChangeFn="onCheckboxChangeFnToggleName" let-row="row" let-rowIndex="rowIndex">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
                                     toggles['Budget Dashboard'].states[rowIndex]
-                                "
-                                (change)="
+                                " (change)="
                                     toggles['Budget Dashboard'].toggleFn(
                                         rowIndex
                                     )
-                                "
-                            ></mat-slide-toggle>
+                                "></mat-slide-toggle>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column
-                        [width]="48"
-                        [sortable]="false"
-                        [resizeable]="false"
-                    >
-                        <ng-template
-                            ngx-datatable-header-template
-                            let-value="value"
-                            let-allRowsSelected="allRowsSelectedToggleName"
-                            let-selectFn="selectFnToggleName"
-                        >
-                            <mat-slide-toggle
-                                class="h-full min-h-[2pc] overflow-hidden"
-                                [checked]="
+                    <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value"
+                            let-allRowsSelected="allRowsSelectedToggleName" let-selectFn="selectFnToggleName">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
                                     toggles['Project Closeout'].allToggledFn()
-                                "
-                                (change)="
+                                " (change)="
                                     toggles['Project Closeout'].selectAllFn(
                                         !toggles[
                                             'Project Closeout'
                                         ].allToggledFn()
                                     )
-                                "
-                            ></mat-slide-toggle>
+                                "></mat-slide-toggle>
                             Project Closeout
                         </ng-template>
-                        <ng-template
-                            ngx-datatable-cell-template
-                            let-value="value"
-                            let-isSelected="isSelectedToggleName"
-                            let-onCheckboxChangeFn="onCheckboxChangeFnToggleName"
-                            let-row="row"
-                            let-rowIndex="rowIndex"
-                        >
-                            <mat-slide-toggle
-                                class="h-full min-h-[2pc] overflow-hidden"
-                                [checked]="
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelectedToggleName"
+                            let-onCheckboxChangeFn="onCheckboxChangeFnToggleName" let-row="row" let-rowIndex="rowIndex">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
                                     toggles['Project Closeout'].states[rowIndex]
-                                "
-                                (change)="
+                                " (change)="
                                     toggles['Project Closeout'].toggleFn(
                                         rowIndex
                                     )
-                                "
-                            ></mat-slide-toggle>
+                                "></mat-slide-toggle>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column
-                        [width]="48"
-                        [sortable]="false"
-                        [resizeable]="false"
-                    >
-                        <ng-template
-                            ngx-datatable-header-template
-                            let-value="value"
-                            let-allRowsSelected="allRowsSelectedToggleName"
-                            let-selectFn="selectFnToggleName"
-                        >
-                            <mat-slide-toggle
-                                class="h-full min-h-[2pc] overflow-hidden"
-                                [checked]="
+                    <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value"
+                            let-allRowsSelected="allRowsSelectedToggleName" let-selectFn="selectFnToggleName">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
                                     toggles['GMSGQ Product Team'].allToggledFn()
-                                "
-                                (change)="
+                                " (change)="
                                     toggles['GMSGQ Product Team'].selectAllFn(
                                         !toggles[
                                             'GMSGQ Product Team'
                                         ].allToggledFn()
                                     )
-                                "
-                            ></mat-slide-toggle>
+                                "></mat-slide-toggle>
                             GMSGQ Product Team
                         </ng-template>
-                        <ng-template
-                            ngx-datatable-cell-template
-                            let-value="value"
-                            let-isSelected="isSelectedToggleName"
-                            let-onCheckboxChangeFn="onCheckboxChangeFnToggleName"
-                            let-row="row"
-                            let-rowIndex="rowIndex"
-                        >
-                            <mat-slide-toggle
-                                class="h-full min-h-[2pc] overflow-hidden"
-                                [checked]="
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelectedToggleName"
+                            let-onCheckboxChangeFn="onCheckboxChangeFnToggleName" let-row="row" let-rowIndex="rowIndex">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
                                     toggles['GMSGQ Product Team'].states[
                                         rowIndex
                                     ]
-                                "
-                                (change)="
+                                " (change)="
                                     toggles['GMSGQ Product Team'].toggleFn(
                                         rowIndex
                                     )
-                                "
-                            ></mat-slide-toggle>
+                                "></mat-slide-toggle>
                         </ng-template>
                     </ngx-datatable-column>
                 </ngx-datatable>
                 <div class="flex justify-between gap-8">
-                    <button
-                        class="min-w-26 submit-button"
-                        mat-flat-button
-                        [color]="'primary'"
-                        (click)="Close()"
-                    >
+                    <button class="min-w-26 submit-button" mat-flat-button [color]="'primary'" (click)="Close()">
                         Cancel
                     </button>
-                    <button
-                        class="min-w-26 submit-button"
-                        mat-flat-button
-                        [color]="'primary'"
-                        (click)="generateReports()"
-                    >
+                    <button class="min-w-26 submit-button" mat-flat-button [color]="'primary'"
+                        (click)="generateReports()">
                         Submit
                     </button>
                 </div>
@@ -1436,89 +752,55 @@
         <!-- Drawer content -->
         <mat-drawer-content class="flex flex-col w-full">
             <!-- Header -->
-            <div
-                [hidden]="!showContent"
-                class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10"
-            >
-                <spot-global-message
-                    [callLocation]="'PortfolioCenter'"
-                ></spot-global-message>
-                <div
-                    class="flex justify-between gap-8 mt-2"
-                    style="margin-bottom: -20px"
-                >
-                    <h1
-                        class="text-3xl tracking-tight leading-7 sm:leading-10 text-primary"
-                        style="margin-left: 10px"
-                    >
+            <div [hidden]="!showContent" class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10">
+                <spot-global-message [callLocation]="'PortfolioCenter'"></spot-global-message>
+                <div class="flex justify-between gap-8 mt-2" style="margin-bottom: -20px">
+                    <h1 class="text-3xl tracking-tight leading-7 sm:leading-10 text-primary" style="margin-left: 10px">
                         Portfolio Center
                     </h1>
                 </div>
-                <div
-                    style="
+                <div style="
                         top: 25px;
                         display: inline;
                         position: relative;
                         left: 10px;
-                    "
-                >
+                    ">
                     <span *ngFor="let item of filterList; last as isLast">
-                        <span
-                            *ngIf="item.count == 1"
-                            class="text-primary text-base"
-                        >
+                        <span *ngIf="item.count == 1" class="text-primary text-base">
                             {{ item.name }} : {{ item.value }}
                             {{ isLast ? "" : ", " }}
                         </span>
-                        <span
-                            *ngIf="item.count > 1"
-                            class="text-primary text-base"
-                        >
+                        <span *ngIf="item.count > 1" class="text-primary text-base">
                             {{ item.name }} ({{ item.count }})
                             {{ isLast ? "" : ", " }}
                         </span>
                     </span>
 
-                    <span
-                        *ngFor="
+                    <span *ngFor="
                             let item of localAttributeData;
                             last as isLast;
                             first as isFirst
-                        "
-                    >
-                        <span
-                            *ngIf="item.count == 1"
-                            class="text-primary text-base"
-                        >
+                        ">
+                        <span *ngIf="item.count == 1" class="text-primary text-base">
                             {{ isFirst ? ", " : "" }} {{ item.name }} :
                             {{ item.value }} {{ isLast ? "" : ", " }}
                         </span>
-                        <span
-                            *ngIf="item.count > 1"
-                            class="text-primary text-base"
-                        >
+                        <span *ngIf="item.count > 1" class="text-primary text-base">
                             {{ item.name }} ({{ item.count }})
                             {{ isLast ? "" : ", " }}
                         </span>
                     </span>
                 </div>
-                <div
-                    class="flex justify-between gap-8 mt-4"
-                    style="margin-bottom: -20px"
-                >
+                <div class="flex justify-between gap-8 mt-4" style="margin-bottom: -20px">
                     <div class="flex items-center ml-[10px]">
-                        <button
-                            mat-flat-button
-                            [color]="'primary'"
-                            (click)="
+                        <button mat-flat-button [color]="'primary'" (click)="
                                 PortfolioCenterService.toggleBookmarkDrawerOpen(
                                     'BookmarksOpen',
                                     '',
                                     '',
                                     true
                                 )
-                            "
-                        >
+                            ">
                             Edit Bookmarks
                         </button>
                     </div>
@@ -1531,38 +813,21 @@
                             [dropDownArray]="BookmarksDropValues"
                         >
                         </spot-select> -->
-                        <form [formGroup]="BookmarksForm" class="w-[200px]">
-                            <spot-select
-                                formControlName="BookmarkName"
-                                class="w-full bookmark-dropdown"
-                                [placeholder]="'Default'"
-                                [dropDownArrayType]="'object'"
-                                [dropDownArray]="getBookmarkArray()"
-                                [idPointer]="'bookmarkId'"
-                                [showNoneOption]="false"
-                                [valuePointer]="'bookmarkName'"
-                                [sortByType]="'custom'"
-                            >
+                        <form [formGroup]="BookmarksForm" class="w-[400px]">
+                            <spot-select formControlName="BookmarkName" class="w-full bookmark-dropdown"
+                                [placeholder]="'Default'" [dropDownArrayType]="'object'"
+                                [dropDownArray]="getBookmarkArray()" [idPointer]="'bookmarkId'" [showNoneOption]="false"
+                                [valuePointer]="'bookmarkName'" [sortByType]="'custom'"
+                                [matTooltip]="selectedBookmarkName">
                             </spot-select>
                         </form>
 
-                        <button
-                            class="ml-4 bookmark-button"
-                            mat-raised-button
+                        <button class="ml-4 bookmark-button" mat-raised-button
                             matTooltip="Quick Bookmark Creator - Create a bookmark based on the current filter applied"
-                            [color]="'primary'"
-                            (click)="saveAsBookmark()"
-                        >
-                            <mat-icon
-                                svgIcon="mat_outline:bookmark_add"
-                            ></mat-icon>
+                            [color]="'primary'" (click)="saveAsBookmark()">
+                            <mat-icon svgIcon="mat_outline:bookmark_add"></mat-icon>
                         </button>
-                        <button
-                            class="ml-4"
-                            mat-flat-button
-                            [color]="'primary'"
-                            (click)="openDrawer('Filter')"
-                        >
+                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="openDrawer('Filter')">
                             Filter
                         </button>
 
@@ -1572,107 +837,68 @@
                     </div>
                 </div>
 
-                <div
-                    style="
+                <div style="
                         top: 25px;
                         display: inline;
                         position: relative;
                         left: 10px;
-                    "
-                    *ngIf="showdefault"
-                >
-                    <button
-                        class="ml-4 h-6 p-0"
-                        mat-flat-button
-                        [color]="'primary'"
-                        (click)="DefaultFilter()"
-                    >
+                    " *ngIf="showdefault">
+                    <button class="ml-4 h-6 p-0" mat-flat-button [color]="'primary'" (click)="DefaultFilter()">
                         Cancel Loading
                     </button>
                 </div>
-                <div
-                    *ngIf="showContent"
-                    class="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full min-w-0 mt-8"
-                    @slideInRight
-                >
+                <div *ngIf="showContent" class="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full min-w-0 mt-8"
+                    @slideInRight>
                     <ng-container *ngFor="let tile of portfolioTilesValues">
                         <!-- Phase Distribution -->
 
-                        <div
-                            *ngIf="
+                        <div *ngIf="
                                 tile.name == 'PhaseDistribution' &&
                                 tile.isToggled == true
-                            "
-                            class="flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl"
-                            @slideInLeft
-                        >
-                            <div
-                                class="sm:col-span-3 lg:col-span-2 flex flex-col flex-auto p-6 overflow-hidden"
-                            >
+                            " class="flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl" @slideInLeft>
+                            <div class="sm:col-span-3 lg:col-span-2 flex flex-col flex-auto p-6 overflow-hidden">
                                 <div
-                                    class="text-2xl lg:text-3xl font-medium tracking-tight text-primary leading-6 truncate mb-0"
-                                >
+                                    class="text-2xl lg:text-3xl font-medium tracking-tight text-primary leading-6 truncate mb-0">
                                     Phase Distribution
                                 </div>
                                 <div class="flex flex-col flex-auto h-60">
-                                    <apx-chart
-                                        class="flex-auto w-full h-50"
-                                        [chart]="chartBudgetDistribution.chart"
+                                    <apx-chart class="flex-auto w-full h-50" [chart]="chartBudgetDistribution.chart"
                                         [colors]="
                                             chartBudgetDistribution.colors
-                                        "
-                                        [series]="
+                                        " [series]="
                                             chartBudgetDistribution.series
-                                        "
-                                        [plotOptions]="
+                                        " [plotOptions]="
                                             chartBudgetDistribution.plotOptions
-                                        "
-                                        [tooltip]="
+                                        " [tooltip]="
                                             chartBudgetDistribution.tooltip
-                                        "
-                                        [xaxis]="chartBudgetDistribution.xaxis"
-                                        [legend]="
+                                        " [xaxis]="chartBudgetDistribution.xaxis" [legend]="
                                             chartBudgetDistribution.legend
-                                        "
-                                        [grid]="chartBudgetDistribution.grid"
-                                        [yaxis]="chartBudgetDistribution.yaxis"
+                                        " [grid]="chartBudgetDistribution.grid" [yaxis]="chartBudgetDistribution.yaxis"
                                         [dataLabels]="
                                             chartBudgetDistribution.dataLabels
-                                        "
-                                    ></apx-chart>
+                                        "></apx-chart>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Milestone Performances -->
 
-                        <div
-                            *ngIf="
+                        <div *ngIf="
                                 tile.name == 'MilestonePerformances' &&
                                 tile.isToggled == true
-                            "
-                            class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden"
-                        >
-                            <div
-                                class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden"
-                            >
+                            " class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
+                            <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
                                 <div
-                                    class="text-2xl lg:text-3xl font-medium tracking-tight text-primary leading-6 truncate mb-2"
-                                >
+                                    class="text-2xl lg:text-3xl font-medium tracking-tight text-primary leading-6 truncate mb-2">
                                     Milestone Performance
                                 </div>
 
-                                <ng-container
-                                    *ngFor="let dataset of data.milstoneTile"
-                                >
+                                <ng-container *ngFor="let dataset of data.milstoneTile">
                                     <div class="flex py-1">
-                                        <div
-                                            class="flex items-center text-secondary w-14 font-extrabold text-lg"
-                                            style="
+                                        <div class="flex items-center text-secondary w-14 font-extrabold text-lg" style="
                                                 justify-content: right;
                                                 margin-right: 15px;
-                                            "
-                                        >
+                                            ">
                                             {{ dataset.value }}%
                                         </div>
                                         <div class="flex items-right text-lg">
@@ -1778,70 +1004,47 @@
 
                         <!-- Budget -->
 
-                        <div
-                            *ngIf="
+                        <div *ngIf="
                                 tile.name == 'Budget' && tile.isToggled == true
-                            "
-                            class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden"
-                        >
-                            <div
-                                class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden"
-                            >
+                            " class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
+                            <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
                                 <div
-                                    class="text-2xl lg:text-3xl font-medium tracking-tight leading-6 text-primary mb-0"
-                                >
+                                    class="text-2xl lg:text-3xl font-medium tracking-tight leading-6 text-primary mb-0">
                                     Budget
                                 </div>
 
                                 <div class="flex flex-col mt-2">
                                     <div class="grid grid-cols-3 py-1">
-                                        <div
-                                            class="flex items-center font-extrabold text-lg"
-                                        >
+                                        <div class="flex items-center font-extrabold text-lg">
                                             Reference ({{ currfiscalYear }})
                                         </div>
-                                        <div
-                                            class="text-right font-extrabold text-lg"
-                                            style="
+                                        <div class="text-right font-extrabold text-lg" style="
                                                 right: 10px;
                                                 position: relative;
-                                            "
-                                        >
+                                            ">
                                             CAPEX ({{ budgetCurrency }})
                                         </div>
-                                        <div
-                                            class="text-right font-extrabold text-lg"
-                                            style="
+                                        <div class="text-right font-extrabold text-lg" style="
                                                 right: 10px;
                                                 position: relative;
-                                            "
-                                        >
+                                            ">
                                             OPEX ({{ budgetCurrency }})
                                         </div>
                                     </div>
-                                    <ng-container
-                                        *ngFor="let dataset of data.budgetTile"
-                                    >
-                                        <div
-                                            class="grid grid-cols-3 py-1"
-                                            style="
+                                    <ng-container *ngFor="let dataset of data.budgetTile">
+                                        <div class="grid grid-cols-3 py-1" style="
                                                 right: 10px;
                                                 position: relative;
-                                            "
-                                        >
+                                            ">
                                             <div class="flex items-left">
                                                 <div class="ml-3 text-lg">
                                                     {{ dataset.title }}
                                                 </div>
                                             </div>
-                                            <div
-                                                class="text-right text-secondary font-extrabold text-lg"
-                                            >
+                                            <div class="text-right text-secondary font-extrabold text-lg">
                                                 {{ dataset.value }}
                                             </div>
-                                            <div
-                                                class="text-right text-secondary font-extrabold text-lg"
-                                            >
+                                            <div class="text-right text-secondary font-extrabold text-lg">
                                                 {{ dataset.value2 }}
                                             </div>
                                         </div>
@@ -1850,10 +1053,7 @@
                             </div>
 
                             <div class="p-4 text-right">
-                                <button
-                                    class="forecast"
-                                    *ngIf="showForecast"
-                                    (click)="
+                                <button class="forecast" *ngIf="showForecast" (click)="
                                         PortfolioCenterService.toggleDrawerOpen(
                                             'BudgetSpendOpen',
                                             '',
@@ -1861,8 +1061,7 @@
                                             '1',
                                             true
                                         )
-                                    "
-                                >
+                                    ">
                                     Forecast Bulk View
                                 </button>
                             </div>
@@ -1914,165 +1113,85 @@
                     </div> -->
                     </ng-container>
                 </div>
-                <div
-                    class="flex justify-between gap-8 mt-2 p-6"
-                    style="margin-bottom: -30px"
-                >
-                    <h1
-                        class="text-3xl tracking-tight leading-7 sm:leading-10 text-primary"
-                        style="margin-left: -15px"
-                    >
+                <div class="flex justify-between gap-8 mt-2 p-6" style="margin-bottom: -30px">
+                    <h1 class="text-3xl tracking-tight leading-7 sm:leading-10 text-primary" style="margin-left: -15px">
                         Project Overview
                     </h1>
                     <div class="flex items-center">
-                        <button
-                            class="ml-4"
-                            mat-flat-button
-                            [color]="'primary'"
-                            (click)="OpenBiReport()"
-                        >
+                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="OpenBiReport()">
                             Portfolio Report
                         </button>
-                        <button
-                            class="ml-4"
-                            mat-flat-button
-                            [color]="'primary'"
-                            (click)="OpenSPOTReport()"
-                        >
+                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="OpenSPOTReport()">
                             SPOT Data (Power BI)
                         </button>
-                        <button
-                            class="ml-4"
-                            mat-flat-button
-                            [color]="'primary'"
-                            (click)="openDrawer('BulkReport')"
-                        >
+                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="openDrawer('BulkReport')">
                             Generate Reports
                         </button>
                     </div>
                 </div>
-                <div
-                    class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden"
-                    *ngIf="showContent"
-                >
-                    <ngx-datatable
-                        [headerHeight]="'auto'"
-                        [rowHeight]="'auto'"
-                        [scrollbarV]="false"
-                        [scrollbarH]="true"
-                        columnMode="force"
-                        [externalPaging]="true"
-                        [count]="totalElements"
-                        [offset]="pageNumber"
-                        [limit]="size"
-                        (page)="setPage('', $event)"
-                        (sort)="sort($event)"
-                        [footerHeight]="50"
-                        [virtualization]="false"
-                        [sorts]="[
+                <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden"
+                    *ngIf="showContent && !PortfolioCenterService.drawerOpenedPrakharTemp">
+                    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
+                        columnMode="force" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
+                        [limit]="size" (page)="setPage('', $event)" (sort)="sort($event)" [footerHeight]="50"
+                        [virtualization]="false" [sorts]="[
                             { prop: 'overallStatus', dir: 'desc' },
                             { prop: 'problemTitle', dir: 'asc' }
                         ]"
                         class="datatable-PO-80 datatable-ProjectOverview font-medium text-sm text-default whitespace-nowrap"
-                        [rows]="projectOverview"
-                        #projectOverviewTable
-                    >
-                        <ngx-datatable-column
-                            prop="dataFreshness"
-                            [width]="20"
-                            [frozenLeft]="true"
-                            [resizeable]="false"
-                            [sortable]="false"
-                        >
-                            <ng-template
-                                let-column="column"
-                                ngx-datatable-header-template
-                            >
+                        [rows]="projectOverview" #projectOverviewTable>
+                        <ngx-datatable-column prop="dataFreshness" [width]="20" [frozenLeft]="true" [resizeable]="false"
+                            [sortable]="false">
+                            <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
                                         <span></span>
                                     </span>
                                 </ng-container>
                             </ng-template>
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <!-- <mat-icon style="margin-left: 12px;"
                                     svgIcon="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).icontype}}"
                                     class="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon> -->
-                                <span
-                                    *ngIf="row.grey"
-                                    style="
+                                <span *ngIf="row.grey" style="
                                         background-color: #ccc8c8;
                                         margin-left: 10px;
                                         height: 90px;
                                         display: flex;
-                                    "
-                                    title="{{ value }}"
-                                ></span>
-                                <span
-                                    *ngIf="row.darkGrey"
-                                    style="
+                                    " title="{{ value }}"></span>
+                                <span *ngIf="row.darkGrey" style="
                                         background-color: #999999;
                                         margin-left: 10px;
                                         height: 90px;
                                         display: flex;
-                                    "
-                                    title="{{ value }}"
-                                ></span>
+                                    " title="{{ value }}"></span>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Overall status"
-                            prop="overallStatus"
-                            [headerClass]="getFrozenHeaderClassID"
-                            [width]="70"
-                            [sortable]="true"
-                            [frozenLeft]="true"
-                            [resizeable]="false"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                <mat-icon
-                                    style="margin-left: 12px"
-                                    svgIcon="{{
+                        <ngx-datatable-column name="Overall status" prop="overallStatus"
+                            [headerClass]="getFrozenHeaderClassID" [width]="70" [sortable]="true" [frozenLeft]="true"
+                            [resizeable]="false">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <mat-icon style="margin-left: 12px" svgIcon="{{
                                         indicator.getIndicators(
                                             row.overallStatusIndicator,
                                             'overall'
                                         ).icontype
-                                    }}"
-                                    class="{{
+                                    }}" class="{{
                                         indicator.getIndicators(
                                             row.overallStatusIndicator,
                                             'overall'
                                         ).iconcolor
-                                    }} "
-                                >
+                                    }} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Project ID/ Budget ID"
-                            prop="problemId"
-                            [width]="95"
-                            [frozenLeft]="true"
-                            [headerClass]="getFrozenHeaderClassID"
-                            [resizeable]="false"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-rowIndex="rowIndex"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Project ID/ Budget ID" prop="problemId" [width]="95"
+                            [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID" [resizeable]="false">
+                            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                                ngx-datatable-cell-template>
                                 <p>
                                     {{ value }} <br />
                                     {{ row.budgetId }}
@@ -2080,375 +1199,205 @@
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Program/Project Name"
-                            prop="problemTitle"
-                            [width]="350"
-                            [frozenLeft]="true"
-                            [headerClass]="getFrozenHeaderClass"
-                            [resizeable]="false"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                <p
-                                    (click)="OpenProject(row.projectUid)"
-                                    class="projectNames"
-                                >
+                        <ngx-datatable-column name="Program/Project Name" prop="problemTitle" [width]="350"
+                            [frozenLeft]="true" [headerClass]="getFrozenHeaderClass" [resizeable]="false">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <p (click)="OpenProject(row.projectUid)" class="projectNames">
                                     {{ value }}
                                 </p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="State"
-                            prop="projStatus"
-                            [width]="100"
-                            [resizeable]="false"
-                            *ngIf="checkColumnVisible('State')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="State" prop="projStatus" [width]="100" [resizeable]="false"
+                            *ngIf="checkColumnVisible('State')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Phase (Project/Capital/OE)"
-                            prop="projectCapitalOe"
-                            [width]="200"
-                            [resizeable]="false"
-                            *ngIf="checkColumnVisible('PhaseProjectCapitalOE')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Phase (Project/Capital/OE)" prop="projectCapitalOe" [width]="200"
+                            [resizeable]="false" *ngIf="checkColumnVisible('PhaseProjectCapitalOE')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Project Manager"
-                            prop="pm"
-                            [width]="150"
-                            *ngIf="checkColumnVisible('ProjectManager')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Project Manager" prop="pm" [width]="150"
+                            *ngIf="checkColumnVisible('ProjectManager')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p>{{ value }}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Sponsor"
-                            prop="sponsor"
-                            [width]="140"
-                            *ngIf="checkColumnVisible('Sponsor')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Sponsor" prop="sponsor" [width]="140"
+                            *ngIf="checkColumnVisible('Sponsor')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p>{{ value }}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Schedule"
-                            prop="scheduleIndicator"
-                            [headerClass]="getHeaderClass"
-                            [resizeable]="false"
-                            [width]="30"
-                            *ngIf="checkColumnVisible('Schedule')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                <mat-icon
-                                    svgIcon="{{
+                        <ngx-datatable-column name="Schedule" prop="scheduleIndicator" [headerClass]="getHeaderClass"
+                            [resizeable]="false" [width]="30" *ngIf="checkColumnVisible('Schedule')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <mat-icon svgIcon="{{
                                         indicator.getIndicators(
                                             row.scheduleIndicator,
                                             'overall'
                                         ).icontype
-                                    }}"
-                                    class="{{
+                                    }}" class="{{
                                         indicator.getIndicators(
                                             row.scheduleIndicator,
                                             'overall'
                                         ).iconcolor
-                                    }} "
-                                >
+                                    }} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Risk/Issue"
-                            prop="riskIndicator"
-                            [headerClass]="getHeaderClass"
-                            [resizeable]="false"
-                            [width]="30"
-                            *ngIf="checkColumnVisible('RiskIssues')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                <mat-icon
-                                    svgIcon="{{
+                        <ngx-datatable-column name="Risk/Issue" prop="riskIndicator" [headerClass]="getHeaderClass"
+                            [resizeable]="false" [width]="30" *ngIf="checkColumnVisible('RiskIssues')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <mat-icon svgIcon="{{
                                         indicator.getIndicators(
                                             row.riskIssueIndicator,
                                             'overall'
                                         ).icontype
-                                    }}"
-                                    class="{{
+                                    }}" class="{{
                                         indicator.getIndicators(
                                             row.riskIssueIndicator,
                                             'overall'
                                         ).iconcolor
-                                    }} "
-                                >
+                                    }} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Ask/Need"
-                            prop="askNeedIndicator"
-                            [headerClass]="getHeaderClass"
-                            [resizeable]="false"
-                            [width]="30"
-                            *ngIf="checkColumnVisible('AskNeed')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                <mat-icon
-                                    svgIcon="{{
+                        <ngx-datatable-column name="Ask/Need" prop="askNeedIndicator" [headerClass]="getHeaderClass"
+                            [resizeable]="false" [width]="30" *ngIf="checkColumnVisible('AskNeed')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <mat-icon svgIcon="{{
                                         indicator.getIndicators(
                                             row.askNeedIndicator,
                                             'overall'
                                         ).icontype
-                                    }}"
-                                    class="{{
+                                    }}" class="{{
                                         indicator.getIndicators(
                                             row.askNeedIndicator,
                                             'overall'
                                         ).iconcolor
-                                    }} "
-                                >
+                                    }} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Budget"
-                            prop="budgetIndicator"
-                            [headerClass]="getHeaderClass"
-                            [resizeable]="false"
-                            [width]="30"
-                            *ngIf="checkColumnVisible('Budget')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                <mat-icon
-                                    svgIcon="{{
+                        <ngx-datatable-column name="Budget" prop="budgetIndicator" [headerClass]="getHeaderClass"
+                            [resizeable]="false" [width]="30" *ngIf="checkColumnVisible('Budget')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <mat-icon svgIcon="{{
                                         indicator.getIndicators(
                                             row.budgetIndicator,
                                             'circle'
                                         ).icontype
-                                    }}"
-                                    class="{{
+                                    }}" class="{{
                                         indicator.getIndicators(
                                             row.budgetIndicator,
                                             'overall'
                                         ).iconcolor
-                                    }} "
-                                >
+                                    }} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Spend"
-                            prop="budgetSpendIndicator"
-                            [headerClass]="getHeaderClass"
-                            [resizeable]="false"
-                            [width]="30"
-                            *ngIf="checkColumnVisible('Spend')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                <mat-icon
-                                    svgIcon="{{
+                        <ngx-datatable-column name="Spend" prop="budgetSpendIndicator" [headerClass]="getHeaderClass"
+                            [resizeable]="false" [width]="30" *ngIf="checkColumnVisible('Spend')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <mat-icon svgIcon="{{
                                         indicator.getIndicators(
                                             row.spendIndicator,
                                             'circle'
                                         ).icontype
-                                    }}"
-                                    class="{{
+                                    }}" class="{{
                                         indicator.getIndicators(
                                             row.spendIndicator,
                                             'overall'
                                         ).iconcolor
-                                    }} "
-                                >
+                                    }} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="DQ%"
-                            prop="projectDataQualityString"
-                            [width]="70"
-                            *ngIf="checkColumnVisible('DQPercent')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                <p
-                                    style="
+                        <ngx-datatable-column name="DQ%" prop="projectDataQualityString" [width]="70"
+                            *ngIf="checkColumnVisible('DQPercent')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <p style="
                                         text-align: right;
                                         margin-right: 10px;
-                                    "
-                                    [ngStyle]="{
+                                    " [ngStyle]="{
                                         color: getColor(
                                             row.projectDataQuality,
                                             row.projStatus
                                         )
-                                    }"
-                                >
+                                    }">
                                     {{ value }}
                                 </p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Total CAPEX Approved/Forecast"
-                            prop="totalApprovedCapex"
-                            [width]="180"
-                            *ngIf="
+                        <ngx-datatable-column name="Total CAPEX Approved/Forecast" prop="totalApprovedCapex"
+                            [width]="180" *ngIf="
                                 checkColumnVisible('TotalCapexApprovedForcast')
-                            "
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                            ">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <!-- <p>{{value}}</p> -->
-                                <p
-                                    class="grid grid-cols-1 text-right"
-                                    style="margin-right: 28px"
-                                >
+                                <p class="grid grid-cols-1 text-right" style="margin-right: 28px">
                                     {{
-                                        row.CAPEX
-                                            ? row.CAPEX.toLocaleString()
-                                            : 0
+                                    row.CAPEX
+                                    ? row.CAPEX.toLocaleString()
+                                    : 0
                                     }}
                                     &nbsp; {{ row.currencyAbb }}
                                 </p>
                                 <!-- <br /> -->
-                                <p
-                                    class="text-right"
-                                    style="margin-right: 28px"
-                                >
+                                <p class="text-right" style="margin-right: 28px">
                                     {{
-                                        row.FORECAST
-                                            ? row.FORECAST.toLocaleString()
-                                            : 0
+                                    row.FORECAST
+                                    ? row.FORECAST.toLocaleString()
+                                    : 0
                                     }}
                                     &nbsp; {{ row.currencyAbb }}
                                 </p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Carbon Impact (Tons CO2)"
-                            prop="calculatedEmissionsImpact"
-                            [width]="130"
-                            *ngIf="checkColumnVisible('CarbonImpact')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                <p
-                                    style="
+                        <ngx-datatable-column name="Carbon Impact (Tons CO2)" prop="calculatedEmissionsImpact"
+                            [width]="130" *ngIf="checkColumnVisible('CarbonImpact')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <p style="
                                         text-align: right;
                                         margin-right: 15px;
-                                    "
-                                >
+                                    ">
                                     {{ row.calculatedEmissionsImpact1 }}
                                 </p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Water Impact (m3)"
-                            prop="waterImpactUnits"
-                            [width]="110"
-                            [sortable]="true"
-                            *ngIf="checkColumnVisible('WaterImpact')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                <p
-                                    style="
+                        <ngx-datatable-column name="Water Impact (m3)" prop="waterImpactUnits" [width]="110"
+                            [sortable]="true" *ngIf="checkColumnVisible('WaterImpact')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <p style="
                                         text-align: right;
                                         margin-right: 15px;
-                                    "
-                                >
+                                    ">
                                     {{ row.waterImpactUnits1 }}
                                 </p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Milestone / Progression"
-                            prop="progression"
-                            [resizeable]="false"
-                            [headerClass]="alignHeaderMiddleClass"
-                            [cellClass]="getGraphCellClass"
-                            [width]="200"
-                            [sortable]="false"
-                            *ngIf="checkColumnVisible('MilestoneProgression')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                <apx-chart
-                                    [chart]="{
+                        <ngx-datatable-column name="Milestone / Progression" prop="progression" [resizeable]="false"
+                            [headerClass]="alignHeaderMiddleClass" [cellClass]="getGraphCellClass" [width]="200"
+                            [sortable]="false" *ngIf="checkColumnVisible('MilestoneProgression')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <apx-chart [chart]="{
                                         type: 'bar',
                                         toolbar: {
                                             show: false,
@@ -2457,8 +1406,7 @@
                                             }
                                         },
                                         height: 75
-                                    }"
-                                    [series]="[
+                                    }" [series]="[
                                         {
                                             name: 'Completed',
                                             data: [
@@ -2484,16 +1432,12 @@
                                                 }
                                             ]
                                         }
-                                    ]"
-                                    [dataLabels]="{ enabled: false }"
-                                    [xaxis]="{
+                                    ]" [dataLabels]="{ enabled: false }" [xaxis]="{
                                         labels: { show: false },
                                         max: row.totalMilestone
                                             ? row.totalMilestone
                                             : row.targetToComplete
-                                    }"
-                                    [yaxis]="{ labels: { show: true } }"
-                                    [tooltip]="{
+                                    }" [yaxis]="{ labels: { show: true } }" [tooltip]="{
                                         x: {
                                             show: false
                                         },
@@ -2501,398 +1445,188 @@
                                             formatter: tootlipFormatter
                                         },
                                         intersect: false
-                                    }"
-                                    [plotOptions]="{
+                                    }" [plotOptions]="{
                                         bar: {
                                             horizontal: true
                                         }
-                                    }"
-                                ></apx-chart>
+                                    }"></apx-chart>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Next Milestone"
-                            prop="nextMilestone"
-                            [width]="250"
-                            [resizeable]="false"
-                            *ngIf="checkColumnVisible('NextMilestone')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Next Milestone" prop="nextMilestone" [width]="250"
+                            [resizeable]="false" *ngIf="checkColumnVisible('NextMilestone')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Next Milestone Planned Finish Date"
-                            prop="nextMilestoneFinishDate"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="
+                        <ngx-datatable-column name="Next Milestone Planned Finish Date" prop="nextMilestoneFinishDate"
+                            [resizeable]="false" [width]="180" *ngIf="
                                 checkColumnVisible(
                                     'NextMilestonePlannedFinishDate'
                                 )
-                            "
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                            ">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value | date : "dd-MMM-yyyy" }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Execution Complete Date"
-                            prop="executionCompleteDate"
-                            [resizeable]="false"
-                            [width]="150"
-                            *ngIf="checkColumnVisible('ExecutionCompleteDate')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                <p
-                                    [ngClass]="{
+                        <ngx-datatable-column name="Execution Complete Date" prop="executionCompleteDate"
+                            [resizeable]="false" [width]="150" *ngIf="checkColumnVisible('ExecutionCompleteDate')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <p [ngClass]="{
                                         red: row.redExecutionCompleteDate
-                                    }"
-                                >
+                                    }">
                                     {{ value | date : "dd-MMM-yyyy" }}
                                 </p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Execution Duration (Days)"
-                            prop="executionDuration"
-                            [resizeable]="false"
-                            [width]="150"
-                            *ngIf="checkColumnVisible('ExecutionDuration')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
-                                <p
-                                    style="
+                        <ngx-datatable-column name="Execution Duration (Days)" prop="executionDuration"
+                            [resizeable]="false" [width]="150" *ngIf="checkColumnVisible('ExecutionDuration')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <p style="
                                         text-align: right;
                                         margin-right: 15px;
-                                    "
-                                >
+                                    ">
                                     {{ value }}
                                 </p>
-                                <p
-                                    style="
+                                <p style="
                                         text-align: right;
                                         margin-right: 15px;
-                                    "
-                                    *ngIf="row.completed"
-                                >
+                                    " *ngIf="row.completed">
                                     Completed
                                 </p>
-                                <p
-                                    style="
+                                <p style="
                                         text-align: right;
                                         margin-right: 15px;
-                                    "
-                                    *ngIf="row.notBaselined"
-                                >
+                                    " *ngIf="row.notBaselined">
                                     Not Baselined
                                 </p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Project Type"
-                            prop="problemType"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('ProjectType')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Project Type" prop="problemType" [resizeable]="false" [width]="180"
+                            *ngIf="checkColumnVisible('ProjectType')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Owning Organization"
-                            prop="defaultOwningOrganizationId"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('OwningOrganization')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Owning Organization" prop="defaultOwningOrganizationId"
+                            [resizeable]="false" [width]="180" *ngIf="checkColumnVisible('OwningOrganization')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Portfolio Owner"
-                            prop="portfolioOwnerID"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('PortfolioOwner')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Portfolio Owner" prop="portfolioOwnerID" [resizeable]="false"
+                            [width]="180" *ngIf="checkColumnVisible('PortfolioOwner')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Parent Project"
-                            prop="parentProjectId"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('ParentProject')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Parent Project" prop="parentProjectId" [resizeable]="false"
+                            [width]="180" *ngIf="checkColumnVisible('ParentProject')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Primary Product"
-                            prop="primaryProductId"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('PrimaryProduct')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Primary Product" prop="primaryProductId" [resizeable]="false"
+                            [width]="180" *ngIf="checkColumnVisible('PrimaryProduct')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="Primary Value Driver"
-                            prop="primaryKPI"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('PrimaryValueDriver')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Primary Value Driver" prop="primaryKPI" [resizeable]="false"
+                            [width]="180" *ngIf="checkColumnVisible('PrimaryValueDriver')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Agile Primary Workstream"
-                            prop="agilePrimaryWorkstream"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('AGILEPrimaryWorkstream')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Agile Primary Workstream" prop="agilePrimaryWorkstream"
+                            [resizeable]="false" [width]="180" *ngIf="checkColumnVisible('AGILEPrimaryWorkstream')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="CAPEX Required"
-                            prop="CAPEXRequired"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('CapexRequired')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="CAPEX Required" prop="CAPEXRequired" [resizeable]="false"
+                            [width]="180" *ngIf="checkColumnVisible('CapexRequired')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="OPEX Required"
-                            prop="OPEXRequired"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('OPEXRequired')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="OPEX Required" prop="OPEXRequired" [resizeable]="false"
+                            [width]="180" *ngIf="checkColumnVisible('OPEXRequired')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="GMS Budget Owner"
-                            prop="budgetOwner"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('GMSBudgetOwner')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="GMS Budget Owner" prop="budgetOwner" [resizeable]="false"
+                            [width]="180" *ngIf="checkColumnVisible('GMSBudgetOwner')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="Global/Regional Predefined Investment"
-                            prop="predefinedInvestmentID"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="
+                        <ngx-datatable-column name="Global/Regional Predefined Investment" prop="predefinedInvestmentID"
+                            [resizeable]="false" [width]="180" *ngIf="
                                 checkColumnVisible(
                                     'GlobalRegionalPredefinedInvestment'
                                 )
-                            "
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                            ">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="Where"
-                            prop="whereID"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('Where')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Where" prop="whereID" [resizeable]="false" [width]="180"
+                            *ngIf="checkColumnVisible('Where')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="Why"
-                            prop="whyID"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('Why')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Why" prop="whyID" [resizeable]="false" [width]="180"
+                            *ngIf="checkColumnVisible('Why')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="Funding Approval Need Date"
-                            prop="fundingApprovalNeedDate"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="
+                        <ngx-datatable-column name="Funding Approval Need Date" prop="fundingApprovalNeedDate"
+                            [resizeable]="false" [width]="180" *ngIf="
                                 checkColumnVisible('FundingApprovalNeedDate')
-                            "
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                            ">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value | date : "dd-MMM-yyyy" }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Asset Placed In Service (Estimate)"
-                            prop="APISDate"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('AssetPlaceInService')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Asset Placed In Service (Estimate)" prop="APISDate"
+                            [resizeable]="false" [width]="180" *ngIf="checkColumnVisible('AssetPlaceInService')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value | date : "dd-MMM-yyyy" }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="Environment Portfolio"
-                            prop="emissionPortfolioID"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('PortfolioOwner')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Environment Portfolio" prop="emissionPortfolioID"
+                            [resizeable]="false" [width]="180" *ngIf="checkColumnVisible('PortfolioOwner')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column
-                            name="CAPS Project"
-                            prop="isCAPSProject"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('CAPSProject')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="CAPS Project" prop="isCAPSProject" [resizeable]="false"
+                            [width]="180" *ngIf="checkColumnVisible('CAPSProject')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column
-                            name="Impact Realization Date"
-                            prop="emissionsImpactRealizationDate"
-                            [resizeable]="false"
-                            [width]="180"
-                            *ngIf="checkColumnVisible('ImpactRealizationDate')"
-                        >
-                            <ng-template
-                                let-row="row"
-                                let-value="value"
-                                ngx-datatable-cell-template
-                            >
+                        <ngx-datatable-column name="Impact Realization Date" prop="emissionsImpactRealizationDate"
+                            [resizeable]="false" [width]="180" *ngIf="checkColumnVisible('ImpactRealizationDate')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value | date : "dd-MMM-yyyy" }}
                             </ng-template>
                         </ngx-datatable-column>

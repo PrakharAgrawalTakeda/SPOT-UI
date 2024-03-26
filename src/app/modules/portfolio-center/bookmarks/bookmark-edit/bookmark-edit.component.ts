@@ -25,6 +25,27 @@ import {
 import { PortfolioCenterService } from '../../portfolio-center.service';
 import { PortfolioApiService } from '../../portfolio-api.service';
 import { Subject, Subscription, takeUntil } from 'rxjs';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+
+// Assuming this.bookmarkNames is an array of existing bookmark names
+function bookmarkNameValidator(existingNames: string[]): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const nameExists = existingNames.includes(control.value);
+    return nameExists ? { 'nameExists': true } : null;
+  };
+}
+
+// function editBookmarkNameValidator(existingNames: string[], currentName: string): ValidatorFn {
+//     return (control: AbstractControl): ValidationErrors | null => {
+//       if (control.value === currentName) {
+//         // Allow the current name
+//         return null;
+//       }
+//       const nameExists = existingNames.includes(control.value);
+//       return nameExists ? { 'nameExists': true } : null;
+//     };
+//   }
+  
 
 export const MY_FORMATS = {
     parse: {
@@ -126,7 +147,11 @@ export class BookmarkEditComponent implements OnInit {
     tableValuesExpanded = false;
 
     PortfolioFilterForm = new FormGroup({
-        BookmarkName: new FormControl('', Validators.required),
+        BookmarkName: new FormControl('', [
+            Validators.required,
+            // Add the custom validator
+            bookmarkNameValidator(this.PortfolioCenterService.bookmarks.map(b => b.bookmarkName))
+          ]),
 
         IsAppliedFilters: new FormControl(),
 
@@ -382,9 +407,11 @@ export class BookmarkEditComponent implements OnInit {
                 }
             }
         );
+        console.log(this.PortfolioFilterForm.controls.BookmarkName.errors)
     }
 
     ngOnInit(): void {
+        console.log(this.PortfolioFilterForm.controls.BookmarkName.errors)
         this.PortfolioFilterForm.reset();
         this.ProjectTableColumns.reset();
 
@@ -830,6 +857,7 @@ export class BookmarkEditComponent implements OnInit {
             }
             this.dataLA.push(i);
         });
+        
     }
 
     getLookup(key) {
@@ -1184,6 +1212,35 @@ export class BookmarkEditComponent implements OnInit {
     }
 
     onEditBookmark() {
+    //     if (this.PortfolioFilterForm.get('BookmarkName').errors?.['nameExists']) {
+    //     var comfirmConfig: FuseConfirmationConfig = {
+    //         title: 'The Bookmark Name you entered already exists. Please select a different Name!',
+    //         message: '',
+    //         icon: {
+    //             show: true,
+    //             name: 'heroicons_outline:exclamation',
+    //             color: 'warn',
+    //         },
+    //         actions: {
+    //             confirm: {
+    //                 show: true,
+    //                 label: 'Okay',
+    //                 color: 'warn',
+    //             },
+                
+    //             cancel: {
+    //                 show: false,
+    //                 label: 'Cancel',
+    //             },
+    //         },
+    //         dismissible: true,
+    //     };
+
+    //     this.fuseAlert.open(comfirmConfig);
+    // }
+    // else
+    // {
+        console.log(this.PortfolioFilterForm.controls.BookmarkName.valid)
         if (this.PortfolioFilterForm.controls.BookmarkName.valid) {
             if (
                 this.PortfolioFilterForm.controls.ProjectPhase.value == null ||
@@ -1843,6 +1900,34 @@ export class BookmarkEditComponent implements OnInit {
                     // this.showFilter = false
                 });
         }
+        else
+        {
+            var comfirmConfig: FuseConfirmationConfig = {
+                        title: 'The Bookmark Name you entered already exists. Please select a different Name!',
+                        message: '',
+                        icon: {
+                            show: true,
+                            name: 'heroicons_outline:exclamation',
+                            color: 'warn',
+                        },
+                        actions: {
+                            confirm: {
+                                show: true,
+                                label: 'Okay',
+                                color: 'warn',
+                            },
+                            
+                            cancel: {
+                                show: false,
+                                label: 'Cancel',
+                            },
+                        },
+                        dismissible: true,
+                    };
+            
+                    this.fuseAlert.open(comfirmConfig);
+        }
+    //}
     }
 
     patchAllSelectedColumns(arr) {
@@ -1858,235 +1943,251 @@ export class BookmarkEditComponent implements OnInit {
     }
 
     onAddBookmark() {
-        if (this.PortfolioFilterForm.controls.BookmarkName.valid) {
-            if (
-                this.PortfolioFilterForm.controls.ProjectPhase.value == null ||
-                this.PortfolioFilterForm.controls.ProjectPhase.value.length == 0
-            ) {
-                if (
-                    this.PortfolioFilterForm.controls.CapitalPhase.value !=
-                        null &&
-                    this.PortfolioFilterForm.controls.CapitalPhase.value
-                        .length != 0
-                ) {
-                    this.PortfolioFilterForm.patchValue({ CapitalPhase: [] });
-                }
-                if (
-                    this.PortfolioFilterForm.controls.OEPhase.value != null &&
-                    this.PortfolioFilterForm.controls.OEPhase.value.length != 0
-                ) {
-                    this.PortfolioFilterForm.patchValue({ OEPhase: [] });
-                }
-            }
-
-            var mainObj = this.originalData;
-            var dataToSend = [];
-            var emptyObject = {
-                uniqueId: '',
-                value: '',
+        console.log(this.PortfolioFilterForm.get('BookmarkName').errors)
+        if (this.PortfolioFilterForm.get('BookmarkName').errors?.['nameExists']) {
+            var comfirmConfig: FuseConfirmationConfig = {
+                title: 'The Bookmark Name you entered already exists. Please select a different Name!',
+                message: '',
+                icon: {
+                    show: true,
+                    name: 'heroicons_outline:exclamation',
+                    color: 'warn',
+                },
+                actions: {
+                    confirm: {
+                        show: true,
+                        label: 'Okay',
+                        color: 'warn',
+                    },
+                    
+                    cancel: {
+                        show: false,
+                        label: 'Cancel',
+                    },
+                },
+                dismissible: true,
             };
 
-            // if(this.PortfolioFilterForm.value.PortfolioOwner?.length > 0 || this.PortfolioFilterForm.value.ExecutionScope?.length > 0){
-
-            var portfolioOwners = '';
-            var executionScope = '';
-
-            if (
-                this.PortfolioFilterForm.controls.PortfolioOwner.value !=
-                    null &&
-                this.PortfolioFilterForm.controls.PortfolioOwner.value.length !=
-                    0
-            ) {
-                for (
-                    var z = 0;
-                    z <
-                    this.PortfolioFilterForm.controls.PortfolioOwner.value
-                        .length;
-                    z++
+            this.fuseAlert.open(comfirmConfig);
+        }
+        else
+        {
+            if (this.PortfolioFilterForm.controls.BookmarkName.valid) {
+                if (
+                    this.PortfolioFilterForm.controls.ProjectPhase.value == null ||
+                    this.PortfolioFilterForm.controls.ProjectPhase.value.length == 0
                 ) {
-                    portfolioOwners +=
-                        this.PortfolioFilterForm.controls.PortfolioOwner.value[
-                            z
-                        ].portfolioOwnerId + ',';
+                    if (
+                        this.PortfolioFilterForm.controls.CapitalPhase.value !=
+                            null &&
+                        this.PortfolioFilterForm.controls.CapitalPhase.value
+                            .length != 0
+                    ) {
+                        this.PortfolioFilterForm.patchValue({ CapitalPhase: [] });
+                    }
+                    if (
+                        this.PortfolioFilterForm.controls.OEPhase.value != null &&
+                        this.PortfolioFilterForm.controls.OEPhase.value.length != 0
+                    ) {
+                        this.PortfolioFilterForm.patchValue({ OEPhase: [] });
+                    }
                 }
-            }
-            if (
-                this.PortfolioFilterForm.controls.ExecutionScope.value !=
-                    null &&
-                this.PortfolioFilterForm.controls.ExecutionScope.value.length !=
-                    0
-            ) {
-                for (
-                    var z = 0;
-                    z <
-                    this.PortfolioFilterForm.controls.ExecutionScope.value
-                        .length;
-                    z++
+    
+                var mainObj = this.originalData;
+                var dataToSend = [];
+                var emptyObject = {
+                    uniqueId: '',
+                    value: '',
+                };
+    
+                // if(this.PortfolioFilterForm.value.PortfolioOwner?.length > 0 || this.PortfolioFilterForm.value.ExecutionScope?.length > 0){
+    
+                var portfolioOwners = '';
+                var executionScope = '';
+    
+                if (
+                    this.PortfolioFilterForm.controls.PortfolioOwner.value !=
+                        null &&
+                    this.PortfolioFilterForm.controls.PortfolioOwner.value.length !=
+                        0
                 ) {
-                    executionScope +=
-                        this.PortfolioFilterForm.controls.ExecutionScope.value[
-                            z
-                        ].portfolioOwnerId + ',';
+                    for (
+                        var z = 0;
+                        z <
+                        this.PortfolioFilterForm.controls.PortfolioOwner.value
+                            .length;
+                        z++
+                    ) {
+                        portfolioOwners +=
+                            this.PortfolioFilterForm.controls.PortfolioOwner.value[
+                                z
+                            ].portfolioOwnerId + ',';
+                    }
                 }
-            }
-
-            this.apiService
-                .getLocalAttributes(portfolioOwners, executionScope)
-                .then((res: any) => {
-                    let localAttributes;
-                    let filterObjects;
-                    Object.keys(this.localAttributeForm.controls).forEach(
-                        (name) => {
-                            // const currentControl =
-                            //     this.localAttributeForm.controls[name];
-                            var i = mainObj.findIndex(
-                                (x) => x.uniqueId === name
-                            );
-                            if (i >= 0) {
-                                if (
-                                    mainObj[i].data.length == 0 &&
-                                    mainObj[i].dataType == 1 &&
-                                    this.localAttributeForm.controls[
-                                        mainObj[i].uniqueId
-                                    ].value == ''
-                                ) {
-                                    mainObj[i].data = [];
-                                    dataToSend.push(mainObj[i]);
-                                } else if (
-                                    mainObj[i].data.length == 0 &&
-                                    mainObj[i].dataType == 2 &&
-                                    this.localAttributeForm.controls[
-                                        mainObj[i].uniqueId
-                                    ].value == ''
-                                ) {
-                                    mainObj[i].data = [];
-                                    dataToSend.push(mainObj[i]);
-                                } else if (
-                                    mainObj[i].data.length == 0 &&
-                                    mainObj[i].dataType == 3 &&
-                                    this.localAttributeForm.controls[
-                                        mainObj[i].uniqueId
-                                    ].value.length == 0
-                                ) {
-                                    mainObj[i].data = [];
-                                    dataToSend.push(mainObj[i]);
-                                } else if (
-                                    mainObj[i].data.length == 0 &&
-                                    (mainObj[i].dataType == 6 ||
-                                        mainObj[i].dataType == 4) &&
-                                    this.localAttributeForm.controls[
-                                        mainObj[i].uniqueId
-                                    ].value == ''
-                                ) {
-                                    mainObj[i].data = [];
-                                    dataToSend.push(mainObj[i]);
-                                } else if (
-                                    mainObj[i].data.length == 0 &&
-                                    mainObj[i].dataType == 5 &&
-                                    this.localAttributeForm.controls[
-                                        mainObj[i].uniqueId
-                                    ].value == ''
-                                ) {
-                                    mainObj[i].data = [];
-                                    dataToSend.push(mainObj[i]);
-                                } else if (mainObj[i].dataType == 2) {
+                if (
+                    this.PortfolioFilterForm.controls.ExecutionScope.value !=
+                        null &&
+                    this.PortfolioFilterForm.controls.ExecutionScope.value.length !=
+                        0
+                ) {
+                    for (
+                        var z = 0;
+                        z <
+                        this.PortfolioFilterForm.controls.ExecutionScope.value
+                            .length;
+                        z++
+                    ) {
+                        executionScope +=
+                            this.PortfolioFilterForm.controls.ExecutionScope.value[
+                                z
+                            ].portfolioOwnerId + ',';
+                    }
+                }
+    
+                this.apiService
+                    .getLocalAttributes(portfolioOwners, executionScope)
+                    .then((res: any) => {
+                        let localAttributes;
+                        let filterObjects;
+                        Object.keys(this.localAttributeForm.controls).forEach(
+                            (name) => {
+                                // const currentControl =
+                                //     this.localAttributeForm.controls[name];
+                                var i = mainObj.findIndex(
+                                    (x) => x.uniqueId === name
+                                );
+                                if (i >= 0) {
                                     if (
-                                        mainObj[i].data.length != 0 &&
-                                        (this.localAttributeForm.controls[
+                                        mainObj[i].data.length == 0 &&
+                                        mainObj[i].dataType == 1 &&
+                                        this.localAttributeForm.controls[
                                             mainObj[i].uniqueId
-                                        ].value == '' ||
-                                            this.localAttributeForm.controls[
-                                                mainObj[i].uniqueId
-                                            ].value == null)
+                                        ].value == ''
                                     ) {
-                                        mainObj[i].data[0].value = null;
+                                        mainObj[i].data = [];
                                         dataToSend.push(mainObj[i]);
                                     } else if (
                                         mainObj[i].data.length == 0 &&
+                                        mainObj[i].dataType == 2 &&
                                         this.localAttributeForm.controls[
                                             mainObj[i].uniqueId
-                                        ].value != ''
+                                        ].value == ''
                                     ) {
-                                        emptyObject = {
-                                            uniqueId: '',
-                                            value: moment(
-                                                this.localAttributeForm
-                                                    .controls[mainObj[i].name]
-                                                    .value
+                                        mainObj[i].data = [];
+                                        dataToSend.push(mainObj[i]);
+                                    } else if (
+                                        mainObj[i].data.length == 0 &&
+                                        mainObj[i].dataType == 3 &&
+                                        this.localAttributeForm.controls[
+                                            mainObj[i].uniqueId
+                                        ].value.length == 0
+                                    ) {
+                                        mainObj[i].data = [];
+                                        dataToSend.push(mainObj[i]);
+                                    } else if (
+                                        mainObj[i].data.length == 0 &&
+                                        (mainObj[i].dataType == 6 ||
+                                            mainObj[i].dataType == 4) &&
+                                        this.localAttributeForm.controls[
+                                            mainObj[i].uniqueId
+                                        ].value == ''
+                                    ) {
+                                        mainObj[i].data = [];
+                                        dataToSend.push(mainObj[i]);
+                                    } else if (
+                                        mainObj[i].data.length == 0 &&
+                                        mainObj[i].dataType == 5 &&
+                                        this.localAttributeForm.controls[
+                                            mainObj[i].uniqueId
+                                        ].value == ''
+                                    ) {
+                                        mainObj[i].data = [];
+                                        dataToSend.push(mainObj[i]);
+                                    } else if (mainObj[i].dataType == 2) {
+                                        if (
+                                            mainObj[i].data.length != 0 &&
+                                            (this.localAttributeForm.controls[
+                                                mainObj[i].uniqueId
+                                            ].value == '' ||
+                                                this.localAttributeForm.controls[
+                                                    mainObj[i].uniqueId
+                                                ].value == null)
+                                        ) {
+                                            mainObj[i].data[0].value = null;
+                                            dataToSend.push(mainObj[i]);
+                                        } else if (
+                                            mainObj[i].data.length == 0 &&
+                                            this.localAttributeForm.controls[
+                                                mainObj[i].uniqueId
+                                            ].value != ''
+                                        ) {
+                                            emptyObject = {
+                                                uniqueId: '',
+                                                value: moment(
+                                                    this.localAttributeForm
+                                                        .controls[mainObj[i].name]
+                                                        .value
+                                                ).format(
+                                                    'YYYY-MM-DD[T]HH:mm:ss.sss[Z]'
+                                                ),
+                                            };
+                                            mainObj[i].data.push(emptyObject);
+                                            emptyObject = {
+                                                uniqueId: '',
+                                                value: moment(
+                                                    this.localAttributeForm
+                                                        .controls[
+                                                        mainObj[i].uniqueId
+                                                    ].value
+                                                ).format(
+                                                    'YYYY-MM-DD[T]HH:mm:ss.sss[Z]'
+                                                ),
+                                            };
+                                            mainObj[i].data.push(emptyObject);
+                                            dataToSend.push(mainObj[i]);
+                                        } else {
+                                            mainObj[i].data[0].value = moment(
+                                                this.localAttributeForm.controls[
+                                                    mainObj[i].name
+                                                ].value
                                             ).format(
                                                 'YYYY-MM-DD[T]HH:mm:ss.sss[Z]'
-                                            ),
-                                        };
-                                        mainObj[i].data.push(emptyObject);
-                                        emptyObject = {
-                                            uniqueId: '',
-                                            value: moment(
-                                                this.localAttributeForm
-                                                    .controls[
+                                            );
+                                            mainObj[i].data[1].value = moment(
+                                                this.localAttributeForm.controls[
                                                     mainObj[i].uniqueId
                                                 ].value
                                             ).format(
                                                 'YYYY-MM-DD[T]HH:mm:ss.sss[Z]'
-                                            ),
-                                        };
-                                        mainObj[i].data.push(emptyObject);
-                                        dataToSend.push(mainObj[i]);
-                                    } else {
-                                        mainObj[i].data[0].value = moment(
-                                            this.localAttributeForm.controls[
-                                                mainObj[i].name
-                                            ].value
-                                        ).format(
-                                            'YYYY-MM-DD[T]HH:mm:ss.sss[Z]'
-                                        );
-                                        mainObj[i].data[1].value = moment(
+                                            );
+                                            dataToSend.push(mainObj[i]);
+                                        }
+                                    } else if (mainObj[i].dataType == 3) {
+                                        var data = [];
+                                        if (
                                             this.localAttributeForm.controls[
                                                 mainObj[i].uniqueId
-                                            ].value
-                                        ).format(
-                                            'YYYY-MM-DD[T]HH:mm:ss.sss[Z]'
-                                        );
-                                        dataToSend.push(mainObj[i]);
-                                    }
-                                } else if (mainObj[i].dataType == 3) {
-                                    var data = [];
-                                    if (
-                                        this.localAttributeForm.controls[
-                                            mainObj[i].uniqueId
-                                        ] != null &&
-                                        this.localAttributeForm.controls[
-                                            mainObj[i].uniqueId
-                                        ].value.length != 0
-                                    ) {
-                                        for (
-                                            var j = 0;
-                                            j <
+                                            ] != null &&
                                             this.localAttributeForm.controls[
                                                 mainObj[i].uniqueId
-                                            ].value.length;
-                                            j++
+                                            ].value.length != 0
                                         ) {
-                                            if (
-                                                this.localAttributeForm
-                                                    .controls[
+                                            for (
+                                                var j = 0;
+                                                j <
+                                                this.localAttributeForm.controls[
                                                     mainObj[i].uniqueId
-                                                ].value.length <
-                                                mainObj[i].data.length
+                                                ].value.length;
+                                                j++
                                             ) {
-                                                mainObj[i].data = [];
-                                                mainObj[i].data[j] = {
-                                                    uniqueId: '',
-                                                    value: this
-                                                        .localAttributeForm
+                                                if (
+                                                    this.localAttributeForm
                                                         .controls[
                                                         mainObj[i].uniqueId
-                                                    ].value[j].lookUpId,
-                                                };
-                                            } else {
-                                                if (
-                                                    mainObj[i].data[j] ==
-                                                    undefined
+                                                    ].value.length <
+                                                    mainObj[i].data.length
                                                 ) {
+                                                    mainObj[i].data = [];
                                                     mainObj[i].data[j] = {
                                                         uniqueId: '',
                                                         value: this
@@ -2096,56 +2197,56 @@ export class BookmarkEditComponent implements OnInit {
                                                         ].value[j].lookUpId,
                                                     };
                                                 } else {
-                                                    mainObj[i].data[j].value =
-                                                        this.localAttributeForm.controls[
-                                                            mainObj[i].uniqueId
-                                                        ].value[j].lookUpId;
+                                                    if (
+                                                        mainObj[i].data[j] ==
+                                                        undefined
+                                                    ) {
+                                                        mainObj[i].data[j] = {
+                                                            uniqueId: '',
+                                                            value: this
+                                                                .localAttributeForm
+                                                                .controls[
+                                                                mainObj[i].uniqueId
+                                                            ].value[j].lookUpId,
+                                                        };
+                                                    } else {
+                                                        mainObj[i].data[j].value =
+                                                            this.localAttributeForm.controls[
+                                                                mainObj[i].uniqueId
+                                                            ].value[j].lookUpId;
+                                                    }
                                                 }
                                             }
+                                        } else {
+                                            mainObj[i].data = [];
                                         }
-                                    } else {
-                                        mainObj[i].data = [];
-                                    }
-                                    dataToSend.push(mainObj[i]);
-                                } else if (mainObj[i].dataType == 5) {
-                                    var data = [];
-                                    if (
-                                        this.localAttributeForm.controls[
-                                            mainObj[i].uniqueId
-                                        ] != null &&
-                                        this.localAttributeForm.controls[
-                                            mainObj[i].uniqueId
-                                        ].value.length != 0
-                                    ) {
-                                        for (
-                                            var j = 0;
-                                            j <
+                                        dataToSend.push(mainObj[i]);
+                                    } else if (mainObj[i].dataType == 5) {
+                                        var data = [];
+                                        if (
                                             this.localAttributeForm.controls[
                                                 mainObj[i].uniqueId
-                                            ].value.length;
-                                            j++
+                                            ] != null &&
+                                            this.localAttributeForm.controls[
+                                                mainObj[i].uniqueId
+                                            ].value.length != 0
                                         ) {
-                                            if (
-                                                this.localAttributeForm
-                                                    .controls[
+                                            for (
+                                                var j = 0;
+                                                j <
+                                                this.localAttributeForm.controls[
                                                     mainObj[i].uniqueId
-                                                ].value.length <
-                                                mainObj[i].data.length
+                                                ].value.length;
+                                                j++
                                             ) {
-                                                mainObj[i].data = [];
-                                                mainObj[i].data[j] = {
-                                                    uniqueId: '',
-                                                    value: this
-                                                        .localAttributeForm
+                                                if (
+                                                    this.localAttributeForm
                                                         .controls[
                                                         mainObj[i].uniqueId
-                                                    ].value[j],
-                                                };
-                                            } else {
-                                                if (
-                                                    mainObj[i].data[j] ==
-                                                    undefined
+                                                    ].value.length <
+                                                    mainObj[i].data.length
                                                 ) {
+                                                    mainObj[i].data = [];
                                                     mainObj[i].data[j] = {
                                                         uniqueId: '',
                                                         value: this
@@ -2155,350 +2256,365 @@ export class BookmarkEditComponent implements OnInit {
                                                         ].value[j],
                                                     };
                                                 } else {
-                                                    mainObj[i].data[j].value =
-                                                        this.localAttributeForm.controls[
-                                                            mainObj[i].uniqueId
-                                                        ].value[j];
+                                                    if (
+                                                        mainObj[i].data[j] ==
+                                                        undefined
+                                                    ) {
+                                                        mainObj[i].data[j] = {
+                                                            uniqueId: '',
+                                                            value: this
+                                                                .localAttributeForm
+                                                                .controls[
+                                                                mainObj[i].uniqueId
+                                                            ].value[j],
+                                                        };
+                                                    } else {
+                                                        mainObj[i].data[j].value =
+                                                            this.localAttributeForm.controls[
+                                                                mainObj[i].uniqueId
+                                                            ].value[j];
+                                                    }
                                                 }
                                             }
-                                        }
-                                    } else {
-                                        mainObj[i].data = [];
-                                    }
-                                    dataToSend.push(mainObj[i]);
-                                } else {
-                                    if (mainObj[i].data.length == 0) {
-                                        if (
-                                            mainObj[i].dataType == 4 &&
-                                            (this.localAttributeForm.controls[
-                                                mainObj[i].uniqueId
-                                            ].value == '' ||
-                                                isNaN(
-                                                    this.localAttributeForm
-                                                        .controls[
-                                                        mainObj[i].uniqueId
-                                                    ].value
-                                                ))
-                                        ) {
-                                            emptyObject = {
-                                                uniqueId: '',
-                                                value: '',
-                                            };
-                                            mainObj[i].data.push(emptyObject);
-                                            mainObj[i].data[0].value = null;
-                                            dataToSend.push(mainObj[i]);
-                                        } else if (
-                                            mainObj[i].dataType == 4 &&
-                                            this.localAttributeForm.controls[
-                                                mainObj[i].uniqueId
-                                            ].value != '' &&
-                                            !isNaN(
-                                                this.localAttributeForm
-                                                    .controls[
-                                                    mainObj[i].uniqueId
-                                                ].value
-                                            )
-                                        ) {
-                                            emptyObject = {
-                                                uniqueId: '',
-                                                value: this.localAttributeForm
-                                                    .controls[mainObj[i].name]
-                                                    .value,
-                                            };
-                                            mainObj[i].data.push(emptyObject);
-                                            emptyObject = {
-                                                uniqueId: '',
-                                                value: this.localAttributeForm
-                                                    .controls[
-                                                    mainObj[i].uniqueId
-                                                ].value,
-                                            };
-                                            mainObj[i].data.push(emptyObject);
-                                            dataToSend.push(mainObj[i]);
                                         } else {
-                                            emptyObject = {
-                                                uniqueId: '',
-                                                value: this.localAttributeForm
-                                                    .controls[
-                                                    mainObj[i].uniqueId
-                                                ].value,
-                                            };
-                                            mainObj[i].data.push(emptyObject);
-                                            mainObj[i].data[0].value =
-                                                this.localAttributeForm.controls[
-                                                    mainObj[i].uniqueId
-                                                ].value;
-                                            dataToSend.push(mainObj[i]);
-                                        }
-                                    } else {
-                                        if (
-                                            mainObj[i].dataType == 4 &&
-                                            this.localAttributeForm.controls[
-                                                mainObj[i].uniqueId
-                                            ].value == '' &&
-                                            !isNaN(
-                                                this.localAttributeForm
-                                                    .controls[
-                                                    mainObj[i].uniqueId
-                                                ].value
-                                            )
-                                        ) {
-                                            mainObj[i].data[0].value = null;
-                                            dataToSend.push(mainObj[i]);
-                                        }
-                                        if (
-                                            mainObj[i].dataType == 4 &&
-                                            (this.localAttributeForm.controls[
-                                                mainObj[i].uniqueId
-                                            ].value != '' ||
-                                                isNaN(
-                                                    this.localAttributeForm
-                                                        .controls[
-                                                        mainObj[i].uniqueId
-                                                    ].value
-                                                ))
-                                        ) {
                                             mainObj[i].data = [];
-                                            emptyObject = {
-                                                uniqueId: '',
-                                                value: this.localAttributeForm
-                                                    .controls[mainObj[i].name]
-                                                    .value,
-                                            };
-                                            mainObj[i].data.push(emptyObject);
-                                            emptyObject = {
-                                                uniqueId: '',
-                                                value: this.localAttributeForm
-                                                    .controls[
+                                        }
+                                        dataToSend.push(mainObj[i]);
+                                    } else {
+                                        if (mainObj[i].data.length == 0) {
+                                            if (
+                                                mainObj[i].dataType == 4 &&
+                                                (this.localAttributeForm.controls[
                                                     mainObj[i].uniqueId
-                                                ].value,
-                                            };
-                                            mainObj[i].data.push(emptyObject);
-                                            dataToSend.push(mainObj[i]);
-                                        } else {
-                                            mainObj[i].data[0].value =
+                                                ].value == '' ||
+                                                    isNaN(
+                                                        this.localAttributeForm
+                                                            .controls[
+                                                            mainObj[i].uniqueId
+                                                        ].value
+                                                    ))
+                                            ) {
+                                                emptyObject = {
+                                                    uniqueId: '',
+                                                    value: '',
+                                                };
+                                                mainObj[i].data.push(emptyObject);
+                                                mainObj[i].data[0].value = null;
+                                                dataToSend.push(mainObj[i]);
+                                            } else if (
+                                                mainObj[i].dataType == 4 &&
                                                 this.localAttributeForm.controls[
                                                     mainObj[i].uniqueId
-                                                ].value;
-                                            dataToSend.push(mainObj[i]);
+                                                ].value != '' &&
+                                                !isNaN(
+                                                    this.localAttributeForm
+                                                        .controls[
+                                                        mainObj[i].uniqueId
+                                                    ].value
+                                                )
+                                            ) {
+                                                emptyObject = {
+                                                    uniqueId: '',
+                                                    value: this.localAttributeForm
+                                                        .controls[mainObj[i].name]
+                                                        .value,
+                                                };
+                                                mainObj[i].data.push(emptyObject);
+                                                emptyObject = {
+                                                    uniqueId: '',
+                                                    value: this.localAttributeForm
+                                                        .controls[
+                                                        mainObj[i].uniqueId
+                                                    ].value,
+                                                };
+                                                mainObj[i].data.push(emptyObject);
+                                                dataToSend.push(mainObj[i]);
+                                            } else {
+                                                emptyObject = {
+                                                    uniqueId: '',
+                                                    value: this.localAttributeForm
+                                                        .controls[
+                                                        mainObj[i].uniqueId
+                                                    ].value,
+                                                };
+                                                mainObj[i].data.push(emptyObject);
+                                                mainObj[i].data[0].value =
+                                                    this.localAttributeForm.controls[
+                                                        mainObj[i].uniqueId
+                                                    ].value;
+                                                dataToSend.push(mainObj[i]);
+                                            }
+                                        } else {
+                                            if (
+                                                mainObj[i].dataType == 4 &&
+                                                this.localAttributeForm.controls[
+                                                    mainObj[i].uniqueId
+                                                ].value == '' &&
+                                                !isNaN(
+                                                    this.localAttributeForm
+                                                        .controls[
+                                                        mainObj[i].uniqueId
+                                                    ].value
+                                                )
+                                            ) {
+                                                mainObj[i].data[0].value = null;
+                                                dataToSend.push(mainObj[i]);
+                                            }
+                                            if (
+                                                mainObj[i].dataType == 4 &&
+                                                (this.localAttributeForm.controls[
+                                                    mainObj[i].uniqueId
+                                                ].value != '' ||
+                                                    isNaN(
+                                                        this.localAttributeForm
+                                                            .controls[
+                                                            mainObj[i].uniqueId
+                                                        ].value
+                                                    ))
+                                            ) {
+                                                mainObj[i].data = [];
+                                                emptyObject = {
+                                                    uniqueId: '',
+                                                    value: this.localAttributeForm
+                                                        .controls[mainObj[i].name]
+                                                        .value,
+                                                };
+                                                mainObj[i].data.push(emptyObject);
+                                                emptyObject = {
+                                                    uniqueId: '',
+                                                    value: this.localAttributeForm
+                                                        .controls[
+                                                        mainObj[i].uniqueId
+                                                    ].value,
+                                                };
+                                                mainObj[i].data.push(emptyObject);
+                                                dataToSend.push(mainObj[i]);
+                                            } else {
+                                                mainObj[i].data[0].value =
+                                                    this.localAttributeForm.controls[
+                                                        mainObj[i].uniqueId
+                                                    ].value;
+                                                dataToSend.push(mainObj[i]);
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                    );
-
-                    var LA = null;
-
-                    var index = [];
-                    var updateArray = [];
-
-                    for (var z = 0; z < dataToSend.length; z++) {
-                        if (
-                            dataToSend[z].dataType == '4' &&
-                            dataToSend[z].data.length != 0
-                        ) {
-                            if (dataToSend[z].data[0].value == '0') {
-                                index.push(z);
-                            }
-                        }
-                        if (dataToSend[z].data.length == 0) {
-                            // updateArray.splice(z,1);
-                        } else if (
-                            dataToSend[z].data[0].value == '' ||
-                            dataToSend[z].data[0].value == null ||
-                            dataToSend[z].data[0].value == undefined ||
-                            dataToSend[z].data[0].value.length == 0
-                        ) {
-                            // updateArray.splice(z,1);
-                        } else if (
-                            isNaN(dataToSend[z].data[0].value) &&
-                            dataToSend[z].dataType == 4
-                        ) {
-                            // updateArray.splice(z,1);
-                        } else {
-                            index.push(z);
-                        }
-                    }
-
-                    if (index.length > 0) {
-                        for (var i = 0; i < index.length; i++) {
-                            updateArray.push(dataToSend[index[i]]);
-                        }
-                    }
-
-                    dataToSend = updateArray;
-
-                    // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
-
-                    if (dataToSend.length != 0) {
-                        var c = 0;
-                        if (LA != null || LA != undefined) {
-                            var secondArray = LA.filter(
-                                (o) =>
-                                    !dataToSend.some(
-                                        (i) => i.uniqueId === o.uniqueId
-                                    )
-                            );
-                            console.log(secondArray);
-                            if (secondArray.length != 0) {
-                                for (var z = 0; z < secondArray.length; z++) {
-                                    dataToSend.push(secondArray[z]);
-                                }
-                            }
-                        }
-                        var newIndex = [];
-                        var newArray = [];
+                        );
+    
+                        var LA = null;
+    
+                        var index = [];
+                        var updateArray = [];
+    
                         for (var z = 0; z < dataToSend.length; z++) {
                             if (
                                 dataToSend[z].dataType == '4' &&
-                                dataToSend[z].data[0].value == '0'
+                                dataToSend[z].data.length != 0
                             ) {
-                                newIndex.push(z);
+                                if (dataToSend[z].data[0].value == '0') {
+                                    index.push(z);
+                                }
                             }
                             if (dataToSend[z].data.length == 0) {
-                                // newArray.splice(z,1);
+                                // updateArray.splice(z,1);
                             } else if (
                                 dataToSend[z].data[0].value == '' ||
                                 dataToSend[z].data[0].value == null ||
                                 dataToSend[z].data[0].value == undefined ||
                                 dataToSend[z].data[0].value.length == 0
                             ) {
-                                // newArray.splice(z,1);
+                                // updateArray.splice(z,1);
                             } else if (
                                 isNaN(dataToSend[z].data[0].value) &&
                                 dataToSend[z].dataType == 4
                             ) {
-                                // newArray.splice(z,1);
+                                // updateArray.splice(z,1);
                             } else {
-                                newIndex.push(z);
+                                index.push(z);
                             }
                         }
-                        if (newIndex.length > 0) {
-                            for (var i = 0; i < newIndex.length; i++) {
-                                newArray.push(dataToSend[newIndex[i]]);
+    
+                        if (index.length > 0) {
+                            for (var i = 0; i < index.length; i++) {
+                                updateArray.push(dataToSend[index[i]]);
                             }
                         }
-                        dataToSend = newArray;
+    
+                        dataToSend = updateArray;
+    
                         // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
-                    } else if (
-                        (LA != null || LA != undefined) &&
-                        dataToSend.length == 0
-                    ) {
-                        for (var i = 0; i < LA.length; i++) {
-                            dataToSend.push(LA[i]);
-                        }
-                        // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
-                    }
-
-                    var removeEle = [];
-                    var removeData = [];
-
-                    if (dataToSend.length > 0) {
-                        for (var i = 0; i < dataToSend.length; i++) {
-                            var count = 0;
-                            for (var j = 0; j < res.length; j++) {
-                                if (dataToSend[i].uniqueId == res[j].uniqueId) {
-                                    count++;
+    
+                        if (dataToSend.length != 0) {
+                            var c = 0;
+                            if (LA != null || LA != undefined) {
+                                var secondArray = LA.filter(
+                                    (o) =>
+                                        !dataToSend.some(
+                                            (i) => i.uniqueId === o.uniqueId
+                                        )
+                                );
+                                console.log(secondArray);
+                                if (secondArray.length != 0) {
+                                    for (var z = 0; z < secondArray.length; z++) {
+                                        dataToSend.push(secondArray[z]);
+                                    }
                                 }
                             }
-                            if (count > 0) {
-                                removeEle.push(i);
+                            var newIndex = [];
+                            var newArray = [];
+                            for (var z = 0; z < dataToSend.length; z++) {
+                                if (
+                                    dataToSend[z].dataType == '4' &&
+                                    dataToSend[z].data[0].value == '0'
+                                ) {
+                                    newIndex.push(z);
+                                }
+                                if (dataToSend[z].data.length == 0) {
+                                    // newArray.splice(z,1);
+                                } else if (
+                                    dataToSend[z].data[0].value == '' ||
+                                    dataToSend[z].data[0].value == null ||
+                                    dataToSend[z].data[0].value == undefined ||
+                                    dataToSend[z].data[0].value.length == 0
+                                ) {
+                                    // newArray.splice(z,1);
+                                } else if (
+                                    isNaN(dataToSend[z].data[0].value) &&
+                                    dataToSend[z].dataType == 4
+                                ) {
+                                    // newArray.splice(z,1);
+                                } else {
+                                    newIndex.push(z);
+                                }
+                            }
+                            if (newIndex.length > 0) {
+                                for (var i = 0; i < newIndex.length; i++) {
+                                    newArray.push(dataToSend[newIndex[i]]);
+                                }
+                            }
+                            dataToSend = newArray;
+                            // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+                        } else if (
+                            (LA != null || LA != undefined) &&
+                            dataToSend.length == 0
+                        ) {
+                            for (var i = 0; i < LA.length; i++) {
+                                dataToSend.push(LA[i]);
+                            }
+                            // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+                        }
+    
+                        var removeEle = [];
+                        var removeData = [];
+    
+                        if (dataToSend.length > 0) {
+                            for (var i = 0; i < dataToSend.length; i++) {
+                                var count = 0;
+                                for (var j = 0; j < res.length; j++) {
+                                    if (dataToSend[i].uniqueId == res[j].uniqueId) {
+                                        count++;
+                                    }
+                                }
+                                if (count > 0) {
+                                    removeEle.push(i);
+                                }
                             }
                         }
-                    }
-
-                    if (removeEle.length > 0) {
-                        for (var i = 0; i < removeEle.length; i++) {
-                            removeData.push(dataToSend[removeEle[i]]);
+    
+                        if (removeEle.length > 0) {
+                            for (var i = 0; i < removeEle.length; i++) {
+                                removeData.push(dataToSend[removeEle[i]]);
+                            }
+                            dataToSend = removeData;
                         }
-                        dataToSend = removeData;
-                    }
-                    localAttributes = dataToSend;
-                    this.filtersnew = this.PortfolioFilterForm.getRawValue();
-
-                    filterObjects = this.filtersnew;
-
-                    if (
-                        Object.values(this.filtersnew).every(
-                            (x: any) => x === null || x === '' || x.length === 0
-                        ) &&
-                        dataToSend.length == 0
-                    ) {
-                        var comfirmConfig: FuseConfirmationConfig = {
-                            title: 'There must be at least one filter present other wise the query will return too much data to load.',
-                            message: '',
-                            icon: {
-                                show: true,
-                                name: 'heroicons_outline:exclamation',
-                                color: 'warn',
-                            },
-                            actions: {
-                                confirm: {
+                        localAttributes = dataToSend;
+                        this.filtersnew = this.PortfolioFilterForm.getRawValue();
+    
+                        filterObjects = this.filtersnew;
+    
+                        if (
+                            Object.values(this.filtersnew).every(
+                                (x: any) => x === null || x === '' || x.length === 0
+                            ) &&
+                            dataToSend.length == 0
+                        ) {
+                            var comfirmConfig: FuseConfirmationConfig = {
+                                title: 'There must be at least one filter present other wise the query will return too much data to load.',
+                                message: '',
+                                icon: {
                                     show: true,
-                                    label: 'Okay',
+                                    name: 'heroicons_outline:exclamation',
                                     color: 'warn',
                                 },
-                            },
-                            dismissible: true,
-                        };
-
-                        this.fuseAlert.open(comfirmConfig);
-                    } else {
-                        this.isAppliedFiltersChange = true;
-                        this.PortfolioFilterForm.controls.IsAppliedFilters.setValue(
-                            false
-                        );
-
-                        const tempObj = {
-                            bookmarkId: 'new',
-                            bookmarkName:
-                                this.PortfolioFilterForm.controls.BookmarkName
-                                    .value,
-                            userADId: this.activeaccount.localAccountId,
-                            columnsObject: JSON.stringify(
-                                this.ProjectTableColumns.value
-                            ).replaceAll('"', ' /"'),
-                            filterObject: JSON.stringify(
-                                filterObjects
-                            ).replaceAll('"', ' /"'),
-                            localAttributeObject: JSON.stringify(
-                                localAttributes
-                            ).replaceAll('"', ' /"'),
-                            createdDate: new Date().toISOString(),
-                        };
-                        const isExist =
-                            this.PortfolioCenterService.bookmarks.some(
-                                (bookmark) =>
-                                    bookmark.bookmarkName ===
-                                    this.PortfolioFilterForm.controls
-                                        .BookmarkName.value
-                            );
-
-                        if (isExist) {
+                                actions: {
+                                    confirm: {
+                                        show: true,
+                                        label: 'Okay',
+                                        color: 'warn',
+                                    },
+                                },
+                                dismissible: true,
+                            };
+    
+                            this.fuseAlert.open(comfirmConfig);
                         } else {
-                            this.apiService
-                                .addBookmarkValue(tempObj)
-                                .then((res: any) => {
-                                    this.PortfolioCenterService.getAllBookmarks();
-                                    this.PortfolioCenterService.bookmarkSmallDrawerOpenedChanged(
-                                        false
-                                    );
-                                    this.PortfolioFilterForm.reset();
-                                    this.ProjectTableColumns.reset();
-                                    this.PortfolioFilterForm.markAsUntouched();
-                                    this.PortfolioFilterForm.markAsPristine();
-                                });
+                            this.isAppliedFiltersChange = true;
+                            this.PortfolioFilterForm.controls.IsAppliedFilters.setValue(
+                                false
+                            );
+    
+                            const tempObj = {
+                                bookmarkId: 'new',
+                                bookmarkName:
+                                    this.PortfolioFilterForm.controls.BookmarkName
+                                        .value,
+                                userADId: this.activeaccount.localAccountId,
+                                columnsObject: JSON.stringify(
+                                    this.ProjectTableColumns.value
+                                ).replaceAll('"', ' /"'),
+                                filterObject: JSON.stringify(
+                                    filterObjects
+                                ).replaceAll('"', ' /"'),
+                                localAttributeObject: JSON.stringify(
+                                    localAttributes
+                                ).replaceAll('"', ' /"'),
+                                createdDate: new Date().toISOString(),
+                            };
+                            const isExist =
+                                this.PortfolioCenterService.bookmarks.some(
+                                    (bookmark) =>
+                                        bookmark.bookmarkName ===
+                                        this.PortfolioFilterForm.controls
+                                            .BookmarkName.value
+                                );
+    
+                            if (isExist) {
+                            } else {
+                                this.apiService
+                                    .addBookmarkValue(tempObj)
+                                    .then((res: any) => {
+                                        this.PortfolioCenterService.getAllBookmarks();
+                                        this.PortfolioCenterService.bookmarkSmallDrawerOpenedChanged(
+                                            false
+                                        );
+                                        this.PortfolioFilterForm.reset();
+                                        this.ProjectTableColumns.reset();
+                                        this.PortfolioFilterForm.markAsUntouched();
+                                        this.PortfolioFilterForm.markAsPristine();
+                                    });
+                            }
                         }
-                    }
-
-                    // COMMENTED CODE
-
-                    // this.filterDrawer.close()
-                    // this.PortfolioCenterService.drawerOpenedPrakharTemp = false
-                    // this.resetpage()
-                    // this.showFilter = false
-                });
+    
+                        // COMMENTED CODE
+    
+                        // this.filterDrawer.close()
+                        // this.PortfolioCenterService.drawerOpenedPrakharTemp = false
+                        // this.resetpage()
+                        // this.showFilter = false
+                    });
+            }
         }
+  
     }
 }

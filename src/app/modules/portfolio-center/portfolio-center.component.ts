@@ -175,6 +175,8 @@ export class PortfolioCenterComponent implements OnInit {
     BookmarksForm = new FormGroup({
         BookmarkName: new FormControl(),
     });
+    
+    selectedBookmarkName: string = '';
 
     ProjectTableColumns = new FormGroup({
         State: new FormControl(false),
@@ -441,6 +443,12 @@ export class PortfolioCenterComponent implements OnInit {
     }
 
     async ngOnInit() {
+
+            this.BookmarksForm.get('BookmarkName').valueChanges.subscribe(val => {
+                const selectedOption = this.getBookmarkArray().find(option => option.bookmarkId === val);
+                this.selectedBookmarkName = selectedOption ? selectedOption.bookmarkName : '';
+            });
+        
         this.activeaccount = this.msal.instance.getActiveAccount();
 
         this.showContent = false;
@@ -4066,7 +4074,6 @@ export class PortfolioCenterComponent implements OnInit {
     setPage(res: any, offset) {
         if (res != '') {
             this.projectOverview = res.portfolioDetails;
-            debugger;
             console.log(this.lookup);
 
             this.status = this.projectOverview.projStatus;
@@ -4380,7 +4387,6 @@ export class PortfolioCenterComponent implements OnInit {
                 this.projectOverview[i].parentProjectId =
                     res.projectDetails[i].parentProgramId;
 
-                debugger;
                 console.log(this.filterlist);
                 console.log(
                     this.filterlist.portfolioOwner.filter((item) => {
