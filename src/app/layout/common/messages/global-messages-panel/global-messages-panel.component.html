@@ -23,7 +23,7 @@
     </div>
     
 </div>
-<div class="absolute bottom-2 w-full px-3">
+<div class="absolute bottom-2 w-full px-3" *ngIf="origin == 'unread'">
     <div class="pr-3 flex items-start justify-between mt-6">
         <a class="min-w-26" mat-flat-button [color]="'primary'"
             (click)="readLaterAndClose()">
@@ -31,6 +31,14 @@
         </a>
         <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="readAndUnderstood()">
             Read and Understood
+        </button>
+    </div>
+</div>
+<div class="absolute bottom-2 w-full px-3" *ngIf="origin == 'panel'">
+    <div class="pr-3 flex items-start justify-between mt-6">
+       <div></div>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="closePanel()">
+            Ok
         </button>
     </div>
 </div>

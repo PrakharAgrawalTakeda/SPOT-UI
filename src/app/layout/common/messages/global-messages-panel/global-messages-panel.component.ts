@@ -15,56 +15,55 @@ import { MessagesService } from '../messages.service';
 export class GlobalMessagesPanelComponent implements OnInit, OnDestroy {
   messages: any = [];
   location: 'project-hub' | 'my-preference' | 'portfolio-center';
+  origin: string
+  skipDestroy = false
   constructor(private projectHubService: ProjectHubService, private portfolioCenterService: PortfolioCenterService, private myPreferenceService: MyPreferenceService, private router: Router, private msalService: MsalService, private messageService: MessagesService) {
 
   }
   ngOnInit(): void {
     if (this.router.url.includes('project-hub')) {
-     this.messages = this.projectHubService.all
-     this.location = 'project-hub'
+      this.messages = this.projectHubService.all
+      this.origin = this.projectHubService.itemid
+      this.location = 'project-hub'
     }
     else if (this.router.url.includes('my-preference')) {
       this.messages = this.myPreferenceService.all
+      this.origin = this.myPreferenceService.itemid
       this.location = 'my-preference'
     }
     else if (this.router.url.includes('portfolio-center')) {
-    this.messages = this.portfolioCenterService.all
-    this.location = 'portfolio-center'  
+      this.messages = this.portfolioCenterService.all
+      this.origin = this.portfolioCenterService.itemid
+      this.location = 'portfolio-center'
+    }
+    if (this.origin == 'panel') {
+      this.skipDestroy = true
     }
   }
 
-  closePanel(){
-    if(this.location == 'project-hub'){
-      this.projectHubService.toggleDrawerOpen("","",[],this.projectHubService.projectid, false, false)
+  closePanel() {
+    if (this.location == 'project-hub') {
+      this.projectHubService.toggleDrawerOpen("", "", [], this.projectHubService.projectid, false, false)
     }
-    else if( this.location == 'my-preference'){
-      this.myPreferenceService.toggleDrawerOpen("","",[],'', false)
+    else if (this.location == 'my-preference') {
+      this.myPreferenceService.toggleDrawerOpen("", "", [], '', false)
     }
-    else if( this.location == 'portfolio-center'){
-      this.portfolioCenterService.toggleDrawerOpen("","",[],'',false)
+    else if (this.location == 'portfolio-center') {
+      this.portfolioCenterService.toggleDrawerOpen("", "", [], '', false)
     }
   }
 
-  readLater(){
-    var submitObject = []
-    for(let message of this.messages){
-      submitObject.push({
-        userAdid: this.msalService.instance.getActiveAccount()?.localAccountId,
-        messageId: message.messageId,
-        messageRead: 0
-      })
-    }
-    this.messageService.bulkEditGlobalMessageUserLog(this.msalService.instance.getActiveAccount()?.localAccountId, submitObject).then((response) => {
-    })
+  readLater() {
+    localStorage.setItem('ReadLaterTime', new Date().toString())
   }
 
-  readLaterAndClose(){
+  readLaterAndClose() {
     this.readLater()
     this.closePanel()
   }
-  readAndUnderstood(){
+  readAndUnderstood() {
     var submitObject = []
-    for(let message of this.messages){
+    for (let message of this.messages) {
       submitObject.push({
         userAdid: this.msalService.instance.getActiveAccount()?.localAccountId,
         messageId: message.messageId,
@@ -72,12 +71,15 @@ export class GlobalMessagesPanelComponent implements OnInit, OnDestroy {
       })
     }
     this.messageService.bulkEditGlobalMessageUserLog(this.msalService.instance.getActiveAccount()?.localAccountId, submitObject).then((response) => {
-    this.closePanel()
+      this.skipDestroy = true
+      this.closePanel()
     })
   }
 
   ngOnDestroy(): void {
-    this.readLater()
+    if (!this.skipDestroy) {
+      this.readLater()
+    }
   }
 
 }
