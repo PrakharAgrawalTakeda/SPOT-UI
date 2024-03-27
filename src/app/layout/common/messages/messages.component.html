@@ -12,8 +12,9 @@
     <div class="fixed inset-0 sm:static sm:inset-auto flex flex-col min-w-200 mt-4 sm:rounded-2xl overflow-hidden shadow-lg">
 
         <!-- Header -->
-        <div class="flex shrink-0 items-center py-4 pr-4 pl-6 bg-primary text-on-primary">
-            <div class="sm:hidden -ml-1 mr-3">
+        <div class="flex shrink-0 items-center py-4 pr-4 pl-6 bg-primary text-on-primary justify-between">
+            <div class="text-lg font-medium leading-10">Messages</div>
+            <div class="-ml-1 mr-3">
                 <button
                     mat-icon-button
                     (click)="closePanel()">
@@ -22,7 +23,6 @@
                         [svgIcon]="'heroicons_solid:x'"></mat-icon>
                 </button>
             </div>
-            <div class="text-lg font-medium leading-10">Messages</div>
         </div>
 
         <!-- Content -->
