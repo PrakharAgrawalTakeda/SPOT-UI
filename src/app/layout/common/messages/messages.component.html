@@ -2,6 +2,8 @@
 <button
     mat-icon-button
     (click)="openPanel()"
+    matTooltip="Messages"
+    [matTooltipPosition]="'below'"
     #messagesOrigin>
     <mat-icon class="text-on-primary" [svgIcon]="'heroicons_outline:inbox'"></mat-icon>
 </button>
