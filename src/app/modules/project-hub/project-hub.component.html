@@ -273,7 +273,7 @@
     [ngClass]="navigationAppearance=='default'?'project-hub-default':'project-hub-dense'"
     [ngStyle]="{ 'position' : projecthubservice.drawerOpenedright ? 'fixed' : 'relative'}">
     <div class="p-8 pb-6 pt-2" *ngIf="viewContent">
-        <spot-global-message [callLocation]="'ProjectHub'"></spot-global-message>
+        <!--<spot-global-message [callLocation]="'ProjectHub'"></spot-global-message>-->
         <div class="w-full bg-card shadow rounded-2xl">
             <div class="flex-1 min-w-0 p-6 pt-1" [ngClass]="{'text-gray-400': projectDetails.isArchived}">
                 <!-- Title -->
