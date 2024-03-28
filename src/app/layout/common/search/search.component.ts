@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, HostBinding, Input, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { debounceTime, filter, map, startWith, Subject, takeUntil } from 'rxjs';
+import { debounceTime, filter, map, startWith, Subject, Subscription, takeUntil } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations/public-api';
 import { Router } from '@angular/router';
 import { GlobalVariables } from 'app/shared/global-variables';
@@ -32,7 +32,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
     searchControl: FormControl = new FormControl();
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     temp: string = ""
-
+    private subscription: Subscription;
     /**
      * Constructor
      */
@@ -153,11 +153,12 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
             this.refreshData(value);
         }
     }
-    private refreshData(value: string) {
+    
+    private async refreshData(value: string) {
         const params = new HttpParams().set('query', value);
-        this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, { body: [] })
-            .subscribe((resultSets: any) => {
-
+        this.subscription?.unsubscribe(); // Unsubscribe from the previous request
+        this.subscription = this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, { body: [] })
+            .subscribe(async (resultSets: any) => {
                 // Store the result sets
                 if (this.confidentialProjects != 'Only') {
                     this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
@@ -166,18 +167,17 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
                     this.resultSets = [];
                 }
                 if (this.confidentialProjects != 'None') {
-                    var activeaccount = this.msalService.instance.getActiveAccount()
-                    this.roleService.getCurrentRole(activeaccount.localAccountId).then((resp: any) => {
-                        if (resp.confidentialProjects.length > 0) {
-                            var confProjectUserList = resultSets.projectData?.filter(x => resp.confidentialProjects?.includes(x.problemUniqueId));
-                            if (confProjectUserList?.length > 0) {
-                                this.resultSets = [...this.resultSets, ...confProjectUserList];
-                            }
+                    var activeaccount = this.msalService.instance.getActiveAccount();
+                    const resp: any = await this.roleService.getCurrentRole(activeaccount.localAccountId);
+                    if (resp.confidentialProjects.length > 0) {
+                        var confProjectUserList = resultSets.projectData?.filter(x => resp.confidentialProjects?.includes(x.problemUniqueId));
+                        if (confProjectUserList?.length > 0) {
+                            this.resultSets = [...this.resultSets, ...confProjectUserList];
                         }
-                    });
+                    }
                 }
                 this.budget = resultSets.budget;
-
+    
                 // Execute the event
                 this.search.next(resultSets);
             });
