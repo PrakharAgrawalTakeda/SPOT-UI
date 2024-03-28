@@ -766,9 +766,16 @@
                     <div class="flex justify-between items-start pt-4 pb-4">
                         <div></div>
                         <div></div>
-                        <div>
+                        <!-- *ngIf="ForecastForm.controls.ForecastType.value.lookUpName == 'CapEx Forecast'" -->
+                        <div *ngIf="ForecastForm.controls.ForecastType.value.lookUpName == 'CapEx Forecast'">
                         <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="
-                                        PortfolioCenterService.toggleForecastDrawerOpen('ForecastBulkEdit','',projectFunding,true)">
+                                        PortfolioCenterService.toggleForecastDrawerOpen('ForecastBulkEdit','',[],true)">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
+                        </button>
+                    </div>
+                    <div *ngIf="ForecastForm.controls.ForecastType.value.lookUpName == 'OpEx Forecast'">
+                        <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="
+                                        PortfolioCenterService.toggleForecastDrawerOpen('ForecastBulkEditO','',[],true)">
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                         </button>
                     </div>

@@ -18,6 +18,24 @@
     <app-global-messages-panel *ngIf="PortfolioCenterService.itemtype == 'GlobalMessagesPanel'"></app-global-messages-panel>
 </fuse-drawer>
 
+<fuse-drawer
+    [name]="'rightDrawer'"
+    [opened]="PortfolioCenterService.forecastDrawerOpened"
+    (openedChanged)="PortfolioCenterService.forecastDrawerOpenedChanged($event)"
+    [mode]="'over'"
+    [position]="'right'"
+    [ngClass]="{
+        'fuse-drawer-large': PortfolioCenterService.forecastDrawerLarge
+    }"
+>
+    <div>
+        <app-forecast-bulk-edit
+        *ngIf="PortfolioCenterService.forecastItemType == 'ForecastBulkEdit'" [type]="'capex'"></app-forecast-bulk-edit>
+        <app-forecast-bulk-edit
+        *ngIf="PortfolioCenterService.forecastItemType == 'ForecastBulkEditO'" [type]="'opex'"></app-forecast-bulk-edit>
+    </div>
+</fuse-drawer> 
+
 <fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.bookmarkDrawerOpened"
     (openedChanged)="PortfolioCenterService.bookmarkDrawerOpenedChanged($event)" [mode]="'over'" [position]="'right'"
     [ngClass]="{

@@ -762,6 +762,7 @@
                 </a>
             </ng-template>
         </ngx-datatable-column>
+
         <ngx-datatable-column name={{yearLabel.Y1}} prop="y2" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
             [resizeable]="false" [sortable]="false" [draggable]="false">
             <ng-template let-column="column" ngx-datatable-header-template>
@@ -774,10 +775,16 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a (click)="fTableEditRow(rowIndex)" [ngClass]="'closed'">
+                <a  *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': row.isopen==false}">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
-                    <p style="text-align:right">{{(value ? value : 0 ) | number : fractionSize}}</p>
+                    <p style="text-align:right">{{value ? (value | number : fractionSize) : 0}}</p>
                 </a>
+                <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-2"
+                    *ngIf="fTableEditStack.includes(rowIndex)">
+                    <spot-input-forecast formControlName="y2"
+                        (valueChanged)="recalculateTotalCapex()"
+                        (pasteEvent)="onPaste($event, rowIndex, 'y2')"></spot-input-forecast>
+                </form>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name={{yearLabel.Y2}} prop="y3" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
@@ -792,10 +799,16 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a (click)="fTableEditRow(rowIndex)" [ngClass]="'closed'">
+                <a  *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': row.isopen==false}">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
-                    <p style="text-align:right">{{(value ? value : 0 ) | number : fractionSize}}</p>
+                    <p style="text-align:right">{{value ? (value | number : fractionSize) : 0}}</p>
                 </a>
+                <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-2"
+                    *ngIf="fTableEditStack.includes(rowIndex)">
+                    <spot-input-forecast formControlName="y3"
+                        (valueChanged)="recalculateTotalCapex()"
+                        (pasteEvent)="onPaste($event, rowIndex, 'y3')"></spot-input-forecast>
+                </form>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name={{yearLabel.Y3}} prop="y4" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
@@ -810,10 +823,16 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a (click)="fTableEditRow(rowIndex)" [ngClass]="'closed'">
+                <a  *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': row.isopen==false}">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
-                    <p style="text-align:right">{{(value ? value : 0 ) | number : fractionSize}}</p>
+                    <p style="text-align:right">{{value ? (value | number : fractionSize) : 0}}</p>
                 </a>
+                <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-2"
+                    *ngIf="fTableEditStack.includes(rowIndex)">
+                    <spot-input-forecast formControlName="y4"
+                        (valueChanged)="recalculateTotalCapex()"
+                        (pasteEvent)="onPaste($event, rowIndex, 'y4')"></spot-input-forecast>
+                </form>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name={{yearLabel.Y4}} prop="y5" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
@@ -828,13 +847,19 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a (click)="fTableEditRow(rowIndex)" [ngClass]="'closed'">
+                <a  *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': row.isopen==false}">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
-                    <p style="text-align:right">{{(value ? value : 0 ) | number : fractionSize}}</p>
+                    <p style="text-align:right">{{value ? (value | number : fractionSize) : 0}}</p>
                 </a>
+                <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-2"
+                    *ngIf="fTableEditStack.includes(rowIndex)">
+                    <spot-input-forecast formControlName="y5"
+                        (valueChanged)="recalculateTotalCapex()"
+                        (pasteEvent)="onPaste($event, rowIndex, 'y5')"></spot-input-forecast>
+                </form>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column *ngIf="projectFunding.budgetData=='CapEx Forecast'" name="Total CAPEX" prop="cumulativeTotal" [flexGrow]="1"
+        <ngx-datatable-column *ngIf="type=='capex'" name="Total CAPEX" prop="cumulativeTotal" [flexGrow]="1"
             [headerClass]="getNgxDatatableNumberHeader" [resizeable]="false" [sortable]="false" [draggable]="false">
             <ng-template let-column="column" ngx-datatable-header-template>
                 <ng-container>
@@ -853,7 +878,7 @@
                 </a>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column *ngIf="projectFunding.budgetData=='OpEx Forecast'" name="Total OPEX" prop="cumulativeTotal" [flexGrow]="1"
+        <ngx-datatable-column *ngIf="type=='opex'" name="Total OPEX" prop="cumulativeTotal" [flexGrow]="1"
             [headerClass]="getNgxDatatableNumberHeader" [resizeable]="false" [sortable]="false" [draggable]="false">
             <ng-template let-column="column" ngx-datatable-header-template>
                 <ng-container>
@@ -872,55 +897,52 @@
                 </a>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Period Submitted By" prop="submittedByName" [width]="200"
-                            [resizeable]="false">
-                            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
-                                <ng-container>
-                                    <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span style="top: 6px;position: fixed;left: 5500px; font-weight: bold;">
-                                            {{column.name}}
-                                        </span>
-                                        <!-- <span style="top: 8px;position: fixed;left: 3903px; font-weight: bold;">{{column.name}}</span> -->
-                                    </span>
-                                </ng-container>
-                            </ng-template>
-                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p>{{value}}</p>
-                            </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-column name="Period Submitted Date/Time" prop="lastSubmitted" [width]="250"
-                            [resizeable]="false">
-                            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
-                                <ng-container>
-                                    <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span style="top: 6px;position: fixed;left: 4600px; font-weight: bold;">
-                                            {{column.name}}
-                                        </span>
-                                        <!-- <span style="top: 8px;position: fixed;left: 4076px; font-weight: bold;">{{column.name}}</span> -->
-                                    </span>
-                                </ng-container>
-                            </ng-template>
-                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p>{{value| date:'dd-MMM-yyyy'}}</p>
-                            </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-column name="Period Submitted Reference" prop="active" [width]="250"
-                            [resizeable]="false">
-                            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
-                                <ng-container>
-                                    <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span style="top: 6px;position: fixed;left: 4700px; font-weight: bold;">
-                                            {{column.name}}
-                                        </span>
-                                        <!-- <span style="top: 8px;position: fixed;left: 4315px; font-weight: bold;">{{column.name}}</span> -->
-                                    </span>
-                                </ng-container>
-                            </ng-template>
-                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p *ngIf="row.submittedByName">{{value}}</p>
-                                <p *ngIf="!row.submittedByName">&nbsp;</p>
-                            </ng-template>
-                        </ngx-datatable-column>
+        <ngx-datatable-column name="Period Submitted By" prop="submittedByName" [width]="200" [resizeable]="false">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                <ng-container>
+                    <span class="datatable-header-cell-wrapper" (click)="sort()">
+                        <span style="top: 6px;position: fixed;left: 4800px; font-weight: bold;">
+                            {{column.name}}
+                        </span>
+                        <!-- <span style="top: 8px;position: fixed;left: 3903px; font-weight: bold;">{{column.name}}</span> -->
+                    </span>
+                </ng-container>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p>{{value}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Period Submitted Date/Time" prop="lastSubmitted" [width]="250" [resizeable]="false">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                <ng-container>
+                    <span class="datatable-header-cell-wrapper" (click)="sort()">
+                        <span style="top: 6px;position: fixed;left: 4950px; font-weight: bold;">
+                            {{column.name}}
+                        </span>
+                        <!-- <span style="top: 8px;position: fixed;left: 4076px; font-weight: bold;">{{column.name}}</span> -->
+                    </span>
+                </ng-container>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p>{{value| date:'dd-MMM-yyyy'}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Period Submitted Reference" prop="active" [width]="250" [resizeable]="false">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                <ng-container>
+                    <span class="datatable-header-cell-wrapper" (click)="sort()">
+                        <span style="top: 6px;position: fixed;left: 5150px; font-weight: bold;">
+                            {{column.name}}
+                        </span>
+                        <!-- <span style="top: 8px;position: fixed;left: 4315px; font-weight: bold;">{{column.name}}</span> -->
+                    </span>
+                </ng-container>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p *ngIf="row.submittedByName">{{value}}</p>
+                <p *ngIf="!row.submittedByName">&nbsp;</p>
+            </ng-template>
+        </ngx-datatable-column>
 
     </ngx-datatable>
     <!-- </div>

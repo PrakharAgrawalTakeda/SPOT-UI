@@ -3,6 +3,8 @@ import { PortfolioCenterService } from '../../portfolio-center.service';
 import { PortfolioApiService } from '../../portfolio-api.service';
 import { BudgetService } from 'app/modules/project-hub/budget/budget.service';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { FuseConfirmationService } from '@fuse/services/confirmation/confirmation.service';
 
 @Component({
   selector: 'app-forecast-bulk-edit',
@@ -11,7 +13,9 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 })
 export class ForecastBulkEditComponent {
   @Input() projectFunding: any;
+  @Input() type: 'capex' | 'opex' = 'capex'
   ForecastBulkEdit: string = 'ForecastBulkEdit';
+  ForecastBulkEditO: string = 'ForecastBulkEditO';
   forecastData: any;
   projectCAPEXdata: any;
   //projectFunding:any = []
@@ -30,35 +34,61 @@ export class ForecastBulkEditComponent {
   openEntry: any;
   year1Value = 1;
   forecastsSubmit = []
-constructor(public PortfolioCenterService: PortfolioCenterService, private portfoliService: PortfolioApiService, public budgetService: BudgetService, private cdRef: ChangeDetectorRef)
+  projectFundingOpex: any;
+constructor(public PortfolioCenterService: PortfolioCenterService,public fuseAlert: FuseConfirmationService, public projecthubservice: ProjectHubService, private portfoliService: PortfolioApiService, public budgetService: BudgetService, private cdRef: ChangeDetectorRef)
 {
-  
+  this.forecastsForm.valueChanges.subscribe(() => {
+    this.formValue();
+    this.projecthubservice.isFormChanged = JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit);
+    if(this.projecthubservice.isFormChanged){
+        window.onbeforeunload = this.showConfirmationMessage;
+    }
+});
 }
+
+//  ngOnChanges() : void {
+//   this.openEntry = this.forecastsForm.controls.find(control => control.get('isopen').value == 1)
+// //   this.dataloader()
+// //   debugger
+// //   if(this.type == 'CapEx Forecast')
+// //   {
+// //     this.openEntry = this.projecthubservice.all.budgetForecasts.find(x => x.isopen === true && x.budgetData == "CapEx Forecast");
+// //   }
+
+//  }
 
   ngOnInit(): void {
     this.filterdata = JSON.parse(JSON.stringify(this.PortfolioCenterService.all))
-    //console.log(projectFunding)
     console.log(this.filterdata)
     this.dataloader()
   }
 
   dataloader()
   {
+    console.log(this.type)
     this.portfoliService.getForecastData(this.filterdata).then((forecastData: any) => {
     this.portfoliService.getLocalCurrency().then(currency => {
       this.forecastData = forecastData
+      console.log(this.forecastData)
       if(forecastData.forecastTableItems != null){
         this.CAPEXdata = forecastData.forecastTableItems["CapExForecast|OY"]
         this.OPEXdata = forecastData.forecastTableItems["OpExForecast|OY"]
         this.fundingRequests = forecastData.forecastTableItems["CapExForecast|OY"]
+
         if (forecastData.forecastProjectItems.CapExForecast != undefined){
           this.projectCAPEXdata = forecastData.forecastProjectItems.CapExForecast
           this.projectFunding = forecastData.forecastProjectItems.CapExForecast
+          //this.type = 'CapEx Forecast'
         }
         if (forecastData.forecastProjectItems.OpExForecast != undefined) {
           this.projectOPEXdata = forecastData.forecastProjectItems.OpExForecast
+          //this.projectFundingOpex = forecastData.forecastProjectItems.OpExForecast
+          //this.type = 'OpEx Forecast'
         }
-        
+        if(this.type == 'opex')
+        {
+          this.projectFunding = forecastData.forecastProjectItems.OpExForecast
+        }
         this.projectFunding.sort((a, b) => {
           return (a.problemID < b.problemID ? -1 : a.problemID == b.problemID ? 0 : 1);
         })
@@ -70,6 +100,8 @@ constructor(public PortfolioCenterService: PortfolioCenterService, private portf
         this.yearLabel.Y4 = forecastData.yearLabels["5+"]
         this.localCurrency = currency
       }
+console.log(this.projectFunding)
+
       this.forecastsDb = this.projectFunding.map(x => {
         return {
         "budgetGlobalID": x.budgetGlobalID,
@@ -131,6 +163,7 @@ constructor(public PortfolioCenterService: PortfolioCenterService, private portf
         "isOpexRequired": x.isOpexRequired
     }
   })
+  console.log(this.forecastsDb)
   this.year1Value = this.projectFunding.find(x => x.isopen == 1).annualTotalY1;
   for (var i of this.projectFunding) {
     this.forecastsForm.push(new FormGroup({
@@ -193,10 +226,12 @@ constructor(public PortfolioCenterService: PortfolioCenterService, private portf
       isOpexRequired: new FormControl(i.isOpexRequired)
     }), { emitEvent: false })
 }
-      console.log(this.projectFunding)
+//this.type = this.projectFunding.find(x => x.isopen == 1).budgetData
+      console.log(this.type)
 this.showContent = true
     })
     })
+    this.formValue()
   }
 
   fTableEditRow(rowIndex) {
@@ -205,6 +240,7 @@ this.showContent = true
             this.fTableEditStack.push(rowIndex)
         }
     }
+
 }
 
 getRowStyle(month:string,isEditable:boolean, row:any){
@@ -234,114 +270,146 @@ onPaste(event: ClipboardEvent, rowIndex: number, field: string): void {
 }
 
 recalculateAnnualTotal() {
-  const isOpenEntry = this.forecastsForm.controls.find(control => control.get('isopen').value == 1);
-  const newAnnualTotal =
-      (isNaN(isOpenEntry.value.apr) ? 0 : isOpenEntry.value.apr) +
-      (isNaN(isOpenEntry.value.may) ? 0 : isOpenEntry.value.may) +
-      (isNaN(isOpenEntry.value.jun) ? 0 : isOpenEntry.value.jun) +
-      (isNaN(isOpenEntry.value.jul) ? 0 : isOpenEntry.value.jul) +
-      (isNaN(isOpenEntry.value.aug) ? 0 : isOpenEntry.value.aug) +
-      (isNaN(isOpenEntry.value.sep) ? 0 : isOpenEntry.value.sep) +
-      (isNaN(isOpenEntry.value.oct) ? 0 : isOpenEntry.value.oct) +
-      (isNaN(isOpenEntry.value.nov) ? 0 : isOpenEntry.value.nov) +
-      (isNaN(isOpenEntry.value.dec) ? 0 : isOpenEntry.value.dec) +
-      (isNaN(isOpenEntry.value.jan) ? 0 : isOpenEntry.value.jan) +
-      (isNaN(isOpenEntry.value.feb) ? 0 : isOpenEntry.value.feb) +
-      (isNaN(isOpenEntry.value.mar) ? 0 : isOpenEntry.value.mar);
-      const newAnnualTotalY1 = 
-      (isNaN(isOpenEntry.value.aprY1) ? 0 : isOpenEntry.value.aprY1) +
-      (isNaN(isOpenEntry.value.mayY1) ? 0 : isOpenEntry.value.mayY1) +
-      (isNaN(isOpenEntry.value.junY1) ? 0 : isOpenEntry.value.junY1) +
-      (isNaN(isOpenEntry.value.julY1) ? 0 : isOpenEntry.value.julY1) +
-      (isNaN(isOpenEntry.value.augY1) ? 0 : isOpenEntry.value.augY1) +
-      (isNaN(isOpenEntry.value.sepY1) ? 0 : isOpenEntry.value.sepY1) +
-      (isNaN(isOpenEntry.value.octY1) ? 0 : isOpenEntry.value.octY1) +
-      (isNaN(isOpenEntry.value.novY1) ? 0 : isOpenEntry.value.novY1) +
-      (isNaN(isOpenEntry.value.decY1) ? 0 : isOpenEntry.value.decY1) +
-      (isNaN(isOpenEntry.value.janY1) ? 0 : isOpenEntry.value.janY1) +
-      (isNaN(isOpenEntry.value.febY1) ? 0 : isOpenEntry.value.febY1) +
-      (isNaN(isOpenEntry.value.marY1) ? 0 : isOpenEntry.value.marY1);
-      isOpenEntry.patchValue({
-        annualTotal: newAnnualTotal
+  if(this.forecastsSubmit.length > 0)
+  {
+    const updatedProjectFunding = this.projectFunding.map((project, index) => {
+      if (project.isopen === 1) {
+        const control = this.forecastsForm.controls[index];
+        // Calculate your totals here based on the control's value...
+        const newAnnualTotal =
+        (isNaN(control.value.apr) ? 0 : control.value.apr) +
+        (isNaN(control.value.may) ? 0 : control.value.may) +
+        (isNaN(control.value.jun) ? 0 : control.value.jun) +
+        (isNaN(control.value.jul) ? 0 : control.value.jul) +
+        (isNaN(control.value.aug) ? 0 : control.value.aug) +
+        (isNaN(control.value.sep) ? 0 : control.value.sep) +
+        (isNaN(control.value.oct) ? 0 : control.value.oct) +
+        (isNaN(control.value.nov) ? 0 : control.value.nov) +
+        (isNaN(control.value.dec) ? 0 : control.value.dec) +
+        (isNaN(control.value.jan) ? 0 : control.value.jan) +
+        (isNaN(control.value.feb) ? 0 : control.value.feb) +
+        (isNaN(control.value.mar) ? 0 : control.value.mar);
+        const newAnnualTotalY1 = 
+        (isNaN(control.value.aprY1) ? 0 : control.value.aprY1) +
+        (isNaN(control.value.mayY1) ? 0 : control.value.mayY1) +
+        (isNaN(control.value.junY1) ? 0 : control.value.junY1) +
+        (isNaN(control.value.julY1) ? 0 : control.value.julY1) +
+        (isNaN(control.value.augY1) ? 0 : control.value.augY1) +
+        (isNaN(control.value.sepY1) ? 0 : control.value.sepY1) +
+        (isNaN(control.value.octY1) ? 0 : control.value.octY1) +
+        (isNaN(control.value.novY1) ? 0 : control.value.novY1) +
+        (isNaN(control.value.decY1) ? 0 : control.value.decY1) +
+        (isNaN(control.value.janY1) ? 0 : control.value.janY1) +
+        (isNaN(control.value.febY1) ? 0 : control.value.febY1) +
+        (isNaN(control.value.marY1) ? 0 : control.value.marY1);
+
+        // Update control values (consider using a method to do this if complex)
+        control.patchValue({
+          annualTotal: newAnnualTotal,
+          annualTotalY1: newAnnualTotalY1,
+        }, {emitEvent: false});
+
+        // Return updated project object
+        return {...project, annualTotal: newAnnualTotal, annualTotalY1: newAnnualTotalY1};
+      }
+      return project; // Return unchanged project if not open
     });
-    this.projectFunding.find(value => value.isopen === true).annualTotal = newAnnualTotal;
-    //this.recalculateTotalCapex()
-  this.projectFunding = this.projectFunding.map(forecast => {
-    if (forecast.isopen == 1) {
-        return {...forecast, annualTotalY1: newAnnualTotalY1};
-    } else {
-        return forecast;
-    }
-});
-if(this.projectFunding.budgetData=='CapEx Forecast'){
-    if(this.projectFunding.find(x => x.active == 'Preliminary')){
-        this.projectFunding.find(x => x.active == 'Preliminary').annualTotalY1 = newAnnualTotalY1;
-        this.projectFunding.find(x => x.active == 'Preliminary').annualTotal = newAnnualTotal;
-        this.year1Value =newAnnualTotalY1;
-        this.forecastsForm.controls.find(control => control.get('budgetData').value == "CapEx Forecast" && control.get('active').value=="Preliminary").patchValue({
-          annualTotalY1: newAnnualTotalY1
-        }, {emitEvent : false});
-    }else{
-        this.projectFunding.find(x => x.active == 'Current').annualTotalY1 = newAnnualTotalY1;
-        this.projectFunding.find(x => x.active == 'Current').annualTotal = newAnnualTotal;
-        this.year1Value =newAnnualTotalY1;
-        this.forecastsForm.controls.find(control => control.get('budgetData').value == "CapEx Forecast" && control.get('active').value=="Current").patchValue({
-          annualTotalY1: newAnnualTotalY1
-        } );
-    }
-}else {
-    if(this.projectFunding.find(x => x.active == 'Preliminary')){
-        this.projectFunding.find(x => x.active == 'Preliminary').annualTotalY1 = newAnnualTotalY1;
-        this.projectFunding.find(x => x.active == 'Preliminary').annualTotal = newAnnualTotal;
-        this.year1Value =newAnnualTotalY1;
-        this.forecastsForm.controls.find(control => control.get('budgetData').value == "OpEx Forecast" && control.get('active').value=="Preliminary").patchValue({
-          annualTotalY1: newAnnualTotalY1
-        }, {emitEvent : false});
-    }else{
-        this.projectFunding.find(x => x.active == 'Current').annualTotalY1 = newAnnualTotalY1;
-        this.projectFunding.find(x => x.active == 'Current').annualTotal = newAnnualTotal;
-        this.year1Value =newAnnualTotalY1;
-        this.forecastsForm.controls.find(control => control.get('budgetData').value == "OpEx Forecast" && control.get('active').value=="Current").patchValue({
-          annualTotalY1: newAnnualTotalY1
-        }, {emitEvent : false});
-    }
+
+    // Update the state atomically
+    this.projectFunding = updatedProjectFunding;
+    this.cdRef.detectChanges(); // Trigger change detection if necessary
+    this.recalculateTotalCapex();
+  }
+
+//     this.forecastsForm.controls.forEach((control, index) => {
+//       if (control.get('isopen').value == 1) {
+//     //console.log(isOpenEntry)
+//     const newAnnualTotal =
+//         (isNaN(control.value.apr) ? 0 : control.value.apr) +
+//         (isNaN(control.value.may) ? 0 : control.value.may) +
+//         (isNaN(control.value.jun) ? 0 : control.value.jun) +
+//         (isNaN(control.value.jul) ? 0 : control.value.jul) +
+//         (isNaN(control.value.aug) ? 0 : control.value.aug) +
+//         (isNaN(control.value.sep) ? 0 : control.value.sep) +
+//         (isNaN(control.value.oct) ? 0 : control.value.oct) +
+//         (isNaN(control.value.nov) ? 0 : control.value.nov) +
+//         (isNaN(control.value.dec) ? 0 : control.value.dec) +
+//         (isNaN(control.value.jan) ? 0 : control.value.jan) +
+//         (isNaN(control.value.feb) ? 0 : control.value.feb) +
+//         (isNaN(control.value.mar) ? 0 : control.value.mar);
+//         const newAnnualTotalY1 = 
+//         (isNaN(control.value.aprY1) ? 0 : control.value.aprY1) +
+//         (isNaN(control.value.mayY1) ? 0 : control.value.mayY1) +
+//         (isNaN(control.value.junY1) ? 0 : control.value.junY1) +
+//         (isNaN(control.value.julY1) ? 0 : control.value.julY1) +
+//         (isNaN(control.value.augY1) ? 0 : control.value.augY1) +
+//         (isNaN(control.value.sepY1) ? 0 : control.value.sepY1) +
+//         (isNaN(control.value.octY1) ? 0 : control.value.octY1) +
+//         (isNaN(control.value.novY1) ? 0 : control.value.novY1) +
+//         (isNaN(control.value.decY1) ? 0 : control.value.decY1) +
+//         (isNaN(control.value.janY1) ? 0 : control.value.janY1) +
+//         (isNaN(control.value.febY1) ? 0 : control.value.febY1) +
+//         (isNaN(control.value.marY1) ? 0 : control.value.marY1);
+//         control.patchValue({
+//           annualTotal: newAnnualTotal,
+//           annualTotalY1: newAnnualTotalY1
+//       }, { emitEvent: false });
+//       if (this.projectFunding[index] && this.projectFunding[index].isopen == 1) {
+//         this.projectFunding[index] = { ...this.projectFunding[index], annualTotal: newAnnualTotal, annualTotalY1: newAnnualTotalY1 };
+//       }
+//   //});
+//   console.log(this.projectFunding)
+
+// }
+//     })
+//   this.cdRef.detectChanges();
+//   this.recalculateTotalCapex();
+//   }
+  
+
 }
 
-this.cdRef.detectChanges();
-this.recalculateTotalCapex();
-
-}
 
 recalculateTotalCapex() {
-  const isOpenEntry = this.forecastsForm.controls.find(control => control.get('isopen').value == 1);
-  const newTotal =
-      (isNaN(isOpenEntry.value.annualTotal) ? 0 : isOpenEntry.value.annualTotal) +
-      (isNaN(isOpenEntry.value.historical) ? 0 : isOpenEntry.value.historical) +
-      (isNaN(isOpenEntry.value.y1) ? 0 : isOpenEntry.value.y1) +
-      (isNaN(isOpenEntry.value.y2) ? 0 : isOpenEntry.value.y2) +
-      (isNaN(isOpenEntry.value.y3) ? 0 : isOpenEntry.value.y3) +
-      (isNaN(isOpenEntry.value.y4) ? 0 : isOpenEntry.value.y4) +
-      (isNaN(isOpenEntry.value.y5) ? 0 : isOpenEntry.value.y5);
-  isOpenEntry.patchValue({
+  if(this.forecastsSubmit.length > 0)
+  {
+    const updatedProjectFunding = this.projectFunding.map((project, index) => {
+      // Check if the project is open
+      if (project.isopen === 1) {
+        const control = this.forecastsForm.controls[index];
+    // Calculate the new total capex
+    const newTotal = [
+      control.value.annualTotal,
+      control.value.historical,
+      control.value.annualTotalY1,
+      control.value.y2,
+      control.value.y3,
+      control.value.y4,
+      control.value.y5
+    ].reduce((total, value) => total + (isNaN(value) ? 0 : parseFloat(value)), 0);
+
+    // Update the form control for cumulativeTotal
+    control.patchValue({
       cumulativeTotal: newTotal
-  });
-  const isOpenForecast = this.projectFunding.find(value => value.isopen == 1);
-  if (isOpenForecast) {
-      this.openEntry.cumulativeTotal = newTotal;
-      this.projectFunding = this.projectFunding.map(forecast => {
-          if (forecast.isopen == 1) {
-              return this.openEntry;
-          } else {
-              return forecast;
-          }
-      });
-      this.cdRef.detectChanges();
+    }, { emitEvent: false });
+
+    // Return a new object for the project with the updated cumulativeTotal
+    return { ...project, cumulativeTotal: newTotal };
   }
-  this.budgetService.setTextColors();
-  this.formValue()
+  // For projects that are not open or don't need updating, return them unchanged
+  return project;
+});
+
+// Update the projectFunding array with the new data
+this.projectFunding = updatedProjectFunding;
+this.cdRef.detectChanges(); // Ensure UI is updated with the new data
+this.formValue(); // Update any other state or perform additional operations as needed
+}
 }
 
 formValue() {
+  //this.recalculateAnnualTotal()
+  //this.recalculateTotalCapex()
   var form = this.forecastsForm.getRawValue()
   if (form.length > 0) {
       this.forecastsSubmit = []
@@ -409,6 +477,7 @@ formValue() {
   } else {
       this.forecastsSubmit = []
   }
+  //console.log(this.forecastsSubmit)
 }
 
 getNextField(field: string): string {
@@ -450,6 +519,12 @@ getNextField(field: string): string {
 
 submitForecasts() {
 
+}
+
+showConfirmationMessage(event) {
+  const confirmationMessage = 'Are you sure you want to exit? All unsaved data will be lost.';
+  (event || window.event).returnValue = confirmationMessage;
+  return confirmationMessage;
 }
 
 }
