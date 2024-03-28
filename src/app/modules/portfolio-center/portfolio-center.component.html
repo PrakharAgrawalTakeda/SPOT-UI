@@ -21,10 +21,10 @@
         [ngStyle]="{ 'position' : PortfolioCenterService.drawerOpenedPrakharTemp ? 'fixed' : 'relative'}">
         <!-- Drawer -->
         <mat-drawer
-            [ngClass]="{'w-full': showContent && !showFilter, 'w-2qua': showContent && showFilter, 'dark:bg-gray-900': true, 'overflow-hidden': true}"
+            [ngClass]="{'w-full': showContent && matPanelType == 'BulkReport', 'w-2qua': showContent && matPanelType == 'Filter', 'dark:bg-gray-900': true, 'overflow-hidden': true}"
             [autoFocus]="false" [mode]="'over'" [position]="'end'" #filterDrawer (openedChange)="captureClose($event)">
             <form class="w-full overflow-hidden h-full" [formGroup]="PortfolioFilterForm"
-                *ngIf="showContent && showFilter" style="overflow-y: scroll">
+                *ngIf="showContent && matPanelType == 'Filter'" style="overflow-y: scroll">
                 <div class=" form-ask-need overflow-y-scroll"
                     style="height: calc(calc(100vh/ var(--custom-zoom)) - 80px)">
                     <div class="flex justify-end items-center">
@@ -234,7 +234,7 @@
             </form>
             <!-- GENERATE REPORT -->
             <div class="mt-3 pl-3 pr-3 w-full" #target id="scheduleTableDiv" style="height: calc(calc(100vh/ var(--custom-zoom)) - 100px)"
-                *ngIf="showContent && !showFilter">
+                *ngIf="showContent && matPanelType == 'BulkReport'">
                 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="true" [scrollbarH]="false"
                     columnMode="force" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
                     [limit]="size" (page)="setPage('',$event)" (sort)="sort($event)" [virtualization]="false"

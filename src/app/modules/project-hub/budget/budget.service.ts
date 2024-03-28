@@ -382,7 +382,12 @@ export class BudgetService {
         if(this.openEntry){
             let year = new Date().getFullYear()
             let month = new Date().getMonth()
-            if(month < 3){
+            // Note: By Darshan on 28.03.2024
+            //       Year labels are changed based on month,
+            //       in 2024, rollover was done done early due to Easter holidays
+            //       This should be updated in back to month < 3 for 2025
+            //       This is a temporary fix until a better solution is implemented
+            if(month < 2){
                 year = year - 1;
             }
             let year2 = year + 1;

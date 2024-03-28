@@ -199,7 +199,8 @@ export class PortfolioCenterComponent implements OnInit {
   // The current page number
   pageNumber = 0
   groupData: any = [];
-  showFilter = false
+  //showFilter = false
+  matPanelType: 'Filter'| 'BulkReport'
   toggleObject = {};
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
   initial: any;
@@ -1107,7 +1108,7 @@ export class PortfolioCenterComponent implements OnInit {
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'Escape') {
       if (this.PortfolioCenterService.drawerOpenedPrakharTemp) {
-        if (this.showFilter) {
+        if (this.matPanelType == 'Filter') {
           this.Closefilter()
         }
         else {
@@ -1625,7 +1626,6 @@ export class PortfolioCenterComponent implements OnInit {
         this.filterDrawer.close()
         this.PortfolioCenterService.drawerOpenedPrakharTemp = false
         this.resetpage()
-        this.showFilter = false
       }
       // this.filterDrawer.close()
       // this.PortfolioCenterService.drawerOpenedPrakharTemp = false
@@ -3114,15 +3114,14 @@ export class PortfolioCenterComponent implements OnInit {
   openDrawer(type) {
     this.PortfolioCenterService.drawerOpenedPrakharTemp = true
     if (type == 'Filter') {
-      this.showFilter = true
       console.log(this.PortfolioFilterForm)
+      this.matPanelType = 'Filter'
       var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
       if (this.PortfolioFilterForm.value.PortfolioOwner?.length == 0 && this.PortfolioFilterForm.value.ExecutionScope?.length == 0 && (LA == null || LA == undefined)) {
         this.localAttributeFormRaw.controls = {}
         this.localAttributeFormRaw.value = {}
         this.localAttributeForm.controls = {}
         this.localAttributeForm.value = {}
-        this.showFilter = true
       }
       else {
         var portfolioOwners = ""
@@ -3154,12 +3153,11 @@ export class PortfolioCenterComponent implements OnInit {
               this.localAttributeForm.removeControl(filterKeys[i])
             }
           }
-          this.showFilter = true
         })
       }
     }
     else {
-      this.showFilter = false
+      this.matPanelType = 'BulkReport'
     }
     this.filterDrawer.toggle();
   }
