@@ -154,7 +154,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         }
     }
     
-    private async refreshData(value: string) {
+    private refreshData(value: string) {
         const params = new HttpParams().set('query', value);
         this.subscription?.unsubscribe(); // Unsubscribe from the previous request
         this.subscription = this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, { body: [] })
