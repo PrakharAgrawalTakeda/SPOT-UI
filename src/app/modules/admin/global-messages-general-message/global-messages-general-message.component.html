@@ -1,1 +1,58 @@
-<p>global-messages-general-message works!</p>
+<div class="w-full bg-card rounded-2xl p-6 ml-6 mr-10 mb-8" *ngIf="viewContent">
+    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+        class="material font-medium text-default text-sm whitespace-nowrap cursor-pointer" [rows]="globalMessages"
+        #GlobalMessageTable>
+        <ngx-datatable-column name='Message Id' prop="messageId" [flexGrow]="1" [resizeable]="false" [sortable]="false"
+            [draggable]="false">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Message Title" prop="messageTitle" [flexGrow]="5" [resizeable]="false"
+            [sortable]="true" [draggable]="false">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Message Creation Date" prop="messageCreationDate" [flexGrow]="1.5" [resizeable]="false" [sortable]="false"
+            [draggable]="false">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value | date:'dd-MMM-yyyy'}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Active" prop="isActive" [flexGrow]="1.5" [resizeable]="false" [sortable]="false"
+            [draggable]="false">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [canAutoResize]="false"
+            [draggable]="false">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                <div class="flex justify-start items-center gap-6">
+                    <a href="javascript:void(0)" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
+                        <mat-icon *ngIf='!expanded' svgIcon="heroicons_outline:chevron-down"></mat-icon>
+                        <mat-icon *ngIf='expanded' svgIcon="heroicons_outline:chevron-up"></mat-icon>
+                    </a>
+                    <a href="javascript:void(0)" title="Edit Single" (click)="dataloader()">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
+                    </a>
+                    <a href="javascript:void(0)" title="Delete Single" (click)="dataloader()">
+                        <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                    </a>
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow>
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="pb-3 pt-3">
+                    <div>
+                        <strong>Message Preview:</strong>
+                        <div class="py-3" [innerHTML]="row.globalMessageText"></div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+    </ngx-datatable>
+</div>
