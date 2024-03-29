@@ -15,12 +15,12 @@ import { TranslocoModule } from '@ngneat/transloco';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { SharedModule } from 'app/shared/shared.module';
 import { CommonModule } from '@angular/common';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { FuseDrawerModule } from '@fuse/components/drawer';
 import { FuseNavigationModule } from '@fuse/components/navigation';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MatChipsModule } from '@angular/material/chips';
-import {MatSelectModule} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -35,15 +35,27 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ManageUsersEditComponent } from './manage-users-edit/manage-users-edit.component';
 import { AdminComponent } from './admin.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { GlobalMessagesGeneralMessageComponent } from './global-messages-general-message/global-messages-general-message.component';
+import { GeneralAdminToolsComponent } from './general-admin-tools/general-admin-tools.component';
 
 export const projectRoutes: Routes = [
-  { path: '', component: AdminComponent },
+  {
+    path: '',
+    component: AdminComponent,
+    children: [
+      { path: '', component: GeneralAdminToolsComponent },
+      { path: 'global-messages', component: GlobalMessagesGeneralMessageComponent }
+    ]
+  }
+
 ];
 
 @NgModule({
   declarations: [
     ManageUsersEditComponent,
-    AdminComponent
+    AdminComponent,
+    GlobalMessagesGeneralMessageComponent,
+    GeneralAdminToolsComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),
