@@ -5,6 +5,8 @@ import { BudgetService } from 'app/modules/project-hub/budget/budget.service';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { FuseConfirmationService } from '@fuse/services/confirmation/confirmation.service';
+import moment from 'moment';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-forecast-bulk-edit',
@@ -35,7 +37,8 @@ export class ForecastBulkEditComponent {
   year1Value = 1;
   forecastsSubmit = []
   projectFundingOpex: any;
-constructor(public PortfolioCenterService: PortfolioCenterService,public fuseAlert: FuseConfirmationService, public projecthubservice: ProjectHubService, private portfoliService: PortfolioApiService, public budgetService: BudgetService, private cdRef: ChangeDetectorRef)
+  today = new Date();
+constructor(public PortfolioCenterService: PortfolioCenterService, private _Activatedroute: ActivatedRoute,private apiService: PortfolioApiService,public fuseAlert: FuseConfirmationService, public projecthubservice: ProjectHubService, private portfoliService: PortfolioApiService, public budgetService: BudgetService, private cdRef: ChangeDetectorRef)
 {
   this.forecastsForm.valueChanges.subscribe(() => {
     this.formValue();
@@ -275,7 +278,7 @@ recalculateAnnualTotal() {
     const updatedProjectFunding = this.projectFunding.map((project, index) => {
       if (project.isopen === 1) {
         const control = this.forecastsForm.controls[index];
-        // Calculate your totals here based on the control's value...
+
         const newAnnualTotal =
         (isNaN(control.value.apr) ? 0 : control.value.apr) +
         (isNaN(control.value.may) ? 0 : control.value.may) +
@@ -303,7 +306,7 @@ recalculateAnnualTotal() {
         (isNaN(control.value.febY1) ? 0 : control.value.febY1) +
         (isNaN(control.value.marY1) ? 0 : control.value.marY1);
 
-        // Update control values (consider using a method to do this if complex)
+       
         control.patchValue({
           annualTotal: newAnnualTotal,
           annualTotalY1: newAnnualTotalY1,
@@ -317,7 +320,7 @@ recalculateAnnualTotal() {
 
     // Update the state atomically
     this.projectFunding = updatedProjectFunding;
-    this.cdRef.detectChanges(); // Trigger change detection if necessary
+    this.cdRef.detectChanges();
     this.recalculateTotalCapex();
   }
 
@@ -400,10 +403,10 @@ recalculateTotalCapex() {
   return project;
 });
 
-// Update the projectFunding array with the new data
+
 this.projectFunding = updatedProjectFunding;
-this.cdRef.detectChanges(); // Ensure UI is updated with the new data
-this.formValue(); // Update any other state or perform additional operations as needed
+this.cdRef.detectChanges(); 
+this.formValue(); 
 }
 }
 
@@ -518,7 +521,77 @@ getNextField(field: string): string {
 }
 
 submitForecasts() {
+  if (JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit)) {
+    this.projecthubservice.isFormChanged = false
 
+  const submitData = this.forecastsSubmit.map(item => {
+    return {
+      projectId: item.projectID, 
+      budgetForecastData: {
+        budgetDataId: item.budgetDataID,
+        budgetGlobalId: item.budgetGlobalID,
+        projectId: item.projectID,
+        budgetDataTypeId: item.budgetDataTypeID,
+        apr: item.apr,
+        may: item.may,
+        jun: item.jun,
+        jul: item.jul,
+        aug: item.aug,
+        sep: item.sep,
+        oct: item.oct,
+        nov: item.nov,
+        dec: item.dec,
+        jan: item.jan,
+        feb: item.feb,
+        mar: item.mar,
+        y1: item.annualTotalY1, 
+        y2: item.y2,
+        y3: item.y3,
+        y4: item.y4,
+        y5: item.y5,
+        lastSubmitted: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+        submittedById: this._Activatedroute.parent.snapshot.paramMap.get("id"), 
+        annualTotal: item.annualTotal,
+        cumulativeTotal: item.cumulativeTotal,
+        afpdeviationCodeId: null, 
+        mtdpdeviationCodeId: null, 
+        committedSpend: 0
+      },
+      budgetForecastDataY1: {
+        budgetDataId: item.budgetDataIDY1,
+        budgetGlobalId: item.budgetGlobalID, 
+        projectId: item.projectID,
+        budgetDataTypeId: item.budgetDataTypeID, 
+        apr: item.aprY1,
+        may: item.mayY1,
+        jun: item.junY1,
+        jul: item.julY1,
+        aug: item.augY1,
+        sep: item.sepY1,
+        oct: item.octY1,
+        nov: item.novY1,
+        dec: item.decY1,
+        jan: item.janY1,
+        feb: item.febY1,
+        mar: item.marY1
+      }
+    };
+  });
+  
+  console.log(submitData);
+
+  this.apiService.updateForecast(submitData).then(res => {
+    this.projecthubservice.isNavChanged.next(true)
+    this.projecthubservice.submitbutton.next(true)
+    this.projecthubservice.successSave.next(true)
+    this.projecthubservice.toggleDrawerOpen('', '', [], '')
+})
+} else {
+this.projecthubservice.submitbutton.next(true)
+this.projecthubservice.toggleDrawerOpen('', '', [], '')
+this.projecthubservice.isNavChanged.next(true)
+}
+  
 }
 
 showConfirmationMessage(event) {

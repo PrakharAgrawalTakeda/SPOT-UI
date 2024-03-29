@@ -218,4 +218,11 @@ export class PortfolioApiService {
         const response = lastValueFrom(abc$);
         return response;
     }
+
+    async updateForecast(body) {
+        var link = GlobalVariables.apiurl + "PortfolioCenter/ForecastBulkEditData/BulkEdit"
+        const abc$ = this.http.put(link,body)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
 }

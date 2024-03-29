@@ -178,11 +178,11 @@ export class MyPreferenceComponent implements OnInit {
                 title: 'Milestone Sets',
                 link: 'my-preference/milestone-sets'
             })
-            this.navItem.children.push({
-                title: 'Metric Repository',
-                link: 'my-preference/metric-repository'
-            })
         }
+        this.navItem.children.push({
+            title: 'Metric Repository',
+            link: 'my-preference/metric-repository'
+        })
 
     }
 }
