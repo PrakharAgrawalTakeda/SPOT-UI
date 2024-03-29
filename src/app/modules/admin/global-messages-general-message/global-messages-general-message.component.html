@@ -1,4 +1,9 @@
 <div class="w-full bg-card rounded-2xl p-6 ml-6 mr-10 mb-8" *ngIf="viewContent">
+    <div class="w-full pb-6  flex justify-end items-center">
+        <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)='adminService.toggleDrawerOpen("GlobalMessageEdit", "new", {}, "", true)'>
+            <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+        </button>
+    </div>
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
         class="material font-medium text-default text-sm whitespace-nowrap cursor-pointer" [rows]="globalMessages"
         #GlobalMessageTable>

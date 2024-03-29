@@ -37,6 +37,7 @@ import { AdminComponent } from './admin.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { GlobalMessagesGeneralMessageComponent } from './global-messages-general-message/global-messages-general-message.component';
 import { GeneralAdminToolsComponent } from './general-admin-tools/general-admin-tools.component';
+import { GlobalMessageEditComponent } from './global-messages-general-message/global-message-edit/global-message-edit.component';
 
 export const projectRoutes: Routes = [
   {
@@ -55,7 +56,8 @@ export const projectRoutes: Routes = [
     ManageUsersEditComponent,
     AdminComponent,
     GlobalMessagesGeneralMessageComponent,
-    GeneralAdminToolsComponent
+    GeneralAdminToolsComponent,
+    GlobalMessageEditComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),

@@ -3,6 +3,7 @@
     [ngClass]="{'fuse-drawer-large':adminService.fuseDrawerLarge}">
     <div>
         <app-manage-users-edit *ngIf="adminService.itemtype == 'AdminManageUserRoles'"></app-manage-users-edit>
+        <app-global-message-edit *ngIf="adminService.itemtype == 'GlobalMessageEdit'"></app-global-message-edit>
     </div>
 </fuse-drawer>
 
