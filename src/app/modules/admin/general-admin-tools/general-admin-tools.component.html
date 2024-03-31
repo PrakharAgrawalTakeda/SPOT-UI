@@ -1,0 +1,11 @@
+<div class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
+        [ngStyle]="{ 'position' : adminService.drawerOpenedright ? 'fixed' : 'relative'}">
+        <div class="flex flex-col min-w-0 overflow-hidden p-6 pr-3 pt-0 w-full">
+            <div class="p-6 bg-card rounded-2xl shadow w-full mb-6 flex justify-between items-center">
+                <p class="font-bold">Role Assignment</p>
+                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                    (click)="adminService.toggleDrawerOpen('AdminManageUserRoles', '' , '' , '')">
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                </button>
+            </div>
+    </div>
