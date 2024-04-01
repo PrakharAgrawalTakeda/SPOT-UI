@@ -2,6 +2,7 @@
     (openedChanged)="projecthubservice.drawerOpenedChanged($event)" [mode]="'over'" #myDiv [position]="'right'"
     [ngClass]="{'bulkEdit':projecthubservice.isBulkEdit , 'fuse-drawer-small':projecthubservice.fuseDrawerSmall}">
     <div>
+        <app-global-messages-panel *ngIf="projecthubservice.itemtype == 'GlobalMessagesPanel'"></app-global-messages-panel>
         <app-ask-need-view-edit *ngIf="projecthubservice.itemtype == 'AskNeed'"></app-ask-need-view-edit>
         <app-ask-need-bulk-edit *ngIf="projecthubservice.itemtype == 'AskNeedBulkEdit'"></app-ask-need-bulk-edit>
         <app-ask-need-link *ngIf="projecthubservice.itemtype == 'LinkAskNeeds'"></app-ask-need-link>
@@ -272,7 +273,7 @@
     [ngClass]="navigationAppearance=='default'?'project-hub-default':'project-hub-dense'"
     [ngStyle]="{ 'position' : projecthubservice.drawerOpenedright ? 'fixed' : 'relative'}">
     <div class="p-8 pb-6 pt-2" *ngIf="viewContent">
-        <spot-global-message [callLocation]="'ProjectHub'"></spot-global-message>
+        <!--<spot-global-message [callLocation]="'ProjectHub'"></spot-global-message>-->
         <div class="w-full bg-card shadow rounded-2xl">
             <div class="flex-1 min-w-0 p-6 pt-1" [ngClass]="{'text-gray-400': projectDetails.isArchived}">
                 <!-- Title -->

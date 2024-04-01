@@ -39,6 +39,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { SaveBookmarkComponent } from './save-bookmark/save-bookmark.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MessagesModule } from 'app/layout/common/messages/messages.module';
 
 export const projectRoutes: Route[] = [
   {
@@ -91,6 +92,7 @@ export const projectRoutes: Route[] = [
         MatTooltipModule,
         SpreadsheetModule,
         SpotGlobalMessageModule,
+        MessagesModule
     ],
     exports: [RouterModule],
 })

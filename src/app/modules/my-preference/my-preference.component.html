@@ -2,6 +2,7 @@
              (openedChanged)="myPreferenceService.drawerOpenedChanged($event)" [mode]="'over'" [position]="'right'"
              [ngClass]="{'fuse-drawer-large':myPreferenceService.fuseDrawerLarge}">
     <div>
+        <app-global-messages-panel *ngIf="myPreferenceService.itemtype == 'GlobalMessagesPanel'"></app-global-messages-panel>
         <app-milestone-set-view-edit *ngIf="myPreferenceService.itemtype == 'MilestoneSetsAddNew'"></app-milestone-set-view-edit>
         <app-email-notifications-edit
             *ngIf="myPreferenceService.itemtype == 'EmailNotiEdit'"></app-email-notifications-edit>
@@ -15,7 +16,7 @@
 </fuse-drawer>
 
 <div *ngIf="viewContent" class="w-full pt-20">
-    <spot-global-message [callLocation]="'MyPreference'"></spot-global-message>
+    <!--<spot-global-message [callLocation]="'MyPreference'"></spot-global-message>-->
     <div class="flex flex-col bg-card p-6 pt-3 pb-4 m-6 mb-5 mt-0 shadow rounded-2xl">
         <div class="flex justify-between items-start w-full">
             <div class="w-[73%]">

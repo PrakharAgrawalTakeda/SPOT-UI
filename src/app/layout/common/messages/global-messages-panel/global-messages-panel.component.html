@@ -1,0 +1,49 @@
+<div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Messages</div>
+    <div style="padding-top: 2px">
+        <a (click)="readLaterAndClose()" href="javascript:void(0) " *ngIf="origin == 'unread'"
+            title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+        <a (click)="closePanel()" href="javascript:void(0) " *ngIf="origin == 'panel'"
+            title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+    </div>
+</div>
+<div class="mat-app-background w-full flex flex-col overflow-hidden"
+    style='height: calc(calc(100vh/ var(--custom-zoom)) - 110px)'>
+    <div class="overflow-scroll w-full" style='height: calc(calc(100vh/ var(--custom-zoom)) - 110px)'>
+        <div *ngFor="let message of messages" class="bg-card rounded-2xl shadow p-6 m-6 message">
+            <div>
+                <div class="flex items-center justify-between pb-3">
+                    <div class="text-lg font-bold text-primary">{{message.messageTitle}}</div>
+                    <div>{{message.messageCreationDate| date:'dd-MMM-YYYY'}}</div>
+                </div>
+                <div>
+                    <div class="card" [innerHTML]="message.globalMessageText"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<div class="absolute bottom-2 w-full px-3" *ngIf="origin == 'unread'">
+    <div class="pr-3 flex items-start justify-between mt-6">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+            (click)="readLaterAndClose()">
+            Read Later
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="readAndUnderstood()">
+            Read and Understood
+        </button>
+    </div>
+</div>
+<div class="absolute bottom-2 w-full px-3" *ngIf="origin == 'panel'">
+    <div class="pr-3 flex items-start justify-between mt-6">
+       <div></div>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="closePanel()">
+            Ok
+        </button>
+    </div>
+</div>

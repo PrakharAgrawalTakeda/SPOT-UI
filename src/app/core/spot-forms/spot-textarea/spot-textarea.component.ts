@@ -6,6 +6,7 @@ import {
     Output,
     EventEmitter,
     ViewChild,
+    ViewEncapsulation,
 } from '@angular/core';
 import {
     NG_VALUE_ACCESSOR,
@@ -25,6 +26,7 @@ import { QuillEditorComponent } from 'ngx-quill';
             multi: true,
         },
     ],
+    encapsulation : ViewEncapsulation.None
 })
 export class SpotTextareaComponent implements OnInit, ControlValueAccessor {
     @Input() showLabel: boolean = true;
