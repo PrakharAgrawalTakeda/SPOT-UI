@@ -1,0 +1,34 @@
+<div>
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Global Message Add/Edit</div>
+        <div style="padding-top: 2px"><a (click)="adminService.toggleDrawerOpen('', '',[],'')" href="javascript:void(0)"
+                title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="overflow-hidden  w-full">
+        <form class="w-full p-[20px]" [formGroup]="globalMessageForm">
+            <div class="w-full flex justify-between items-center gap-6">
+                <spot-input class="w-11/12" formControlName="messageTitle" name="messageTitle" [label]="'Message Title'"
+                    [placeholder]="'Message Title'">
+                </spot-input>
+                <spot-toggle class="w-1/12" formControlName="isActive" name="isActive" [label]="'Active'">
+                </spot-toggle>
+            </div>
+            <spot-textarea formControlName="globalMessageText" name="globalMessageText" [label]="'Message'" [rows]="20"
+            [isQuill]="true"></spot-textarea>
+        </form>
+    </div>
+    <div class="absolute bottom-2 w-full px-3">
+        <div class="pr-3 flex items-start justify-between mt-6">
+            <a class="min-w-26" mat-flat-button [color]="'primary'"
+                (click)="adminService.toggleDrawerOpen('', '',[],'')">
+                Cancel
+            </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="ngOnInit()">
+                Submit
+            </button>
+        </div>
+    </div>
+</div>

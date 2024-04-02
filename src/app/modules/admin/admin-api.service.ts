@@ -16,4 +16,10 @@ export class AdminApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+  async getGlobalMessages() {
+    var url = GlobalVariables.apiurl + "GlobalMessages"
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }

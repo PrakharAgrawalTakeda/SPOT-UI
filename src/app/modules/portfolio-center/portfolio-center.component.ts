@@ -175,7 +175,7 @@ export class PortfolioCenterComponent implements OnInit {
     BookmarksForm = new FormGroup({
         BookmarkName: new FormControl(),
     });
-    
+
     selectedBookmarkName: string = '';
 
     ProjectTableColumns = new FormGroup({
@@ -280,7 +280,8 @@ export class PortfolioCenterComponent implements OnInit {
     // The current page number
     pageNumber = 0;
     groupData: any = [];
-    showFilter = false;
+    //showFilter = false;
+    matPanelType: 'Filter' | 'BulkReport'
     toggleObject = {};
     @ViewChild('filterDrawer') filterDrawer: MatSidenav;
     initial: any;
@@ -444,11 +445,11 @@ export class PortfolioCenterComponent implements OnInit {
 
     async ngOnInit() {
 
-            this.BookmarksForm.get('BookmarkName').valueChanges.subscribe(val => {
-                const selectedOption = this.getBookmarkArray().find(option => option.bookmarkId === val);
-                this.selectedBookmarkName = selectedOption ? selectedOption.bookmarkName : '';
-            });
-        
+        this.BookmarksForm.get('BookmarkName').valueChanges.subscribe(val => {
+            const selectedOption = this.getBookmarkArray().find(option => option.bookmarkId === val);
+            this.selectedBookmarkName = selectedOption ? selectedOption.bookmarkName : '';
+        });
+
         this.activeaccount = this.msal.instance.getActiveAccount();
 
         this.showContent = false;
@@ -1138,8 +1139,8 @@ export class PortfolioCenterComponent implements OnInit {
                         return a.order < b.order
                             ? -1
                             : a.order == b.order
-                            ? 0
-                            : 1;
+                                ? 0
+                                : 1;
                     });
                     if (filterGroups.length > 0) {
                         filterGroups[
@@ -1302,34 +1303,34 @@ export class PortfolioCenterComponent implements OnInit {
                                         value: res.budgetTile.capex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.capex.plan
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.capex.plan
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                         value2: res.budgetTile.opex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.opex.plan
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.opex.plan
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                     },
                                     {
@@ -1337,34 +1338,34 @@ export class PortfolioCenterComponent implements OnInit {
                                         value: res.budgetTile.capex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.capex.previous
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.capex.previous
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                         value2: res.budgetTile.opex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.opex.previous
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.opex.previous
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                     },
                                     {
@@ -1372,34 +1373,34 @@ export class PortfolioCenterComponent implements OnInit {
                                         value: res.budgetTile.capex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.capex.current
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.capex.current
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                         value2: res.budgetTile.opex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.opex.current
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.opex.current
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                     },
                                     {
@@ -1407,34 +1408,34 @@ export class PortfolioCenterComponent implements OnInit {
                                         value: res.budgetTile.capex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.capex.ytd
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.capex.ytd
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                         value2: res.budgetTile.opex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.opex.ytd
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.opex.ytd
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                     },
                                     {
@@ -1442,34 +1443,34 @@ export class PortfolioCenterComponent implements OnInit {
                                         value: res.budgetTile.capex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.capex.preliminaryForecast
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.capex.preliminaryForecast
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                         value2: res.budgetTile.opex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.opex.preliminaryForecast
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.opex.preliminaryForecast
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                     },
                                 ];
@@ -1480,34 +1481,34 @@ export class PortfolioCenterComponent implements OnInit {
                                         value: res.budgetTile.capex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.capex.plan
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.capex.plan
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                         value2: res.budgetTile.opex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.opex.plan
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.opex.plan
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                     },
                                     {
@@ -1515,34 +1516,34 @@ export class PortfolioCenterComponent implements OnInit {
                                         value: res.budgetTile.capex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.capex.previous
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.capex.previous
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                         value2: res.budgetTile.opex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.opex.previous
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.opex.previous
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                     },
                                     {
@@ -1550,34 +1551,34 @@ export class PortfolioCenterComponent implements OnInit {
                                         value: res.budgetTile.capex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.capex.current
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.capex.current
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                         value2: res.budgetTile.opex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.opex.current
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.opex.current
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                     },
                                     {
@@ -1585,34 +1586,34 @@ export class PortfolioCenterComponent implements OnInit {
                                         value: res.budgetTile.capex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.capex.ytd
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.capex.ytd
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                         value2: res.budgetTile.opex
                                             ? this.budgetCurrency != 'OY'
                                                 ? res.budgetTile.opex.ytd
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                                 : res.budgetTile.opex.ytd
-                                                      .toFixed(4)
-                                                      .toString()
-                                                      .replace(
-                                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                                          '$1,'
-                                                      )
+                                                    .toFixed(4)
+                                                    .toString()
+                                                    .replace(
+                                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                                        '$1,'
+                                                    )
                                             : 0,
                                     },
                                 ];
@@ -1729,37 +1730,37 @@ export class PortfolioCenterComponent implements OnInit {
                                 return a.projectUid < b.projectUid
                                     ? -1
                                     : a.projectUid == b.projectUid
-                                    ? 0
-                                    : 1;
+                                        ? 0
+                                        : 1;
                             });
                             res.projectDetails.sort((a, b) => {
                                 return a.problemUniqueId < b.problemUniqueId
                                     ? -1
                                     : a.problemUniqueId == b.problemUniqueId
-                                    ? 0
-                                    : 1;
+                                        ? 0
+                                        : 1;
                             });
                             res.conditionalFormattingLabels.sort((a, b) => {
                                 return a.projectId < b.projectId
                                     ? -1
                                     : a.projectId == b.projectId
-                                    ? 0
-                                    : 1;
+                                        ? 0
+                                        : 1;
                             });
                             res.trendingIndicators.sort((a, b) => {
                                 return a.projectId < b.projectId
                                     ? -1
                                     : a.projectId == b.projectId
-                                    ? 0
-                                    : 1;
+                                        ? 0
+                                        : 1;
                             });
                             if (res.overallStatusInfo) {
                                 res.overallStatusInfo.sort((a, b) => {
                                     return a.projectId < b.projectId
                                         ? -1
                                         : a.projectId == b.projectId
-                                        ? 0
-                                        : 1;
+                                            ? 0
+                                            : 1;
                                 });
                             }
                             this.projectNames = res.projectDetails;
@@ -1928,7 +1929,7 @@ export class PortfolioCenterComponent implements OnInit {
     handleKeyboardEvent(event: KeyboardEvent) {
         if (event.key === 'Escape') {
             if (this.PortfolioCenterService.drawerOpenedPrakharTemp) {
-                if (this.showFilter) {
+                if (this.matPanelType == 'Filter') {
                     this.Closefilter();
                 } else {
                     this.Close();
@@ -2301,7 +2302,7 @@ export class PortfolioCenterComponent implements OnInit {
                                 var data = [];
                                 if (
                                     this.localAttributeForm.controls[
-                                        mainObj[i].uniqueId
+                                    mainObj[i].uniqueId
                                     ] != null &&
                                     this.localAttributeForm.controls[
                                         mainObj[i].uniqueId
@@ -2357,7 +2358,7 @@ export class PortfolioCenterComponent implements OnInit {
                                 var data = [];
                                 if (
                                     this.localAttributeForm.controls[
-                                        mainObj[i].uniqueId
+                                    mainObj[i].uniqueId
                                     ] != null &&
                                     this.localAttributeForm.controls[
                                         mainObj[i].uniqueId
@@ -2720,7 +2721,6 @@ export class PortfolioCenterComponent implements OnInit {
                     this.filterDrawer.close();
                     this.PortfolioCenterService.drawerOpenedPrakharTemp = false;
                     this.applyAllFilters();
-                    this.showFilter = false;
                 }
 
                 // COMMENTED CODE
@@ -2913,7 +2913,7 @@ export class PortfolioCenterComponent implements OnInit {
                                 var data = [];
                                 if (
                                     this.localAttributeForm.controls[
-                                        mainObj[i].uniqueId
+                                    mainObj[i].uniqueId
                                     ] != null &&
                                     this.localAttributeForm.controls[
                                         mainObj[i].uniqueId
@@ -2969,7 +2969,7 @@ export class PortfolioCenterComponent implements OnInit {
                                 var data = [];
                                 if (
                                     this.localAttributeForm.controls[
-                                        mainObj[i].uniqueId
+                                    mainObj[i].uniqueId
                                     ] != null &&
                                     this.localAttributeForm.controls[
                                         mainObj[i].uniqueId
@@ -3353,7 +3353,6 @@ export class PortfolioCenterComponent implements OnInit {
                     this.BookmarksForm.controls.BookmarkName.patchValue(
                         'DefaultFilter'
                     );
-                    this.showFilter = false;
                 }
 
                 this.PortfolioFilterForm.markAsPristine();
@@ -3690,8 +3689,8 @@ export class PortfolioCenterComponent implements OnInit {
                             .map((value, index) =>
                                 value
                                     ? this.bulkreportdata[
-                                          index
-                                      ].problemId.toString()
+                                        index
+                                    ].problemId.toString()
                                     : null
                             )
                             .filter(Boolean);
@@ -3872,8 +3871,8 @@ export class PortfolioCenterComponent implements OnInit {
                         .map((value, index) =>
                             value
                                 ? this.bulkreportdata[
-                                      index
-                                  ].problemId.toString()
+                                    index
+                                ].problemId.toString()
                                 : null
                         )
                         .filter(Boolean);
@@ -4092,34 +4091,34 @@ export class PortfolioCenterComponent implements OnInit {
                 this.projectOverview[i].overallStatus == 'YellowStop'
                     ? (this.projectOverview[i].overallStatus = 'RedStop')
                     : this.projectOverview[i].overallStatus == 'RedStop'
-                    ? (this.projectOverview[i].overallStatus = 'YellowStop')
-                    : this.projectOverview[i].overallStatus;
+                        ? (this.projectOverview[i].overallStatus = 'YellowStop')
+                        : this.projectOverview[i].overallStatus;
                 this.projectOverview[i].scheduleIndicator == 'YellowStop'
                     ? (this.projectOverview[i].scheduleIndicator = 'RedStop')
                     : this.projectOverview[i].scheduleIndicator == 'RedStop'
-                    ? (this.projectOverview[i].scheduleIndicator = 'YellowStop')
-                    : this.projectOverview[i].scheduleIndicator;
+                        ? (this.projectOverview[i].scheduleIndicator = 'YellowStop')
+                        : this.projectOverview[i].scheduleIndicator;
                 this.projectOverview[i].riskIndicator == 'YellowStop'
                     ? (this.projectOverview[i].riskIndicator = 'RedStop')
                     : this.projectOverview[i].riskIndicator == 'RedStop'
-                    ? (this.projectOverview[i].riskIndicator = 'YellowStop')
-                    : this.projectOverview[i].riskIndicator;
+                        ? (this.projectOverview[i].riskIndicator = 'YellowStop')
+                        : this.projectOverview[i].riskIndicator;
                 this.projectOverview[i].askNeedIndicator == 'YellowStop'
                     ? (this.projectOverview[i].askNeedIndicator = 'RedStop')
                     : this.projectOverview[i].askNeedIndicator == 'RedStop'
-                    ? (this.projectOverview[i].askNeedIndicator = 'YellowStop')
-                    : this.projectOverview[i].askNeedIndicator;
+                        ? (this.projectOverview[i].askNeedIndicator = 'YellowStop')
+                        : this.projectOverview[i].askNeedIndicator;
                 this.projectOverview[i].budgetIndicator == 'YellowStop'
                     ? (this.projectOverview[i].budgetIndicator = 'RedStop')
                     : this.projectOverview[i].budgetIndicator == 'RedStop'
-                    ? (this.projectOverview[i].budgetIndicator = 'YellowStop')
-                    : this.projectOverview[i].budgetIndicator;
+                        ? (this.projectOverview[i].budgetIndicator = 'YellowStop')
+                        : this.projectOverview[i].budgetIndicator;
                 this.projectOverview[i].budgetSpendIndicator == 'YellowStop'
                     ? (this.projectOverview[i].budgetSpendIndicator = 'RedStop')
                     : this.projectOverview[i].budgetSpendIndicator == 'RedStop'
-                    ? (this.projectOverview[i].budgetSpendIndicator =
-                          'YellowStop')
-                    : this.projectOverview[i].budgetSpendIndicator;
+                        ? (this.projectOverview[i].budgetSpendIndicator =
+                            'YellowStop')
+                        : this.projectOverview[i].budgetSpendIndicator;
 
                 var preffix = '';
 
@@ -4161,23 +4160,23 @@ export class PortfolioCenterComponent implements OnInit {
                 this.projectOverview[i].calculatedEmissionsImpact1 = this
                     .projectNames[i].calculatedEmissionsImpact
                     ? this.projectNames[i].calculatedEmissionsImpact
-                          .toFixed(1)
-                          .toString()
-                          .replace(
-                              /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                              '$1,'
-                          )
+                        .toFixed(1)
+                        .toString()
+                        .replace(
+                            /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                            '$1,'
+                        )
                     : this.projectNames[i].calculatedEmissionsImpact;
                 this.projectOverview[i].waterImpactUnits =
                     this.projectNames[i].waterImpactUnits;
                 this.projectOverview[i].waterImpactUnits1 = this.projectNames[i]
                     .waterImpactUnits
                     ? this.projectNames[i].waterImpactUnits
-                          .toString()
-                          .replace(
-                              /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                              '$1,'
-                          )
+                        .toString()
+                        .replace(
+                            /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                            '$1,'
+                        )
                     : this.projectNames[i].waterImpactUnits;
                 this.projectOverview[i].problemId =
                     this.projectNames[i].problemId;
@@ -4195,11 +4194,11 @@ export class PortfolioCenterComponent implements OnInit {
                     i
                 ].executionDuration
                     ? this.projects.data[i].executionDuration
-                          .toString()
-                          .replace(
-                              /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                              '$1,'
-                          )
+                        .toString()
+                        .replace(
+                            /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                            '$1,'
+                        )
                     : this.projects.data[i].executionDuration;
                 this.projectOverview[i].overallStatusIndicator =
                     res.trendingIndicators[i].overallStatusIndicator;
@@ -4221,10 +4220,10 @@ export class PortfolioCenterComponent implements OnInit {
                 //   : '';
                 var data = res.overallStatusInfo
                     ? res.overallStatusInfo.filter(
-                          (element) =>
-                              element.projectId ==
-                              this.projectOverview[i].projectUid
-                      )
+                        (element) =>
+                            element.projectId ==
+                            this.projectOverview[i].projectUid
+                    )
                     : [];
                 this.projectOverview[i].overallStatusLastUpdate =
                     data.length != 0
@@ -4237,9 +4236,9 @@ export class PortfolioCenterComponent implements OnInit {
                 if (this.projectOverview[i].overallStatusLastUpdate != '') {
                     if (
                         this.projectOverview[i].overallStatusLastUpdate[0] <=
-                            this.Date2[0] &&
+                        this.Date2[0] &&
                         this.projectOverview[i].overallStatusLastUpdate >=
-                            this.Date3[0]
+                        this.Date3[0]
                     ) {
                         this.projectOverview[i].grey = true;
                     } else if (
@@ -4252,26 +4251,26 @@ export class PortfolioCenterComponent implements OnInit {
                 this.projectOverview[i].notBaselined =
                     res.conditionalFormattingLabels
                         ? res.conditionalFormattingLabels.filter(
-                              (index) =>
-                                  index.projectId ==
-                                  this.projectOverview[i].projectUid
-                          )[0].notBaselined
+                            (index) =>
+                                index.projectId ==
+                                this.projectOverview[i].projectUid
+                        )[0].notBaselined
                         : '';
                 this.projectOverview[i].completed =
                     res.conditionalFormattingLabels
                         ? res.conditionalFormattingLabels.filter(
-                              (index) =>
-                                  index.projectId ==
-                                  this.projectOverview[i].projectUid
-                          )[0].completed
+                            (index) =>
+                                index.projectId ==
+                                this.projectOverview[i].projectUid
+                        )[0].completed
                         : '';
                 this.projectOverview[i].redExecutionCompleteDate =
                     res.conditionalFormattingLabels
                         ? res.conditionalFormattingLabels.filter(
-                              (index) =>
-                                  index.projectId ==
-                                  this.projectOverview[i].projectUid
-                          )[0].redExecutionCompleteDate
+                            (index) =>
+                                index.projectId ==
+                                this.projectOverview[i].projectUid
+                        )[0].redExecutionCompleteDate
                         : '';
 
                 this.projectOverview[i].isCAPSProject = res.projectDetails[i]
@@ -4415,7 +4414,7 @@ export class PortfolioCenterComponent implements OnInit {
                     if (this.pageToggleStates[this.pageNumber][toggleName]) {
                         this.toggles[toggleName].states = [
                             ...this.pageToggleStates[this.pageNumber][
-                                toggleName
+                            toggleName
                             ],
                         ];
                     }
@@ -4433,30 +4432,30 @@ export class PortfolioCenterComponent implements OnInit {
                             return a.projectUid < b.projectUid
                                 ? -1
                                 : a.projectUid == b.projectUid
-                                ? 0
-                                : 1;
+                                    ? 0
+                                    : 1;
                         });
                         res.projectDetails.sort((a, b) => {
                             return a.problemUniqueId < b.problemUniqueId
                                 ? -1
                                 : a.problemUniqueId == b.problemUniqueId
-                                ? 0
-                                : 1;
+                                    ? 0
+                                    : 1;
                         });
                         res.trendingIndicators.sort((a, b) => {
                             return a.projectId < b.projectId
                                 ? -1
                                 : a.projectId == b.projectId
-                                ? 0
-                                : 1;
+                                    ? 0
+                                    : 1;
                         });
                         if (res.overallStatusInfo) {
                             res.overallStatusInfo.sort((a, b) => {
                                 return a.projectId < b.projectId
                                     ? -1
                                     : a.projectId == b.projectId
-                                    ? 0
-                                    : 1;
+                                        ? 0
+                                        : 1;
                             });
                         }
                         if (res.conditionalFormattingLabels != null) {
@@ -4464,8 +4463,8 @@ export class PortfolioCenterComponent implements OnInit {
                                 return a.projectId < b.projectId
                                     ? -1
                                     : a.projectId == b.projectId
-                                    ? 0
-                                    : 1;
+                                        ? 0
+                                        : 1;
                             });
                         }
                         this.projectOverview = res.portfolioDetails;
@@ -4477,68 +4476,68 @@ export class PortfolioCenterComponent implements OnInit {
                                 ' - ' +
                                 (this.projects.data[i].capitalPhaseAbbreviation
                                     ? this.projects.data[i]
-                                          .capitalPhaseAbbreviation
+                                        .capitalPhaseAbbreviation
                                     : 'NA') +
                                 ' - ' +
                                 (this.projects.data[i].oePhaseAbbreviation
                                     ? this.projects.data[i].oePhaseAbbreviation
                                     : 'NA');
                             this.projectOverview[i].overallStatus ==
-                            'YellowStop'
+                                'YellowStop'
                                 ? (this.projectOverview[i].overallStatus =
-                                      'RedStop')
+                                    'RedStop')
                                 : this.projectOverview[i].overallStatus ==
-                                  'RedStop'
-                                ? (this.projectOverview[i].overallStatus =
-                                      'YellowStop')
-                                : this.projectOverview[i].overallStatus;
+                                    'RedStop'
+                                    ? (this.projectOverview[i].overallStatus =
+                                        'YellowStop')
+                                    : this.projectOverview[i].overallStatus;
                             this.projectOverview[i].scheduleIndicator ==
-                            'YellowStop'
+                                'YellowStop'
                                 ? (this.projectOverview[i].scheduleIndicator =
-                                      'RedStop')
+                                    'RedStop')
                                 : this.projectOverview[i].scheduleIndicator ==
-                                  'RedStop'
-                                ? (this.projectOverview[i].scheduleIndicator =
-                                      'YellowStop')
-                                : this.projectOverview[i].scheduleIndicator;
+                                    'RedStop'
+                                    ? (this.projectOverview[i].scheduleIndicator =
+                                        'YellowStop')
+                                    : this.projectOverview[i].scheduleIndicator;
                             this.projectOverview[i].riskIndicator ==
-                            'YellowStop'
+                                'YellowStop'
                                 ? (this.projectOverview[i].riskIndicator =
-                                      'RedStop')
+                                    'RedStop')
                                 : this.projectOverview[i].riskIndicator ==
-                                  'RedStop'
-                                ? (this.projectOverview[i].riskIndicator =
-                                      'YellowStop')
-                                : this.projectOverview[i].riskIndicator;
+                                    'RedStop'
+                                    ? (this.projectOverview[i].riskIndicator =
+                                        'YellowStop')
+                                    : this.projectOverview[i].riskIndicator;
                             this.projectOverview[i].askNeedIndicator ==
-                            'YellowStop'
+                                'YellowStop'
                                 ? (this.projectOverview[i].askNeedIndicator =
-                                      'RedStop')
+                                    'RedStop')
                                 : this.projectOverview[i].askNeedIndicator ==
-                                  'RedStop'
-                                ? (this.projectOverview[i].askNeedIndicator =
-                                      'YellowStop')
-                                : this.projectOverview[i].askNeedIndicator;
+                                    'RedStop'
+                                    ? (this.projectOverview[i].askNeedIndicator =
+                                        'YellowStop')
+                                    : this.projectOverview[i].askNeedIndicator;
                             this.projectOverview[i].budgetIndicator ==
-                            'YellowStop'
+                                'YellowStop'
                                 ? (this.projectOverview[i].budgetIndicator =
-                                      'RedStop')
+                                    'RedStop')
                                 : this.projectOverview[i].budgetIndicator ==
-                                  'RedStop'
-                                ? (this.projectOverview[i].budgetIndicator =
-                                      'YellowStop')
-                                : this.projectOverview[i].budgetIndicator;
+                                    'RedStop'
+                                    ? (this.projectOverview[i].budgetIndicator =
+                                        'YellowStop')
+                                    : this.projectOverview[i].budgetIndicator;
                             this.projectOverview[i].budgetSpendIndicator ==
-                            'YellowStop'
+                                'YellowStop'
                                 ? (this.projectOverview[
-                                      i
-                                  ].budgetSpendIndicator = 'RedStop')
+                                    i
+                                ].budgetSpendIndicator = 'RedStop')
                                 : this.projectOverview[i]
-                                      .budgetSpendIndicator == 'RedStop'
-                                ? (this.projectOverview[
-                                      i
-                                  ].budgetSpendIndicator = 'YellowStop')
-                                : this.projectOverview[i].budgetSpendIndicator;
+                                    .budgetSpendIndicator == 'RedStop'
+                                    ? (this.projectOverview[
+                                        i
+                                    ].budgetSpendIndicator = 'YellowStop')
+                                    : this.projectOverview[i].budgetSpendIndicator;
                             var preffix = '';
                             if (
                                 res.projectDetails[i].isArchived &&
@@ -4576,26 +4575,26 @@ export class PortfolioCenterComponent implements OnInit {
                             this.projectOverview[i].calculatedEmissionsImpact1 =
                                 res.projectDetails[i].calculatedEmissionsImpact
                                     ? res.projectDetails[
-                                          i
-                                      ].calculatedEmissionsImpact
-                                          .toFixed(1)
-                                          .toString()
-                                          .replace(
-                                              /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                              '$1,'
-                                          )
+                                        i
+                                    ].calculatedEmissionsImpact
+                                        .toFixed(1)
+                                        .toString()
+                                        .replace(
+                                            /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                            '$1,'
+                                        )
                                     : res.projectDetails[i]
-                                          .calculatedEmissionsImpact;
+                                        .calculatedEmissionsImpact;
                             this.projectOverview[i].waterImpactUnits =
                                 this.projectNames[i].waterImpactUnits;
                             this.projectOverview[i].waterImpactUnits1 = res
                                 .projectDetails[i].waterImpactUnits
                                 ? res.projectDetails[i].waterImpactUnits
-                                      .toString()
-                                      .replace(
-                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                          '$1,'
-                                      )
+                                    .toString()
+                                    .replace(
+                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                        '$1,'
+                                    )
                                 : res.projectDetails[i].waterImpactUnits;
                             this.projectOverview[i].problemId =
                                 res.projectDetails[i].problemId;
@@ -4604,28 +4603,28 @@ export class PortfolioCenterComponent implements OnInit {
                             this.projectOverview[i].nextMilestoneFinishDate =
                                 this.projects.data[i].nextMilestoneFinishDate
                                     ? new Date(
-                                          this.projects.data[
-                                              i
-                                          ].nextMilestoneFinishDate
-                                      )
+                                        this.projects.data[
+                                            i
+                                        ].nextMilestoneFinishDate
+                                    )
                                     : this.projects.data[i]
-                                          .nextMilestoneFinishDate;
+                                        .nextMilestoneFinishDate;
                             this.projectOverview[i].executionCompleteDate = this
                                 .projects.data[i].executionCompleteDate
                                 ? new Date(
-                                      this.projects.data[
-                                          i
-                                      ].executionCompleteDate
-                                  )
+                                    this.projects.data[
+                                        i
+                                    ].executionCompleteDate
+                                )
                                 : this.projects.data[i].executionCompleteDate;
                             this.projectOverview[i].executionDuration = this
                                 .projects.data[i].executionDuration
                                 ? this.projects.data[i].executionDuration
-                                      .toString()
-                                      .replace(
-                                          /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
-                                          '$1,'
-                                      )
+                                    .toString()
+                                    .replace(
+                                        /(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+                                        '$1,'
+                                    )
                                 : this.projects.data[i].executionDuration;
                             this.projectOverview[i].overallStatusIndicator =
                                 res.trendingIndicators[
@@ -4649,17 +4648,17 @@ export class PortfolioCenterComponent implements OnInit {
                             //   : '';
                             var data = res.overallStatusInfo
                                 ? res.overallStatusInfo.filter(
-                                      (element) =>
-                                          element.projectId ==
-                                          this.projectOverview[i].projectUid
-                                  )
+                                    (element) =>
+                                        element.projectId ==
+                                        this.projectOverview[i].projectUid
+                                )
                                 : [];
                             this.projectOverview[i].overallStatusLastUpdate =
                                 data.length != 0
                                     ? data[0].overallStatusLastUpdate
                                         ? data[0].overallStatusLastUpdate.split(
-                                              'T'
-                                          )
+                                            'T'
+                                        )
                                         : ''
                                     : '';
                             this.projectOverview[i].grey = false;
@@ -4671,10 +4670,10 @@ export class PortfolioCenterComponent implements OnInit {
                                 if (
                                     this.projectOverview[i]
                                         .overallStatusLastUpdate[0] <=
-                                        this.Date2[0] &&
+                                    this.Date2[0] &&
                                     this.projectOverview[i]
                                         .overallStatusLastUpdate <=
-                                        this.Date3[0]
+                                    this.Date3[0]
                                 ) {
                                     this.projectOverview[i].grey = true;
                                 } else if (
@@ -4688,26 +4687,26 @@ export class PortfolioCenterComponent implements OnInit {
                             this.projectOverview[i].notBaselined =
                                 res.conditionalFormattingLabels
                                     ? res.conditionalFormattingLabels.filter(
-                                          (index) =>
-                                              index.projectId ==
-                                              this.projectOverview[i].projectUid
-                                      )[0].notBaselined
+                                        (index) =>
+                                            index.projectId ==
+                                            this.projectOverview[i].projectUid
+                                    )[0].notBaselined
                                     : '';
                             this.projectOverview[i].completed =
                                 res.conditionalFormattingLabels
                                     ? res.conditionalFormattingLabels.filter(
-                                          (index) =>
-                                              index.projectId ==
-                                              this.projectOverview[i].projectUid
-                                      )[0].completed
+                                        (index) =>
+                                            index.projectId ==
+                                            this.projectOverview[i].projectUid
+                                    )[0].completed
                                     : '';
                             this.projectOverview[i].redExecutionCompleteDate =
                                 res.conditionalFormattingLabels
                                     ? res.conditionalFormattingLabels.filter(
-                                          (index) =>
-                                              index.projectId ==
-                                              this.projectOverview[i].projectUid
-                                      )[0].redExecutionCompleteDate
+                                        (index) =>
+                                            index.projectId ==
+                                            this.projectOverview[i].projectUid
+                                    )[0].redExecutionCompleteDate
                                     : '';
                         }
                         if (this.sorting.name != '') {
@@ -4718,9 +4717,9 @@ export class PortfolioCenterComponent implements OnInit {
                                         b.this.sorting.name
                                         ? -1
                                         : a.this.sorting.name ==
-                                          b.this.sorting.name
-                                        ? 0
-                                        : 1;
+                                            b.this.sorting.name
+                                            ? 0
+                                            : 1;
                                 });
                             } else {
                                 this.projectOverview.sort((a, b) => {
@@ -4728,9 +4727,9 @@ export class PortfolioCenterComponent implements OnInit {
                                         b.this.sorting.name
                                         ? -1
                                         : a.this.sorting.name ==
-                                          b.this.sorting.name
-                                        ? 0
-                                        : 1;
+                                            b.this.sorting.name
+                                            ? 0
+                                            : 1;
                                 });
                             }
                         }
@@ -4769,12 +4768,12 @@ export class PortfolioCenterComponent implements OnInit {
                             Object.keys(this.toggles).forEach((toggleName) => {
                                 if (
                                     this.pageToggleStates[this.pageNumber][
-                                        toggleName
+                                    toggleName
                                     ]
                                 ) {
                                     this.toggles[toggleName].states = [
                                         ...this.pageToggleStates[
-                                            this.pageNumber
+                                        this.pageNumber
                                         ][toggleName],
                                     ];
                                 }
@@ -5540,7 +5539,7 @@ export class PortfolioCenterComponent implements OnInit {
         if (
             this.PortfolioFilterForm.controls.ProjectPhase.value.length == 1 &&
             this.PortfolioFilterForm.controls.ProjectPhase.value[0].lookUpId ==
-                '7bf185af-1fda-4086-839e-2aa38fbc19d0'
+            '7bf185af-1fda-4086-839e-2aa38fbc19d0'
         ) {
             this.PortfolioFilterForm.controls.CapitalPhase.disable();
             this.PortfolioFilterForm.controls.OEPhase.disable();
@@ -5679,13 +5678,14 @@ export class PortfolioCenterComponent implements OnInit {
     openDrawer(type) {
         this.PortfolioCenterService.drawerOpenedPrakharTemp = true;
         if (type == 'Filter') {
+            this.matPanelType = 'Filter'
             this.dataLA = [];
             this.showLA = false;
 
             const defaultView =
                 localStorage.getItem('spot-currentBookmark') ==
                     'DefaultFilter' &&
-                localStorage.getItem('spot-customFiltersApplied') == 'false'
+                    localStorage.getItem('spot-customFiltersApplied') == 'false'
                     ? true
                     : false;
 
@@ -5726,7 +5726,6 @@ export class PortfolioCenterComponent implements OnInit {
 
                 this.PortfolioFilterForm.patchValue(defaultFilter);
                 this.ProjectTableColumns.patchValue(tableObj);
-                this.showFilter = true;
             } else {
                 const filterObj = JSON.parse(
                     localStorage.getItem('spot-filtersNew')
@@ -5750,12 +5749,10 @@ export class PortfolioCenterComponent implements OnInit {
                 if (localAttributeArray.length > 0) {
                     this.isLA = true;
                     this.initializeLocalAttributes(localAttributeArray);
-                } else {
-                    this.showFilter = true;
                 }
             }
         } else {
-            this.showFilter = false;
+            this.matPanelType = 'BulkReport'
         }
         this.filterDrawer.open();
     }

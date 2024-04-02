@@ -98,15 +98,15 @@
         }">
         <!-- Drawer -->
         <mat-drawer [ngClass]="{
-                'w-full': showContent && !showFilter,
-                'w-2qua': showContent && showFilter,
+                'w-full': showContent && matPanelType == 'BulkReport',
+                'w-2qua': showContent && matPanelType == 'Filter',
                 'dark:bg-gray-900': true,
                 'overflow-hidden': true
             }" [autoFocus]="false" [mode]="'over'" [position]="'end'" #filterDrawer
             (openedChange)="captureClose($event)">
             <!-- FILTER -->
             <form class="w-full overflow-hidden h-full" [formGroup]="PortfolioFilterForm"
-                *ngIf="showContent && showFilter" style="overflow-y: scroll">
+                *ngIf="showContent && matPanelType == 'Filter'" style="overflow-y: scroll">
                 <div class="form-ask-need overflow-y-scroll" style="
                         height: calc(calc(100vh / var(--custom-zoom)) - 80px);
                     ">
@@ -546,7 +546,7 @@
             </form>
             <!-- GENERATE REPORT -->
             <div class="mt-3 pl-3 pr-3 w-full" #target id="scheduleTableDiv"
-                style="height: calc(calc(100vh / var(--custom-zoom)) - 100px)" *ngIf="showContent && !showFilter">
+                style="height: calc(calc(100vh / var(--custom-zoom)) - 100px)" *ngIf="showContent && matPanelType == 'BulkReport'">
                 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="true" [scrollbarH]="false"
                     columnMode="force" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
                     [limit]="size" (page)="setPage('', $event)" (sort)="sort($event)" [virtualization]="false"
@@ -771,7 +771,7 @@
         <mat-drawer-content class="flex flex-col w-full">
             <!-- Header -->
             <div [hidden]="!showContent" class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10">
-                <spot-global-message [callLocation]="'PortfolioCenter'"></spot-global-message>
+                <!--<spot-global-message [callLocation]="'PortfolioCenter'"></spot-global-message>-->
                 <div class="flex justify-between gap-8 mt-2" style="margin-bottom: -20px">
                     <h1 class="text-3xl tracking-tight leading-7 sm:leading-10 text-primary" style="margin-left: 10px">
                         Portfolio Center
