@@ -43,15 +43,6 @@ export class ForecastBulkEditComponent {
   newmainnav: FuseNavigationItem[];
 constructor(public PortfolioCenterService: PortfolioCenterService, public _fuseNavigationService: FuseNavigationService, private _Activatedroute: ActivatedRoute,private apiService: PortfolioApiService,public fuseAlert: FuseConfirmationService, public projecthubservice: ProjectHubService, private portfoliService: PortfolioApiService, public budgetService: BudgetService, private cdRef: ChangeDetectorRef)
 {
-//   this.PortfolioCenterService.refreshEditBookmarkComponent.subscribe(
-//     () => {
-//         if (this.isFirstTimeReload) {
-//             this.isFirstTimeReload = false;
-//         } else {
-//             this.ngOnInit();
-//         }
-//     }
-// );
   this.forecastsForm.valueChanges.subscribe(() => {
     this.formValue();
     this.projecthubservice.isFormChanged = JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit);

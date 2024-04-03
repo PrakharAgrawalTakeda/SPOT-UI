@@ -1,4 +1,5 @@
-<div class="flex items-start justify-between bg-primary sidepanel-header">
+<div>
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
     <div class="text-on-primary" style="padding-top: 6px">Forecast Bulk Edit</div>
     <div style="padding-top: 2px"><a
             (click)="PortfolioCenterService.toggleForecastDrawerOpen('ForecastBulkEdit','',[],false)"
@@ -13,7 +14,7 @@
         <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full">
             <div> -->
 <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden" *ngIf="showContent"
-    #ForecastTable>
+    #ForecastTable style="height: calc(calc(100vh/ var(--custom-zoom)) - 165px)">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarH]="true" [scrollbarV]="false"
         columnMode="force" class="font-medium text-sm text-default whitespace-nowrap datatable-PB-80"
         [rows]="projectFunding">
@@ -949,16 +950,17 @@
             </div>
         </div>
     </div> -->
-    <div class="absolute top-200 w-full px-3">
-        <div class="pr-3 flex items-start justify-between mt-6">
-            <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
-                (click)="PortfolioCenterService.toggleForecastDrawerOpen('ForecastBulkEdit','',[],false)">
-                Cancel
-            </a>
-            <button class="min-w-26" mat-flat-button [color]="'primary'" [disabled]="!editable"
-                (click)="submitForecasts()" type="button">
-                Submit
-            </button>
-        </div>
+</div>
+<div class="absolute bottom-2 w-full px-3">
+    <div class="pr-3 flex items-start justify-between mt-6">
+        <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+            (click)="PortfolioCenterService.toggleForecastDrawerOpen('ForecastBulkEdit','',[],false)">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" [disabled]="!editable"
+            (click)="submitForecasts()" type="button">
+            Submit
+        </button>
     </div>
+</div>
 </div>
