@@ -28,7 +28,11 @@
         <ngx-datatable-column name="Active" prop="isActive" [flexGrow]="1.5" [resizeable]="false" [sortable]="false"
             [draggable]="false">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
+                <div class="flex items-center justify-between pl-2 overflow-hidden">
+                    <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="value == false"></mat-icon>
+                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="value == true">
+                    </mat-icon>
+                </div>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [canAutoResize]="false"
@@ -39,10 +43,10 @@
                         <mat-icon *ngIf='!expanded' svgIcon="heroicons_outline:chevron-down"></mat-icon>
                         <mat-icon *ngIf='expanded' svgIcon="heroicons_outline:chevron-up"></mat-icon>
                     </a>
-                    <a href="javascript:void(0)" title="Edit Single" (click)="dataloader()">
+                    <a href="javascript:void(0)" title="Edit Single" (click)='adminService.toggleDrawerOpen("GlobalMessageEdit", row.globalMessageId, row, "", true)'>
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
                     </a>
-                    <a href="javascript:void(0)" title="Delete Single" (click)="dataloader()">
+                    <a href="javascript:void(0)" title="Delete Single" (click)="deleteGlobalMessage(row.globalMessageId)">
                         <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                     </a>
                 </div>

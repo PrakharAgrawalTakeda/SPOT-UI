@@ -8,7 +8,8 @@
         </div>
     </div>
     <div class="overflow-hidden  w-full">
-        <form class="w-full p-[20px]" [formGroup]="globalMessageForm">
+        <form class="w-full p-[20px] overflow-y-scroll" [formGroup]="globalMessageForm"
+            style="height: calc(calc(100vh/ var(--custom-zoom)) - 120px)">
             <div class="w-full flex justify-between items-center gap-6">
                 <spot-input class="w-11/12" formControlName="messageTitle" name="messageTitle" [label]="'Message Title'"
                     [placeholder]="'Message Title'">
@@ -17,7 +18,7 @@
                 </spot-toggle>
             </div>
             <spot-textarea formControlName="globalMessageText" name="globalMessageText" [label]="'Message'" [rows]="20"
-            [isQuill]="true"></spot-textarea>
+                [isQuill]="true"></spot-textarea>
         </form>
     </div>
     <div class="absolute bottom-2 w-full px-3">
@@ -26,7 +27,7 @@
                 (click)="adminService.toggleDrawerOpen('', '',[],'')">
                 Cancel
             </a>
-            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="ngOnInit()">
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitMessage()">
                 Submit
             </button>
         </div>
