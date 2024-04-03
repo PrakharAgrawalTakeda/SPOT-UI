@@ -1,8 +1,7 @@
-<div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 overflow-hidden">
-    <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl"
+<div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 overflow-hidden" style="height: calc(calc(100vh/ var(--custom-zoom)) - 165px)">
+    <div class="xl:col-span-2 flex flex-col flex-auto  bg-card shadow rounded-2xl overflow-y-scroll"
         style="margin-right: 10px; margin-left: 10px;">
-        <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full">
-            <div>
+        <div class="flex flex-col flex-auto p-6 w-full">
                 <div class="pb-3 pt-0 flex items-center justify-between overflow-hidden">
                     <form class="w-full grid-cols-4 grid" [formGroup]="ForecastForm">
                         <!-- make spot selectt -->
@@ -1675,7 +1674,6 @@
                         </ngx-datatable-column>
                     </ngx-datatable>
                 </div>
-            </div>
         </div>
     </div>
 </div>
