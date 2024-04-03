@@ -7,7 +7,7 @@ import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { FuseConfirmationService } from '@fuse/services/confirmation/confirmation.service';
 import moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
-import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
+import { FuseNavigationItem, FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 
 @Component({
   selector: 'app-forecast-bulk-edit',
@@ -40,7 +40,7 @@ export class ForecastBulkEditComponent {
   forecastsSubmit = []
   projectFundingOpex: any;
   today = new Date();
-  newmainnav: import("c:/Users/devma/SPOT UI/SPOT-UI/src/@fuse/components/navigation/navigation.types").FuseNavigationItem[];
+  newmainnav: FuseNavigationItem[];
 constructor(public PortfolioCenterService: PortfolioCenterService, public _fuseNavigationService: FuseNavigationService, private _Activatedroute: ActivatedRoute,private apiService: PortfolioApiService,public fuseAlert: FuseConfirmationService, public projecthubservice: ProjectHubService, private portfoliService: PortfolioApiService, public budgetService: BudgetService, private cdRef: ChangeDetectorRef)
 {
 //   this.PortfolioCenterService.refreshEditBookmarkComponent.subscribe(
