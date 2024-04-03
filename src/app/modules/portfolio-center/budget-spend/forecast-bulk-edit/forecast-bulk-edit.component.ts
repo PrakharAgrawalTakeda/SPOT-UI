@@ -7,6 +7,7 @@ import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { FuseConfirmationService } from '@fuse/services/confirmation/confirmation.service';
 import moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
+import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 
 @Component({
   selector: 'app-forecast-bulk-edit',
@@ -14,6 +15,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./forecast-bulk-edit.component.scss']
 })
 export class ForecastBulkEditComponent {
+  isFirstTimeReload = true;
   @Input() projectFunding: any;
   @Input() type: 'capex' | 'opex' = 'capex'
   ForecastBulkEdit: string = 'ForecastBulkEdit';
@@ -38,8 +40,18 @@ export class ForecastBulkEditComponent {
   forecastsSubmit = []
   projectFundingOpex: any;
   today = new Date();
-constructor(public PortfolioCenterService: PortfolioCenterService, private _Activatedroute: ActivatedRoute,private apiService: PortfolioApiService,public fuseAlert: FuseConfirmationService, public projecthubservice: ProjectHubService, private portfoliService: PortfolioApiService, public budgetService: BudgetService, private cdRef: ChangeDetectorRef)
+  newmainnav: import("c:/Users/devma/SPOT UI/SPOT-UI/src/@fuse/components/navigation/navigation.types").FuseNavigationItem[];
+constructor(public PortfolioCenterService: PortfolioCenterService, public _fuseNavigationService: FuseNavigationService, private _Activatedroute: ActivatedRoute,private apiService: PortfolioApiService,public fuseAlert: FuseConfirmationService, public projecthubservice: ProjectHubService, private portfoliService: PortfolioApiService, public budgetService: BudgetService, private cdRef: ChangeDetectorRef)
 {
+//   this.PortfolioCenterService.refreshEditBookmarkComponent.subscribe(
+//     () => {
+//         if (this.isFirstTimeReload) {
+//             this.isFirstTimeReload = false;
+//         } else {
+//             this.ngOnInit();
+//         }
+//     }
+// );
   this.forecastsForm.valueChanges.subscribe(() => {
     this.formValue();
     this.projecthubservice.isFormChanged = JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit);
@@ -581,15 +593,18 @@ submitForecasts() {
   console.log(submitData);
 
   this.apiService.updateForecast(submitData).then(res => {
-    this.projecthubservice.isNavChanged.next(true)
-    this.projecthubservice.submitbutton.next(true)
-    this.projecthubservice.successSave.next(true)
-    this.projecthubservice.toggleDrawerOpen('', '', [], '')
+     this.PortfolioCenterService.isNavChanged.next(true)
+     this.PortfolioCenterService.submitbutton.next(true)
+     this.PortfolioCenterService.successSave.next(true)
+    this.PortfolioCenterService.toggleForecastDrawerOpen('ForecastBulkEdit','',[],false)
+    this.PortfolioCenterService.triggerRefresh();
+
 })
 } else {
-this.projecthubservice.submitbutton.next(true)
-this.projecthubservice.toggleDrawerOpen('', '', [], '')
-this.projecthubservice.isNavChanged.next(true)
+this.PortfolioCenterService.submitbutton.next(true)
+this.PortfolioCenterService.toggleForecastDrawerOpen('ForecastBulkEdit','',[],false)
+this.PortfolioCenterService.toggleDrawerOpenSmall('BudgetSpendOpen', '',[],'')
+this.PortfolioCenterService.isNavChanged.next(true)
 }
   
 }

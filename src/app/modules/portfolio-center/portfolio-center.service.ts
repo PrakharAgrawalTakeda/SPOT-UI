@@ -13,9 +13,13 @@ import { BookmarksComponent } from './bookmarks/bookmarks.component';
     providedIn: 'root',
 })
 export class PortfolioCenterService {
+    refreshNeeded = new BehaviorSubject<boolean>(false);
+    submitbutton = new BehaviorSubject<boolean>(false)
+    successSave = new BehaviorSubject<boolean>(false)
     node = new BehaviorSubject<object>({});
     submitbutttoggleDrawerOpenon = new BehaviorSubject<boolean>(false);
     refreshEditBookmarkComponent = new BehaviorSubject<boolean>(false);
+    refreshEditForecast = new BehaviorSubject<boolean>(false);
     isNavChanged = new BehaviorSubject<boolean>(false);
     drawerOpenedright: boolean = false;
     drawerOpened: boolean = false;
@@ -30,7 +34,6 @@ export class PortfolioCenterService {
     fuseDrawerSmall: boolean = false;
 
     projectid: string = '';
-    successSave = new BehaviorSubject<boolean>(false);
     alert: FuseConfirmationConfig = {
         title: 'Are you sure you want to exit?',
         message: 'All unsaved data will be lost.',
@@ -153,6 +156,17 @@ export class PortfolioCenterService {
             }
         }
     }
+
+    // Method to call when refresh is needed
+  public triggerRefresh() {
+    this.refreshNeeded.next(true); // Emit true to signal a refresh
+  }
+
+  // Method for components to call to subscribe to the refresh trigger
+  public getRefreshNeeded() {
+    return this.refreshNeeded.asObservable();
+  }
+
     toggleForecastDrawerOpen(
         forecastType: string,
         forecastid: string,
