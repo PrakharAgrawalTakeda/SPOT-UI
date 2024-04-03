@@ -169,8 +169,8 @@ export class BudgetGeneralEditComponent {
                         this.gmsBudgetowner.enable({emitEvent : false})
                     }
                 }
-                
-                
+
+
                 else{
                     if(this.budgetId.enabled){
                         this.budgetId.disable({emitEvent : false})
@@ -242,11 +242,11 @@ export class BudgetGeneralEditComponent {
         return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '927293cb-d4ca-4f31-8af6-c33c9e4792d1')
     }
 
-
-
     async submitBudgetInfo() {
-        let isPrefixValid:boolean =true;
-        if (this.budgetId.value && this.isBudgetAdmin==false) {
+        let isPrefixValid:boolean = true;
+        if (this.budgetId.value
+            && this.budgetId.dirty
+            && this.isBudgetAdmin == false) {
             try {
                 isPrefixValid = await this.checkPrefix(this.budgetId.value);
             } catch (error) {
@@ -272,9 +272,8 @@ export class BudgetGeneralEditComponent {
                 }
                 this.fuseAlert.open(errorConfig)
             }
-        } else {
-            isPrefixValid = true;
         }
+
         if (!isPrefixValid && this.budgetId.status === "VALID") {
             var comfirmConfig: FuseConfirmationConfig = {
                 "title": "The Capital Budget ID with existing prefix abbreviations is not allowed.",
