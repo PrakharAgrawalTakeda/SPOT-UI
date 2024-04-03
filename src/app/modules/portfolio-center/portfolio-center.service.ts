@@ -13,9 +13,13 @@ import { BookmarksComponent } from './bookmarks/bookmarks.component';
     providedIn: 'root',
 })
 export class PortfolioCenterService {
+    refreshNeeded = new BehaviorSubject<boolean>(false);
+    submitbutton = new BehaviorSubject<boolean>(false)
+    successSave = new BehaviorSubject<boolean>(false)
     node = new BehaviorSubject<object>({});
     submitbutttoggleDrawerOpenon = new BehaviorSubject<boolean>(false);
     refreshEditBookmarkComponent = new BehaviorSubject<boolean>(false);
+    refreshEditForecast = new BehaviorSubject<boolean>(false);
     isNavChanged = new BehaviorSubject<boolean>(false);
     drawerOpenedright: boolean = false;
     drawerOpened: boolean = false;
@@ -30,7 +34,6 @@ export class PortfolioCenterService {
     fuseDrawerSmall: boolean = false;
 
     projectid: string = '';
-    successSave = new BehaviorSubject<boolean>(false);
     alert: FuseConfirmationConfig = {
         title: 'Are you sure you want to exit?',
         message: 'All unsaved data will be lost.',
@@ -65,6 +68,13 @@ export class PortfolioCenterService {
     bookmarkDrawerSmall: boolean = false;
 
     isComponentRefreshed = false;
+
+
+    forecastItemType: string = '';
+    forecastItemId: string = '';
+    forecastData: any = '';
+    forecastDrawerOpened: boolean = false;
+    forecastDrawerLarge: boolean = false;
 
     async getAllBookmarks() {
         const localAccountId =
@@ -145,6 +155,50 @@ export class PortfolioCenterService {
                 }
             }
         }
+    }
+
+    // Method to call when refresh is needed
+  public triggerRefresh() {
+    this.refreshNeeded.next(true); // Emit true to signal a refresh
+  }
+
+  // Method for components to call to subscribe to the refresh trigger
+  public getRefreshNeeded() {
+    return this.refreshNeeded.asObservable();
+  }
+
+    toggleForecastDrawerOpen(
+        forecastType: string,
+        forecastid: string,
+        forecastData: any,
+        forecastDrawerLarge: boolean = false
+    ): void {
+        console.log(forecastType);
+        this.forecastItemId = forecastid;
+        this.forecastItemType = forecastType;
+        this.forecastData = forecastData;
+        this.forecastDrawerOpened = !this.forecastDrawerOpened;
+        this.forecastDrawerLarge = forecastDrawerLarge;
+    }
+
+    forecastDrawerOpenedChanged(event: any): void {
+        console.log(this.forecastDrawerOpened)
+            if (this.forecastDrawerOpened != event) {
+                if (event == false) {
+                    this.forecastDrawerOpened = event;
+                    if (this.isFormChanged == true) {
+                        console.log(this.isFormChanged);
+                        this.alertopener();
+                    } else {
+                        this.item = {};
+                        this.itemtype = '';
+                        this.itemid = '';
+                        this.all = [];
+                        this.projectid = '';
+                        this.isFormChanged = false;
+                    }
+                }
+            }
     }
 
     toggleBookmarkDrawerOpen(
@@ -229,6 +283,7 @@ export class PortfolioCenterService {
         fuseDrawerLarge: boolean = false
     ): void {
         console.log(itemtype);
+        //debugger
         if (this.drawerOpenedright == true && this.isFormChanged == true) {
             const alertopener = this.fusealert.open(this.alert);
             alertopener.afterClosed().subscribe((res) => {
@@ -242,7 +297,7 @@ export class PortfolioCenterService {
                     this.drawerOpenedright = !this.drawerOpenedright;
                 }
             });
-        } else {
+        }else {
             this.itemid = itemid;
             this.itemtype = itemtype;
             this.all = all;
@@ -261,6 +316,7 @@ export class PortfolioCenterService {
         fuseDrawerSmall: boolean = false
     ): void {
         console.log(itemtype);
+        //debugger;
 
         if (this.drawerOpened == true && this.isFormChanged == true) {
             // const alertopener = this.fusealert.open(this.alert)

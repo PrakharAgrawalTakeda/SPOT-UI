@@ -26,7 +26,7 @@ import { QuillEditorComponent } from 'ngx-quill';
             multi: true,
         },
     ],
-    encapsulation : ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None
 })
 export class SpotTextareaComponent implements OnInit, ControlValueAccessor {
     @Input() showLabel: boolean = true;
@@ -41,9 +41,9 @@ export class SpotTextareaComponent implements OnInit, ControlValueAccessor {
     @Input() isQuill: boolean = false;
 
     formFieldHelpers: any;
-    onTouch: any = () => {};
-    onChange: any = () => {};
-    selected: any = () => {};
+    onTouch: any = () => { };
+    onChange: any = () => { };
+    selected: any = () => { };
     form: FormGroup;
     disabled = false;
     @ViewChild('quill') quill: QuillEditorComponent;
@@ -58,12 +58,16 @@ export class SpotTextareaComponent implements OnInit, ControlValueAccessor {
         ],
     };
 
-    constructor(private fb: FormBuilder) {}
-
+    constructor(private fb: FormBuilder) { }
     ngOnInit() {
         this.form = this.fb.group({
             control: '',
         });
+        if (this.isQuill) {
+            this.form.controls.control.valueChanges.subscribe(x => {
+                this.onChange(x)
+            })
+        }
     }
     get control() {
         return this.form.get('control');

@@ -151,6 +151,7 @@ export class BudgetForecastBulkEditComponent {
     dataloader() {
         console.log(this.projecthubservice.all.budgetForecasts)
         this.forecastPatchGeneralForm(this.projecthubservice.all.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"), this.projecthubservice.all.budget);
+        console.log(this.forecasts)
         if (this.forecasts.length > 0) {
             this.forecastsDb = this.forecasts.map(x => {
                 return {
@@ -444,6 +445,7 @@ export class BudgetForecastBulkEditComponent {
             }else{
                 mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "OpEx Forecast").submittedByID = this.msalService.instance.getActiveAccount().localAccountId;
             }
+            console.log(mainObj)
             this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
                 this.projecthubservice.isNavChanged.next(true)
                 this.projecthubservice.submitbutton.next(true)

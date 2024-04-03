@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { AdminService } from '../admin.service';
 import { AdminApiService } from '../admin-api.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-global-messages-general-message',
@@ -8,25 +9,43 @@ import { AdminApiService } from '../admin-api.service';
   styleUrls: ['./global-messages-general-message.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class GlobalMessagesGeneralMessageComponent implements OnInit {
+export class GlobalMessagesGeneralMessageComponent implements OnInit, OnDestroy {
   globalMessages: any = []
   @ViewChild('GlobalMessageTable') table: any;
   viewContent: boolean = false;
-    constructor(public adminService: AdminService, private adminApiService: AdminApiService) { }
-  
-    ngOnInit(): void {
-     this.dataloader();
-    }
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  constructor(public adminService: AdminService, private adminApiService: AdminApiService) {
 
-    dataloader(){
-      this.adminApiService.getGlobalMessages().then((res: any) => {
-        console.log(res)
-        this.globalMessages = res
-        this.viewContent = true;
-      })
+    this.adminService.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(x => {
+      if (this.viewContent) {
+        this.dataloader()
+      }
+    })
+  }
 
-    }
-    toggleExpandRow(row) {
-      this.table.rowDetail.toggleExpandRow(row);
-    }
+  ngOnInit(): void {
+    this.dataloader();
+  }
+
+  dataloader() {
+    this.adminApiService.getGlobalMessages().then((res: any) => {
+      console.log(res)
+      this.globalMessages = res
+      this.viewContent = true;
+    })
+
+  }
+  toggleExpandRow(row) {
+    this.table.rowDetail.toggleExpandRow(row);
+  }
+  deleteGlobalMessage(id) {
+    this.adminApiService.deleteGlobalMessage(id).then(res=>{
+      this.dataloader()
+    })
+  }
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
 }

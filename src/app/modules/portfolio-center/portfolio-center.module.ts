@@ -38,6 +38,7 @@ import { BookmarkEditComponent } from './bookmarks/bookmark-edit/bookmark-edit.c
 import { MatExpansionModule } from '@angular/material/expansion';
 import { SaveBookmarkComponent } from './save-bookmark/save-bookmark.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ForecastBulkEditComponent } from './budget-spend/forecast-bulk-edit/forecast-bulk-edit.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MessagesModule } from 'app/layout/common/messages/messages.module';
 
@@ -60,6 +61,7 @@ export const projectRoutes: Route[] = [
         BookmarksComponent,
         BookmarkEditComponent,
         SaveBookmarkComponent,
+        ForecastBulkEditComponent,
     ],
     imports: [
         RouterModule.forChild(projectRoutes),
