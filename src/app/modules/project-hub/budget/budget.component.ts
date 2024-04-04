@@ -157,13 +157,14 @@ export class BudgetComponent implements OnInit, OnDestroy {
         }
     }
     forecastPatchGeneralForm(forecast: any) {
-        if (forecast.find(x => x.active == 'Preliminary')) {
+        var preliminaryCapex = forecast.find(x => x.active == 'Preliminary' && x.budgetData == "CapEx Forecast");
+        if (preliminaryCapex) {
             this.preliminaryExists = true;
-            this.budgetForecastForm.patchValue({
-                referencePreliminary: forecast.find(x => x.active == 'Preliminary')?.active ? forecast.find(x => x.active == 'Preliminary').active : "",
-                periodPreliminary: forecast.find(x => x.active == 'Preliminary')?.periodName ? forecast.find(x => x.active == 'Preliminary').periodName : "",
-                lastSubmittedPreliminary: forecast.find(x => x.active == 'Preliminary')?.lastSubmitted ? forecast.find(x => x.active == 'Preliminary').lastSubmitted : "",
-                submittedByPreliminary: forecast.find(x => x.active == 'Preliminary')?.userName ? forecast.find(x => x.active == 'Preliminary').userName : "",
+            this.budgetForecastForm.patchValue({                
+                referencePreliminary: preliminaryCapex.active,
+                periodPreliminary: preliminaryCapex.periodName,
+                lastSubmittedPreliminary: this.formatDateTime(preliminaryCapex.lastSubmitted),
+                submittedByPreliminary: preliminaryCapex.userName,
             })
         }
         this.budgetForecastForm.patchValue({
