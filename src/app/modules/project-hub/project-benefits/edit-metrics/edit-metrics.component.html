@@ -113,7 +113,7 @@
                             <spot-input class="w-full" [formControlName]="getControlName(col.year)"
                             [inputType]="getInputType(row.metricFormat)"
                                         [autoAddDecimal]="getDecimalProperties(row.metricFormat).autoAddDecimal" 
-                                        
+                                        [allowNegativeValues]="true"
                                         [decimalCount]="getDecimalProperties(row.metricFormat).decimalCount"
                                         (change)="onValueChange(rowIndex, col.year, $event.target.value)">
                             </spot-input>

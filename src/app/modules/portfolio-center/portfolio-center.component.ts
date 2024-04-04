@@ -1284,6 +1284,7 @@ export class PortfolioCenterComponent implements OnInit {
                             console.log(this.bulkreportdata);
 
                             this.initial = res;
+                            //debugger;
                             if (res.budgetTile.fiscalYear) {
                                 this.currfiscalYear = res.budgetTile.fiscalYear;
                             }
