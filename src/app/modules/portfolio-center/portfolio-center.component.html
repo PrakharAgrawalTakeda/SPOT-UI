@@ -555,7 +555,7 @@
                     [rows]="projectOverview" #projectOverviewTable>
                     <!-- Define columns -->
                     <ngx-datatable-column name="Project ID" prop="problemId" [resizeable]="false" [sortable]="false"
-                        [flexGrow]="1"  >
+                        [flexGrow]="0.8"  >
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             {{ value }}
@@ -563,7 +563,7 @@
                     </ngx-datatable-column>
 
                     <ngx-datatable-column name="Budget ID" prop="budgetId" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="1">
+                    [flexGrow]="0.8">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             {{ value }}
@@ -571,7 +571,7 @@
                     </ngx-datatable-column>
 
                     <ngx-datatable-column name="Project Name" prop="problemTitle" [resizeable]="false"
-                        [sortable]="false" [flexGrow]="2">
+                        [sortable]="false" [flexGrow]="2.2">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             <p (click)="OpenProject(value)" class="projectName">
