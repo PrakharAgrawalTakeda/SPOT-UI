@@ -149,9 +149,7 @@ export class BudgetForecastBulkEditComponent {
     }
 
     dataloader() {
-        console.log(this.projecthubservice.all.budgetForecasts)
         this.forecastPatchGeneralForm(this.projecthubservice.all.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"), this.projecthubservice.all.budget);
-        console.log(this.forecasts)
         if (this.forecasts.length > 0) {
             this.forecastsDb = this.forecasts.map(x => {
                 return {
@@ -432,10 +430,10 @@ export class BudgetForecastBulkEditComponent {
             this.extraEntriesY1.forEach(x => {
                 mainObj.budgetForecastsY1.push(x);
             });
-            const formValue = this.budgetForecastForm.getRawValue();
-            console.log("CAPEX", mainObj)
+            const formValue = this.budgetForecastForm.getRawValue();            
             if(this.mode=='Capex'){
                 mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").submittedByID = this.msalService.instance.getActiveAccount().localAccountId;
+                mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").lastSubmitted = new Date();
                 mainObj.budgetForecasts.forEach(obj => {
                     if (obj.budgetData === "CapEx Forecast") {
                         obj.afpDeviationCodeID = formValue.afpDeviationCode ? formValue.afpDeviationCode.lookUpId : "";
@@ -444,8 +442,8 @@ export class BudgetForecastBulkEditComponent {
                 });
             }else{
                 mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "OpEx Forecast").submittedByID = this.msalService.instance.getActiveAccount().localAccountId;
+                mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "OpEx Forecast").lastSubmitted = new Date();
             }
-            console.log(mainObj)
             this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
                 this.projecthubservice.isNavChanged.next(true)
                 this.projecthubservice.submitbutton.next(true)
