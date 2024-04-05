@@ -25,13 +25,20 @@
 .bls-5 {
     border-left: 5px solid;
 }
+
 .pe {
     pointer-events: auto;
 }
-.mat-standard-chip .mat-chip-remove, .mat-standard-chip .mat-chip-trailing-icon {
-margin-bottom: 5px ;
+
+.mat-standard-chip .mat-chip-remove,
+.mat-standard-chip .mat-chip-trailing-icon {
+    margin-bottom: 5px;
 }
-ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-datatable .datatable-row-left, .ngx-datatable .datatable-row-right {
+
+ngx-datatable .datatable-row-center,
+.ngx-datatable .datatable-row-group,
+.ngx-datatable .datatable-row-left,
+.ngx-datatable .datatable-row-right {
     gap: 15px;
 }
 
@@ -68,7 +75,7 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
 .closed {
     font-style: italic !important;
     --tw-text-opacity: 0.6 !important;
-    color: rgba(var(--fuse-text-secondary-rgb),var(--tw-text-opacity))!important;
+    color: rgba(var(--fuse-text-secondary-rgb), var(--tw-text-opacity)) !important;
 }
 
 .customIconSize {
@@ -96,6 +103,7 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
 .form-ask-need {
     padding: 20px 20px;
 }
+
 .sliding-panel-padding {
     padding: 10px 10px;
 }
@@ -115,10 +123,67 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
 .team-pad {
     padding: 0 20px 50px 20px;
 }
-.ngx-datatable .datatable-body-row, .ngx-datatable .datatable-header-inner, .ngx-datatable .datatable-row-center {
-align-items: flex-end;
+
+.ngx-datatable .datatable-body-row,
+.ngx-datatable .datatable-header-inner,
+.ngx-datatable .datatable-row-center {
+    align-items: flex-end;
 }
 
-.mat-primary.mdc-button{
-    color:white !important
+.mat-primary.mdc-button {
+    color: white !important
+}
+
+
+.global-message {
+    all: unset !important;
+
+    a {
+        color: #007bff;
+        text-decoration: underline;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    h3 {
+        font-size: 1.17em;
+    }
+
+    h4 {
+        font-size: 1em;
+    }
+
+    h5 {
+        font-size: 0.83em;
+    }
+
+    .ql-size-small {
+        font-size: 0.75em;
+    }
+
+    .ql-size-large {
+        font-size: 1.5em;
+    }
+
+    .ql-size-huge {
+        font-size: 2em;
+
+    }
+
+    ul {
+        list-style-type: circle;
+        padding: 0;
+        margin: 0;
+
+        li {
+            margin-left: 20px;
+            list-style: circle;
+        }
+    }
 }
