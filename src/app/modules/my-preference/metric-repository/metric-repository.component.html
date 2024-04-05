@@ -8,7 +8,7 @@
                 <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary"> </div>
                 <div class="text-primary">
                     <div class="flex items-start justify-between">
-                        <div *ngIf="milestoneAccess">
+                        <div *ngIf="isPortfolioManager">
                             <button class="mx-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                                     (click)="myPreferenceService.toggleDrawerOpen('MetricRepositoryAddNew', 'new', '', '', false)">
                                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
@@ -69,15 +69,19 @@
                     </ngx-datatable-column>
                     <ngx-datatable-column [flexGrow]="0.6" [resizeable]="false" [sortable]="false" [draggable]="false">
                         <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template >
-                            <div class="flex items-center justify-start gap-6" *ngIf="isEditable(row) && milestoneAccess">
+                            <div class="flex items-center justify-start gap-6" *ngIf="isEditable(row)">
+                                <div *ngIf="row.showEdit">
                                 <a href="javascript:void(0)" title="Edit Single"
                                    (click)="myPreferenceService.toggleDrawerOpen('MetricRepositoryAddNew', row.milestoneTemplateId, row, '', false)">
                                     <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
                                 </a>
+                            </div>
+                            <div *ngIf="row.showDelete">
                                 <a href="javascript:void(0)" title="Delete Single"
                                    (click)="deleteMetricRepository(row.metricID)">
                                     <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                                 </a>
+                            </div>
                             </div>
                         </ng-template>
                     </ngx-datatable-column>
