@@ -122,3 +122,32 @@ align-items: flex-end;
 .mat-primary.mdc-button{
     color:white !important
 }
+
+
+.global-message{
+ all: unset !important;
+ a{
+        color: #007bff;
+        text-decoration: underline;
+ }
+ .ql-size-small{
+    font-size: 0.75em;
+ }
+ .ql-size-large{
+    font-size: 1.5em;
+ }
+ .ql-size-huge{
+    font-size: 2em;
+ 
+ }
+ }
+ ul{
+        list-style-type: circle;
+        padding: 0;
+        margin: 0;
+        li{
+            margin-left: 20px;
+            list-style: circle;
+        }
+ }
+}
