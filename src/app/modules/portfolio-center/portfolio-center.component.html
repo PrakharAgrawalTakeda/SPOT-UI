@@ -548,14 +548,14 @@
             <div class="mt-3 pl-3 pr-3 w-full" #target id="scheduleTableDiv"
                 style="height: calc(calc(100vh / var(--custom-zoom)) - 100px)" *ngIf="showContent && matPanelType == 'BulkReport'">
                 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="true" [scrollbarH]="false"
-                    columnMode="force" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
+                    columnMode="flex" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
                     [limit]="size" (page)="setPage('', $event)" (sort)="sort($event)" [virtualization]="false"
                     [footerHeight]="20" [sorts]="[{ prop: 'problemId', dir: 'asc' }]"
                     class="font-medium h-full reportTable text-sm text-default whitespace-nowrap overflow-y-scroll"
                     [rows]="projectOverview" #projectOverviewTable>
                     <!-- Define columns -->
                     <ngx-datatable-column name="Project ID" prop="problemId" [resizeable]="false" [sortable]="false"
-                        [width]="25">
+                        [flexGrow]="0.8"  >
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             {{ value }}
@@ -563,7 +563,7 @@
                     </ngx-datatable-column>
 
                     <ngx-datatable-column name="Budget ID" prop="budgetId" [resizeable]="false" [sortable]="false"
-                        [width]="40">
+                    [flexGrow]="0.8">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             {{ value }}
@@ -571,7 +571,7 @@
                     </ngx-datatable-column>
 
                     <ngx-datatable-column name="Project Name" prop="problemTitle" [resizeable]="false"
-                        [sortable]="false" [width]="200">
+                        [sortable]="false" [flexGrow]="2.2">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             <p (click)="OpenProject(value)" class="projectName">
@@ -580,7 +580,7 @@
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="PM" prop="pm" [resizeable]="false" [sortable]="false" [width]="50">
+                    <ngx-datatable-column name="PM" prop="pm" [resizeable]="false" [sortable]="false" [flexGrow]="1">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             {{ value }}
@@ -588,7 +588,7 @@
                     </ngx-datatable-column>
 
                     <ngx-datatable-column name="Sponsor" prop="sponsor" [resizeable]="false" [sortable]="false"
-                        [width]="50">
+                    [flexGrow]="1">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             {{ value }}
@@ -596,7 +596,7 @@
                     </ngx-datatable-column>
 
                     <!-- Toggle column -->
-                    <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
+                    <ngx-datatable-column [flexGrow]="1" [sortable]="false" [resizeable]="false">
                         <ng-template ngx-datatable-header-template let-value="value"
                             let-allRowsSelected="allRowsSelectedToggleName" let-selectFn="selectFnToggleName">
                             <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
@@ -621,7 +621,7 @@
                                 "></mat-slide-toggle>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
+                    <ngx-datatable-column [flexGrow]="1" [sortable]="false" [resizeable]="false">
                         <ng-template ngx-datatable-header-template let-value="value"
                             let-allRowsSelected="allRowsSelectedToggleName" let-selectFn="selectFnToggleName">
                             <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
@@ -646,7 +646,7 @@
                                 "></mat-slide-toggle>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
+                    <ngx-datatable-column [flexGrow]="1" [sortable]="false" [resizeable]="false">
                         <ng-template ngx-datatable-header-template let-value="value"
                             let-allRowsSelected="allRowsSelectedToggleName" let-selectFn="selectFnToggleName">
                             <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
@@ -677,7 +677,7 @@
                                 "></mat-slide-toggle>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
+                    <ngx-datatable-column [flexGrow]="1" [sortable]="false" [resizeable]="false">
                         <ng-template ngx-datatable-header-template let-value="value"
                             let-allRowsSelected="allRowsSelectedToggleName" let-selectFn="selectFnToggleName">
                             <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
@@ -702,7 +702,7 @@
                                 "></mat-slide-toggle>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
+                    <ngx-datatable-column [flexGrow]="1" [sortable]="false" [resizeable]="false">
                         <ng-template ngx-datatable-header-template let-value="value"
                             let-allRowsSelected="allRowsSelectedToggleName" let-selectFn="selectFnToggleName">
                             <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
@@ -727,7 +727,7 @@
                                 "></mat-slide-toggle>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column [width]="48" [sortable]="false" [resizeable]="false">
+                    <ngx-datatable-column [flexGrow]="1" [sortable]="false" [resizeable]="false">
                         <ng-template ngx-datatable-header-template let-value="value"
                             let-allRowsSelected="allRowsSelectedToggleName" let-selectFn="selectFnToggleName">
                             <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="
@@ -768,7 +768,7 @@
         </mat-drawer>
 
         <!-- Drawer content -->
-        <mat-drawer-content class="flex flex-col w-full">
+        <mat-drawer-content class="flex flex-col" style="width: calc(100vw/ var(--custom-zoom)) !important;">
             <!-- Header -->
             <div [hidden]="!showContent" class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10">
                 <!--<spot-global-message [callLocation]="'PortfolioCenter'"></spot-global-message>-->

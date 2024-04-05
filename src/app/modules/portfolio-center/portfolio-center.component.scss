@@ -177,8 +177,8 @@ li {
 // }
 
 .fuse-drawer-large {
-    min-width: 95vw !important;
-    max-width: 95vw !important;
+    min-width: calc(95vw / var(--custom-zoom)) !important;
+    max-width: calc(95vw / var(--custom-zoom)) !important;
     // min-height: 120vh !important;
     // max-height: 120vh !important;
 }
@@ -202,10 +202,7 @@ fuse-drawer .fuse-drawer-content {
     min-height: 100vh;
 }
 
-.bookmark-dropdown
-    .form
-    .mat-mdc-form-field
-    .mat-mdc-text-field-wrapper.mat-mdc-form-field-flex {
+.bookmark-dropdown .form .mat-mdc-form-field .mat-mdc-text-field-wrapper.mat-mdc-form-field-flex {
     border-radius: 20px !important;
 }
 .bookmark-dropdown .form .mat-mdc-form-field .mat-mdc-text-field-wrapper {
