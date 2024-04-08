@@ -45,21 +45,21 @@ export class MetricRepositoryComponent {
         const currentUserID = this.msalService.instance.getActiveAccount().localAccountId;
         console.log(currentUserID)
         const portfolioOwnerList = this.filterCriteria.portfolioOwner;
-        const isPortfolioManager = ["C9F323D4-EF97-4C2A-B748-11DB5B8589D0"].includes(this.role.roleMaster.securityGroupId);
+       //Requirement Changed----- this check no longer needed const isPortfolioManager = ["C9F323D4-EF97-4C2A-B748-11DB5B8589D0"].includes(this.role.roleMaster.securityGroupId);
         this.userManagedPortfolios = portfolioOwnerList.filter(po =>
             po.pmoleadDelegateAdid == currentUserID || po.pmoleadAdid == currentUserID
         ).map(po => po.portfolioOwner);
         console.log(this.userManagedPortfolios)
         this.metricRepositoryData = this.metricRepositoryData.map(metric => ({
             ...metric,
-            showEdit: isPortfolioManager && this.userManagedPortfolios.includes(metric.portfolioOwner) && metric.metricTypeID != 'Global',
-            showDelete: isPortfolioManager && this.userManagedPortfolios.includes(metric.portfolioOwner) && metric.metricTypeID != 'Global'
+            showEdit: this.userManagedPortfolios.includes(metric.portfolioOwner) && metric.metricTypeID != 'Global',
+            showDelete: this.userManagedPortfolios.includes(metric.portfolioOwner) && metric.metricTypeID != 'Global'
         }));
-        console.log(this.metricRepositoryData.filter(po => po.portfolioOwner == 'Site-Lessines'))
     }
+    
     dataloader() {
-        // Check if the user is a Portfolio Manager and update the variable
-        this.isPortfolioManager = ["C9F323D4-EF97-4C2A-B748-11DB5B8589D0"].includes(this.role.roleMaster.securityGroupId);
+        // Check if the user is a Portfolio Manager and update the variable --- requirement changed
+        //this.isPortfolioManager = ["C9F323D4-EF97-4C2A-B748-11DB5B8589D0"].includes(this.role.roleMaster.securityGroupId);
 
         const promises = [
             this.authService.lookupMaster(),

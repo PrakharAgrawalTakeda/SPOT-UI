@@ -8,7 +8,7 @@
                 <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary"> </div>
                 <div class="text-primary">
                     <div class="flex items-start justify-between">
-                        <div *ngIf="isPortfolioManager">
+                        <div>
                             <button class="mx-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                                     (click)="myPreferenceService.toggleDrawerOpen('MetricRepositoryAddNew', 'new', '', '', false)">
                                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
