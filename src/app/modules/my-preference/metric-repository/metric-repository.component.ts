@@ -54,14 +54,13 @@ export class MetricRepositoryComponent {
         ]).then(([lookupMaster, filterList]) => {
             this.myPreferenceService.lookUpMaster = lookupMaster;
             this.filterCriteria = filterList;
-        }).catch(error => {
-            console.error("Error loading initial data", error);
-        });
+        })
     }
 
     checkUserPermissions() {
         return new Promise<void>((resolve, reject) => {
-            const currentUserID = this.msalService.instance.getActiveAccount().localAccountId;
+            const currentUserID = '321be4b0-6338-4ed4-b40d-b9fdf9b4c489'
+            //this.msalService.instance.getActiveAccount().localAccountId;
             if (!this.filterCriteria || !this.filterCriteria.portfolioOwner) {
                 console.error("filterCriteria is not loaded");
                 reject("filterCriteria is not loaded");
@@ -74,8 +73,8 @@ export class MetricRepositoryComponent {
             ).map(po => po.portfolioOwner);
             console.log(this.userManagedPortfolios)
 
-            // Determine visibility of Add New button
-            this.showAddNewButton = this.userManagedPortfolios ? true : false;
+            // visibility of Add New button
+            this.showAddNewButton = this.userManagedPortfolios ? this.userManagedPortfolios.length > 0 : false;
 
             resolve();
         });
