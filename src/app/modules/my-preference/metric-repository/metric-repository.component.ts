@@ -59,7 +59,7 @@ export class MetricRepositoryComponent {
 
     checkUserPermissions() {
         return new Promise<void>((resolve, reject) => {
-            const currentUserID = '321be4b0-6338-4ed4-b40d-b9fdf9b4c489'
+            const currentUserID = this.msalService.instance.getActiveAccount().localAccountId;
             //this.msalService.instance.getActiveAccount().localAccountId;
             if (!this.filterCriteria || !this.filterCriteria.portfolioOwner) {
                 console.error("filterCriteria is not loaded");
