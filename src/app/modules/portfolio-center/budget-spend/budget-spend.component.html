@@ -17,7 +17,7 @@
 <div class="overflow-y-scroll" style="height: calc(calc(100vh/ var(--custom-zoom)) - 165px)">
     <div *ngFor="let item of  navItem.children" class="flex flex-col flex-auto w-full min-w-0"
         [ngStyle]="{ 'position' : PortfolioCenterService.drawerOpenedright ? 'fixed' : 'relative'}">
-        <app-forecast *ngIf="item.title == 'Forecast Bulk View' && item.toggled == true"></app-forecast>
+        <app-forecast *ngIf="item.title == 'Forecast Bulk Edit' && item.toggled == true"></app-forecast>
         <app-project-performance
             *ngIf="item.title == 'Project Performance' && item.toggled == true"></app-project-performance>
         <app-forecast-excel-update
