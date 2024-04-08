@@ -44,7 +44,7 @@
             <search [appearance]="'bar'"></search>
             <fuse-fullscreen class="hidden"></fuse-fullscreen>
             <shortcuts class="hidden"></shortcuts>
-            <!--<messages></messages>-->
+            <messages></messages>
             <notifications class="hidden"></notifications>
             <user class="text-on-primary p-3"></user>
             <!--<button
@@ -58,7 +58,7 @@
     </div>
 
     <!-- Content -->
-    <div class="flex flex-col flex-auto w-full" [ngClass]="{'pb-6': !projecthubservice.drawerOpenedright && !myPreferenceService.drawerOpenedright && !adminService.drawerOpenedright}">
+    <div class="flex flex-col flex-auto w-full" [ngClass]="{'pb-6': !projecthubservice.drawerOpenedright && !myPreferenceService.drawerOpenedright && !adminService.drawerOpenedright && !portService.drawerOpenedPrakharTemp}">
         <!-- *ngIf="true" hack is required here for router-outlet to work correctly.
              Otherwise, layout changes won't be registered and the view won't be updated! -->
         <router-outlet *ngIf="true"></router-outlet>
@@ -66,8 +66,9 @@
 
     <!-- Footer -->
     <div
-        class="fixed bottom-0 flex flex-0 items-center w-full h-14 sm:h-12 px-4 md:px-6 z-49 border-t bg-card dark:bg-transparent print:hidden" *ngIf="!projecthubservice.drawerOpenedright && !myPreferenceService.drawerOpenedright && !adminService.drawerOpenedright && !portService.drawerOpenedPrakharTemp">
+        class="fixed bottom-0 flex flex-0 items-center justify-between w-full h-14 sm:h-12 px-4 md:px-6 z-49 border-t bg-card dark:bg-transparent print:hidden" *ngIf="!projecthubservice.drawerOpenedright && !myPreferenceService.drawerOpenedright && !adminService.drawerOpenedright && !portService.drawerOpenedPrakharTemp">
         <span class="font-medium text-secondary">Takeda &copy; {{currentYear}}</span>
+        <span class="font-medium text-secondary">{{version}}</span>
     </div>
 
 </div>

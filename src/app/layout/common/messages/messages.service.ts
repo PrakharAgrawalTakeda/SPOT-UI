@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, ReplaySubject, switchMap, take, tap } from 'rxjs';
+import { lastValueFrom, map, Observable, ReplaySubject, switchMap, take, tap } from 'rxjs';
 import { Message } from 'app/layout/common/messages/messages.types';
+import { GlobalVariables } from 'app/shared/global-variables';
 
 @Injectable({
     providedIn: 'root'
@@ -150,5 +151,18 @@ export class MessagesService
                 })
             ))
         );
+    }
+
+    async getUserGlobalMessage(userId: string){
+        var url = GlobalVariables.apiurl + "GlobalMessages/" + userId
+        const abc$ = this._httpClient.get(url)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+    async bulkEditGlobalMessageUserLog(userId: string, gloabalMessageUserLog: any){
+        var url = GlobalVariables.apiurl + "GlobalMessages/BulkEditGlobalMessageUserLog/" + userId
+        const abc$ = this._httpClient.put(url, gloabalMessageUserLog)
+        const response = await lastValueFrom(abc$)
+        return response
     }
 }
