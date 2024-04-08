@@ -1,0 +1,73 @@
+<div class="relative flex flex-col w-full h-full">
+    <!-- Dismiss button -->
+    <ng-container>
+        <div class="absolute top-0 right-0">
+            <button mat-icon-button [matDialogClose]="undefined">
+                <mat-icon
+                    class="text-secondary"
+                    [svgIcon]="'heroicons_outline:x'"
+                ></mat-icon>
+            </button>
+        </div>
+    </ng-container>
+
+    <!-- Content -->
+    <div
+        class="flex flex-col sm:flex-row flex-auto items-center sm:items-start"
+    >
+        <ng-container>
+            <div
+                class="flex flex-col items-center sm:items-start mt-4 sm:mt-0 sm:pr-8 space-y-1 text-center sm:text-left"
+            >
+                <!-- Title -->
+                <ng-container>
+                    <div class="text-2xl mb-2 leading-6 font-medium">
+                        Quick Bookmark Creator
+                    </div>
+                </ng-container>
+
+                <!-- Message -->
+                <ng-container>
+                    <div class="text-secondary w-3qua">
+                        By clicking Submit the current applied filters are saved
+                        as a bookmark
+                    </div>
+                </ng-container>
+                <ng-container>
+                    <spot-input
+                        [(ngModel)]="bookmarkName"
+                        Required
+                        class="w-full pt-4"
+                        [placeholder]="'Enter Bookmark Name'"
+                        [label]="'Bookmark Name'"
+                    />
+                </ng-container>
+            </div>
+        </ng-container>
+    </div>
+
+    <!-- Actions -->
+    <ng-container>
+        <div
+            class="flex items-center justify-center sm:justify-end space-x-3 bg-gray-50 dark:bg-black dark:bg-opacity-10"
+        >
+            <!-- Cancel -->
+            <ng-container>
+                <button mat-stroked-button [matDialogClose]="undefined">
+                    Cancel
+                </button>
+            </ng-container>
+
+            <!-- Confirm -->
+            <ng-container>
+                <button
+                    mat-flat-button
+                    [color]="'primary'"
+                    (click)="onSaveBookmark()"
+                >
+                    Submit
+                </button>
+            </ng-container>
+        </div>
+    </ng-container>
+</div>

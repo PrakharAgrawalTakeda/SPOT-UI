@@ -29,6 +29,10 @@ export const secondaryRoles: Role[] = [
     {
         roleName: 'Confidential Manager',
         roleId: 'C005FB71-C1FF-44D3-8779-5CA37643D794'
+    },
+    {
+        roleName: 'Resource Manager',
+        roleId: '06CDEA21-EB7C-402B-9FB3-CBE507CEE364'
     }
 ];
 

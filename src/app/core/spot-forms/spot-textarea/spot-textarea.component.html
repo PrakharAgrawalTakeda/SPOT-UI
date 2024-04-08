@@ -1,15 +1,77 @@
-<form [formGroup]="form" class="form w-full" [ngClass]="{'custom-label-with-hint': showHint && hintPostion == 'tooltip'}">
-    <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
-        <mat-label class="items-center flex" *ngIf="showLabel">{{label}}<mat-icon class="pe" *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}" >help</mat-icon></mat-label>
+<form
+    [formGroup]="form"
+    class="form w-full"
+    [ngClass]="{
+        'custom-label-with-hint': showHint && hintPostion == 'tooltip'
+    }"
+>
+    <mat-form-field
+        *ngIf="!isQuill"
+        [ngClass]="formFieldHelpers"
+        class="fuse-mat-textarea flex-auto w-full"
+        [floatLabel]="'always'"
+    >
+        <mat-label class="items-center flex" *ngIf="showLabel">
+            {{ label }}
+            <mat-icon
+                class="pe"
+                *ngIf="showHint && hintPostion == 'tooltip'"
+                matTooltip="{{ hint }}"
+            >
+                help
+            </mat-icon>
+        </mat-label>
         <!-- <h1 *ngIf="Required; then ifBlock else elseBlock"></h1>
         <ng-template #ifBlock> -->
-            <textarea matInput formControlName="control" [placeholder]="placeholder" (input)="onChange($event.target.value)"
-                (onChange) = "selected($event.target.value)" (blur)="onTouch()" [rows]="rows" [maxlength]="maxLength" [required]=Required matTextareaAutosize></textarea>
+        <textarea
+            matInput
+            formControlName="control"
+            [placeholder]="placeholder"
+            (input)="onChange($event.target.value)"
+            (onChange)="selected($event.target.value)"
+            (blur)="onTouch()"
+            [rows]="rows"
+            [maxlength]="maxLength"
+            [required]="Required"
+            matTextareaAutosize
+        ></textarea>
         <!-- </ng-template>
         <ng-template #elseBlock>
             <textarea matInput formControlName="control" [placeholder]="placeholder" (input)="onChange($event.target.value)"
                 (onChange) = "selected($event.target.value)" (blur)="onTouch()" [rows]="rows" [maxlength]="maxLength" matTextareaAutosize></textarea>
         </ng-template> -->
-        <mat-hint *ngIf="showHint && hintPostion == 'mat-hint'">{{hint}}</mat-hint>
+        <mat-hint *ngIf="showHint && hintPostion == 'mat-hint'">{{
+            hint
+        }}</mat-hint>
     </mat-form-field>
+    <div
+        *ngIf="isQuill"
+        [ngClass]="formFieldHelpers"
+        class="fuse-mat-textarea flex-auto w-full"
+    >
+        <mat-label class="items-center flex" *ngIf="showLabel"
+            >{{ label
+            }}<mat-icon
+                class="pe"
+                *ngIf="showHint && hintPostion == 'tooltip'"
+                matTooltip="{{ hint }}"
+                >help</mat-icon
+            ></mat-label
+        >
+        <!-- <h1 *ngIf="Required; then ifBlock else elseBlock"></h1>
+        <ng-template #ifBlock> -->
+        <quill-editor
+        class="w-full"
+        formControlName="control"
+        >
+        </quill-editor>
+        <!-- </ng-template>
+        <ng-template #elseBlock>
+            <textarea matInput formControlName="control" [placeholder]="placeholder" (input)="onChange($event.target.value)"
+                (onChange) = "selected($event.target.value)" (blur)="onTouch()" [rows]="rows" [maxlength]="maxLength" matTextareaAutosize></textarea>
+        </ng-template> -->
+        <mat-hint *ngIf="showHint && hintPostion == 'mat-hint'">{{
+            hint
+        }}</mat-hint>
+    </div>
 </form>

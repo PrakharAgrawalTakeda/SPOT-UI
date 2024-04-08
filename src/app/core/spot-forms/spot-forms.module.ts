@@ -23,51 +23,51 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SpotMultiselectUserAutocompleteComponent } from './spot-multiselect-user-autocomplete/spot-multiselect-user-autocomplete.component';
 import { SpotMultiselectProjectAutocompleteComponent } from './spot-multiselect-project-autocomplete/spot-multiselect-project-autocomplete.component';
 import { SpotInputForecastComponent } from './spot-input-forecast/spot-input-forecast.component';
-
-
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
-  declarations: [
-    SpotInputComponent,
-    SpotSelectComponent,
-    SpotInputDateComponent,
-    SpotMultiselectAutocompleteComponent,
-    SpotSingleselectAutocompleteComponent,
-    SpotTextareaComponent,
-    SpotSingleselectUserAutocompleteComponent,
-    SpotToggleComponent,
-    SpotMultiselectUserAutocompleteComponent,
-    SpotMultiselectProjectAutocompleteComponent,
-    SpotInputForecastComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatSelectModule,
-    MatInputModule,
-    MatTooltipModule,
-    MatDatepickerModule,
-    MatMomentDateModule,
-    MatSlideToggleModule
-  ],
-  exports: [
-    SpotInputComponent,
-    SpotSelectComponent,
-    SpotInputDateComponent,
-    SpotMultiselectAutocompleteComponent,
-    SpotSingleselectAutocompleteComponent,
-    SpotTextareaComponent,
-    SpotSingleselectUserAutocompleteComponent,
-    SpotToggleComponent,
-    SpotMultiselectUserAutocompleteComponent,
-    SpotMultiselectProjectAutocompleteComponent,
-    SpotInputForecastComponent
-  ]
+    declarations: [
+        SpotInputComponent,
+        SpotSelectComponent,
+        SpotInputDateComponent,
+        SpotMultiselectAutocompleteComponent,
+        SpotSingleselectAutocompleteComponent,
+        SpotTextareaComponent,
+        SpotSingleselectUserAutocompleteComponent,
+        SpotToggleComponent,
+        SpotMultiselectUserAutocompleteComponent,
+        SpotMultiselectProjectAutocompleteComponent,
+        SpotInputForecastComponent,
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatCheckboxModule,
+        MatChipsModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatSelectModule,
+        MatInputModule,
+        MatTooltipModule,
+        MatDatepickerModule,
+        MatMomentDateModule,
+        MatSlideToggleModule,
+        QuillModule.forRoot(),
+    ],
+    exports: [
+        SpotInputComponent,
+        SpotSelectComponent,
+        SpotInputDateComponent,
+        SpotMultiselectAutocompleteComponent,
+        SpotSingleselectAutocompleteComponent,
+        SpotTextareaComponent,
+        SpotSingleselectUserAutocompleteComponent,
+        SpotToggleComponent,
+        SpotMultiselectUserAutocompleteComponent,
+        SpotMultiselectProjectAutocompleteComponent,
+        SpotInputForecastComponent,
+    ],
 })
-export class SpotFormsModule { }
+export class SpotFormsModule {}

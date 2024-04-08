@@ -4,6 +4,7 @@ import { MyPreferenceService } from "../../my-preference.service";
 import { MyPreferenceApiService } from "../../my-preference-api.service";
 import { MsalService } from "@azure/msal-angular";
 import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../../@fuse/services/confirmation";
+import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 
 @Component({
     selector: 'app-metric-repository-add-edit-view',
@@ -12,14 +13,17 @@ import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../../
 })
 export class MetricRepositoryAddEditViewComponent {
     metricRepository: any = {}
-    portfolioOwnerList = [];
+    
     categoryChanged: boolean = false;
     canSubmit: boolean = true
+    filterCriteria: any = {}
+    portfolioOwnerList: any;
     constructor(
         public myPreferenceApiService: MyPreferenceApiService,
         public myPreferenceService: MyPreferenceService,
         private msalService: MsalService,
         public fuseAlert: FuseConfirmationService,
+        private portApiService: PortfolioApiService
     ) {
         this.metricRepositoryForm.controls.category.valueChanges.subscribe(res => {
             if (this.myPreferenceService.itemid != "new") {
@@ -78,7 +82,17 @@ export class MetricRepositoryAddEditViewComponent {
     ngOnInit() {
         this.metricRepositoryForm.controls.globalLocal.disable()
         this.myPreferenceApiService.GetPortfolioOwnerForPreferences(this.msalService.instance.getActiveAccount().localAccountId).then((portfolioRes: any) => {
-            this.portfolioOwnerList = portfolioRes;
+                this.portfolioOwnerList = portfolioRes;
+                console.log(this.portfolioOwnerList)
+            //     this.filterCriteria = filter
+            //     console.log(this.filterCriteria)
+            //     const currentUserID = this.msalService.instance.getActiveAccount().localAccountId;
+            //     this.portfolioOwnerList = this.filterCriteria.portfolioOwner.filter(po => {
+            //         // Split the pmoleadDelegateAdid field into an array of IDs
+            //     const delegateAdids = po.pmoleadDelegateAdid ? po.pmoleadDelegateAdid.split(',') : [];
+            //     // Check if currentUserID matches pmoleadAdid or is included in the delegateAdids array
+            //     return po.pmoleadAdid == currentUserID || delegateAdids.includes(currentUserID);
+            // })
             if (this.myPreferenceService.itemid != "new") {
                 this.metricRepository = this.myPreferenceService.all
                 this.metricRepositoryForm.patchValue({

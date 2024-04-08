@@ -1,4 +1,4 @@
-@import '../../../../node_modules/@swimlane/ngx-datatable/assets/icons.css';
+@import "../../../../node_modules/@swimlane/ngx-datatable/assets/icons.css";
 .w-half {
     width: 50%;
 }
@@ -13,24 +13,24 @@
 .w-2qua {
     width: 55%;
 }
-.apply-button{
+.apply-button {
     margin: 20px 15px 175px 15px !important;
     // width: 100%;
     width: 20%;
 }
 
-.apexcharts-tooltip-marker{
+.apexcharts-tooltip-marker {
     width: 0px !important;
     height: 0px !important;
 }
 
-.submit-button{
+.submit-button {
     margin: 20px 15px 15px 15px !important;
     // width: 100%;
     min-width: 26px;
 }
 
-.tile-title{
+.tile-title {
     font-size: 20px;
 }
 
@@ -51,13 +51,13 @@
     margin-left: 9px !important;
 }
 
-.datatable-body{
+.datatable-body {
     height: 55vh !important;
 }
-.reportTable .datatable-body{
+.reportTable .datatable-body {
     height: 100% !important;
 }
-.datatable-row-left{
+.datatable-row-left {
     background: white !important;
     height: 132px !important;
 }
@@ -69,7 +69,6 @@
     cursor: pointer !important;
     margin-left: 15px !important;
     color: rgb(81, 174, 245);
-
 }
 .projectNames:hover {
     text-decoration: underline;
@@ -89,7 +88,7 @@
     text-decoration: underline;
     cursor: pointer !important;
 }
-.forecast{
+.forecast {
     cursor: pointer !important;
     color: rgb(81, 174, 245);
 }
@@ -97,12 +96,11 @@
     text-decoration: underline;
     cursor: pointer !important;
 }
-.datatable-header{
+.datatable-header {
     top: 10px;
 }
 
-
-.columnFilter{
+.columnFilter {
     top: 12px !important;
     position: relative !important;
     display: flex;
@@ -110,54 +108,54 @@
     left: 21px;
 }
 
-.checkbox{
-        width: 50%;
-        position: relative;
-        left: 30%;
+.checkbox {
+    width: 50%;
+    position: relative;
+    left: 30%;
 }
 
 ul {
     columns: 2;
     -webkit-columns: 4;
     -moz-columns: 2;
-     background-color: white;
-        border-style: solid;
-        border-color: lightgray;
-        border-width: 2px;
-        border-radius: 15px;
+    background-color: white;
+    border-style: solid;
+    border-color: lightgray;
+    border-width: 2px;
+    border-radius: 15px;
 }
 
-li{
+li {
     padding: 4px;
     font-weight: 500;
 }
 
-.pager li{
+.pager li {
     padding-right: 10px !important;
     margin-right: 2px !important;
     border-radius: 10px;
     padding-left: 10px !important;
 }
 
-.pager{
+.pager {
     font-size: small !important;
     width: 300px !important;
 }
 
-.pages.active{
+.pages.active {
     background: #ffffff !important;
     border: 2px solid green;
     color: black;
 }
 
-.pages{
+.pages {
     cursor: pointer;
     padding: 5px 12px;
     background: lightgrey;
     margin: 0px 5px;
     color: black;
 }
-.page-count{
+.page-count {
     font-size: small !important;
     margin-left: 6px !important;
 }
@@ -167,10 +165,9 @@ li{
     transform: rotate(-180deg);
     left: -1px;
 }
-.red{
+.red {
     color: red !important;
 }
-
 
 // ::ng-deep .ngx-datatable .datatable-PO-60 .datatable-body .datatable-scroll {
 //     height: 80vh !important;
@@ -179,18 +176,17 @@ li{
 //     overflow-y: scroll !important;
 // }
 
-
 .fuse-drawer-large {
-    min-width: 95vw !important;
-    max-width: 95vw !important;
+    min-width: calc(95vw / var(--custom-zoom)) !important;
+    max-width: calc(95vw / var(--custom-zoom)) !important;
     // min-height: 120vh !important;
     // max-height: 120vh !important;
 }
-.fuse-drawer-small{
+.fuse-drawer-small {
     min-width: 35vw !important;
     max-width: 35vw !important;
-     min-height: 100vh !important;
-     max-height: 100vh !important;
+    min-height: 100vh !important;
+    max-height: 100vh !important;
 }
 fuse-drawer {
     min-width: 50vw;
@@ -201,4 +197,64 @@ fuse-drawer {
 
 fuse-drawer .fuse-drawer-content {
     display: block !important;
+}
+.fuse-drawer-overlay {
+    min-height: 100vh;
+}
+
+.bookmark-dropdown .form .mat-mdc-form-field .mat-mdc-text-field-wrapper.mat-mdc-form-field-flex {
+    border-radius: 20px !important;
+}
+.bookmark-dropdown .form .mat-mdc-form-field .mat-mdc-text-field-wrapper {
+    border-radius: 20px !important;
+}
+
+.bookmark-dropdown
+    .form
+    .mat-mdc-form-field.mat-form-field-appearance-fill.ng-dirty
+    .mat-mdc-text-field-wrapper
+    .mat-mdc-form-field-flex {
+    border-left: 5px solid transparent !important;
+}
+
+.bookmark-dropdown
+    .form
+    .mat-mdc-form-field.mat-form-field-appearance-fill
+    .mat-mdc-text-field-wrapper
+    .mat-mdc-form-field-flex
+    .mat-mdc-form-field-infix {
+    min-height: 37px !important;
+}
+
+.bookmark-button {
+    padding: 0px !important;
+    min-width: 43px !important;
+}
+
+.datatable-ProjectOverview {
+    $widths: (20px, 70px, 95px, 350px);
+
+    .datatable-header {
+        .datatable-row-left {
+            width: 535px !important;
+
+            @for $i from 1 through length($widths) {
+                .datatable-header-cell:nth-child(#{$i}) {
+                    width: nth($widths, $i) !important;
+                }
+            }
+        }
+    }
+
+    .datatable-body {
+        .datatable-row-left {
+            width: 535px !important;
+
+            @for $i from 1 through length($widths) {
+                .datatable-body-cell:nth-child(#{$i}) {
+                    width: nth($widths, $i) !important;
+                }
+            }
+        }
+    }
 }

@@ -1,8 +1,8 @@
-<div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 overflow-hidden">
-    <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl" style="margin-right: 10px; margin-left: 10px;">
-        <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full">
-            <div>
-                <div class="pb-3 pt-0 flex items-center justify-between overflow-hidden">
+<div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 overflow-hidden" style="height: calc(calc(100vh/ var(--custom-zoom)) - 165px)">
+    <div class="xl:col-span-2 flex flex-col flex-auto  bg-card shadow rounded-2xl overflow-y-scroll"
+        style="margin-right: 10px; margin-left: 10px;">
+        <div class="flex flex-col flex-auto p-6 w-full">
+                <div class="pb-3 pt-0 flex items-center justify-between overflow-hidden" *ngIf="showContent">
                     <form class="w-full grid-cols-4 grid" [formGroup]="ForecastForm">
                         <!-- make spot selectt -->
                         <spot-singleselect-autocomplete class="w-full custom" formControlName="ForecastType"
@@ -11,21 +11,21 @@
                             [customSortPointer]="'lookUpOrder'">
                         </spot-singleselect-autocomplete>
                         <spot-singleselect-autocomplete *ngIf="showCurrency" class="w-full custom"
-                            formControlName="Currency" name="Currency" [label]="'Currency'"
-                            [placeholder]="'Currency'" [valuePointer]="'name'" [dropDownArray]="currencyList">
+                            formControlName="Currency" name="Currency" [label]="'Currency'" [placeholder]="'Currency'"
+                            [valuePointer]="'name'" [dropDownArray]="currencyList">
                         </spot-singleselect-autocomplete>
-                        <spot-multiselect-user-autocomplete formControlName="PM"
-                            [placeholder]="'Project Manager'" [label]="'Project Manager'" name="PM"
-                            [showLabel]="true">
+                        <spot-multiselect-user-autocomplete formControlName="PM" [placeholder]="'Project Manager'"
+                            [label]="'Project Manager'" name="PM" [showLabel]="true">
                         </spot-multiselect-user-autocomplete>
                         <a class="customIcon" *ngIf="ForecastForm.controls.PM.value != null && !showEmail"
-                            (click)="MailTo()"><mat-icon
-                                [svgIcon]="'heroicons_solid:mail'"></mat-icon></a>
+                            (click)="MailTo()"><mat-icon [svgIcon]="'heroicons_solid:mail'"></mat-icon></a>
                         <!-- <button *ngIf="ForecastForm.controls.PM.value != null && !showEmail" class="text-primary bg-gray-200 customButton" mat-flat-button [color]="'primary-200'" (click)="ApplyFilter()"> Apply Filters
                         </button> -->
                     </form>
                     <div class="flex items-center justify-center">
-                        <button *ngIf="ForecastForm.controls.PM.value != null && !showEmail" style="margin-right: 10px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="ApplyFilter()"> Apply Filters
+                        <button *ngIf="ForecastForm.controls.PM.value != null && !showEmail" style="margin-right: 10px;"
+                            class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                            (click)="ApplyFilter()"> Apply Filters
                         </button>
                         <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                             (click)="PortfolioCenterService.toggleDrawerOpenSmall('FXRateOpen', '' , 'this.filterdata' , '1', true)">
@@ -36,16 +36,16 @@
 
                 <div class="mxflex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden datatable"
                     *ngIf="showContent && !hidePlan" #ForecastTable>
-                    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarH]="true"
-                        [scrollbarV]="false" columnMode="force"
-                        class="font-medium text-sm text-default whitespace-nowrap datatable-CX-80"
+                    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarH]="true" [scrollbarV]="false"
+                        columnMode="force" class="font-medium text-sm text-default whitespace-nowrap datatable-CX-80"
                         [rows]="fundingRequests">
                         <ngx-datatable-column name="Reference" prop="active" [width]="100" [sortable]="false"
                             [resizeable]="false" [frozenLeft]="true">
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span style="top: 10px;position: fixed;left: 9px; font-weight: bold;">{{column.name}}</span>
+                                        <span
+                                            style="top: 10px;position: fixed;left: 9px; font-weight: bold;">{{column.name}}</span>
                                     </span>
                                 </ng-container>
                             </ng-template>
@@ -58,7 +58,8 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span style="top: 10px;position: fixed;left: 103px; font-weight: bold;">{{column.name}}</span>
+                                        <span
+                                            style="top: 10px;position: fixed;left: 103px; font-weight: bold;">{{column.name}}</span>
                                     </span>
                                 </ng-container>
                             </ng-template>
@@ -80,8 +81,8 @@
                                 <p style="margin-right: 10px;">{{value}}</p>
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Historical" prop="historical" [width]="120"
-                            [sortable]="false" [resizeable]="false">
+                        <ngx-datatable-column name="Historical" prop="historical" [width]="120" [sortable]="false"
+                            [resizeable]="false">
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
@@ -91,8 +92,12 @@
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Apr" prop="apr" [width]="120" [sortable]="false"
@@ -100,13 +105,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="May" prop="may" [width]="120" [sortable]="false"
@@ -114,13 +126,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Jun" prop="jun" [width]="120" [sortable]="false"
@@ -128,13 +147,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Jul" prop="jul" [width]="120" [sortable]="false"
@@ -142,13 +168,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Aug" prop="aug" [width]="120" [sortable]="false"
@@ -156,13 +189,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Sep" prop="sep" [width]="120" [sortable]="false"
@@ -170,13 +210,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Oct" prop="oct" [width]="120" [sortable]="false"
@@ -184,13 +231,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Nov" prop="nov" [width]="120" [sortable]="false"
@@ -198,13 +252,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Dec" prop="dec" [width]="120" [sortable]="false"
@@ -212,13 +273,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Jan" prop="jan" [width]="120" [sortable]="false"
@@ -226,13 +294,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Feb" prop="feb" [width]="120" [sortable]="false"
@@ -240,13 +315,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Mar" prop="mar" [width]="120" [sortable]="false"
@@ -254,13 +336,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name={{yearLabel.currentYear}} prop="annualTotal" [width]="120"
@@ -268,13 +357,24 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <div *ngIf="ForecastForm.controls.Currency.value.name == 'OY'" style="background-color: #89B4E0 !important; height: 39px;  margin-bottom: 22px;"><p style="top: 12px; position: relative;text-align:right;">{{value| number:'1.0-4'}}</p></div>
-                                <div *ngIf="ForecastForm.controls.Currency.value.name != 'OY'" style="background-color: #89B4E0 !important; height: 39px;  margin-bottom: 22px;"><p style="top: 12px; position: relative;text-align:right;">{{value| number:'1.0-0'}}</p></div>
+                                <div *ngIf="ForecastForm.controls.Currency.value.name == 'OY'"
+                                    style="background-color: #89B4E0 !important; height: 39px;  margin-bottom: 22px;">
+                                    <p style="top: 12px; position: relative;text-align:right;">{{value| number:'1.0-4'}}
+                                    </p>
+                                </div>
+                                <div *ngIf="ForecastForm.controls.Currency.value.name != 'OY'"
+                                    style="background-color: #89B4E0 !important; height: 39px;  margin-bottom: 22px;">
+                                    <p style="top: 12px; position: relative;text-align:right;">{{value| number:'1.0-0'}}
+                                    </p>
+                                </div>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Apr" prop="aprY1" [width]="120" [sortable]="false"
@@ -282,13 +382,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="May" prop="mayY1" [width]="120" [sortable]="false"
@@ -296,13 +403,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Jun" prop="junY1" [width]="120" [sortable]="false"
@@ -310,13 +424,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Jul" prop="julY1" [width]="120" [sortable]="false"
@@ -324,13 +445,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Aug" prop="augY1" [width]="120" [sortable]="false"
@@ -338,13 +466,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Sep" prop="sepY1" [width]="120" [sortable]="false"
@@ -352,13 +487,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Oct" prop="octY1" [width]="120" [sortable]="false"
@@ -366,13 +508,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Nov" prop="novY1" [width]="120" [sortable]="false"
@@ -380,13 +529,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Dec" prop="decY1" [width]="120" [sortable]="false"
@@ -394,13 +550,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Jan" prop="janY1" [width]="120" [sortable]="false"
@@ -408,13 +571,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Feb" prop="febY1" [width]="120" [sortable]="false"
@@ -422,13 +592,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Mar" prop="marY1" [width]="120" [sortable]="false"
@@ -436,13 +613,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name={{yearLabel.NextYear}} prop="annualTotalY1" [width]="120"
@@ -450,16 +634,23 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <div *ngIf="ForecastForm.controls.Currency.value.name == 'OY'" style="background-color: #81FD84 !important; height: 39px;margin-bottom: 22px;">
-                                    <p style="top: 12px; position: relative;text-align:right;">{{value| number:'1.0-4'}}</p>
+                                <div *ngIf="ForecastForm.controls.Currency.value.name == 'OY'"
+                                    style="background-color: #81FD84 !important; height: 39px;margin-bottom: 22px;">
+                                    <p style="top: 12px; position: relative;text-align:right;">{{value| number:'1.0-4'}}
+                                    </p>
                                 </div>
-                                <div *ngIf="ForecastForm.controls.Currency.value.name != 'OY'" style="background-color: #81FD84 !important; height: 39px;margin-bottom: 22px;">
-                                    <p style="top: 12px; position: relative;text-align:right;">{{value| number:'1.0-0'}}</p>
+                                <div *ngIf="ForecastForm.controls.Currency.value.name != 'OY'"
+                                    style="background-color: #81FD84 !important; height: 39px;margin-bottom: 22px;">
+                                    <p style="top: 12px; position: relative;text-align:right;">{{value| number:'1.0-0'}}
+                                    </p>
                                 </div>
                             </ng-template>
                         </ngx-datatable-column>
@@ -468,13 +659,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="pinkBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name={{yearLabel.Y2}} prop="y3" [width]="120" [sortable]="false"
@@ -482,13 +680,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="pinkBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name={{yearLabel.Y3}} prop="y4" [width]="120" [sortable]="false"
@@ -496,13 +701,20 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="pinkBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name={{yearLabel.Y4}} prop="y5" [width]="120" [sortable]="false"
@@ -510,35 +722,64 @@
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
+                                        <span class="pinkBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                <p style="text-align:right; margin-bottom: 12px;" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}
+                                </p>
+                                <p style="text-align:right; margin-bottom: 12px;"
+                                    *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Total CAPEX" prop="cumulativeTotal" [width]="120"
-                            [sortable]="false" [resizeable]="false">
+                        <ngx-datatable-column name="Total CAPEX" prop="cumulativeTotal" [width]="120" [sortable]="false"
+                            [resizeable]="false">
                             <ng-template let-column="column" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper">
-                                        <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 10px;">{{column.name}}</div></span>
+                                        <span class="pinkBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 10px;">
+                                                {{column.name}}</div>
+                                        </span>
                                     </span>
                                 </ng-container>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <div style="background-color: #FCC2C2 !important; height: 39px; margin-bottom: 22px;">
-                                    <p style="top: 12px; position: relative;text-align:right;">{{value| number:'1.0-4'}}</p>
+                                    <p style="top: 12px; position: relative;text-align:right;">{{value| number:'1.0-4'}}
+                                    </p>
                                 </div>
                             </ng-template>
                         </ngx-datatable-column>
                     </ngx-datatable>
                 </div>
 
-                <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden" *ngIf="showContent"
-                    #ForecastTable>
+                <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden"
+                    *ngIf="showContent" #ForecastTable>
+                    <div class="flex justify-between items-start pt-4 pb-4">
+                        <div></div>
+                        <div></div>
+                        <!-- *ngIf="ForecastForm.controls.ForecastType.value.lookUpName == 'CapEx Forecast'" -->
+                        <div *ngIf="ForecastForm.controls.ForecastType.value.lookUpName == 'CapEx Forecast'">
+                        <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="
+                                        PortfolioCenterService.toggleForecastDrawerOpen('ForecastBulkEdit','',[],true)">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
+                        </button>
+                    </div>
+                    <div *ngIf="ForecastForm.controls.ForecastType.value.lookUpName == 'OpEx Forecast'">
+                        <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="
+                                        PortfolioCenterService.toggleForecastDrawerOpen('ForecastBulkEditO','',[],true)">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
+                        </button>
+                    </div>
+
+                    </div>
                     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarH]="true" [scrollbarV]="false"
                         columnMode="force" class="font-medium text-sm text-default whitespace-nowrap datatable-PB-80"
                         [rows]="projectFunding">
@@ -547,9 +788,11 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <div style="top: 19px;position: fixed;left: 8px; font-weight: bold;" (click)="sortasc('capitalBudgetID')">
+                                        <div style="top: 19px;position: fixed;left: 8px; font-weight: bold;"
+                                            (click)="sortasc('capitalBudgetID')">
                                             {{column.name}}
-                                            <button type="button" (click)="sortasc('capitalBudgetID')" style="position: absolute; top: 2px;">
+                                            <button type="button" (click)="sortasc('capitalBudgetID')"
+                                                style="position: absolute; top: 2px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDir ? (sortDir === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -567,9 +810,11 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <div style="top: 19px;position: fixed;left: 139px; font-weight: bold;" (click)="sortasc('problemID')">
+                                        <div style="top: 19px;position: fixed;left: 139px; font-weight: bold;"
+                                            (click)="sortasc('problemID')">
                                             {{column.name}}
-                                            <button type="button" (click)="sortasc('problemID')" style="position: absolute; top: 2px;">
+                                            <button type="button" (click)="sortasc('problemID')"
+                                                style="position: absolute; top: 2px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirID ? (sortDirID === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -587,9 +832,11 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <div style="top: 19px;position: fixed;left: 257px; font-weight: bold;" (click)="sortasc('projectName')">
+                                        <div style="top: 19px;position: fixed;left: 257px; font-weight: bold;"
+                                            (click)="sortasc('projectName')">
                                             {{column.name}}
-                                            <button type="button" (click)="sortasc('projectName')" style="position: absolute; top: 2px;">
+                                            <button type="button" (click)="sortasc('projectName')"
+                                                style="position: absolute; top: 2px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirPN ? (sortDirPN === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -607,9 +854,11 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <div style="top: 19px;position: fixed;left: 782px; font-weight: bold;" (click)="sortasc('pm')">
+                                        <div style="top: 19px;position: fixed;left: 782px; font-weight: bold;"
+                                            (click)="sortasc('pm')">
                                             {{column.name}}
-                                            <button type="button" (click)="sortasc('pm')" style="position: absolute; top: 2px;">
+                                            <button type="button" (click)="sortasc('pm')"
+                                                style="position: absolute; top: 2px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirPM ? (sortDirPM === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -627,9 +876,11 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <div style="top: 19px;position: fixed;left: 981px; font-weight: bold;" (click)="sortasc('localCurrencyAbbreviation')">
+                                        <div style="top: 19px;position: fixed;left: 981px; font-weight: bold;"
+                                            (click)="sortasc('localCurrencyAbbreviation')">
                                             {{column.name}}
-                                            <button type="button" (click)="sortasc('localCurrencyAbbreviation')" style="position: absolute; top: 2px;">
+                                            <button type="button" (click)="sortasc('localCurrencyAbbreviation')"
+                                                style="position: absolute; top: 2px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirLC ? (sortDirLC === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -646,17 +897,19 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <div style="top: 19px;position: fixed;left: 36px; font-weight: bold;" (click)="sortasc('historical')">
+                                        <div style="top: 19px;position: fixed;left: 36px; font-weight: bold;"
+                                            (click)="sortasc('historical')">
                                             {{column.name}}
-                                            <button type="button" (click)="sortasc('historical')" style="position: absolute; top: 2px;">
+                                            <button type="button" (click)="sortasc('historical')"
+                                                style="position: absolute; top: 2px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirHis ? (sortDirHis === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
                                         </div>
-                                    <!-- <span style="top: 10px;position: fixed;left: 36px; font-weight: bold;">{{column.name}}</span> -->
-                                </span>
-                            </ng-container>
-                        </ng-template>
+                                        <!-- <span style="top: 10px;position: fixed;left: 36px; font-weight: bold;">{{column.name}}</span> -->
+                                    </span>
+                                </ng-container>
+                            </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p style="text-align:right; margin-bottom: 12px;">{{value | number:'1.0-0'}}</p>
                             </ng-template>
@@ -665,9 +918,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('apr')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('apr')" style="position: absolute; left: 72px; top: 4px;">
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('apr')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('apr')"
+                                                style="position: absolute; left: 72px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirapr ? (sortDirapr === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -684,9 +940,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('may')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('may')" style="position: absolute; left: 82px; top: 4px;">
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('may')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('may')"
+                                                style="position: absolute; left: 82px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirmay ? (sortDirmay === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -703,9 +962,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('jun')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('jun')" style="position: absolute; left: 79px; top: 4px;">
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('jun')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('jun')"
+                                                style="position: absolute; left: 79px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirjun ? (sortDirjun === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -722,9 +984,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('jul')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('jul')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('jul')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('jul')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirjul ? (sortDirjul === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -741,9 +1006,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('aug')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('aug')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('aug')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('aug')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDiraug ? (sortDiraug === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -760,9 +1028,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('sep')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('sep')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('sep')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('sep')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirsep ? (sortDirsep === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -779,9 +1050,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('oct')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('oct')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('oct')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('oct')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDiroct ? (sortDiroct === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -798,9 +1072,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('nov')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('nov')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('nov')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('nov')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirnov ? (sortDirnov === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -817,9 +1094,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('dec')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('dec')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('dec')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('dec')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirdec ? (sortDirdec === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -836,9 +1116,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('jan')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('jan')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('jan')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('jan')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirjan ? (sortDirjan === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -855,9 +1138,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('feb')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('feb')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('feb')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('feb')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirfeb ? (sortDirfeb === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -874,9 +1160,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('mar')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('mar')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('mar')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('mar')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirmar ? (sortDirmar=== 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -894,9 +1183,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('annualTotal')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('annualTotal')" style="position: absolute; left: 87px; top: 4px;">
+                                        <span class="blueBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('annualTotal')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('annualTotal')"
+                                                style="position: absolute; left: 87px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirAT ? (sortDirAT === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -907,7 +1199,8 @@
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <div style="background-color: #89B4E0 !important; height: 39px;margin-bottom: 22px;">
-                                    <p style="top: 12px; position: relative;text-align:right">{{value| number:'1.0-0'}}</p>
+                                    <p style="top: 12px; position: relative;text-align:right">{{value| number:'1.0-0'}}
+                                    </p>
                                 </div>
                             </ng-template>
                         </ngx-datatable-column>
@@ -915,9 +1208,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('aprY1')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('aprY1')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('aprY1')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('aprY1')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDiraprY1 ? (sortDiraprY1 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -934,9 +1230,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('mayY1')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('mayY1')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('mayY1')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('mayY1')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirmayY1 ? (sortDirmayY1 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -953,9 +1252,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('junY1')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('junY1')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('junY1')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('junY1')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirjunY1 ? (sortDirjunY1 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -972,9 +1274,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('julY1')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('julY1')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('julY1')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('julY1')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirjulY1 ? (sortDirjulY1 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -991,9 +1296,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('augY1')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('augY1')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('augY1')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('augY1')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDiraugY1 ? (sortDiraugY1 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1010,9 +1318,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('sepY1')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('sepY1')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('sepY1')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('sepY1')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirsepY1 ? (sortDirsepY1 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1029,9 +1340,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('octY1')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('octY1')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('octY1')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('octY1')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDiroctY1 ? (sortDiroctY1 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1048,9 +1362,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('novY1')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('novY1')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('novY1')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('novY1')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirnovY1 ? (sortDirnovY1 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1067,9 +1384,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('decY1')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('decY1')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('decY1')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('decY1')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirdecY1 ? (sortDirdecY11 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1086,9 +1406,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('janY1')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('janY1')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('janY1')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('janY1')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirjanY1 ? (sortDirjanY1 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1105,9 +1428,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('febY1')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('febY1')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('febY1')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('febY1')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirfebY1 ? (sortDirfebY1 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1124,9 +1450,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('marY1')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('marY1')" style="position: absolute; left: 77px; top: 4px;">
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('marY1')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('marY1')"
+                                                style="position: absolute; left: 77px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirmarY1 ? (sortDirmarY1 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1144,9 +1473,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('annualTotalY1')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('annualTotalY1')" style="position: absolute; left: 85px; top: 4px;">
+                                        <span class="greenBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('annualTotalY1')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('annualTotalY1')"
+                                                style="position: absolute; left: 85px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirATY1 ? (sortDirATY1 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1157,7 +1489,8 @@
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <div style="background-color: #81FD84 !important; height: 39px;margin-bottom: 22px;">
-                                    <p style="top: 12px; position: relative;text-align:right">{{value| number:'1.0-0'}}</p>
+                                    <p style="top: 12px; position: relative;text-align:right">{{value| number:'1.0-0'}}
+                                    </p>
                                 </div>
                             </ng-template>
                         </ngx-datatable-column>
@@ -1165,9 +1498,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('y2')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('y2')" style="position: absolute; left: 87px; top: 4px;">
+                                        <span class="pinkBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('y2')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('y2')"
+                                                style="position: absolute; left: 87px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDiry2 ? (sortDiry2 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1184,9 +1520,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('y3')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('y3')" style="position: absolute; left: 85px; top: 4px;">
+                                        <span class="pinkBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('y3')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('y3')"
+                                                style="position: absolute; left: 85px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDiry3 ? (sortDiry3 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1203,9 +1542,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('y4')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('y4')" style="position: absolute; left: 87px; top: 4px;">
+                                        <span class="pinkBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('y4')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('y4')"
+                                                style="position: absolute; left: 87px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDiry4 ? (sortDiry4 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1222,9 +1564,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('y5')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('y5')" style="position: absolute; left: 91px; top: 4px;">
+                                        <span class="pinkBg headBgHeight">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('y5')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('y5')"
+                                                style="position: absolute; left: 91px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDiry5 ? (sortDiry5 === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1242,9 +1587,12 @@
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span class="pinkBg headBgHeightCapex"><div class="mr-2 pt-1" style="position: relative; left: 33px;" (click)="sortasc('cumulativeTotal')">
-                                            {{column.name}}</div>
-                                            <button type="button" (click)="sortasc('cumulativeTotal')" style="position: absolute; left: 94px; top: 4px;">
+                                        <span class="pinkBg headBgHeightCapex">
+                                            <div class="mr-2 pt-1" style="position: relative; left: 33px;"
+                                                (click)="sortasc('cumulativeTotal')">
+                                                {{column.name}}</div>
+                                            <button type="button" (click)="sortasc('cumulativeTotal')"
+                                                style="position: absolute; left: 94px; top: 4px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirCT ? (sortDirCT === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1257,13 +1605,16 @@
                                 <p style="text-align:right; margin-bottom: 12px;">{{value | number:'1.0-0'}}</p>
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Period Submitted By" prop="submittedByName" [width]="200" [resizeable]="false">
+                        <ngx-datatable-column name="Period Submitted By" prop="submittedByName" [width]="200"
+                            [resizeable]="false">
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span style="top: 6px;position: fixed;left: 3903px; font-weight: bold;" (click)="sortasc('submittedByName')">
+                                        <span style="top: 6px;position: fixed;left: 3903px; font-weight: bold;"
+                                            (click)="sortasc('submittedByName')">
                                             {{column.name}}
-                                            <button type="button" (click)="sortasc('submittedByName')" style="position: absolute; left: 133px; top: 1px;">
+                                            <button type="button" (click)="sortasc('submittedByName')"
+                                                style="position: absolute; left: 133px; top: 1px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirSN ? (sortDirSN === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1276,13 +1627,16 @@
                                 <p>{{value}}</p>
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Period Submitted Date/Time" prop="lastSubmitted" [width]="250"  [resizeable]="false">
+                        <ngx-datatable-column name="Period Submitted Date/Time" prop="lastSubmitted" [width]="250"
+                            [resizeable]="false">
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span style="top: 6px;position: fixed;left: 4088px; font-weight: bold;" (click)="sortasc('lastSubmitted')">
+                                        <span style="top: 6px;position: fixed;left: 4088px; font-weight: bold;"
+                                            (click)="sortasc('lastSubmitted')">
                                             {{column.name}}
-                                            <button type="button" (click)="sortasc('lastSubmitted')" style="position: absolute; left: 189px; top: 1px;">
+                                            <button type="button" (click)="sortasc('lastSubmitted')"
+                                                style="position: absolute; left: 189px; top: 1px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDirLS ? (sortDirLS === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1295,14 +1649,16 @@
                                 <p>{{value| date:'dd-MMM-yyyy'}}</p>
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Period Submitted Reference" prop="active" [width]="250" 
+                        <ngx-datatable-column name="Period Submitted Reference" prop="active" [width]="250"
                             [resizeable]="false">
                             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                                 <ng-container>
                                     <span class="datatable-header-cell-wrapper" (click)="sort()">
-                                        <span style="top: 6px;position: fixed;left: 4321px; font-weight: bold;" (click)="sortasc('active')">
+                                        <span style="top: 6px;position: fixed;left: 4321px; font-weight: bold;"
+                                            (click)="sortasc('active')">
                                             {{column.name}}
-                                            <button type="button" (click)="sortasc('active')" style="position: absolute; left: 184px; top: 1px;">
+                                            <button type="button" (click)="sortasc('active')"
+                                                style="position: absolute; left: 184px; top: 1px;">
                                                 <i class="material-icons"
                                                     [innerText]="sortDiractive ? (sortDiractive === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
                                             </button>
@@ -1320,5 +1676,4 @@
                 </div>
         </div>
     </div>
-</div>
 </div>
