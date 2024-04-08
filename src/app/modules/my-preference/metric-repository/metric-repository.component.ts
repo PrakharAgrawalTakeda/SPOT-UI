@@ -59,7 +59,8 @@ export class MetricRepositoryComponent {
 
     checkUserPermissions() {
         return new Promise<void>((resolve, reject) => {
-            const currentUserID = this.msalService.instance.getActiveAccount().localAccountId;
+            const currentUserID = '321be4b0-6338-4ed4-b40d-b9fdf9b4c489'
+            //this.msalService.instance.getActiveAccount().localAccountId;
             //this.msalService.instance.getActiveAccount().localAccountId;
             if (!this.filterCriteria || !this.filterCriteria.portfolioOwner) {
                 console.error("filterCriteria is not loaded");
@@ -68,9 +69,12 @@ export class MetricRepositoryComponent {
             }
             console.log(this.filterCriteria.portfolioOwner)
             const portfolioOwnerList = this.filterCriteria.portfolioOwner;
-            this.userManagedPortfolios = portfolioOwnerList.filter(po =>
-                po.pmoleadDelegateAdid == currentUserID || po.pmoleadAdid == currentUserID
-            ).map(po => po.portfolioOwner);
+            this.userManagedPortfolios = portfolioOwnerList.filter(po => {
+                // Split the pmoleadDelegateAdid field into an array of IDs
+            const delegateAdids = po.pmoleadDelegateAdid ? po.pmoleadDelegateAdid.split(',') : [];
+            // Check if currentUserID matches pmoleadAdid or is included in the delegateAdids array
+            return po.pmoleadAdid == currentUserID || delegateAdids.includes(currentUserID);
+        }).map(po => po.portfolioOwner);
             console.log(this.userManagedPortfolios)
 
             // visibility of Add New button
