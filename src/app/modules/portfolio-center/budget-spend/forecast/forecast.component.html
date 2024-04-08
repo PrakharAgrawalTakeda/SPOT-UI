@@ -2,7 +2,7 @@
     <div class="xl:col-span-2 flex flex-col flex-auto  bg-card shadow rounded-2xl overflow-y-scroll"
         style="margin-right: 10px; margin-left: 10px;">
         <div class="flex flex-col flex-auto p-6 w-full">
-                <div class="pb-3 pt-0 flex items-center justify-between overflow-hidden">
+                <div class="pb-3 pt-0 flex items-center justify-between overflow-hidden" *ngIf="showContent">
                     <form class="w-full grid-cols-4 grid" [formGroup]="ForecastForm">
                         <!-- make spot selectt -->
                         <spot-singleselect-autocomplete class="w-full custom" formControlName="ForecastType"

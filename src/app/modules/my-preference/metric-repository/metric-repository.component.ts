@@ -39,41 +39,62 @@ export class MetricRepositoryComponent {
     }
 
     ngOnInit(): void {
-        this.dataloader()
+        this.loadInitialData().then(() => {
+            // Once loadInitialData completes, proceed to check user permissions
+            this.checkUserPermissions().then(() => {
+                // After permissions are checked, proceed to load metric repository data
+                this.dataloader();
+            });
+        });
     }
-    checkUserPermissions() {
-        const currentUserID = this.msalService.instance.getActiveAccount().localAccountId;
-        console.log(currentUserID)
-        const portfolioOwnerList = this.filterCriteria.portfolioOwner;
-        const isPortfolioManager = ["C9F323D4-EF97-4C2A-B748-11DB5B8589D0"].includes(this.role.roleMaster.securityGroupId);
-        this.userManagedPortfolios = portfolioOwnerList.filter(po =>
-            po.pmoleadDelegateAdid == currentUserID || po.pmoleadAdid == currentUserID
-        ).map(po => po.portfolioOwner);
-        console.log(this.userManagedPortfolios)
-        this.metricRepositoryData = this.metricRepositoryData.map(metric => ({
-            ...metric,
-            showEdit: isPortfolioManager && this.userManagedPortfolios.includes(metric.portfolioOwner) && metric.metricTypeID != 'Global',
-            showDelete: isPortfolioManager && this.userManagedPortfolios.includes(metric.portfolioOwner) && metric.metricTypeID != 'Global'
-        }));
-        console.log(this.metricRepositoryData.filter(po => po.portfolioOwner == 'Site-Lessines'))
-    }
-    dataloader() {
-        // Check if the user is a Portfolio Manager and update the variable
-        this.isPortfolioManager = ["C9F323D4-EF97-4C2A-B748-11DB5B8589D0"].includes(this.role.roleMaster.securityGroupId);
-
-        const promises = [
+    loadInitialData() {
+        return Promise.all([
             this.authService.lookupMaster(),
             this.portApiService.getfilterlist(),
+        ]).then(([lookupMaster, filterList]) => {
+            this.myPreferenceService.lookUpMaster = lookupMaster;
+            this.filterCriteria = filterList;
+        })
+    }
+
+    checkUserPermissions() {
+        return new Promise<void>((resolve, reject) => {
+            const currentUserID = this.msalService.instance.getActiveAccount().localAccountId;
+            //this.msalService.instance.getActiveAccount().localAccountId;
+            if (!this.filterCriteria || !this.filterCriteria.portfolioOwner) {
+                console.error("filterCriteria is not loaded");
+                reject("filterCriteria is not loaded");
+                return;
+            }
+            console.log(this.filterCriteria.portfolioOwner)
+            const portfolioOwnerList = this.filterCriteria.portfolioOwner;
+            this.userManagedPortfolios = portfolioOwnerList.filter(po => {
+                // Split the pmoleadDelegateAdid field into an array of IDs
+            const delegateAdids = po.pmoleadDelegateAdid ? po.pmoleadDelegateAdid.split(',') : [];
+            // Check if currentUserID matches pmoleadAdid or is included in the delegateAdids array
+            return po.pmoleadAdid == currentUserID || delegateAdids.includes(currentUserID);
+        }).map(po => po.portfolioOwner);
+            console.log(this.userManagedPortfolios)
+
+            // visibility of Add New button
+            this.showAddNewButton = this.userManagedPortfolios ? this.userManagedPortfolios.length > 0 : false;
+
+            resolve();
+        });
+    }
+
+    dataloader() {
+        // Check if the user is a Portfolio Manager and update the variable --- requirement changed
+        //this.isPortfolioManager = ["C9F323D4-EF97-4C2A-B748-11DB5B8589D0"].includes(this.role.roleMaster.securityGroupId);
+
+        const promises = [
             this.apiService.getMetricRepository()
         ];
         Promise.all(promises)
             .then((response: any[]) => {
-                this.myPreferenceService.lookUpMaster = response[0]
-                this.filterCriteria = response[1];
-                console.log("FILTER LIST", this.filterCriteria.portfolioOwner)
-                this.metricRepositoryData = response[2]
-                console.log(this.metricRepositoryData)
-                this.metricRepositoryData.forEach(element => {
+                let tempMetricRepositoryData = response[0];
+                console.log(tempMetricRepositoryData)
+                tempMetricRepositoryData.forEach(element => {
                     if (element.metricTypeID == "e7a9e055-1319-4a4f-b929-cd7777599e39") {
                         element.metricTypeID = 'Global';
                     } else {
@@ -82,7 +103,24 @@ export class MetricRepositoryComponent {
                     element.metricPortfolioID = element.metricPortfolioID == "2eb536f8-bb88-4bd7-b4d5-4d1fb287059a" ? 'Global' : this.filterCriteria.portfolioOwner.filter(x => x.portfolioOwnerId == element.metricPortfolioID)[0]?.portfolioOwner
                     element.metricCategoryID = element.metricCategoryID && element.metricCategoryID.lookUpId != '' ? this.myPreferenceService.lookUpMaster.find(x => x.lookUpId == element.metricCategoryID)?.lookUpName : ''
                 })
-                this.checkUserPermissions()
+                // Filter metrics based on user role and metric type
+                this.metricRepositoryData = tempMetricRepositoryData.filter(metric => {
+                    if (metric.metricTypeID == 'Global') {
+                        return true; // Always include global metrics
+                    } else {
+                        // Include local metrics only if the user manages the portfolio
+                        return this.userManagedPortfolios ? this.userManagedPortfolios.includes(metric.portfolioOwner) : '';
+                    }
+                });
+
+                this.metricRepositoryData.forEach(element => {
+                    const isUserAssociatedWithPortfolio = this.userManagedPortfolios.includes(element.portfolioOwner);
+                    const isLocalMetric = element.metricTypeID != 'Global';
+
+                    element.showEdit = isUserAssociatedWithPortfolio && isLocalMetric;
+                    element.showDelete = isUserAssociatedWithPortfolio && isLocalMetric;
+                })
+
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);

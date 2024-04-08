@@ -4277,12 +4277,13 @@ export class PortfolioCenterComponent implements OnInit {
                     .isCapsProject
                     ? 'Yes'
                     : 'No';
-                this.projectOverview[i].CAPEXRequired = res.budgetDetails[i]
-                    .capExRequired
+                this.projectOverview[i].CAPEXRequired = res.budgetDetails[i] &&
+
+                res.budgetDetails[i].capExRequired
                     ? 'Yes'
                     : 'No';
-                this.projectOverview[i].OPEXRequired = res.budgetDetails[i]
-                    .opExRequired
+                this.projectOverview[i].OPEXRequired = res.budgetDetails[i] &&
+                res.budgetDetails[i].opExRequired
                     ? 'Yes'
                     : 'No';
 
@@ -4290,7 +4291,8 @@ export class PortfolioCenterComponent implements OnInit {
                     (item) => {
                         return (
                             item.portfolioOwnerId ==
-                            res.budgetDetails[i].budgetOwner
+                            res.budgetDetails[i] ?
+                            res.budgetDetails[i].budgetOwner : ''
                         );
                     }
                 );
@@ -4322,16 +4324,16 @@ export class PortfolioCenterComponent implements OnInit {
                     }
                 );
 
-                const predefinedInvestmentId = this.getLookupMaster(
-                    res.budgetDetails[i].predefinedInvestmentId
+                const predefinedInvestmentId = this.getLookupMaster(res.budgetDetails[i] ?
+                    res.budgetDetails[i].predefinedInvestmentId : ''
                 );
                 const agilePrimaryWorkstream = this.getLookupMaster(
                     res.projectDetails[i].agilePrimaryWorkstream
                 );
-                const whereId = this.getLookupMaster(
-                    res.budgetDetails[i].whereId
+                const whereId = this.getLookupMaster(res.budgetDetails[i] ?
+                    res.budgetDetails[i].whereId : ''
                 );
-                const whyId = this.getLookupMaster(res.budgetDetails[i].whyId);
+                const whyId = this.getLookupMaster(res.budgetDetails[i] ? res.budgetDetails[i].whyId : '');
                 const primaryKPI = this.getLookupMaster(
                     res.projectDetails[i].primaryKpi
                 );
@@ -4358,8 +4360,8 @@ export class PortfolioCenterComponent implements OnInit {
                 this.projectOverview[i].budgetOwner =
                     budgetOwner.length > 0 ? budgetOwner[0].portfolioOwner : '';
 
-                this.projectOverview[i].fundingApprovalNeedDate =
-                    res.budgetDetails[i].fundingApprovalNeedDate;
+                this.projectOverview[i].fundingApprovalNeedDate = res.budgetDetails[i] ?
+                    res.budgetDetails[i].fundingApprovalNeedDate : '';
                 this.projectOverview[i].emissionsImpactRealizationDate =
                     res.projectDetails[i].emissionsImpactRealizationDate;
 
@@ -4376,8 +4378,8 @@ export class PortfolioCenterComponent implements OnInit {
                         ? primaryProduct[0].fullProductName
                         : '';
 
-                this.projectOverview[i].APISDate =
-                    res.budgetDetails[i].apisdate;
+                this.projectOverview[i].APISDate = res.budgetDetails[i] ?
+                    res.budgetDetails[i].apisdate : '';
                 this.projectOverview[i].problemType =
                     res.projectDetails[i].problemType;
                 this.projectOverview[i].defaultOwningOrganizationId =
@@ -4390,8 +4392,8 @@ export class PortfolioCenterComponent implements OnInit {
                 console.log(
                     this.filterlist.portfolioOwner.filter((item) => {
                         return (
-                            item.portfolioOwnerId ==
-                            res.budgetDetails[i].budgetOwner
+                            item.portfolioOwnerId == res.budgetDetails[i] ?
+                            res.budgetDetails[i].budgetOwner : ''
                         );
                     })
                 );

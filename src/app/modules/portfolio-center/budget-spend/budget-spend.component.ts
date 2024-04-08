@@ -50,7 +50,7 @@ export class BudgetSpendComponent implements OnInit, OnDestroy {
         title: 'Budget/Spend',
           children: [
             {
-              title: 'Forecast Bulk View',
+              title: 'Forecast Bulk Edit',
               toggled: true
             }
             
@@ -62,7 +62,7 @@ export class BudgetSpendComponent implements OnInit, OnDestroy {
         title: 'Budget/Spend',
           children: [
             {
-              title: 'Forecast Bulk View',
+              title: 'Forecast Bulk Edit',
               toggled: true
             },
             {

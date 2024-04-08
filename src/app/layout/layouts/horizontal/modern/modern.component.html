@@ -66,8 +66,9 @@
 
     <!-- Footer -->
     <div
-        class="fixed bottom-0 flex flex-0 items-center w-full h-14 sm:h-12 px-4 md:px-6 z-49 border-t bg-card dark:bg-transparent print:hidden" *ngIf="!projecthubservice.drawerOpenedright && !myPreferenceService.drawerOpenedright && !adminService.drawerOpenedright && !portService.drawerOpenedPrakharTemp">
+        class="fixed bottom-0 flex flex-0 items-center justify-between w-full h-14 sm:h-12 px-4 md:px-6 z-49 border-t bg-card dark:bg-transparent print:hidden" *ngIf="!projecthubservice.drawerOpenedright && !myPreferenceService.drawerOpenedright && !adminService.drawerOpenedright && !portService.drawerOpenedPrakharTemp">
         <span class="font-medium text-secondary">Takeda &copy; {{currentYear}}</span>
+        <span class="font-medium text-secondary">{{version}}</span>
     </div>
 
 </div>
