@@ -348,10 +348,10 @@ export class CapsComponent implements OnInit, OnDestroy {
   openCAPS() {
     var message = "";
     if(this.callLocation == 'Business-Case'){
-      message = "The details can be edited only in the CAPS page. Do you want to leave the Business Case Recommended Options page and switch to the CAPS page?"
+      message = "The details can be edited only in the Environmental Impact (CAPS) page. Do you want to leave the Business Case Recommended Options page and switch to the Environmental Impact (CAPS) page?"
     }
     else if(this.callLocation == "Project-Charter"){
-      message = "The details can be edited only in the CAPS page. Do you want to leave the Project Charter page and switch to the CAPS page?"
+      message = "The details can be edited only in the Environmental Impact (CAPS) page. Do you want to leave the Project Charter page and switch to the Environmental Impact (CAPS) page?"
     }
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Are you sure?",
@@ -364,7 +364,7 @@ export class CapsComponent implements OnInit, OnDestroy {
       "actions": {
         "confirm": {
           "show": true,
-          "label": "Go to CAPS",
+          "label": "Go to Environmental Impact (CAPS)",
           // "color": "warn"
         },
         "cancel": {
