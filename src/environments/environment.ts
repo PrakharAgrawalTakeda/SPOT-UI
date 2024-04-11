@@ -6,8 +6,8 @@ export const environment = {
     production: false,
     environment: 'Local',
     SPOT_UI_URL: 'http://localhost:4200/',
-    SPOT_API_URL:'https://tospotdev-api-gateway.azurewebsites.net/api/',
-    //SPOT_API_URL:'https://localhost:7288/api/',
+    //SPOT_API_URL:'https://tospotdev-api-gateway.azurewebsites.net/api/',
+    SPOT_API_URL:'https://localhost:7288/api/',
     isDeploying: false
 };
 
@@ -18,4 +18,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
+import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
