@@ -134,13 +134,13 @@
                                     <div>Submitted By</div>
                                     <div></div>
                                 </div>
-                                <div class="grid grid-cols-4 gap-x-6 gap-y-0 w-full -mt-4">
-                                    <spot-input class="w-full" formControlName="referenceCurrent"  showLabel="false" >
+                                <div *ngIf="!preliminaryExists" class="grid grid-cols-4 gap-x-6 gap-y-0 w-full -mt-4">
+                                    <spot-input class="w-full" formControlName="referenceCurrent" showLabel="false">
                                     </spot-input>
                                     <spot-input class="w-full" formControlName="periodCurrent" showLabel="false">
-                                    </spot-input>                                
+                                    </spot-input>
                                     <spot-input showLabel="false"
-                                                class="w-full" 
+                                                class="w-full"
                                                 formControlName="lastSubmittedCurrent"></spot-input>
                                     <spot-input class="w-full" formControlName="submittedByCurrent" showLabel="false">
                                     </spot-input>
@@ -150,8 +150,8 @@
                                     </spot-input>
                                     <spot-input class="w-full" formControlName="periodPreliminary" showLabel="false">
                                     </spot-input>
-                                    <spot-input class="w-full" 
-                                                formControlName="lastSubmittedPreliminary" 
+                                    <spot-input class="w-full"
+                                                formControlName="lastSubmittedPreliminary"
                                                 showLabel="false" >
                                     </spot-input>
                                     <spot-input class="w-full" formControlName="submittedByPreliminary" showLabel="false" >
