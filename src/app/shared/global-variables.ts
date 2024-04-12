@@ -15,24 +15,7 @@ export class GlobalVariables {
     
     //process.env.NODE_ENV === 'development' ?
 
-        //Mannat
-
-        'https://tospotdev-api-gateway.azurewebsites.net/api/'
-
-        //Nick&Toader
-
-        // 'https://localhost:7288/api/'
-
-        // Prakhar Local API
-
-        // 'https://spot4api-dev.azurewebsites.net/api/'
-
-        // 'https://localhost:5001/api/'
-
-        // 'https://localhost:44304/api/'
-
-        // 'https://localhost:7288/api/'
-
-        : 'https://tospotdev-api-gateway.azurewebsites.net/api/'
+        
+    public static version: string  = 'v 2.0.20.1'
 
 }

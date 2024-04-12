@@ -9,6 +9,7 @@ import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { MyPreferenceService } from 'app/modules/my-preference/my-preference.service';
 import { AdminService } from 'app/modules/admin/admin.service';
 import { PortfolioCenterService } from 'app/modules/portfolio-center/portfolio-center.service';
+import { GlobalVariables } from 'app/shared/global-variables';
 
 @Component({
     selector     : 'modern-layout',
@@ -20,7 +21,7 @@ export class ModernLayoutComponent implements OnInit, OnDestroy
     isScreenSmall: boolean;
     navigation: Navigation;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-
+    version: string = GlobalVariables.version;
     /**
      * Constructor
      */

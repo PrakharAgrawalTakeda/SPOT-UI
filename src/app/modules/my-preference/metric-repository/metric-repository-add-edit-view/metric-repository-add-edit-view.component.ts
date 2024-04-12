@@ -82,13 +82,17 @@ export class MetricRepositoryAddEditViewComponent {
     ngOnInit() {
         this.metricRepositoryForm.controls.globalLocal.disable()
         this.myPreferenceApiService.GetPortfolioOwnerForPreferences(this.msalService.instance.getActiveAccount().localAccountId).then((portfolioRes: any) => {
-            this.portApiService.getfilterlist().then(filter => {
-                this.filterCriteria = filter
-                console.log(this.filterCriteria)
-                const currentUserID = this.msalService.instance.getActiveAccount().localAccountId;
-                this.portfolioOwnerList = this.filterCriteria.portfolioOwner.filter(po =>
-                po.pmoleadDelegateAdid === currentUserID || po.pmoleadAdid === currentUserID
-            );
+                this.portfolioOwnerList = portfolioRes;
+                console.log(this.portfolioOwnerList)
+            //     this.filterCriteria = filter
+            //     console.log(this.filterCriteria)
+            //     const currentUserID = this.msalService.instance.getActiveAccount().localAccountId;
+            //     this.portfolioOwnerList = this.filterCriteria.portfolioOwner.filter(po => {
+            //         // Split the pmoleadDelegateAdid field into an array of IDs
+            //     const delegateAdids = po.pmoleadDelegateAdid ? po.pmoleadDelegateAdid.split(',') : [];
+            //     // Check if currentUserID matches pmoleadAdid or is included in the delegateAdids array
+            //     return po.pmoleadAdid == currentUserID || delegateAdids.includes(currentUserID);
+            // })
             if (this.myPreferenceService.itemid != "new") {
                 this.metricRepository = this.myPreferenceService.all
                 this.metricRepositoryForm.patchValue({
@@ -106,7 +110,6 @@ export class MetricRepositoryAddEditViewComponent {
                 }
             }
         })
-    })
     }
     submitMetricRepository() {
         if (this.canSubmit) {

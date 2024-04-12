@@ -105,7 +105,7 @@ export class ProjectHubService {
           link: 'project-team'
         },
         {
-          title: 'CAPS',
+          title: 'Enviornmental Impact (CAPS)',
           type: 'basic',
           icon: 'heroicons_outline:globe',
           link: 'caps'
@@ -215,7 +215,7 @@ export class ProjectHubService {
                   link: 'business-case/recommended-option/benefits'
                 },
                 {
-                  title: 'CAPS',
+                  title: 'Environmental Impact (CAPS)',
                   type: 'basic',
                   link: 'business-case/recommended-option/caps'
                 },
@@ -334,7 +334,7 @@ export class ProjectHubService {
               link: 'project-charter/budget'
             },
             {
-              title: 'CAPS',
+              title: 'Environmental Impact (CAPS)',
               type: 'basic',
               link: 'project-charter/caps'
             },
