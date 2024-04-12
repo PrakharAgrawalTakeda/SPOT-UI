@@ -98,16 +98,17 @@ export class BudgetComponent implements OnInit, OnDestroy {
                 this.budgetService.planActive = response[3].budgetForecasts.find(x => x.active === 'Plan' || x.budgetData === 'CapEx Forecast');
                 this.forecastPatchGeneralForm(response[3].budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"));
                 this.generalInfoPatchValue(response[3])
-                this.budgetService.forecastEditButtonEnabler();
+                this.budgetService.openEntriesExist = response[3].budgetForecasts.some(item => item.budgetData === 'CapEx Forecast' && item.isopen === true);
+                if (this.budgetService.openEntriesExist) {
+                    this.budgetService.openEntry = response[3].budgetForecasts.find(x => x.isopen === true);
+                }
                 this.budgetService.startingMonth = this.budgetService.getStartingMonth();
+                this.budgetService.forecastEditButtonEnabler();
                 this.budgetService.checkIsCellEditable();
                 this.budgetService.calculateForecast();
                 this.budgetService.setTextColors();
-                this.budgetService.openEntriesExist = response[3].budgetForecasts.some(item => item.budgetData === 'CapEx Forecast' && item.isopen === true);
-                if (this.budgetService.openEntriesExist) {
-                    this.budgetService.openEntry = response[3].budgetForecasts.find(x => x.isopen == true);
-                }
                 this.budgetService.setLabels();
+
                 this.viewContent = true
             })
             .catch((error) => {
