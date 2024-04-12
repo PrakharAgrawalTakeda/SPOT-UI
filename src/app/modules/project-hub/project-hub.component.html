@@ -132,7 +132,7 @@
         <app-strategic-drivers
             *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEdit'"></app-strategic-drivers>
         <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditStrategicInitiative'"
-            [viewElements]="['primaryKPI', 'isAgile', 'agilePrimaryWorkstream', 'agileSecondaryWorkstream', 'agileWave']"></app-strategic-drivers>
+            [viewElements]="['primaryKPI', 'isAgile', 'agilePrimaryWorkstream', 'agileSecondaryWorkstream', 'agileWave','isSprproject','sprprojectCategory', 'sprprojectGrouping']"></app-strategic-drivers>
         <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditCloseOut'"
             [subCallLocation]="'CloseOut'" [viewElements]="['isGoodPractise']"></app-strategic-drivers>
         <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditCloseOutStrategicInitiative'"

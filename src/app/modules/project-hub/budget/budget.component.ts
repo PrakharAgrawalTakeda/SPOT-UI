@@ -98,16 +98,17 @@ export class BudgetComponent implements OnInit, OnDestroy {
                 this.budgetService.planActive = response[3].budgetForecasts.find(x => x.active === 'Plan' || x.budgetData === 'CapEx Forecast');
                 this.forecastPatchGeneralForm(response[3].budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"));
                 this.generalInfoPatchValue(response[3])
-                this.budgetService.forecastEditButtonEnabler();
+                this.budgetService.openEntriesExist = response[3].budgetForecasts.some(item => item.budgetData === 'CapEx Forecast' && item.isopen === true);
+                if (this.budgetService.openEntriesExist) {
+                    this.budgetService.openEntry = response[3].budgetForecasts.find(x => x.isopen === true);
+                }
                 this.budgetService.startingMonth = this.budgetService.getStartingMonth();
+                this.budgetService.forecastEditButtonEnabler();
                 this.budgetService.checkIsCellEditable();
                 this.budgetService.calculateForecast();
                 this.budgetService.setTextColors();
-                this.budgetService.openEntriesExist = response[3].budgetForecasts.some(item => item.budgetData === 'CapEx Forecast' && item.isopen === true);
-                if (this.budgetService.openEntriesExist) {
-                    this.budgetService.openEntry = response[3].budgetForecasts.find(x => x.isopen == true);
-                }
                 this.budgetService.setLabels();
+
                 this.viewContent = true
             })
             .catch((error) => {
@@ -161,7 +162,7 @@ export class BudgetComponent implements OnInit, OnDestroy {
         const preliminary = forecast.find(x => x.active == 'Preliminary');
         if (preliminary) {
             this.preliminaryExists = true;
-            this.budgetForecastForm.patchValue({                
+            this.budgetForecastForm.patchValue({
                 referencePreliminary: preliminary.active,
                 periodPreliminary: preliminary.periodName,
                 lastSubmittedPreliminary: this.formatDateTime(preliminary.lastSubmitted),
@@ -178,17 +179,20 @@ export class BudgetComponent implements OnInit, OnDestroy {
             mtdpCodeId: this.getLookUpName(this.budgetService.currentEntry.mtdpDeviationCodeID),
             committedSpend: forecast.find(x => x.isopen && x.budgetData == "CapEx Forecast").committedSpend,
         })
-        this.budgetService.headerLabel = "Current " + current.periodName + " versus Plan " + forecast.find(x => x.active == 'Plan').periodName
+        this.budgetService.headerLabel =
+            ( preliminary ? "Preliminary " + preliminary.periodName
+                          : "Current " + current.periodName
+            ) + " versus Plan " + forecast.find(x => x.active == 'Plan').periodName
     }
 
     formatDateTime(dateTime: string): string {
         if (!dateTime) return '';
-        // in DB dates are stored in UTC datetime, but the format is regalar datetime format, 
+        // in DB dates are stored in UTC datetime, but the format is regalar datetime format,
         // to explicitaly mark it utc, adding a trailing 'Z' is required
         // User will see this date-time in local time, as per browser's timezone or location settings
         return moment.utc(dateTime + 'Z').local().format('DD-MMM-YYYY, HH:mm:ss');
     }
-    
+
     getLookUpName(id: string): string {
         return id && id != '' ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == id)?.lookUpName : ''
     }

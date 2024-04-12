@@ -49,7 +49,7 @@ export class ManageUsersEditComponent implements OnInit {
     if (roles?.length > 0) {
       var secondaryRoles = []
       roles.forEach(element => {
-        secondaryRoles.push(this.secondaryRoles.find(x => x.roleId == element))
+        secondaryRoles.push(this.secondaryRoles.find(x => x.roleId.toLowerCase() == element.toLowerCase()))
       });
       return secondaryRoles
     }

@@ -44,8 +44,12 @@ export class BudgetCapexOpexTableComponent implements OnDestroy {
             this.data = this.inputData ?  this.inputData.budgetForecasts.filter(x => x.budgetData == "OpEx Forecast") : [];
             this.budgetService.forecastEditButtonEnabler();
         }
-        if(this.mode=="Capex"){
-            this.data = this.inputData ?  this.inputData.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast") : [];
+        if (this.mode == "Capex") {
+            this.data = this.inputData ? this.inputData.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast") : [];
+            const isPriliminary = this.data.filter(x => x.active === "Preliminary").length > 0;
+            if (isPriliminary) {
+                this.data = this.data.filter(x => x.active !== "Current");
+            }
         }
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         this.setTableColumnMode();
