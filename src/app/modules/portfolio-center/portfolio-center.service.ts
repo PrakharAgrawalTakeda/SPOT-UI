@@ -224,7 +224,7 @@ export class PortfolioCenterService {
 
     forecastDrawerOpenedChanged(event: any): void {
         console.log(this.forecastDrawerOpened)
-        debugger
+        
         if (!this.forecastDrawerOpened) {
             if (this.forecastDrawerOpenedright != event) {
                 if (event == false) {
@@ -253,7 +253,7 @@ export class PortfolioCenterService {
         forecastData: any,
         forecastDrawerLarge: boolean = false
     ): void {
-        debugger
+        //debugger
         console.log(forecastType);
         if (this.forecastDrawerOpenedright == true && this.isFormChanged == true) {
             const alertopenerForecast = this.fusealert.open(this.alert);
@@ -304,7 +304,7 @@ export class PortfolioCenterService {
         fuseDrawerLarge: boolean = false
     ): void {
         console.log(itemtype);
-        debugger
+        
         if (this.drawerOpenedright == true && this.isFormChanged == true) {
             const alertopener = this.fusealert.open(this.alert);
             alertopener.afterClosed().subscribe((res) => {
@@ -367,7 +367,7 @@ export class PortfolioCenterService {
         const alertopener = this.fusealert.open(this.alert);
         this.isFormChanged = false;
         alertopener.afterClosed().subscribe((res) => {
-            debugger
+            
             if (res != 'confirmed') {
                 this.toggleDrawerOpen(
                     this.itemtype,
