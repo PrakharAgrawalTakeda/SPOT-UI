@@ -31,7 +31,7 @@ export class BudgetService {
     ytdpValue: number = 0;
     mtdpValue: number = 0;
     ytdPlanTotal: number = 0;
-    ytdCurrentTotal: number = 0;
+    ytdOpenTotal: number = 0;
     planActive: any;
     tfpDev: number;
     ytdDev: number;
@@ -74,54 +74,54 @@ export class BudgetService {
 
     calculateForecast() {
         this.ytdPlanTotal=0;
-        this.ytdCurrentTotal=0;
+        this.ytdOpenTotal=0;
         if (!this.aprEditable) {
             this.ytdPlanTotal += this.planActive.apr;
-            this.ytdCurrentTotal += this.currentEntry.apr;
+            this.ytdOpenTotal += this.openEntry.apr;
         }
         if (!this.mayEditable) {
             this.ytdPlanTotal += this.planActive.may;
-            this.ytdCurrentTotal += this.currentEntry.may;
+            this.ytdOpenTotal += this.openEntry.may;
         }
         if (!this.junEditable) {
             this.ytdPlanTotal += this.planActive.jun;
-            this.ytdCurrentTotal += this.currentEntry.jun;
+            this.ytdOpenTotal += this.openEntry.jun;
         }
         if (!this.julEditable) {
             this.ytdPlanTotal += this.planActive.jul;
-            this.ytdCurrentTotal += this.currentEntry.jul;
+            this.ytdOpenTotal += this.openEntry.jul;
         }
         if (!this.augEditable) {
             this.ytdPlanTotal += this.planActive.aug;
-            this.ytdCurrentTotal += this.currentEntry.aug;
+            this.ytdOpenTotal += this.openEntry.aug;
         }
         if (!this.sepEditable) {
             this.ytdPlanTotal += this.planActive.sep;
-            this.ytdCurrentTotal += this.currentEntry.sep;
+            this.ytdOpenTotal += this.openEntry.sep;
         }
         if (!this.octEditable) {
             this.ytdPlanTotal += this.planActive.oct;
-            this.ytdCurrentTotal += this.currentEntry.oct;
+            this.ytdOpenTotal += this.openEntry.oct;
         }
         if (!this.novEditable) {
             this.ytdPlanTotal += this.planActive.nov;
-            this.ytdCurrentTotal += this.currentEntry.nov;
+            this.ytdOpenTotal += this.openEntry.nov;
         }
         if (!this.decEditable) {
             this.ytdPlanTotal += this.planActive.dec;
-            this.ytdCurrentTotal += this.currentEntry.dec;
+            this.ytdOpenTotal += this.openEntry.dec;
         }
         if (!this.janEditable) {
             this.ytdPlanTotal += this.planActive.jan;
-            this.ytdCurrentTotal += this.currentEntry.jan;
+            this.ytdOpenTotal += this.openEntry.jan;
         }
         if (!this.febEditable) {
             this.ytdPlanTotal += this.planActive.feb;
-            this.ytdCurrentTotal += this.currentEntry.feb;
+            this.ytdOpenTotal += this.openEntry.feb;
         }
         if (!this.marEditable) {
             this.ytdPlanTotal += this.planActive.mar;
-            this.ytdCurrentTotal += this.currentEntry.mar;
+            this.ytdOpenTotal += this.openEntry.mar;
         }
         this.recalculateTfp();
         this.recalculateAFP();
@@ -198,7 +198,7 @@ export class BudgetService {
     }
 
     recalculateTfp() {
-        const totalCapexForecast = this.currentEntry?.cumulativeTotal || 0;
+        const totalCapexForecast = this.openEntry?.cumulativeTotal || 0;
         const totalApprovedCapEx = this.budgetPageInfo.budget.totalApprovedCapEx || 0;
         if (totalCapexForecast === 0 && totalApprovedCapEx === 0) {
             this.tfpDev = 0;
@@ -211,59 +211,59 @@ export class BudgetService {
         } else {
             this.tfpDev = (totalCapexForecast - totalApprovedCapEx) * 100 / Math.abs(totalApprovedCapEx);
         }
-        this.tfpValue = (this.currentEntry.cumulativeTotal || 0) - (this.budgetPageInfo.budget.totalApprovedCapEx || 0)
+        this.tfpValue = (this.openEntry.cumulativeTotal || 0) - (this.budgetPageInfo.budget.totalApprovedCapEx || 0)
     }
 
     recalculateAFP() {
-        const currentAnnualTotal = this.currentEntry?.annualTotal || 0;
+        const openAnnualTotal = this.openEntry?.annualTotal || 0;
         const planAnnualTotal = this.planActive?.annualTotal || 0;
-        if (currentAnnualTotal === 0 && planAnnualTotal === 0) {
+        if (openAnnualTotal === 0 && planAnnualTotal === 0) {
             this.afpDev = 0;
-        } else if (currentAnnualTotal > 0 && planAnnualTotal === 0) {
+        } else if (openAnnualTotal > 0 && planAnnualTotal === 0) {
             this.afpDev = 100;
-        } else if (currentAnnualTotal < 0 && planAnnualTotal === 0) {
+        } else if (openAnnualTotal < 0 && planAnnualTotal === 0) {
             this.afpDev = -100;
-        } else if (currentAnnualTotal === 0 && planAnnualTotal != 0) {
+        } else if (openAnnualTotal === 0 && planAnnualTotal != 0) {
             this.afpDev = -100;
         } else {
-            this.afpDev = (currentAnnualTotal - planAnnualTotal) * 100 / Math.abs(planAnnualTotal);
+            this.afpDev = (openAnnualTotal - planAnnualTotal) * 100 / Math.abs(planAnnualTotal);
         }
-        this.afpValue = currentAnnualTotal - planAnnualTotal
+        this.afpValue = openAnnualTotal - planAnnualTotal
     }
 
     recalculateYtdp() {
-        if (this.ytdCurrentTotal === 0 && this.ytdPlanTotal === 0) {
+        if (this.ytdOpenTotal === 0 && this.ytdPlanTotal === 0) {
             this.ytdDev = 0;
-        } else if (this.ytdCurrentTotal > 0 && this.ytdPlanTotal === 0) {
+        } else if (this.ytdOpenTotal > 0 && this.ytdPlanTotal === 0) {
             this.ytdDev = 100;
-        } else if (this.ytdCurrentTotal < 0 && this.ytdPlanTotal === 0) {
+        } else if (this.ytdOpenTotal < 0 && this.ytdPlanTotal === 0) {
             this.ytdDev = -100;
-        } else if (this.ytdCurrentTotal === 0 && this.ytdPlanTotal != 0) {
+        } else if (this.ytdOpenTotal === 0 && this.ytdPlanTotal != 0) {
             this.ytdDev = -100;
         } else {
-            this.ytdDev = (this.ytdCurrentTotal - this.ytdPlanTotal) * 100 / Math.abs(this.ytdPlanTotal);
+            this.ytdDev = (this.ytdOpenTotal - this.ytdPlanTotal) * 100 / Math.abs(this.ytdPlanTotal);
         }
-        this.ytdpValue = this.ytdCurrentTotal - this.ytdPlanTotal
+        this.ytdpValue = this.ytdOpenTotal - this.ytdPlanTotal
     }
 
     recalculateMtdp() {
-        const currentMtdpDate = new Date(this.currentEntry.financialMonthStartDate)
-        const currentMonthText = this.getMonthText(currentMtdpDate.getMonth());
-        const planMonthText = this.getMonthText(currentMtdpDate.getMonth());
-        const currentMonthValue = this.currentEntry && this.currentEntry[currentMonthText] || 0;
+        const openMtdpDate = new Date(this.openEntry.financialMonthStartDate)
+        const openMonthText = this.getMonthText(openMtdpDate.getMonth());
+        const planMonthText = this.getMonthText(openMtdpDate.getMonth());
+        const openMonthValue = this.openEntry && this.openEntry[openMonthText] || 0;
         const planMonthValue = this.planActive && this.planActive[planMonthText] || 0;
-        if (currentMonthValue === 0 && planMonthValue === 0) {
+        if (openMonthValue === 0 && planMonthValue === 0) {
             this.mtdDev = 0;
-        } else if (currentMonthValue > 0 && planMonthValue === 0) {
+        } else if (openMonthValue > 0 && planMonthValue === 0) {
             this.mtdDev = 100;
-        } else if (currentMonthValue < 0 && planMonthValue === 0) {
+        } else if (openMonthValue < 0 && planMonthValue === 0) {
             this.mtdDev = -100;
-        } else if (currentMonthValue === 0 && planMonthValue != 0) {
+        } else if (openMonthValue === 0 && planMonthValue != 0) {
             this.mtdDev = -100;
         } else {
-            this.mtdDev = (currentMonthValue - planMonthValue) * 100 / Math.abs(planMonthValue);
+            this.mtdDev = (openMonthValue - planMonthValue) * 100 / Math.abs(planMonthValue);
         }
-        this.mtdpValue = this.currentEntry[this.getMonthText(currentMtdpDate.getMonth())] - this.planActive[this.getMonthText(currentMtdpDate.getMonth())]
+        this.mtdpValue = this.openEntry[this.getMonthText(openMtdpDate.getMonth())] - this.planActive[this.getMonthText(openMtdpDate.getMonth())]
     }
 
     getMonthText(month: number): string {
@@ -382,7 +382,12 @@ export class BudgetService {
         if(this.openEntry){
             let year = new Date().getFullYear()
             let month = new Date().getMonth()
-            if(month < 3){
+            // Note: By Darshan on 28.03.2024
+            //       Year labels are changed based on month,
+            //       in 2024, rollover was done done early due to Easter holidays
+            //       This should be updated in back to month < 3 for 2025
+            //       This is a temporary fix until a better solution is implemented
+            if(month < 2){
                 year = year - 1;
             }
             let year2 = year + 1;
