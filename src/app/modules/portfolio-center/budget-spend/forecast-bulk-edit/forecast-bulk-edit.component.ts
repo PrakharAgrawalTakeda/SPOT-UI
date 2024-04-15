@@ -45,23 +45,12 @@ constructor(public PortfolioCenterService: PortfolioCenterService, public _fuseN
 {
   this.forecastsForm.valueChanges.subscribe(() => {
     this.formValue();
-    this.projecthubservice.isFormChanged = JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit);
-    if(this.projecthubservice.isFormChanged){
+    this.PortfolioCenterService.isFormChanged = JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit);
+    if(this.PortfolioCenterService.isFormChanged){
         window.onbeforeunload = this.showConfirmationMessage;
     }
 });
 }
-
-//  ngOnChanges() : void {
-//   this.openEntry = this.forecastsForm.controls.find(control => control.get('isopen').value == 1)
-// //   this.dataloader()
-// //   debugger
-// //   if(this.type == 'CapEx Forecast')
-// //   {
-// //     this.openEntry = this.projecthubservice.all.budgetForecasts.find(x => x.isopen === true && x.budgetData == "CapEx Forecast");
-// //   }
-
-//  }
 
   ngOnInit(): void {
     this.filterdata = JSON.parse(JSON.stringify(this.PortfolioCenterService.all))
@@ -525,7 +514,7 @@ getNextField(field: string): string {
 
 submitForecasts() {
   if (JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit)) {
-    this.projecthubservice.isFormChanged = false
+    this.PortfolioCenterService.isFormChanged = false
 
   const submitData = this.forecastsSubmit.map(item => {
     return {
@@ -601,9 +590,9 @@ this.PortfolioCenterService.isNavChanged.next(true)
 }
 
 showConfirmationMessage(event) {
-  const confirmationMessage = 'Are you sure you want to exit? All unsaved data will be lost.';
-  (event || window.event).returnValue = confirmationMessage;
-  return confirmationMessage;
+  event.returnValue = 'Are you sure you want to exit? All unsaved data will be lost.';
+  //(event || window.event).returnValue = confirmationMessage;
+  return event.returnValue;
 }
 
 }

@@ -73,6 +73,7 @@ export class PortfolioCenterService {
     forecastItemType: string = '';
     forecastItemId: string = '';
     forecastData: any = '';
+    forecastDrawerOpenedright: boolean = false;
     forecastDrawerOpened: boolean = false;
     forecastDrawerLarge: boolean = false;
 
@@ -104,7 +105,7 @@ export class PortfolioCenterService {
         private fusealert: FuseConfirmationService,
         private apiService: PortfolioApiService,
         private msal: MsalService
-    ) {}
+    ) { }
 
     getRefreshBookmarkPage() {
         return this.refreshEditBookmarkComponent.asObservable();
@@ -158,47 +159,13 @@ export class PortfolioCenterService {
     }
 
     // Method to call when refresh is needed
-  public triggerRefresh() {
-    this.refreshNeeded.next(true); // Emit true to signal a refresh
-  }
-
-  // Method for components to call to subscribe to the refresh trigger
-  public getRefreshNeeded() {
-    return this.refreshNeeded.asObservable();
-  }
-
-    toggleForecastDrawerOpen(
-        forecastType: string,
-        forecastid: string,
-        forecastData: any,
-        forecastDrawerLarge: boolean = false
-    ): void {
-        console.log(forecastType);
-        this.forecastItemId = forecastid;
-        this.forecastItemType = forecastType;
-        this.forecastData = forecastData;
-        this.forecastDrawerOpened = !this.forecastDrawerOpened;
-        this.forecastDrawerLarge = forecastDrawerLarge;
+    public triggerRefresh() {
+        this.refreshNeeded.next(true); // Emit true to signal a refresh
     }
 
-    forecastDrawerOpenedChanged(event: any): void {
-        console.log(this.forecastDrawerOpened)
-            if (this.forecastDrawerOpened != event) {
-                if (event == false) {
-                    this.forecastDrawerOpened = event;
-                    if (this.isFormChanged == true) {
-                        console.log(this.isFormChanged);
-                        this.alertopener();
-                    } else {
-                        this.item = {};
-                        this.itemtype = '';
-                        this.itemid = '';
-                        this.all = [];
-                        this.projectid = '';
-                        this.isFormChanged = false;
-                    }
-                }
-            }
+    // Method for components to call to subscribe to the refresh trigger
+    public getRefreshNeeded() {
+        return this.refreshNeeded.asObservable();
     }
 
     toggleBookmarkDrawerOpen(
@@ -255,6 +222,60 @@ export class PortfolioCenterService {
         }
     }
 
+    forecastDrawerOpenedChanged(event: any): void {
+        console.log(this.forecastDrawerOpened)
+        debugger
+        if (!this.forecastDrawerOpened) {
+            if (this.forecastDrawerOpenedright != event) {
+                if (event == false) {
+                    this.forecastDrawerOpenedright = event;
+                    this.drawerOpenedPrakharTemp = event;
+                    if (this.isFormChanged == true) {
+                        console.log(this.isFormChanged);
+                        this.alertopenerForecast();
+                    } else {
+                        this.forecastItemType = '';
+                        this.forecastItemId = '';
+                        this.forecastData = [];
+                        this.isFormChanged = false;
+                    }
+                }
+            }
+        }
+        else {
+            this.forecastDrawerOpenedright = true;
+        }
+    }
+
+    toggleForecastDrawerOpen(
+        forecastType: string,
+        forecastid: string,
+        forecastData: any,
+        forecastDrawerLarge: boolean = false
+    ): void {
+        debugger
+        console.log(forecastType);
+        if (this.forecastDrawerOpenedright == true && this.isFormChanged == true) {
+            const alertopenerForecast = this.fusealert.open(this.alert);
+            alertopenerForecast.afterClosed().subscribe((res) => {
+                if (res == 'confirmed') {
+                    this.forecastItemType = forecastType;
+                    this.forecastItemId = '';
+                    this.forecastData = [];
+                    this.isFormChanged = false;
+                    this.forecastDrawerOpenedright = !this.forecastDrawerOpenedright;
+                }
+            });
+        } else {
+            this.forecastItemId = forecastid;
+            this.forecastItemType = forecastType;
+            this.forecastData = forecastData;
+            this.forecastDrawerOpenedright = !this.forecastDrawerOpenedright;
+        }
+        this.drawerOpenedPrakharTemp = !this.drawerOpenedPrakharTemp;
+        this.forecastDrawerLarge = forecastDrawerLarge;
+    }
+
     drawerOpenedChangedSmall(event: any): void {
         if (this.drawerOpened != event) {
             if (event == false) {
@@ -283,7 +304,7 @@ export class PortfolioCenterService {
         fuseDrawerLarge: boolean = false
     ): void {
         console.log(itemtype);
-        //debugger
+        debugger
         if (this.drawerOpenedright == true && this.isFormChanged == true) {
             const alertopener = this.fusealert.open(this.alert);
             alertopener.afterClosed().subscribe((res) => {
@@ -297,7 +318,7 @@ export class PortfolioCenterService {
                     this.drawerOpenedright = !this.drawerOpenedright;
                 }
             });
-        }else {
+        } else {
             this.itemid = itemid;
             this.itemtype = itemtype;
             this.all = all;
@@ -342,9 +363,11 @@ export class PortfolioCenterService {
     }
 
     alertopener() {
+
         const alertopener = this.fusealert.open(this.alert);
         this.isFormChanged = false;
         alertopener.afterClosed().subscribe((res) => {
+            debugger
             if (res != 'confirmed') {
                 this.toggleDrawerOpen(
                     this.itemtype,
@@ -383,6 +406,27 @@ export class PortfolioCenterService {
                 this.itemid = '';
                 this.all = [];
                 this.projectid = '';
+                this.isFormChanged = false;
+            }
+        });
+    }
+
+    alertopenerForecast() {
+        const alertopener = this.fusealert.open(this.alert);
+        this.isFormChanged = false;
+        alertopener.afterClosed().subscribe((res) => {
+            if (res != 'confirmed') {
+                this.toggleForecastDrawerOpen(
+                    this.forecastItemType,
+                    this.forecastItemId,
+                    this.forecastData,
+                    true
+                );
+                this.isFormChanged = true;
+            } else {
+                this.forecastItemType = this.forecastItemType;
+                this.forecastItemId = '';
+                this.forecastData = [];
                 this.isFormChanged = false;
             }
         });
