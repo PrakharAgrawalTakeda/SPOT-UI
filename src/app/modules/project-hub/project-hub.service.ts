@@ -105,7 +105,7 @@ export class ProjectHubService {
           link: 'project-team'
         },
         {
-          title: 'Enviornmental Impact (CAPS)',
+          title: 'Environmental Impact (CAPS)',
           type: 'basic',
           icon: 'heroicons_outline:globe',
           link: 'caps'
