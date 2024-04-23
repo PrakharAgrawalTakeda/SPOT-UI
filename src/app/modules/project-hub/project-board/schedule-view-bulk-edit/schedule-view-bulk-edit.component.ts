@@ -330,6 +330,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             this.baselineLogData = logs.projectBaselineLog.sort((a, b) => {
                                 return a.baselineCount - b.baselineCount;
                             })
+                            console.log(this.baselineLogData)
                             var count = 1
                             for (var i of this.baselineLogData) {
                                 i.logId = count
@@ -3006,6 +3007,11 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             indicator: new FormControl(''),
             missedMsreasonCode: new FormControl(null)
         }))
+        for (let control of this.milestoneForm.controls) {
+            if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
+                control['controls']['baselineFinish'].disable()
+            }
+        }
         var j = [{
             scheduleUniqueId: "new",
             baselineFinish: null,

@@ -49,18 +49,24 @@
                         <label class="Unit">{{currencyLabel}}</label>
                         </div>
                         <div class="flex justify-start gap-3 items-center w-full pt-2">
+                            <button class="guidance-link" (click)="caps()">
+                                <mat-icon class="icon-small align-icon mat-icon" svgIcon="feather:external-link" matTooltip="CAPS Site Guidance Playbook for more information"></mat-icon>
+                                
+                            </button>
                             <div class="flex justify-start gap-1 items-center font-medium">
-                                CAPS Project <mat-icon class="pe icon-size-4"
-                                    matTooltip="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
-                                                CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
-                                    help</mat-icon>
+                                CAPS Project 
+                                <mat-icon class="pe icon-size-4"
+                                          matTooltip="'Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, energy usage, water withdrawal, or waste to landfill'">
+                                    help
+                                </mat-icon>
                             </div>
                             <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!CAPSform.controls.isCapsProject.value">
                             </mat-icon>
                             <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
-                                *ngIf="CAPSform.controls.isCapsProject.value">
+                                      *ngIf="CAPSform.controls.isCapsProject.value">
                             </mat-icon>
                         </div>
+                        
                         <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full custom" formControlName="WaterImpact" name="WaterImpact"
                             [label]="'Water Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
