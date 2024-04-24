@@ -13,6 +13,7 @@ import { BookmarksComponent } from './bookmarks/bookmarks.component';
     providedIn: 'root',
 })
 export class PortfolioCenterService {
+    projectFunding: any = []
     refreshNeeded = new BehaviorSubject<boolean>(false);
     submitbutton = new BehaviorSubject<boolean>(false)
     successSave = new BehaviorSubject<boolean>(false)
@@ -114,6 +115,7 @@ export class PortfolioCenterService {
     triggerRefreshBookmark() {
         this.refreshEditBookmarkComponent.next(true);
     }
+
 
     bookmarkDrawerOpenedChanged(event: any): void {
         if (!this.bookmarkSmallDrawerOpened) {

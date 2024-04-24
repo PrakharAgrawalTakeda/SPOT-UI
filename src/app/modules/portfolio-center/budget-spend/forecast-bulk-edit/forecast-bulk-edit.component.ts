@@ -16,7 +16,7 @@ import { FuseNavigationItem, FuseNavigationService, FuseVerticalNavigationCompon
 })
 export class ForecastBulkEditComponent {
   isFirstTimeReload = true;
-  @Input() projectFunding: any;
+  projectFunding: any;
   @Input() type: 'capex' | 'opex' = 'capex'
   ForecastBulkEdit: string = 'ForecastBulkEdit';
   ForecastBulkEditO: string = 'ForecastBulkEditO';
@@ -44,6 +44,23 @@ export class ForecastBulkEditComponent {
   currentEntry: any;
   planActive: any;
   startingMonth: number;
+  id: string;
+  projectName: string;
+  csTable: any;
+  extraEntries: any;
+  firstPreliminary: any;
+  aprEditable: boolean = true;
+  mayEditable: boolean = true;
+  junEditable: boolean = true;
+  julEditable: boolean = true;
+  augEditable: boolean = true;
+  sepEditable: boolean = true;
+  octEditable: boolean = true;
+  novEditable: boolean = true;
+  decEditable: boolean = true;
+  janEditable: boolean = true;
+  febEditable: boolean = true;
+  marEditable: boolean = true;
 constructor(public PortfolioCenterService: PortfolioCenterService, public _fuseNavigationService: FuseNavigationService, private _Activatedroute: ActivatedRoute,private apiService: PortfolioApiService,public fuseAlert: FuseConfirmationService, public projecthubservice: ProjectHubService, private portfoliService: PortfolioApiService, public budgetService: BudgetService, private cdRef: ChangeDetectorRef)
 {
   this.forecastsForm.valueChanges.subscribe(() => {
@@ -55,14 +72,198 @@ constructor(public PortfolioCenterService: PortfolioCenterService, public _fuseN
 });
 }
 
-  ngOnInit(): void {
+OpenProject(projectName) {
+  this.projectFunding.forEach((item) => {
+    if (item.projectName == projectName) {
+      window.open('/project-hub/' + item.projectID + '/budget', "_blank")
+    }
+  })
+}
+
+  // ngOnInit(): void {
+   
+  //   this.dataloader()
+  // }
+
+  ngOnChanges(): void {
     this.filterdata = JSON.parse(JSON.stringify(this.PortfolioCenterService.all))
     console.log(this.filterdata)
-    this.startingMonth=this.budgetService.getStartingMonth()
-        this.budgetService.checkIsCellEditable();
-        this.budgetService.setTextColors();
+    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    this.projectName = this.projecthubservice.currentSpotId + " - " + this.projecthubservice.projectName;
+    // if (this.type == "capex") {
+    //     this.currentEntry = this.projecthubservice.all.budgetForecasts.find(x => x.active == 'Current' && x.budgetData == "CapEx Forecast");
+    //     this.openEntry = this.projecthubservice.all.budgetForecasts.find(x => x.isopen === true && x.budgetData == "CapEx Forecast");
+    //     this.planActive = this.projecthubservice.all.budgetForecasts.find(x => x.active === 'Plan' || x.budgetData === 'CapEx Forecast');
+    //     for (const obj of this.projecthubservice.all.budgetForecasts) {
+    //         if (obj.budgetData === "CapEx Forecast") {
+    //             this.projectFunding.push(obj);
+    //         } else if (obj.budgetData === "OpEx Forecast") {
+    //             this.extraEntries.push(obj);
+    //         }
+    //     }
+    //     this.csTable.push(this.projecthubservice.all.budgetForecasts.find(x => x.isopen === true))
+    //     for (const obj of this.projecthubservice.all.budgetForecastsY1) {
+    //         if (obj.budgetData === "CapEx Forecast") {
+    //             if(obj.active=='Current'){
+    //                 obj.annualTotal = this.projectFunding.find(x => x.active == 'Current').y1;
+    //             }
+    //             if(obj.active=='Preliminary'){
+    //                 obj.annualTotal = this.projectFunding.find(x => x.active == 'Preliminary').y1;
+    //             }
+    //             this.projectFunding.push(obj);
+
+    //         } else if (obj.budgetData === "OpEx Forecast") {
+    //             this.extraEntries.push(obj);
+    //         }
+    //     }
+    // } else {
+    //     this.currentEntry = this.projecthubservice.all.budgetForecasts.find(x => x.active == 'Current' && x.budgetData == "OpEx Forecast");
+    //     this.openEntry = this.projecthubservice.all.budgetForecasts.find(x => x.isopen === true && x.budgetData == "OpEx Forecast");
+    //     this.planActive = this.projecthubservice.all.budgetForecasts.find(x => x.active === 'Plan' || x.budgetData === 'OpEx Forecast');
+    //     for (const obj of this.projecthubservice.all.budgetForecasts) {
+    //         if (obj.budgetData === "OpEx Forecast") {
+    //             this.projectFunding.push(obj);
+    //         } else if (obj.budgetData === "CapEx Forecast") {
+    //             this.extraEntries.push(obj);
+    //         }
+    //     }
+    //     this.csTable.push(this.projecthubservice.all.budgetForecasts.find(x => x.isopen === true))
+    //     for (const obj of this.projecthubservice.all.budgetForecastsY1) {
+    //         if (obj.budgetData === "OpEx Forecast") {
+    //             obj.annualTotal = this.projectFunding.find(x => x.active === 'Current').y1;
+    //             this.projectFunding.push(obj);
+    //         } else if (obj.budgetData === "CapEx Forecast") {
+    //             this.extraEntries.push(obj);
+    //         }
+    //     }
+    // }
+    // if (this.projectFunding.some(entry => entry.isopen == 2) && this.projecthubservice.roleControllerControl.projectManager) {
+    //     this.editable = false;
+    // }
+    // if(this.openEntry.active=="Preliminary"){
+    //     this.fTableEditRow(this.projectFunding.findIndex(item => item.active === 'Preliminary'));
+    // }else{
+    //     if(this.openEntry.active=="Current"){
+    //         this.fTableEditRow(this.projectFunding.findIndex(item => item.active === 'Current'));
+    //     }
+    // }
+    this.startingMonth=this.getStartingMonth()
+    this.checkIsCellEditable();
+    //this.budgetService.setTextColors();
     this.dataloader()
+}
+
+getStartingMonth(): number {
+  let project: any;
+  console.log(this.PortfolioCenterService.projectFunding)
+  if (this.PortfolioCenterService.projectFunding.find(x => x.active == 'Preliminary' && x.budgetData == "CapEx Forecast")) {
+      project = this.PortfolioCenterService.projectFunding.find(x => x.active == 'Preliminary' && x.budgetData == "CapEx Forecast");
+  } else {
+      project = this.PortfolioCenterService.projectFunding.find(x => x.active == 'Current' && x.budgetData == "CapEx Forecast");
   }
+  let monthPart = project.periodName.slice(-2);
+  if (project.active == 'Current') {
+      return parseInt(monthPart, 10) - 3;
+  }
+  if (project.active == 'Preliminary') {
+      this.firstPreliminary = this.getMonthText((parseInt(monthPart, 10)));
+      return parseInt(monthPart, 10) - 4;
+  }
+}
+
+getMonthText(month: number): string {
+  switch (month) {
+      case 1:
+          return 'jan';
+      case 2:
+          return 'feb';
+      case 3:
+          return 'mar';
+      case 4:
+          return 'apr';
+      case 5:
+          return 'may';
+      case 6:
+          return 'jun';
+      case 7:
+          return 'jul';
+      case 8:
+          return 'aug';
+      case 9:
+          return 'sep';
+      case 10:
+          return 'oct';
+      case 11:
+          return 'nov';
+      case 0:
+          return 'dec';
+      default:
+          return '';
+  }
+}
+
+checkIsCellEditable() {
+  this.aprEditable = this.isCellEditable('apr')
+  this.mayEditable = this.isCellEditable('may')
+  this.junEditable = this.isCellEditable('jun')
+  this.julEditable = this.isCellEditable('jul')
+  this.augEditable = this.isCellEditable('aug')
+  this.sepEditable = this.isCellEditable('sep')
+  this.octEditable = this.isCellEditable('oct')
+  this.novEditable = this.isCellEditable('nov')
+  this.decEditable = this.isCellEditable('dec')
+  this.janEditable = this.isCellEditable('jan')
+  this.febEditable = this.isCellEditable('feb')
+  this.marEditable = this.isCellEditable('mar')
+}
+isCellEditable(month: string): boolean {
+  let startingMonth = this.startingMonth;
+  if (startingMonth == -1) {
+      startingMonth = 11;
+  }
+  if (startingMonth == -2) {
+      startingMonth = 10;
+  }
+  if (startingMonth == -3) {
+      startingMonth = 9;
+  }
+  // if(startingMonth == 0){
+  //     startingMonth = 12;
+  // }
+  // // startingMonth = 0;
+  const monthNumber = this.getMonthNumber(month);
+  return startingMonth <= monthNumber;
+}
+getMonthNumber(month: string): number {
+  switch (month) {
+      case 'jan':
+          return 9;
+      case 'feb':
+          return 10;
+      case 'mar':
+          return 11;
+      case 'apr':
+          return 0;
+      case 'may':
+          return 1;
+      case 'jun':
+          return 2;
+      case 'jul':
+          return 3;
+      case 'aug':
+          return 4;
+      case 'sep':
+          return 5;
+      case 'oct':
+          return 6;
+      case 'nov':
+          return 7;
+      case 'dec':
+          return 8;
+      default:
+          return 12;
+  }
+}
 
   dataloader()
   {
@@ -76,28 +277,29 @@ constructor(public PortfolioCenterService: PortfolioCenterService, public _fuseN
     // } else {
     //     this.handleOpex(forecastData);
     // }
-      if(forecastData.forecastTableItems != null){
-        this.CAPEXdata = forecastData.forecastTableItems["CapExForecast|OY"]
-        this.OPEXdata = forecastData.forecastTableItems["OpExForecast|OY"]
-        this.fundingRequests = forecastData.forecastTableItems["CapExForecast|OY"]
+       if(this.PortfolioCenterService.projectFunding != null){
+      //   this.CAPEXdata = forecastData.forecastTableItems["CapExForecast|OY"]
+      //   this.OPEXdata = forecastData.forecastTableItems["OpExForecast|OY"]
+      //   this.fundingRequests = forecastData.forecastTableItems["CapExForecast|OY"]
 
-        if (forecastData.forecastProjectItems.CapExForecast != undefined){
-          this.projectCAPEXdata = forecastData.forecastProjectItems.CapExForecast
-          this.projectFunding = forecastData.forecastProjectItems.CapExForecast
-          //this.type = 'CapEx Forecast'
-        }
-        if (forecastData.forecastProjectItems.OpExForecast != undefined) {
-          this.projectOPEXdata = forecastData.forecastProjectItems.OpExForecast
-          //this.projectFundingOpex = forecastData.forecastProjectItems.OpExForecast
-          //this.type = 'OpEx Forecast'
-        }
-        if(this.type == 'opex')
-        {
-          this.projectFunding = forecastData.forecastProjectItems.OpExForecast
-        }
-        this.projectFunding.sort((a, b) => {
-          return (a.problemID < b.problemID ? -1 : a.problemID == b.problemID ? 0 : 1);
-        })
+      //   if (forecastData.forecastProjectItems.CapExForecast != undefined){
+      //     this.projectCAPEXdata = forecastData.forecastProjectItems.CapExForecast
+      //     this.projectFunding = forecastData.forecastProjectItems.CapExForecast
+      //     //this.type = 'CapEx Forecast'
+      //   }
+      //   if (forecastData.forecastProjectItems.OpExForecast != undefined) {
+      //     this.projectOPEXdata = forecastData.forecastProjectItems.OpExForecast
+      //     //this.projectFundingOpex = forecastData.forecastProjectItems.OpExForecast
+      //     //this.type = 'OpEx Forecast'
+      //   }
+      //   if(this.type == 'opex')
+      //   {
+      //     this.projectFunding = forecastData.forecastProjectItems.OpExForecast
+      //   }
+      //   this.projectFunding.sort((a, b) => {
+      //     return (a.problemID < b.problemID ? -1 : a.problemID == b.problemID ? 0 : 1);
+      //   })
+      this.projectFunding = this.PortfolioCenterService.projectFunding
         this.yearLabel.currentYear = forecastData.yearLabels.FY
         this.yearLabel.NextYear = forecastData.yearLabels["FY+1"]
         this.yearLabel.Y1 = forecastData.yearLabels["FY+2"]
@@ -286,10 +488,11 @@ getRowStyle(month:string,isEditable:boolean, row:any){
   if(!isEditable || !row.isopen){
       return 'closed'
   }
-  if(this.budgetService.firstPreliminary==month){
+  if(this.firstPreliminary==month){
       return 'blue-text'
   }
 }
+
 
 onPaste(event: ClipboardEvent, rowIndex: number, field: string): void {
   event.preventDefault();
