@@ -274,7 +274,7 @@ export class PortfolioCenterService {
             this.forecastData = forecastData;
             this.forecastDrawerOpenedright = !this.forecastDrawerOpenedright;
         }
-        this.drawerOpenedPrakharTemp = !this.drawerOpenedPrakharTemp;
+        
         this.forecastDrawerLarge = forecastDrawerLarge;
     }
 
