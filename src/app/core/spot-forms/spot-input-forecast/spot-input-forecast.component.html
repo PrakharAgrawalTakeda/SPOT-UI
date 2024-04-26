@@ -1,7 +1,7 @@
 <form [formGroup]="form" class="form w-full">
     <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
         <input matInput formControlName="control"
-               (blur)="onBlur($event)" (focus)="formatInput($event)" (paste)="onPaste($event)" (keyup)="onKeyDown($event)"
+               (blur)="onBlur($event)" (focus)="focusEvent($event)" (paste)="onPaste($event)" (keyup)="onKeyDown($event)"
                (input)="onInputChange($event)" [ngClass]="'text-right'" [style.color]="isBlue ? 'blue' : ''">
     </mat-form-field>
 </form>
