@@ -775,12 +775,12 @@ export class ForecastBulkEditComponent implements OnInit, OnChanges, OnDestroy {
       this.apiService.updateForecast(submitData).then(res => {
         this.PortfolioCenterService.submitbutton.next(true)
         this.PortfolioCenterService.successSave.next(true)
-        this.PortfolioCenterService.toggleForecastDrawerOpen('ForecastBulkEdit', '', [], false)
+        this.PortfolioCenterService.toggleForecastDrawerOpen('', '', [], false)
 
       })
     } else {
       this.PortfolioCenterService.submitbutton.next(true)
-      this.PortfolioCenterService.toggleForecastDrawerOpen('ForecastBulkEdit', '', [], false)
+      this.PortfolioCenterService.toggleForecastDrawerOpen('', '', [], false)
     }
 
   }
