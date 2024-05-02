@@ -1,0 +1,17 @@
+<fuse-drawer [name]="'rightDrawer'" [opened]="resourceadminservice.drawerOpenedright"
+    (openedChanged)="resourceadminservice.drawerOpenedChanged($event)" [mode]="'over'" #myDiv [position]="'right'"
+    [ngClass]="{'bulkEdit':resourceadminservice.isBulkEdit , 'fuse-drawer-small':resourceadminservice.fuseDrawerSmall}">
+    <div>
+<app-edit-resource-heirarchy *ngIf="resourceadminservice.itemtype == 'EditHeirarchy'"></app-edit-resource-heirarchy>
+</div>
+</fuse-drawer>
+
+<div class="p-18 flex justify-between items-center">
+    <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="resourceadminservice.toggleDrawerOpen('EditHeirarchy', '', [], '', true, false)">
+        <b>Edit Resource Hierarchy</b>
+        </button>
+        <!-- <div class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
+    [ngStyle]="{ 'position' : resourceadminservice.drawerOpenedright ? 'fixed' : 'relative'}">
+        <router-outlet></router-outlet>
+    </div> -->
+</div>
