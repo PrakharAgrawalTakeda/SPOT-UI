@@ -1,6 +1,7 @@
 import {
     Component,
     HostListener,
+    OnDestroy,
     OnInit,
     Renderer2,
     ViewChild,
@@ -43,6 +44,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MyPreferenceApiService } from '../my-preference/my-preference-api.service';
 import { SaveBookmarkComponent } from './save-bookmark/save-bookmark.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Subject, takeUntil } from 'rxjs';
 
 export const MY_FORMATS = {
     parse: {
@@ -74,7 +76,7 @@ export const MY_FORMATS = {
         { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ],
 })
-export class PortfolioCenterComponent implements OnInit {
+export class PortfolioCenterComponent implements OnInit, OnDestroy {
     @ViewChild('recentTransactionsTable', { read: MatSort })
     recentTransactionsTableMatSort: MatSort;
     projects: MatTableDataSource<any> = new MatTableDataSource();
@@ -342,6 +344,7 @@ export class PortfolioCenterComponent implements OnInit {
             order: 300,
         },
     ];
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
     // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
     // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
     constructor(
@@ -361,7 +364,7 @@ export class PortfolioCenterComponent implements OnInit {
         public PortfolioCenterService: PortfolioCenterService
     ) {
         this.renderer.listen('window', 'scroll', this.scrollHandler.bind(this));
-        this.PortfolioCenterService.successSave.subscribe((res) => {
+        this.PortfolioCenterService.successSave.pipe(takeUntil(this._unsubscribeAll)).subscribe((res) => {
             if (res == true) {
                 this.snack.open(
                     'The information has been saved successfully',
@@ -579,7 +582,11 @@ export class PortfolioCenterComponent implements OnInit {
 
         this.initializeBookmark(false);
     }
-
+    ngOnDestroy(): void {
+        this.PortfolioCenterService.successSave.next(false);
+        this._unsubscribeAll.next(null);
+        this._unsubscribeAll.complete();
+    }
     defaultFilterObject = {
         bookmarkId: 'DefaultFilter',
         bookmarkName: 'Default View',
