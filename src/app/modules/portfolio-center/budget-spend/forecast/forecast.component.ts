@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSidenav } from '@angular/material/sidenav';
 import { PortfolioApiService } from '../../portfolio-api.service';
@@ -18,7 +18,7 @@ import { PortfolioCenterService } from '../../portfolio-center.service';
 })
 export class ForecastComponent {
   fundingRequests: any = []
-  projectFunding:any = []
+  @Input() projectFunding: any;
   id: string = ''
   ForecastBulkEdit: string = 'ForecastBulkEdit';
   ForecastBulkEditO: string = 'ForecastBulkEditO';
@@ -245,6 +245,7 @@ export class ForecastComponent {
             this.projectFunding.sort((a, b) => {
               return (a.problemID < b.problemID ? -1 : a.problemID == b.problemID ? 0 : 1);
             })
+            this.PortfolioCenterService.projectFunding = this.projectFunding
             this.yearLabel.currentYear = forecastData.yearLabels.FY
             this.yearLabel.NextYear = forecastData.yearLabels["FY+1"]
             this.yearLabel.Y1 = forecastData.yearLabels["FY+2"]
