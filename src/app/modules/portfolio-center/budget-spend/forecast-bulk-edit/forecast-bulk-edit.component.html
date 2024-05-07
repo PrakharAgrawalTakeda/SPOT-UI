@@ -140,7 +140,8 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p style="text-align:right; margin-bottom: 12px;">{{value | number:'1.0-0'}}</p>
+                <p *ngIf="row.active == 'Plan' || row.active=='Previous'" style="text-align:right; margin-bottom: 12px;">&nbsp;</p>
+                <p *ngIf="row.active == 'Current' || row.active=='Preliminary'" style="text-align:right; margin-bottom: 12px;"> {{value | number:'1.0-0'}}</p>
             </ng-template>
         </ngx-datatable-column>
 
@@ -156,16 +157,16 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.aprEditable"
-                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('apr', budgetService.aprEditable,row)">
+                <a *ngIf="!fTableEditStack.includes(rowIndex) || !aprEditable"
+                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('apr', aprEditable,row)">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
                     <p style="text-align:right">{{value | number : fractionSize}}</p>
                 </a>
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                    *ngIf="fTableEditStack.includes(rowIndex) && budgetService.aprEditable">
+                    *ngIf="fTableEditStack.includes(rowIndex) && aprEditable">
                     <spot-input-forecast formControlName="apr" [decimalCount]="0" [autoAddDecimal]="false"
                         (valueChanged)="recalculateAnnualTotal()" (pasteEvent)="onPaste($event, rowIndex, 'apr')"
-                        [isBlue]="budgetService.firstPreliminary == 'apr' && row.active=='Preliminary'"></spot-input-forecast>
+                        [isBlue]="firstPreliminary == 'apr' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -183,16 +184,16 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.aprEditable"
-                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('may', budgetService.aprEditable,row)">
+                <a *ngIf="!fTableEditStack.includes(rowIndex) || !mayEditable"
+                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('may', mayEditable,row)">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
                     <p style="text-align:right">{{value | number : fractionSize}}</p>
                 </a>
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                    *ngIf="fTableEditStack.includes(rowIndex) && budgetService.aprEditable">
+                    *ngIf="fTableEditStack.includes(rowIndex) && mayEditable">
                     <spot-input-forecast formControlName="may" [decimalCount]="0" [autoAddDecimal]="false"
                         (valueChanged)="recalculateAnnualTotal()" (pasteEvent)="onPaste($event, rowIndex, 'may')"
-                        [isBlue]="budgetService.firstPreliminary == 'may' && row.active=='Preliminary'"></spot-input-forecast>
+                        [isBlue]="firstPreliminary == 'may' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -208,16 +209,16 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.aprEditable"
-                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('jun', budgetService.aprEditable,row)">
+                <a *ngIf="!fTableEditStack.includes(rowIndex) || !junEditable"
+                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('jun', junEditable,row)">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
                     <p style="text-align:right">{{value | number : fractionSize}}</p>
                 </a>
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                    *ngIf="fTableEditStack.includes(rowIndex) && budgetService.aprEditable">
+                    *ngIf="fTableEditStack.includes(rowIndex) && junEditable">
                     <spot-input-forecast formControlName="jun" [decimalCount]="0" [autoAddDecimal]="false"
                         (valueChanged)="recalculateAnnualTotal()" (pasteEvent)="onPaste($event, rowIndex, 'jun')"
-                        [isBlue]="budgetService.firstPreliminary == 'jun' && row.active=='Preliminary'"></spot-input-forecast>
+                        [isBlue]="firstPreliminary == 'jun' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -233,16 +234,16 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.aprEditable"
-                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('jul', budgetService.aprEditable,row)">
+                <a *ngIf="!fTableEditStack.includes(rowIndex) || !julEditable"
+                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('jul', julEditable,row)">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
                     <p style="text-align:right">{{value | number : fractionSize}}</p>
                 </a>
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                    *ngIf="fTableEditStack.includes(rowIndex) && budgetService.aprEditable">
+                    *ngIf="fTableEditStack.includes(rowIndex) && julEditable">
                     <spot-input-forecast formControlName="jul" [decimalCount]="0" [autoAddDecimal]="false"
                         (valueChanged)="recalculateAnnualTotal()" (pasteEvent)="onPaste($event, rowIndex, 'jul')"
-                        [isBlue]="budgetService.firstPreliminary == 'jul' && row.active=='Preliminary'"></spot-input-forecast>
+                        [isBlue]="firstPreliminary == 'jul' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -258,16 +259,16 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.aprEditable"
-                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('aug', budgetService.aprEditable,row)">
+                <a *ngIf="!fTableEditStack.includes(rowIndex) || !augEditable"
+                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('aug', augEditable,row)">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
                     <p style="text-align:right">{{value | number : fractionSize}}</p>
                 </a>
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                    *ngIf="fTableEditStack.includes(rowIndex) && budgetService.aprEditable">
+                    *ngIf="fTableEditStack.includes(rowIndex) && augEditable">
                     <spot-input-forecast formControlName="aug" [decimalCount]="0" [autoAddDecimal]="false"
                         (valueChanged)="recalculateAnnualTotal()" (pasteEvent)="onPaste($event, rowIndex, 'aug')"
-                        [isBlue]="budgetService.firstPreliminary == 'aug' && row.active=='Preliminary'"></spot-input-forecast>
+                        [isBlue]="firstPreliminary == 'aug' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -283,16 +284,16 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.aprEditable"
-                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('sep', budgetService.aprEditable,row)">
+                <a *ngIf="!fTableEditStack.includes(rowIndex) || !sepEditable"
+                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('sep', sepEditable,row)">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
                     <p style="text-align:right">{{value | number : fractionSize}}</p>
                 </a>
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                    *ngIf="fTableEditStack.includes(rowIndex) && budgetService.aprEditable">
+                    *ngIf="fTableEditStack.includes(rowIndex) && sepEditable">
                     <spot-input-forecast formControlName="sep" [decimalCount]="0" [autoAddDecimal]="false"
                         (valueChanged)="recalculateAnnualTotal()" (pasteEvent)="onPaste($event, rowIndex, 'sep')"
-                        [isBlue]="budgetService.firstPreliminary == 'sep' && row.active=='Preliminary'"></spot-input-forecast>
+                        [isBlue]="firstPreliminary == 'sep' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -308,16 +309,16 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.aprEditable"
-                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('oct', budgetService.aprEditable,row)">
+                <a *ngIf="!fTableEditStack.includes(rowIndex) || !octEditable"
+                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('oct', octEditable,row)">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
                     <p style="text-align:right">{{value | number : fractionSize}}</p>
                 </a>
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                    *ngIf="fTableEditStack.includes(rowIndex) && budgetService.aprEditable">
+                    *ngIf="fTableEditStack.includes(rowIndex) && octEditable">
                     <spot-input-forecast formControlName="oct" [decimalCount]="0" [autoAddDecimal]="false"
                         (valueChanged)="recalculateAnnualTotal()" (pasteEvent)="onPaste($event, rowIndex, 'oct')"
-                        [isBlue]="budgetService.firstPreliminary == 'oct' && row.active=='Preliminary'"></spot-input-forecast>
+                        [isBlue]="firstPreliminary == 'oct' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -333,16 +334,16 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.aprEditable"
-                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('nov', budgetService.aprEditable,row)">
+                <a *ngIf="!fTableEditStack.includes(rowIndex) || !novEditable"
+                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('nov', novEditable,row)">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
                     <p style="text-align:right">{{value | number : fractionSize}}</p>
                 </a>
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                    *ngIf="fTableEditStack.includes(rowIndex) && budgetService.aprEditable">
+                    *ngIf="fTableEditStack.includes(rowIndex) && novEditable">
                     <spot-input-forecast formControlName="nov" [decimalCount]="0" [autoAddDecimal]="false"
                         (valueChanged)="recalculateAnnualTotal()" (pasteEvent)="onPaste($event, rowIndex, 'nov')"
-                        [isBlue]="budgetService.firstPreliminary == 'nov' && row.active=='Preliminary'"></spot-input-forecast>
+                        [isBlue]="firstPreliminary == 'nov' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -358,16 +359,16 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.aprEditable"
-                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('dec', budgetService.aprEditable,row)">
+                <a *ngIf="!fTableEditStack.includes(rowIndex) || !decEditable"
+                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('dec', decEditable,row)">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
                     <p style="text-align:right">{{value | number : fractionSize}}</p>
                 </a>
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                    *ngIf="fTableEditStack.includes(rowIndex) && budgetService.aprEditable">
+                    *ngIf="fTableEditStack.includes(rowIndex) && decEditable">
                     <spot-input-forecast formControlName="dec" [decimalCount]="0" [autoAddDecimal]="false"
                         (valueChanged)="recalculateAnnualTotal()" (pasteEvent)="onPaste($event, rowIndex, 'dec')"
-                        [isBlue]="budgetService.firstPreliminary == 'dec' && row.active=='Preliminary'"></spot-input-forecast>
+                        [isBlue]="firstPreliminary == 'dec' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -383,16 +384,16 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.aprEditable"
-                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('jan', budgetService.aprEditable,row)">
+                <a *ngIf="!fTableEditStack.includes(rowIndex) || !janEditable"
+                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('jan', janEditable,row)">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
                     <p style="text-align:right">{{value | number : fractionSize}}</p>
                 </a>
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                    *ngIf="fTableEditStack.includes(rowIndex) && budgetService.aprEditable">
+                    *ngIf="fTableEditStack.includes(rowIndex) && janEditable">
                     <spot-input-forecast formControlName="jan" [decimalCount]="0" [autoAddDecimal]="false"
                         (valueChanged)="recalculateAnnualTotal()" (pasteEvent)="onPaste($event, rowIndex, 'jan')"
-                        [isBlue]="budgetService.firstPreliminary == 'jan' && row.active=='Preliminary'"></spot-input-forecast>
+                        [isBlue]="firstPreliminary == 'jan' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -408,16 +409,16 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.aprEditable"
-                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('feb', budgetService.aprEditable,row)">
+                <a *ngIf="!fTableEditStack.includes(rowIndex) || !febEditable"
+                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('feb', febEditable,row)">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
                     <p style="text-align:right">{{value | number : fractionSize}}</p>
                 </a>
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                    *ngIf="fTableEditStack.includes(rowIndex) && budgetService.aprEditable">
+                    *ngIf="fTableEditStack.includes(rowIndex) && febEditable">
                     <spot-input-forecast formControlName="feb" [decimalCount]="0" [autoAddDecimal]="false"
                         (valueChanged)="recalculateAnnualTotal()" (pasteEvent)="onPaste($event, rowIndex, 'feb')"
-                        [isBlue]="budgetService.firstPreliminary == 'feb' && row.active=='Preliminary'"></spot-input-forecast>
+                        [isBlue]="firstPreliminary == 'feb' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -433,16 +434,16 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.aprEditable"
-                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('mar', budgetService.aprEditable,row)">
+                <a *ngIf="!fTableEditStack.includes(rowIndex) || !marEditable"
+                    (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('mar', marEditable,row)">
                     <p *ngIf="!value && value!=0">&nbsp;</p>
                     <p style="text-align:right">{{value | number : fractionSize}}</p>
                 </a>
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                    *ngIf="fTableEditStack.includes(rowIndex) && budgetService.aprEditable">
+                    *ngIf="fTableEditStack.includes(rowIndex) && marEditable">
                     <spot-input-forecast formControlName="mar" [decimalCount]="0" [autoAddDecimal]="false"
                         (valueChanged)="recalculateAnnualTotal()" (pasteEvent)="onPaste($event, rowIndex, 'mar')"
-                        [isBlue]="budgetService.firstPreliminary == 'mar' && row.active=='Preliminary'"></spot-input-forecast>
+                        [isBlue]="firstPreliminary == 'mar' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -509,7 +510,8 @@
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                     *ngIf="fTableEditStack.includes(rowIndex)">
                     <spot-input-forecast formControlName="mayY1" (valueChanged)="recalculateAnnualTotal()"
-                        (pasteEvent)="onPaste($event, rowIndex, 'mayY1')"></spot-input-forecast>
+                        (pasteEvent)="onPaste($event, rowIndex, 'mayY1')"
+                        [isBlue]="firstPreliminary == 'mayY1' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -533,7 +535,8 @@
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                     *ngIf="fTableEditStack.includes(rowIndex)">
                     <spot-input-forecast formControlName="junY1" (valueChanged)="recalculateAnnualTotal()"
-                        (pasteEvent)="onPaste($event, rowIndex, 'junY1')"></spot-input-forecast>
+                        (pasteEvent)="onPaste($event, rowIndex, 'junY1')"
+                        [isBlue]="firstPreliminary == 'junY1' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -557,7 +560,8 @@
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                     *ngIf="fTableEditStack.includes(rowIndex)">
                     <spot-input-forecast formControlName="julY1" (valueChanged)="recalculateAnnualTotal()"
-                        (pasteEvent)="onPaste($event, rowIndex, 'julY1')"></spot-input-forecast>
+                        (pasteEvent)="onPaste($event, rowIndex, 'julY1')"
+                        [isBlue]="firstPreliminary == 'julY1' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -580,7 +584,8 @@
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                     *ngIf="fTableEditStack.includes(rowIndex)">
                     <spot-input-forecast formControlName="augY1" (valueChanged)="recalculateAnnualTotal()"
-                        (pasteEvent)="onPaste($event, rowIndex, 'augY1')"></spot-input-forecast>
+                        (pasteEvent)="onPaste($event, rowIndex, 'augY1')"
+                        [isBlue]="firstPreliminary == 'augY1' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -603,7 +608,8 @@
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                     *ngIf="fTableEditStack.includes(rowIndex)">
                     <spot-input-forecast formControlName="sepY1" (valueChanged)="recalculateAnnualTotal()"
-                        (pasteEvent)="onPaste($event, rowIndex, 'sepY1')"></spot-input-forecast>
+                        (pasteEvent)="onPaste($event, rowIndex, 'sepY1')"
+                        [isBlue]="firstPreliminary == 'sepY1' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -626,7 +632,8 @@
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                     *ngIf="fTableEditStack.includes(rowIndex)">
                     <spot-input-forecast formControlName="octY1" (valueChanged)="recalculateAnnualTotal()"
-                        (pasteEvent)="onPaste($event, rowIndex, 'octY1')"></spot-input-forecast>
+                        (pasteEvent)="onPaste($event, rowIndex, 'octY1')"
+                        [isBlue]="firstPreliminary == 'octY1' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -649,7 +656,8 @@
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                     *ngIf="fTableEditStack.includes(rowIndex)">
                     <spot-input-forecast formControlName="novY1" (valueChanged)="recalculateAnnualTotal()"
-                        (pasteEvent)="onPaste($event, rowIndex, 'novY1')"></spot-input-forecast>
+                        (pasteEvent)="onPaste($event, rowIndex, 'novY1')"
+                        [isBlue]="firstPreliminary == 'novY1' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -672,7 +680,8 @@
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                     *ngIf="fTableEditStack.includes(rowIndex)">
                     <spot-input-forecast formControlName="decY1" (valueChanged)="recalculateAnnualTotal()"
-                        (pasteEvent)="onPaste($event, rowIndex, 'decY1')"></spot-input-forecast>
+                        (pasteEvent)="onPaste($event, rowIndex, 'decY1')"
+                        [isBlue]="firstPreliminary == 'decY1' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -695,7 +704,8 @@
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                     *ngIf="fTableEditStack.includes(rowIndex)">
                     <spot-input-forecast formControlName="janY1" (valueChanged)="recalculateAnnualTotal()"
-                        (pasteEvent)="onPaste($event, rowIndex, 'janY1')"></spot-input-forecast>
+                        (pasteEvent)="onPaste($event, rowIndex, 'janY1')"
+                        [isBlue]="firstPreliminary == 'janY1' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -718,7 +728,8 @@
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                     *ngIf="fTableEditStack.includes(rowIndex)">
                     <spot-input-forecast formControlName="febY1" (valueChanged)="recalculateAnnualTotal()"
-                        (pasteEvent)="onPaste($event, rowIndex, 'febY1')"></spot-input-forecast>
+                        (pasteEvent)="onPaste($event, rowIndex, 'febY1')"
+                        [isBlue]="firstPreliminary == 'febY1' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -741,7 +752,8 @@
                 <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                     *ngIf="fTableEditStack.includes(rowIndex)">
                     <spot-input-forecast formControlName="marY1" (valueChanged)="recalculateAnnualTotal()"
-                        (pasteEvent)="onPaste($event, rowIndex, 'marY1')"></spot-input-forecast>
+                        (pasteEvent)="onPaste($event, rowIndex, 'marY1')"
+                        [isBlue]="firstPreliminary == 'marY1' && row.active=='Preliminary'"></spot-input-forecast>
                 </form>
             </ng-template>
         </ngx-datatable-column>
@@ -954,7 +966,7 @@
 <div class="absolute bottom-2 w-full px-3">
     <div class="pr-3 flex items-start justify-between mt-6">
         <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
-            (click)="PortfolioCenterService.toggleForecastDrawerOpen('ForecastBulkEdit','',[],false)">
+            (click)="PortfolioCenterService.toggleForecastDrawerOpen('ForecastBulkEdit','',[],true)">
             Cancel
         </a>
         <button class="min-w-26" mat-flat-button [color]="'primary'" [disabled]="!editable"
@@ -963,4 +975,4 @@
         </button>
     </div>
 </div>
-</div>
+</div>        
