@@ -8,7 +8,7 @@ import { PortfolioApiService } from "../../portfolio-center/portfolio-api.servic
 import { BudgetService } from "./budget.service";
 import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../@fuse/services/confirmation";
 import { Subject, takeUntil } from 'rxjs';
-import moment from 'moment';
+import moment, { utc } from 'moment';
 
 @Component({
     selector: 'app-budget',
@@ -98,16 +98,17 @@ export class BudgetComponent implements OnInit, OnDestroy {
                 this.budgetService.planActive = response[3].budgetForecasts.find(x => x.active === 'Plan' || x.budgetData === 'CapEx Forecast');
                 this.forecastPatchGeneralForm(response[3].budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"));
                 this.generalInfoPatchValue(response[3])
-                this.budgetService.forecastEditButtonEnabler();
+                this.budgetService.openEntriesExist = response[3].budgetForecasts.some(item => item.budgetData === 'CapEx Forecast' && item.isopen === true);
+                if (this.budgetService.openEntriesExist) {
+                    this.budgetService.openEntry = response[3].budgetForecasts.find(x => x.isopen === true);
+                }
                 this.budgetService.startingMonth = this.budgetService.getStartingMonth();
+                this.budgetService.forecastEditButtonEnabler();
                 this.budgetService.checkIsCellEditable();
                 this.budgetService.calculateForecast();
                 this.budgetService.setTextColors();
-                this.budgetService.openEntriesExist = response[3].budgetForecasts.some(item => item.budgetData === 'CapEx Forecast' && item.isopen === true);
-                if (this.budgetService.openEntriesExist) {
-                    this.budgetService.openEntry = response[3].budgetForecasts.find(x => x.isopen == true);
-                }
                 this.budgetService.setLabels();
+
                 this.viewContent = true
             })
             .catch((error) => {
@@ -157,31 +158,41 @@ export class BudgetComponent implements OnInit, OnDestroy {
         }
     }
     forecastPatchGeneralForm(forecast: any) {
-        if (forecast.find(x => x.active == 'Preliminary')) {
+        // forecast obj data is already filtered for CapEx Forecast
+        const preliminary = forecast.find(x => x.active == 'Preliminary');
+        if (preliminary) {
             this.preliminaryExists = true;
             this.budgetForecastForm.patchValue({
-                referencePreliminary: forecast.find(x => x.active == 'Preliminary')?.active ? forecast.find(x => x.active == 'Preliminary').active : "",
-                periodPreliminary: forecast.find(x => x.active == 'Preliminary')?.periodName ? forecast.find(x => x.active == 'Preliminary').periodName : "",
-                lastSubmittedPreliminary: forecast.find(x => x.active == 'Preliminary')?.lastSubmitted ? forecast.find(x => x.active == 'Preliminary').lastSubmitted : "",
-                submittedByPreliminary: forecast.find(x => x.active == 'Preliminary')?.userName ? forecast.find(x => x.active == 'Preliminary').userName : "",
+                referencePreliminary: preliminary.active,
+                periodPreliminary: preliminary.periodName,
+                lastSubmittedPreliminary: this.formatDateTime(preliminary.lastSubmitted),
+                submittedByPreliminary: preliminary.userName,
             })
         }
+        const current = forecast.find(x => x.active == 'Current');
         this.budgetForecastForm.patchValue({
-            referenceCurrent: forecast.find(x => x.active == 'Current').active,
-            periodCurrent: forecast.find(x => x.active == 'Current').periodName,
-            lastSubmittedCurrent: this.formatDateTime(forecast.find(x => x.active == 'Current').lastSubmitted),
-            submittedByCurrent: forecast.find(x => x.active == 'Current').userName,
-            afpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').afpDeviationCodeID),
+            referenceCurrent: current.active,
+            periodCurrent: current.periodName,
+            lastSubmittedCurrent: this.formatDateTime(current.lastSubmitted),
+            submittedByCurrent: current.userName,
+            afpCodeId: this.getLookUpName(current.afpDeviationCodeID),
             mtdpCodeId: this.getLookUpName(this.budgetService.currentEntry.mtdpDeviationCodeID),
             committedSpend: forecast.find(x => x.isopen && x.budgetData == "CapEx Forecast").committedSpend,
         })
-        this.budgetService.headerLabel = "Current " + forecast.find(x => x.active == 'Current').periodName + " versus Plan " + forecast.find(x => x.active == 'Plan').periodName
+        this.budgetService.headerLabel =
+            ( preliminary ? "Preliminary " + preliminary.periodName
+                          : "Current " + current.periodName
+            ) + " versus Plan " + forecast.find(x => x.active == 'Plan').periodName
     }
 
-    formatDateTime(isoString: string): string {
-        return moment(isoString).format('DD-MMM-YYYY HH:mm:ss');
+    formatDateTime(dateTime: string): string {
+        if (!dateTime) return '';
+        // in DB dates are stored in UTC datetime, but the format is regalar datetime format,
+        // to explicitaly mark it utc, adding a trailing 'Z' is required
+        // User will see this date-time in local time, as per browser's timezone or location settings
+        return moment.utc(dateTime + 'Z').local().format('DD-MMM-YYYY, HH:mm:ss');
     }
-    
+
     getLookUpName(id: string): string {
         return id && id != '' ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == id)?.lookUpName : ''
     }

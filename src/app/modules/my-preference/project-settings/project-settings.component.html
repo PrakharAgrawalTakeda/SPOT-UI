@@ -1,13 +1,84 @@
 <div class="flex flex-col min-w-0 overflow-hidden p-6 pt-0 pr-3 w-full">
-    <div class="p-6 bg-card rounded-2xl shadow w-full">
+    <div class="mb-2 p-6 bg-card rounded-2xl shadow w-full">
         <form class="w-full" [formGroup]="archiveForm">
-            <label class="flex-auto w-full gt-xs:pl-3"><b>Archived Projects</b></label>
+            <label class="flex-auto w-full gt-xs:pl-3"
+                ><b>Archived Projects</b></label
+            >
             <div class="pl-1">
-            <spot-toggle class="w-full" formControlName="includeArchiveProject" [mode]="'toggle'"
-                [label]="'Include Archived Projects in the Portfolio Center search '">
-            </spot-toggle>
-        </div>
-
+                <spot-toggle
+                    class="w-full"
+                    formControlName="includeArchiveProject"
+                    [mode]="'toggle'"
+                    [label]="
+                        'Include Archived Projects in the Portfolio Center search '
+                    "
+                >
+                </spot-toggle>
+            </div>
+        </form>
+    </div>
+    <div class="mb-2 p-6 bg-card rounded-2xl shadow w-full">
+        <form class="w-full" [formGroup]="PortfolioCenterTilesForm">
+            <div
+                class="flex-auto w-full gt-xs:pl-3 flex justify-between items-center"
+            >
+                <b>Portfolio Center Tiles</b>
+                <button
+                    *ngIf="orderView"
+                    class="min-w-26 ml-4 text-primary bg-gray-200 my-4"
+                    mat-flat-button
+                    [color]="'primary-200'"
+                    (click)="changeOrderView()"
+                >
+                    <mat-icon
+                        svgIcon="heroicons_outline:sort-descending"
+                    ></mat-icon
+                    >&nbsp; Save Setting
+                </button>
+                <button
+                    *ngIf="!orderView"
+                    class="min-w-26 ml-4 text-primary bg-gray-200 my-4"
+                    mat-flat-button
+                    [color]="'primary-200'"
+                    (click)="changeOrderView()"
+                >
+                    <mat-icon
+                        svgIcon="heroicons_outline:sort-descending"
+                    ></mat-icon
+                    >&nbsp; Order Tiles
+                </button>
+            </div>
+            <div *ngIf="!orderView" formArrayName="Tiles" class="pl-1">
+                <div *ngFor="let tile of tilesFormArray; let i = index">
+                    <div class="py-3">
+                        <spot-toggle
+                            class="w-full"
+                            [formControl]="tile.get('isToggled')"
+                            [mode]="'toggle'"
+                            [label]="tile.get('label').value"
+                            (click)="checkToggled()"
+                        >
+                        </spot-toggle>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="orderView">
+                <div
+                    (cdkDropListDropped)="drop($event)"
+                    cdkDropList
+                    class="draggable-list"
+                >
+                    <div
+                        class="draggable-box"
+                        *ngFor="
+                            let portfolioCenterTile of portfolioTilesValues
+                        "
+                        cdkDrag
+                    >
+                        {{ portfolioCenterTile.label }}
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 </div>

@@ -1,0 +1,156 @@
+<div *ngIf="PortfolioCenterService.showBookmarkTableContent" class="h-screen">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">
+            Bookmarks View
+        </div>
+        <div style="padding-top: 2px">
+            <a
+                (click)="
+                    PortfolioCenterService.toggleBookmarkDrawerOpen(
+                        '',
+                        '',
+                        [],
+                        true
+                    )
+                "
+                href="javascript:void(0)"
+                title="Close"
+            >
+                <mat-icon
+                    class="text-on-primary"
+                    svgIcon="heroicons_outline:x"
+                ></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="py-3 px-0 h-full">
+        <div
+            class="flex flex-col justify-between-0 p-3 pt-3 h-full w-full ml-3"
+        >
+            <div class="p-6 pb-3 pt-0 flex items-center justify-between">
+                <div
+                    class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary"
+                >
+                    Bookmarks
+                </div>
+                <div class="text-primary">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <button
+                                class="mx-4 text-primary bg-gray-200"
+                                mat-flat-button
+                                [color]="'primary-200'"
+                                (click)="
+                                    PortfolioCenterService.toggleBookmarkDrawerOpenSmall(
+                                        'BookmarksEditOpen',
+                                        '',
+                                        '',
+                                        true
+                                    )
+                                "
+                            >
+                                <mat-icon
+                                    svgIcon="heroicons_outline:plus-circle"
+                                ></mat-icon
+                                >&nbsp; New Bookmark
+                            </button>
+                        </div>
+                        <!-- <div>
+                            Table&nbsp;&nbsp;<mat-slide-toggle class="primary slider-adjust"></mat-slide-toggle>
+                            &nbsp;&nbsp;Grid
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 overflow-x-auto h-full">
+                <ngx-datatable
+                    [headerHeight]="'auto'"
+                    [rowHeight]="'auto'"
+                    columnMode="flex"
+                    class="datatable-sms material font-medium text-sm text-default whitespace-nowrap cursor-default bookmarks-datatable"
+                    [rows]="PortfolioCenterService.bookmarks"
+                >
+                    <ngx-datatable-column
+                        name="Bookmark Name"
+                        prop="bookmarkName"
+                        [flexGrow]="4"
+                        *ngIf="viewElementChecker('bookmarkName')"
+                    >
+                        <ng-template
+                            let-row="row"
+                            let-value="value"
+                            ngx-datatable-cell-template
+                        >
+                            <p>{{ value }}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column
+                        name="Creation Date"
+                        prop="createdDate"
+                        [flexGrow]="17"
+                        *ngIf="viewElementChecker('createdDate')"
+                    >
+                        <ng-template
+                            let-row="row"
+                            let-value="value"
+                            ngx-datatable-cell-template
+                        >
+                            <p>{{ value | date : "dd-MMM-yyyy hh:mm a" }}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column
+                        [flexGrow]="2"
+                        [resizeable]="false"
+                        [sortable]="false"
+                        [draggable]="false"
+                    >
+                        <ng-template
+                            let-row="row"
+                            let-expanded="expanded"
+                            ngx-datatable-cell-template
+                        >
+                            <div class="flex items-center justify-start gap-6">
+                                <a
+                                    href="javascript:void(0)"
+                                    title="Edit Single"
+                                    (click)="editSingleBookmark(row)"
+                                >
+                                    <mat-icon
+                                        svgIcon="heroicons_solid:pencil"
+                                    ></mat-icon>
+                                </a>
+                                <a
+                                    href="javascript:void(0)"
+                                    title="Delete Single"
+                                    (click)="deleteBookmark(row.bookmarkId)"
+                                >
+                                    <mat-icon
+                                        svgIcon="heroicons_outline:trash"
+                                    ></mat-icon>
+                                </a>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+            <div class="flex items-start justify-end h-auto mb-6 py-6">
+                <a
+                    class="min-w-26 mx-3"
+                    mat-flat-button
+                    [color]="'primary'"
+                    type="button"
+                    (click)="
+                        PortfolioCenterService.toggleBookmarkDrawerOpen(
+                            '',
+                            '',
+                            [],
+                            true
+                        )
+                    "
+                >
+                    Ok
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

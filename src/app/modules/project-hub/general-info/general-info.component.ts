@@ -257,7 +257,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
     if (this.isStrategicInitiative) {
       this.projectNameLabel = "Initiaitive Name"
       if (this.callLocation == "ProjectHub") {
-        this.viewElements = ["isConfidential", "isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "sponsor", "topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription", "StrategicDrivers", "primaryKPI", "isAgile"]
+        this.viewElements = ["isConfidential", "isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "sponsor", "topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription", "StrategicDrivers", "primaryKPI", "isAgile", "isSprproject"]
         this.strategicDriversType = "StrategicDriversSingleEditStrategicInitiative"
         this.generalInfoType = "GeneralInfoSingleEditStrategicInitiative"
       }

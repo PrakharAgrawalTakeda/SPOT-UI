@@ -24,11 +24,15 @@ export const primaryRoles: Role[] = [
 export const secondaryRoles: Role[] = [
     {
         roleName: 'Budget Administrator',
-        roleId: '500EE862-3878-43D9-9378-53FEB1832CEF'
+        roleId: '500ee862-3878-43d9-9378-53feb1832cef'
     },
     {
         roleName: 'Confidential Manager',
         roleId: 'C005FB71-C1FF-44D3-8779-5CA37643D794'
+    },
+    {
+        roleName: 'Resource Manager',
+        roleId: '06CDEA21-EB7C-402B-9FB3-CBE507CEE364'
     }
 ];
 
