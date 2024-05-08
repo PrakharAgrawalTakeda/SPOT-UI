@@ -207,17 +207,11 @@
                         [placeholder]="'Primary Value Driver'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
                         [dropDownArray]="primaryKPI" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
-                    <div class="caps-project-container">
-                        <button class="guidance-link" (click)="caps()">
-                            <mat-icon class="icon-small align-icon mat-icon" svgIcon="feather:external-link" matTooltip="CAPS Site Guidance Playbook for more information"></mat-icon>
-                            
-                        </button>
-                        <spot-select class="w-full" formControlName="CAPSProject" name="CAPSProject"
-                                     [label]="'CAPS Project'" [placeholder]="'CAPS Project'" [showNoneOption]="true"
-                                     [dropDownArrayType]="'string'" [dropDownArray]="CAPSDropDrownValues" [showHint]="true"
-                                     [hint]="'Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, energy usage, water withdrawal, or waste to landfill'">
-                        </spot-select>
-                    </div>
+                    <spot-select class="w-full" formControlName="CAPSProject" name="CAPSProject"
+                        [label]="'CAPS Project'" [placeholder]="'CAPS Project'" [showNoneOption]="true"
+                        [dropDownArrayType]="'string'" [dropDownArray]="CAPSDropDrownValues" [showHint]="true" [hint]="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
+
+                    </spot-select>
                     <spot-multiselect-autocomplete formControlName="OverallStatus" class="w-full" name="OverallStatus"
                         [label]="'Overall Status'" [placeholder]="'Overall Status'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="overallStatus" [sortByType]="'custom'"
