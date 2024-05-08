@@ -474,7 +474,6 @@ export class PortfolioCenterComponent implements OnInit, OnDestroy {
         } else {
             this.showForecast = false;
         }
-
         if (
             this.role.roleMaster.securityGroupId ==
             'F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F'
@@ -516,7 +515,8 @@ export class PortfolioCenterComponent implements OnInit, OnDestroy {
                     target: '_blank',
                 },
             ];
-        } else {
+        } 
+        else {
             this.newmainnav = [
                 {
                     id: 'portfolio-center',
