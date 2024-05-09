@@ -1,17 +1,28 @@
-<form [formGroup]="form" class="form w-full" [ngClass]="{'custom-label-with-hint': showHint && hintPostion == 'tooltip'}">
+<form [formGroup]="form" class="form w-full"
+    [ngClass]="{'custom-label-with-hint': showHint && hintPostion == 'tooltip'}">
     <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
         <mat-label class="items-center flex" *ngIf="showLabel">{{label}}<mat-icon class="pe"
                 *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}">help</mat-icon>
         </mat-label>
-        <h1 *ngIf="Required; then ifBlock else elseBlock"></h1>
-        <ng-template #ifBlock>
-            <input #input required="true" matInput (focus)="changeInput()"
-                formControlName="control" [placeholder]="placeholder" [matAutocomplete]="singleSelect" (focusout)="onFocusout($event.target.value)">
-        </ng-template>
-        <ng-template #elseBlock>
-            <input #input matInput (focus)="changeInput()" formControlName="control" [placeholder]="placeholder"
-                [matAutocomplete]="singleSelect" (focusout)="onFocusout($event.target.value)">
-        </ng-template>
+        <mat-chip-grid #chipList formControlName="chipList" [required]="Required" class="chiplist">
+            <mat-chip (removed)="removeOption(selectedOption)" *ngIf="selectedOption[valuePointer]">
+                {{selectedOption[valuePointer]}}
+                <button matChipRemove *ngIf="!isDisabled">
+                    <mat-icon inline=true>cancel</mat-icon>
+                </button>
+            </mat-chip>
+
+            <h1 *ngIf="Required; then ifBlock else elseBlock"></h1>
+            <ng-template #ifBlock>
+                <input #input required="true" matInput (focus)="changeInput()" formControlName="control"
+                    [placeholder]="!inputDisabled?placeholder:''" [matChipInputFor]="chipList" out
+                    [matAutocomplete]="singleSelect">
+            </ng-template>
+            <ng-template #elseBlock>
+                <input #input matInput (focus)="changeInput()" formControlName="control" [matChipInputFor]="chipList"
+                    [placeholder]="!inputDisabled?placeholder:''" [matAutocomplete]="singleSelect">
+            </ng-template>
+        </mat-chip-grid>
         <mat-autocomplete autoActiveFirstOption #singleSelect="matAutocomplete"
             (optionSelected)="onFunctionSelect($event)">
             <mat-option *ngFor="let function of resultSets" [value]="function">

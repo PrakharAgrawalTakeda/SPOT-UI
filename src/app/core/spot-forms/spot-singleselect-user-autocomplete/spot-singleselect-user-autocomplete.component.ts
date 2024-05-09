@@ -32,32 +32,29 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
   @Input() customSortPointer: string = ''
   @Output() valueChange = new EventEmitter();
   @Input() Required: boolean = false
+  isDisabled: boolean = false
   @ViewChild('input', { static: false }) input: ElementRef<HTMLInputElement>;
-
   filteredDropDownValues: any
   formFieldHelpers: any
   selectedOption: any = {}
   onTouch: any = () => { };
   onChange: any = () => { };
   form = new FormGroup({
-    control: new FormControl('')
+    control: new FormControl(''),
+    chipList: new FormControl([])
   });
   disabled = false;
+  inputDisabled = false;
 
   resultSets: any[];
   minLength = 4
   debounce = 400
   filteredOptions: any
-
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(private fb: FormBuilder, private _httpClient: HttpClient,
     public fuseAlert: FuseConfirmationService) {
+
     this.form.controls.control.valueChanges.subscribe((res: any) => {
-      if (this.form.controls.control.value == "") {
-        this.onChange({})
-        this.valueChange.emit({})
-        this.selectedOption = {}
-      }
     })
     this.filteredDropDownValues = this.form.controls.control.valueChanges.pipe(
       debounceTime(this.debounce),
@@ -84,59 +81,53 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
           .subscribe((resultSets: any) => {
 
             // Sort and filter logic
-          this.resultSets = resultSets
-          .filter(obj => obj.userIsActive)
-          .sort((a, b) => {
-            const lastNameA = a.userDisplayName.split(',')[0].trim();
-            const lastNameB = b.userDisplayName.split(',')[0].trim();
-            return lastNameA.localeCompare(lastNameB);
-          })
+            this.resultSets = resultSets
+              .filter(obj => obj.userIsActive)
+              .sort((a, b) => {
+                const lastNameA = a.userDisplayName.split(',')[0].trim();
+                const lastNameB = b.userDisplayName.split(',')[0].trim();
+                return lastNameA.localeCompare(lastNameB);
+              })
           });
       });
   }
   changeInput() {
-      this.form.controls.control.patchValue(this.selectedOption[this.valuePointer])
+    this.input.nativeElement.addEventListener('focusout',(event =>{
+      this.onFocusout(event)
+    }))
+    if (this.inputDisabled) {
+      this.input.nativeElement.disabled = true
+      this.form.markAsPristine()
+    }
+    else {
+      this.input.nativeElement.disabled = false
+    }
   }
   onFocusout(event) {
     setTimeout(() => {
       if (this.selectedOption[this.valuePointer] === undefined && event != "") {
-        this.form.controls.control.patchValue('')
-        var comfirmConfig: FuseConfirmationConfig = {
-          "title": "The entered name does not exist. Please review your selection!",
-          "message": "",
-          "icon": {
-            "show": true,
-            "name": "heroicons_outline:exclamation",
-            "color": "warn"
-          },
-          "actions": {
-            "confirm": {
-              "show": true,
-              "label": "Okay",
-              "color": "warn"
-            },
-            "cancel": {
-              "show": false,
-              "label": "Cancel"
-            }
-          },
-          "dismissible": false
-        }
-        const alert = this.fuseAlert.open(comfirmConfig)
+        this.input.nativeElement.blur()
+        this.input.nativeElement.value = ''
       }
     }, 200);
   }
   ngOnInit() {
   }
   get control() {
+    
     return this.form.get('control');
   }
   onFunctionSelect(event: any) {
     this.onChange(event.option.value)
     this.valueChange.emit(event.option.value)
-    this.form.controls.control.patchValue(event.option.value[this.valuePointer])
+    this.form.controls.control.patchValue('')
+    this.form.controls.chipList.patchValue(event.option.value)
     this.selectedOption = event.option.value
+    this.form.markAsDirty()
     this.input.nativeElement.blur()
+    this.input.nativeElement.value = ''
+    this.input.nativeElement.disabled = true
+    this.inputDisabled = true
   }
 
   registerOnTouched(fn: any): void {
@@ -149,21 +140,32 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
 
   writeValue(val: any) {
     if (val != null) {
-      if(typeof val != 'string')
-      {
-      this.form.controls.control.patchValue(val[this.valuePointer]);
-      this.selectedOption = val
-      }
-      else
-      {
-        this.form.controls.control.patchValue(val);
-        this.selectedOption = val
+      if (Object.keys(val).length > 0) {
+        this.form.controls.chipList.patchValue(val)
+        if (typeof val != 'string') {
+          this.form.controls.control.patchValue('');
+          this.selectedOption = val
+        }
+        else {
+          this.form.controls.control.patchValue('');
+
+          this.selectedOption = val
+        }
+        this.inputDisabled = true
       }
     }
 
   }
-
+  removeOption(selectedOption) {
+    this.onChange({})
+    this.valueChange.emit({})
+    this.selectedOption = {}
+    this.input.nativeElement.value = ''
+    this.input.nativeElement.disabled = false
+    this.inputDisabled = false
+  }
   setDisabledState(isDisabled: boolean) {
     isDisabled == true ? this.control.disable() : this.control.enable()
+    isDisabled == true ? this.isDisabled = true : this.isDisabled = false
   }
 }
