@@ -8,6 +8,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MessagesComponent } from 'app/layout/common/messages/messages.component';
 import { SharedModule } from 'app/shared/shared.module';
 import { GlobalMessagesPanelComponent } from './global-messages-panel/global-messages-panel.component';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
     declarations: [
@@ -21,6 +22,7 @@ import { GlobalMessagesPanelComponent } from './global-messages-panel/global-mes
         MatButtonModule,
         MatIconModule,
         MatTooltipModule,
+        QuillModule,
         SharedModule
     ],
     exports     : [

@@ -130,7 +130,6 @@ export class AskNeedTableComponent implements OnInit {
   }
 
   onActivate(event) {
-    console.log('Activate Event', event);
   }
 
   toggleExpandRow(row) {

@@ -365,7 +365,6 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   islink(uid: string, projectid: string): boolean {
-    console.log(uid, projectid , this.projectViewDetails.links.some(x => x.linkItemId == uid))
     return this.projectViewDetails.links.some(x => x.linkItemId == uid)
   }
 
