@@ -4,17 +4,18 @@
   
   .function-item {
     margin-top: 10px;
-    background-color: #f0f0f0;
     padding: 10px;
   }
   
   .department-item .department-header button {
-    background-color: #ddd;
     cursor: pointer;
   }
-  
+  .department-item {
+    padding-left: 20px;
+  }
   .team-item {
     list-style: none;
+    padding-left: 40px;
   }
   
   .team-item button {

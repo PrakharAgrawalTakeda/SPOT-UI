@@ -7,38 +7,57 @@
             </a>
         </div>
     </div>
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto m-2 pr-2">
         <!-- Portfolio Dropdown -->
         <div class="portfolio-dropdown">
             <spot-singleselect-autocomplete
-            formControlName="portfolioOwner" class="w-full read-only" [Required]="portfolioOwnerRequired"
-                            name="portfolioOwner" [label]="'Portfolio Owner'" [placeholder]="'Portfolio Owner'"
-                            [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
-                            [dropDownArray]="userManagedPortfolios" [sortByType]="'custom'"
-                            [customSortPointer]="'pfid'">
+            formControlName="managingPortfolio" class="w-full" Required
+            [label]="'Portfolio'"
+            [placeholder]="'Portfolio'" [valuePointer]="'portfolioOwner'"
+            [dropDownArray]="portfolioOwnerList" [sortByType]="'custom'"
+            [customSortPointer]="'portfolioOwner'">
         </spot-singleselect-autocomplete>
         </div>
 
-        <!-- Functions Display -->
-        <div *ngFor="let function of functions" class="function-item">
-            <div class="flex items-center">
-                <mat-slide-toggle [(ngModel)]="function.selected" (change)="toggleFunction(function.id)">
-                    {{ function.name }}
-                </mat-slide-toggle>
+ <!-- Functions Display -->
+ <div>
+    <h1 style="font-weight: bold;">Resource Hierarchy</h1>
+</div>
+<div *ngFor="let function of functions" class="function-item">
+    <div class="flex items-center justify-between mb-2">
+        <span>{{ function.lookUpName }}</span>
+        <mat-slide-toggle [(ngModel)]="function.selected" (change)="toggleFunction(function)">
+        </mat-slide-toggle>
+    </div>
+    <!-- Check if function is selected to display its departments -->
+    <div *ngIf="function.selected">
+        <div *ngFor="let department of function.departments" class="department-item">
+            <div class="flex items-center justify-between mb-2">
+                <span>{{ department.lookUpName }}</span>
+                <div class="flex items-center">
+                    <mat-slide-toggle [(ngModel)]="department.selected" (change)="toggleDepartment(function, department)">
+                    </mat-slide-toggle>
+                    <a href="javascript:void(0)"
+                title="Edit Team"
+                (click)="editTeam()">
+                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
+            </a>
+                </div>
             </div>
-            <div *ngFor="let department of function.departments" class="department-item">
-                <div class="department-header">
-                    {{ department.name }}
-                </div>
-                <div class="team-list">
-                    <ul>
-                        <li *ngFor="let team of department.teams" class="team-item">
-                            {{ team.name }}
-                            <button (click)="editTeam(team.id)">Edit</button>
-                        </li>
-                    </ul>
-                </div>
+            <!-- Check if department is selected to display its teams -->
+            <div *ngIf="department.selected">
+                <ul class="team-list">
+                    <li *ngFor="let team of department.teams" class="team-item">
+                        {{ team.name }}
+                    </li>
+                </ul>
             </div>
         </div>
+    </div>
+</div>
+
+
+  
+          
     </div>
 </div>

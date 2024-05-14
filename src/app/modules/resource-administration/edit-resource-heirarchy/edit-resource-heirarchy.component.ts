@@ -19,29 +19,50 @@ export class EditResourceHeirarchyComponent implements OnInit {
   })
   portfolioOwner: any;
   userManagedPortfolios: any;
+  portfolioOwnerList: any;
+  functions: any;
+  rows: any;
   constructor(private router: Router, private _fuseNavigationService: FuseNavigationService, public auth: AuthService,
     public resourceadminservice: ResourceAdministrationService, private apiService: ProjectApiService, private msalService: MsalService) {
 
   }
+
   ngOnInit(): void {
     console.log("I'm here")
     const currentUserID = this.msalService.instance.getActiveAccount().localAccountId;
 
     this.apiService.getfilterlist().then(res => {
-      this.auth.lookupMaster().then(lookupMaster => {
-      console.log(lookupMaster)
-
+      this.auth.lookupMaster().then((lookup: any) => {
+      console.log(res)
+      this.functions = lookup.filter(x => x.lookUpParentId == '689b87da-1140-446b-82a9-fb71801916b6')
+      this.functions.sort((a, b) => {
+        return a.lookUpOrder - b.lookUpOrder;
+      })
+      console.log(this.functions)
+      // Map functions to their departments by setting departments as a property of functions
+      this.functions = this.functions.map(func => ({
+        ...func,
+        departments: lookup.filter(x => x.lookUpParentId == func.lookUpId)
+    }));
       this.portfolioOwner = res
-      const portfolioOwnerList = this.portfolioOwner.portfolioOwner;
-            this.userManagedPortfolios = portfolioOwnerList.filter(po => {
+      this.portfolioOwnerList = this.portfolioOwner.portfolioOwner;
+      console.log(this.portfolioOwnerList)
+      // this.RMForm.patchValue({
+      //   portfolioOwner: this.getPortfolioOwnerByName(this.metricRepository.metricPortfolioID)
+      // })
+            this.portfolioOwnerList = this.portfolioOwnerList.filter(po => {
             // Check if currentUserID matches resourceMgrAdId
             return po.resourceMgrAdId == currentUserID;
-        }).map(po => po.portfolioOwner);
-            console.log(this.userManagedPortfolios)
+        });
+            console.log(this.portfolioOwnerList)
       })
     })
     this.viewContent = true;
 
+  }
+
+  editTeam() {
+    
   }
 
   // getPortfolioOwner(): any {
