@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MsalService } from '@azure/msal-angular';
 import { FuseNavigationService } from '@fuse/components/navigation';
 import { AuthService } from 'app/core/auth/auth.service';
-import { ResourceAdministrationService } from '../resource-administration.service';
+import { ResourceAdministrationApiService } from '../resource-administration-api.service';
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { FormControl, FormGroup } from '@angular/forms';
 
@@ -15,7 +15,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class EditResourceHeirarchyComponent implements OnInit {
   viewContent: boolean = false
   RMForm = new FormGroup({
-    portfolioOwner: new FormControl(null)
+    managingPortfolio: new FormControl(null)
   })
   portfolioOwner: any;
   userManagedPortfolios: any;
@@ -23,14 +23,19 @@ export class EditResourceHeirarchyComponent implements OnInit {
   functions: any;
   rows: any;
   constructor(private router: Router, private _fuseNavigationService: FuseNavigationService, public auth: AuthService,
-    public resourceadminservice: ResourceAdministrationService, private apiService: ProjectApiService, private msalService: MsalService) {
+    public resourceadminservice: ResourceAdministrationApiService, private apiService: ProjectApiService, private msalService: MsalService) {
 
   }
 
   ngOnInit(): void {
+    this.dataloader()
+    this.setupFormSubscriptions()
+  }
+
+  dataloader() {
     console.log("I'm here")
     const currentUserID = this.msalService.instance.getActiveAccount().localAccountId;
-
+//this.resourceadminservice.getTeamByPortfolio().then(res => {
     this.apiService.getfilterlist().then(res => {
       this.auth.lookupMaster().then((lookup: any) => {
       console.log(res)
@@ -57,8 +62,25 @@ export class EditResourceHeirarchyComponent implements OnInit {
             console.log(this.portfolioOwnerList)
       })
     })
+   // })
     this.viewContent = true;
+  }
 
+
+  setupFormSubscriptions() {
+    this.RMForm.get('managingPortfolio').valueChanges.subscribe(selectedPortfolio => {
+      if (selectedPortfolio) {
+        this.resourceadminservice.getTeamByPortfolio(selectedPortfolio).then(res => {
+          // process your response here to update the functions or other dependent data
+          this.updateFunctionsBasedOnPortfolio(res);
+        });
+      }
+    });
+  }
+
+  updateFunctionsBasedOnPortfolio(data: any) {
+    // Assume data contains necessary information to update functions
+    this.functions = data;
   }
 
   editTeam() {
