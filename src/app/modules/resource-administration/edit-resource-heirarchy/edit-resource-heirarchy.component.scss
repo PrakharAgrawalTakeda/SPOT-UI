@@ -1,24 +1,51 @@
-.portfolio-dropdown {
-    margin-bottom: 20px;
-  }
-  
-  .function-item {
-    margin-top: 10px;
-    padding: 10px;
-  }
-  
-  .department-item .department-header button {
-    cursor: pointer;
-  }
-  .department-item {
-    padding-left: 20px;
-  }
-  .team-item {
-    list-style: none;
-    padding-left: 40px;
-  }
-  
-  .team-item button {
-    margin-left: 10px;
-  }
-  
+.resource-hierarchy {
+  width: 100%;
+}
+
+.function-item, .departments {
+  width: 100%;
+}
+
+.header, .department {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.name {
+  flex: 2;
+  text-align: left;
+  font-weight: normal;
+}
+
+.toggle {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px; 
+}
+
+
+.actions {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 25%;
+}
+
+.team-list {
+  list-style-type: none; 
+  margin-left: 40px; 
+  padding: 0;
+}
+
+.team-item {
+  padding: 5px 0;
+}
+.overflow-x-auto {
+  overflow-x: hidden; 
+}
+
+

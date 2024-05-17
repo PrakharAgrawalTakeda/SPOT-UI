@@ -1,8 +1,8 @@
 <div *ngIf="viewContent">
     <div class="flex items-start justify-between bg-primary sidepanel-header">
-        <div class="text-on-primary" style="padding-top: 6px">Edit Resource Heirarchy</div>
-        <div style="padding-top: 2px"><a (click)="resourceadminservice.toggleDrawerOpen('', '',[],'',true)"
-                href="javascript:void(0)" title="Close">
+        <div class="text-on-primary" style="padding-top: 6px">Edit Resource Hierarchy</div>
+        <div style="padding-top: 2px">
+            <a (click)="resourceadminservice.toggleDrawerOpen('', '', [], '', true)" href="javascript:void(0)" title="Close">
                 <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
             </a>
         </div>
@@ -21,48 +21,49 @@
                     [customSortPointer]="'portfolioOwner'">
                 </spot-singleselect-autocomplete>
             </div>
-        </form>        
-
- <!-- Functions Display -->
- <div  *ngIf="RMForm.get('managingPortfolio').value">
- <div>
-    <h1 style="font-weight: bold;">Resource Hierarchy</h1>
-</div>
-<div *ngFor="let function of functions" class="function-item">
-    <div class="flex items-center justify-between mb-2">
-        <span>{{ function.lookUpName }}</span>
-        <mat-slide-toggle [(ngModel)]="function.selected" (change)="toggleFunction(function)">
-        </mat-slide-toggle>
-    </div>
-    <!-- Check if function is selected to display its departments -->
-    <div *ngIf="function.selected">
-        <div *ngFor="let department of function.departments" class="department-item">
-            <div class="flex items-center justify-between mb-2">
-                <span>{{ department.lookUpName }}</span>
-                <div class="flex items-center">
-                    <mat-slide-toggle [(ngModel)]="department.selected" (change)="toggleDepartment(function, department)">
-                    </mat-slide-toggle>
-                    <a href="javascript:void(0)"
-                title="Edit Team"
-                (click)="editTeam()">
-                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
-            </a>
+        </form>
+  
+        <div *ngIf="RMForm.get('managingPortfolio').value">
+            <h1 style="font-weight: bold;">Resource Hierarchy</h1>
+            <div *ngFor="let function of functions" class="function-item">
+                <div class="header">
+                    <span class="name">{{ function.lookUpName }}</span>
+                    <div class="toggle">
+                        <mat-slide-toggle class="primary slider-adjust" formControlName="functiontoggle" [checked]="function.departments.length > 0" disabled="true"></mat-slide-toggle>
+                    </div>
+                    <div class="actions"></div> <!-- Placeholder for alignment -->
+                </div>
+                <!-- Departments and their details -->
+                <div *ngIf="function.departments.length > 0" class="departments">
+                    <div *ngFor="let department of function.departments" class="department">
+                        <span class="name">{{ department.lookUpName }}</span>
+                        <div class="toggle">
+                            <mat-slide-toggle class="primary slider-adjust" formControlName="depttoggle" [checked]="department.teams && department.teams.length > 0" disabled="true"></mat-slide-toggle>
+                        </div>
+                        <div class="actions">
+                    <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="department.teams && department.teams.length > 0" (click)="editTeam(department)">
+                                <mat-icon svgIcon="heroicons_solid:pencil">Edit Team</mat-icon>
+                            </button>
+                            <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="!(department.teams && department.teams.length > 0)" (click)="addTeam(department)">
+                                <mat-icon svgIcon="heroicons_solid:plus">Add Team</mat-icon>
+                            </button>
+                        </div>
+                        <!-- Team List -->
+                        <ul class="team-list" *ngIf="department.teams && department.teams.length > 0">
+                            <li *ngFor="let team of department.teams" class="team-item">
+                                {{ team.name }}
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <!-- Check if department is selected to display its teams -->
-            <div *ngIf="department.selected">
-                <ul class="team-list">
-                    <li *ngFor="let team of department.teams" class="team-item">
-                        {{ team.name }}
-                    </li>
-                </ul>
-            </div>
         </div>
-    </div>
-</div>
-</div>
+        
+
+
+
 
   
-          
     </div>
-</div>
+  </div>
+  

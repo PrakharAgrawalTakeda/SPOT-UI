@@ -44,19 +44,16 @@ export class EditResourceHeirarchyComponent implements OnInit {
         return a.lookUpOrder - b.lookUpOrder;
       })
       console.log(this.functions)
-      // Map functions to their departments by setting departments as a property of functions
+
       this.functions = this.functions.map(func => ({
         ...func,
         departments: lookup.filter(x => x.lookUpParentId == func.lookUpId)
     }));
       this.portfolioOwner = res
       this.portfolioOwnerList = this.portfolioOwner.portfolioOwner;
-      console.log(this.portfolioOwnerList)
-      // this.RMForm.patchValue({
-      //   portfolioOwner: this.getPortfolioOwnerByName(this.metricRepository.metricPortfolioID)
-      // })
+      console.log(this.functions)
             this.portfolioOwnerList = this.portfolioOwnerList.filter(po => {
-            // Check if currentUserID matches resourceMgrAdId
+
             return po.resourceMgrAdId == currentUserID;
         });
             console.log(this.portfolioOwnerList)
@@ -71,21 +68,35 @@ export class EditResourceHeirarchyComponent implements OnInit {
     this.RMForm.get('managingPortfolio').valueChanges.subscribe(selectedPortfolio => {
       if (selectedPortfolio) {
         this.resourceadminservice.getTeamByPortfolio(selectedPortfolio).then(res => {
-          // process your response here to update the functions or other dependent data
           this.updateFunctionsBasedOnPortfolio(res);
         });
+      } else {
+        this.functions = [];
       }
     });
   }
-
+  
   updateFunctionsBasedOnPortfolio(data: any) {
-    // Assume data contains necessary information to update functions
-    this.functions = data;
+    this.functions.forEach(func => {
+      func.departments.forEach(dept => {
+        const teams = data.teams.filter(team => team.departmentId === dept.lookUpId);
+        dept.teams = teams;
+        dept.selected = teams.length > 0;
+      });
+      func.selected = func.departments.length > 0;
+    });
   }
+  
 
   editTeam() {
     
   }
+
+  toggleFunction(func: any) {
+    // Logic to handle the toggle
+    func.selected = !func.selected;
+  }
+  
 
   // getPortfolioOwner(): any {
   //   return this.portfolioOwner.portfolioOwner.filter(x => x.isPortfolioOwner == true)
