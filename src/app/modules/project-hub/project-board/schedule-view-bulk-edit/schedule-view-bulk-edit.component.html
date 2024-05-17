@@ -509,7 +509,11 @@
                             <div class="flex items-center justify-start gap-6">
                                 <a href="javascript:void(0)" title="Delete"
                                     (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)"
-                                    *ngIf="(row.milestoneType && row.milestoneType >= 1 ? false : true && !islink(row.scheduleUniqueId)) || (row.milestoneType && row.milestoneType >= 1 ? false : true && islink(row.scheduleUniqueId) && projectid != row.projectId)">
+                                    *ngIf="(row.milestoneType && row.milestoneType >= 1 ? false : true && !islink(row.scheduleUniqueId)) || 
+                                    (row.milestoneType && row.milestoneType >= 1 ? false : true && islink(row.scheduleUniqueId) && projectid != row.projectId) ||
+                                    ((row.milestoneType == 1 || row.milestoneType == 2) && 
+            islink(row.scheduleUniqueId) && 
+            isParentLink(row.scheduleUniqueId, row.projectId))">
                                     <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                                 </a>
                             </div>

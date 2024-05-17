@@ -1376,6 +1376,13 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     islink(uid: string): boolean {
         return this.scheduleData.links.some(x => x.linkItemId == uid)
     }
+    isParentLink(uid: string, projectid: string) : boolean {
+        let link = this.scheduleData.links.find(x => x.linkItemId == uid);
+        console.log("HERE",projectid)
+        console.log(link.parentProjectId)
+        // Check if the current project ID matches the parentProjectId of the link
+       return projectid != link.parentProjectId;
+    }
 
     getlinkname2(uid: string): string {
         let temp = this.scheduleData.links.find(x => x.linkItemId == uid)
