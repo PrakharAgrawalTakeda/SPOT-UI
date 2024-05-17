@@ -1378,10 +1378,12 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     }
     isParentLink(uid: string, projectid: string) : boolean {
         let link = this.scheduleData.links.find(x => x.linkItemId == uid);
-        console.log("HERE",projectid)
-        console.log(link.parentProjectId)
+        // console.log(link)
+        // console.log("HERE",projectid)
+        // console.log(link.parentProjectId)
+        // console.log(link.childProjectId)
         // Check if the current project ID matches the parentProjectId of the link
-       return projectid != link.parentProjectId;
+       return this.id == link.parentProjectId;
     }
 
     getlinkname2(uid: string): string {
@@ -1404,6 +1406,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     getlinkname(uid: string): string {
         //debugger
         var linkItemList = this.scheduleData.links.filter(x => x.linkItemId == uid)
+        console.log(linkItemList)
         var returnString = ''
         if (linkItemList.some(x => x.parentProjectId == this.id)) {
             var childProject = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == linkItemList.find(x => x.parentProjectId == this.id).childProjectId)
@@ -1422,6 +1425,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             if (returnString != '') {
                 returnString = returnString + '\n'
             }
+            console.log(projectName)
             returnString = returnString + "A link to this milestone has been created in project(s): " + projectName
         }
         return returnString
