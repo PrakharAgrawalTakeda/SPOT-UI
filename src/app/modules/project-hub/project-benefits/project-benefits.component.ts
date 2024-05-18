@@ -20,6 +20,7 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
   ValueCaptureForm = new FormGroup({
     valueCaptureStart: new FormControl(''),
     primaryValueDriver: new FormControl(''),
+    COPcategory: new FormControl(''),
     valueCommentary: new FormControl('')
   })
   @Input() valuecreationngxdata: any = []
@@ -86,6 +87,7 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                 this.kpi = kpi
                 console.log(this.kpi)
                 console.log(res)
+                console.log(resp)
                 this.lookupData = resp
                 this.filterData = filterres
                 res.forEach((element) => {
@@ -123,7 +125,8 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                 this.ValueCaptureForm.patchValue({
                   valueCaptureStart: problemCapture.financialRealizationStartDate,
                   primaryValueDriver: this.lookupData.find(x => x.lookUpId == problemCapture.primaryKpi) ? this.lookupData.find(x => x.lookUpId == problemCapture.primaryKpi)?.lookUpName : null,
-                  valueCommentary: problemCapture.valueCommentary
+                  valueCommentary: problemCapture.valueCommentary,
+                  COPcategory: this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory) ? this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory)?.lookUpName : null
                 })
                 this.isStrategicInitiative = problemCapture.problemType == 'Strategic Initiative / Program' ? true : false
 

@@ -378,11 +378,16 @@
 
                     </a>
                     <a href="javascript:void(0)" title="Delete Single"
-                        *ngIf="(row.milestoneType && row.milestoneType >= 1 ? false : true && editable) || (row.milestoneType && row.milestoneType >= 1 ? false : true && islink(row.scheduleUniqueId, row.projectId) && projectid != row.projectId)"
-                        (click)="deleteSchedule(row.scheduleUniqueId)">
-                        <!-- && " -->
-                        <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
-                    </a>
+   *ngIf="((row.milestoneType && row.milestoneType >= 1 ? false : true && editable) || 
+           (row.milestoneType && row.milestoneType >= 1 ? false : true && islink(row.scheduleUniqueId, row.projectId))) || 
+           ((row.milestoneType == 1 || row.milestoneType == 2) && 
+            islink(row.scheduleUniqueId, row.projectId) && 
+            editable && 
+            isParentLink(row.scheduleUniqueId, projectid))"
+   (click)="deleteSchedule(row.scheduleUniqueId)">
+    <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+</a>
+
                     <!-- <ng-template #null *ngIf="(editable && islink(row.scheduleUniqueId))" >
                             <a href="javascript:void(0)" title="Delete Single"
                         (click)="deleteSchedule(row.scheduleUniqueId)">

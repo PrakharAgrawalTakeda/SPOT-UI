@@ -16,6 +16,10 @@
         [label]="'Primary Value Driver'" [placeholder]="'Primary KPI'" [valuePointer]="'lookUpName'"
         [dropDownArray]="primaryKPI">
     </spot-singleselect-autocomplete>
+    <spot-singleselect-autocomplete formControlName="COPcategory" class="w-full" name="COPcategory"
+        [label]="'COP Category'" [placeholder]="'COP Category'" [valuePointer]="'lookUpName'"
+        [dropDownArray]="copImpactCategory">
+    </spot-singleselect-autocomplete>
     <spot-textarea formControlName="valueCommentary"
                            [label]="'Value Commentary'"
                            [placeholder]="'Value Commentary'">
