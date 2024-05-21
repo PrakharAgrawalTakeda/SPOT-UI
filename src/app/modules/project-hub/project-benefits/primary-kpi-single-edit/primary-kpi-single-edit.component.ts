@@ -55,6 +55,9 @@ export class PrimaryKpiSingleEditComponent implements OnInit {
           console.log(this.projecthubservice.itemid)
           this.primaryKPI = lookup.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474')
           this.copImpactCategory = lookup.filter(x => x.lookUpParentId == '47630E64-3E3F-4CE2-B4F4-2085A7F35D46')
+          this.copImpactCategory.sort((a, b) => {
+            return a.lookUpOrder - b.lookUpOrder;
+          })
           console.log(this.primaryKPI)
           console.log(this.copImpactCategory)
           //this.primaryKPIForm.controls.primaryKpi.patchValue(this.projecthubservice.kpiMasters.find(x => x.kpiid == this.projecthubservice.itemid))
@@ -62,7 +65,10 @@ export class PrimaryKpiSingleEditComponent implements OnInit {
           this.primaryKPIForm.controls.COPcategory.patchValue(this.copImpactCategory.find(x => x.lookUpId == pc.copImpactCategory))
           this.primaryKPIForm.controls.vcdate.patchValue(pc.financialRealizationStartDate)
           this.primaryKPIForm.controls.valueCommentary.patchValue(pc.valueCommentary)
-
+if(this.primaryKPIForm.value.COPcategory == "" || this.primaryKPIForm.value.COPcategory == null )
+{
+  this.primaryKPIForm.controls.COPcategory.patchValue(this.copImpactCategory.find(x => x.lookUpId == '2730422E-680A-4B2D-8DC2-F64CA885BB61'))
+}
           console.log(this.primaryKPIForm.getRawValue())
           // }
           this.viewContent = true
