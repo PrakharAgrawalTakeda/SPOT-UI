@@ -3,23 +3,6 @@
   align-self: center;
 }
 
-.toggle-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 0;
-  margin-right: 16px;
-}
-
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  flex-grow: 0;
-  margin-left: 15px; /* Adjust spacing as needed */
-}
-
-/* Ensuring the toggle and actions align correctly */
 .mat-expansion-panel-header {
   display: flex;
   justify-content: space-between;
@@ -31,4 +14,20 @@
 
 .button-spacing {
   margin-right: 8px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 0;
+  margin-left: 15px;
+}
+
+.toggle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 0;
+  margin-right: 16px;
 }
