@@ -6,12 +6,9 @@
 </div>
 </fuse-drawer>
 
-<div class="p-18 flex justify-between items-center">
-    <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="resourceadminservice.toggleDrawerOpen('EditHeirarchy', '', [], '', true, false)">
+<div class="top-right-container p-20">
+    <button class="edit-hierarchy-btn min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="resourceadminservice.toggleDrawerOpen('EditHeirarchy', '', [], '', true, false)">
         <b>Edit Resource Hierarchy</b>
-        </button>
-        <!-- <div class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
-    [ngStyle]="{ 'position' : resourceadminservice.drawerOpenedright ? 'fixed' : 'relative'}">
-        <router-outlet></router-outlet>
-    </div> -->
+    </button>
 </div>
+

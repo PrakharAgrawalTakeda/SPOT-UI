@@ -1,69 +1,70 @@
 <div *ngIf="viewContent">
     <div class="flex items-start justify-between bg-primary sidepanel-header">
-        <div class="text-on-primary" style="padding-top: 6px">Edit Resource Hierarchy</div>
-        <div style="padding-top: 2px">
-            <a (click)="resourceadminservice.toggleDrawerOpen('', '', [], '', true)" href="javascript:void(0)" title="Close">
-                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
-            </a>
-        </div>
+      <div class="text-on-primary" style="padding-top: 6px">Edit Resource Hierarchy</div>
+      <div style="padding-top: 2px">
+        <a (click)="resourceadminservice.toggleDrawerOpen('', '', [], '', true)" href="javascript:void(0)" title="Close">
+          <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+      </div>
     </div>
     <div class="overflow-x-auto m-2 pr-2">
-        <form [formGroup]="RMForm">
-            <div class="portfolio-dropdown">
-                <spot-singleselect-autocomplete
-                    formControlName="managingPortfolio"
-                    class="w-full" required
-                    [label]="'Portfolio'"
-                    [placeholder]="'Select Portfolio'"
-                    [valuePointer]="'portfolioOwner'"
-                    [dropDownArray]="portfolioOwnerList"
-                    [sortByType]="'custom'"
-                    [customSortPointer]="'portfolioOwner'">
-                </spot-singleselect-autocomplete>
-            </div>
-        </form>
-  
-        <div *ngIf="RMForm.get('managingPortfolio').value">
-            <h1 style="font-weight: bold;">Resource Hierarchy</h1>
-            <div *ngFor="let function of functions" class="function-item">
-                <div class="header">
-                    <span class="name">{{ function.lookUpName }}</span>
-                    <div class="toggle">
-                        <mat-slide-toggle class="primary slider-adjust" formControlName="functiontoggle" [checked]="function.departments.length > 0" disabled="true"></mat-slide-toggle>
-                    </div>
-                    <div class="actions"></div> <!-- Placeholder for alignment -->
-                </div>
-                <!-- Departments and their details -->
-                <div *ngIf="function.departments.length > 0" class="departments">
-                    <div *ngFor="let department of function.departments" class="department">
-                        <span class="name">{{ department.lookUpName }}</span>
-                        <div class="toggle">
-                            <mat-slide-toggle class="primary slider-adjust" formControlName="depttoggle" [checked]="department.teams && department.teams.length > 0" disabled="true"></mat-slide-toggle>
-                        </div>
-                        <div class="actions">
-                    <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="department.teams && department.teams.length > 0" (click)="editTeam(department)">
-                                <mat-icon svgIcon="heroicons_solid:pencil">Edit Team</mat-icon>
-                            </button>
-                            <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="!(department.teams && department.teams.length > 0)" (click)="addTeam(department)">
-                                <mat-icon svgIcon="heroicons_solid:plus">Add Team</mat-icon>
-                            </button>
-                        </div>
-                        <!-- Team List -->
-                        <ul class="team-list" *ngIf="department.teams && department.teams.length > 0">
-                            <li *ngFor="let team of department.teams" class="team-item">
-                                {{ team.name }}
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+      <form [formGroup]="RMForm">
+        <div class="portfolio-dropdown">
+          <spot-singleselect-autocomplete
+            formControlName="managingPortfolio"
+            class="w-full" required
+            [label]="'Portfolio'"
+            [placeholder]="'Select Portfolio'"
+            [valuePointer]="'portfolioOwner'"
+            [dropDownArray]="portfolioOwnerList"
+            [sortByType]="'custom'"
+            [customSortPointer]="'portfolioOwner'">
+          </spot-singleselect-autocomplete>
         </div>
-        
-
-
-
-
-  
+      </form>
+      <div *ngIf="RMForm.get('managingPortfolio').value">
+        <h1 style="font-weight: bold;">Resource Hierarchy</h1>
+            <mat-accordion multi="true">
+              <mat-expansion-panel *ngFor="let function of functions">
+                <mat-expansion-panel-header>
+                  <span class="panel-title">{{ function.lookUpName }} ({{ function.departments?.length || 0 }})</span>
+                  <span class="toggle-container">
+                    <mat-slide-toggle [checked]="function.departments.length > 0" disabled="true"></mat-slide-toggle>
+                  </span>
+                  <span class="actions"></span>
+                </mat-expansion-panel-header>
+          
+                <mat-accordion multi="true">
+                  <mat-expansion-panel *ngFor="let department of function.departments">
+                    <mat-expansion-panel-header>
+                      <span class="panel-title">
+                        {{ department.lookUpName }} ({{ department.teams?.length || 0 }})
+                      </span>
+                      <span class="toggle-container">
+                        <mat-slide-toggle [checked]="department.teams?.length > 0" disabled="true"></mat-slide-toggle>
+                      </span>
+                      <span class="actions">
+                        <button *ngIf="department.teams && department.teams.length > 0" class="text-primary bg-gray-200 button-spacing" mat-flat-button [color]="'primary-200'"
+                                (click)="editTeam(department)">
+                          <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit Team
+                        </button>
+                        <button *ngIf="!department.teams || department.teams.length === 0" class="text-primary bg-gray-200 button-spacing" mat-flat-button [color]="'primary-200'"
+                                (click)="addTeam(department)">
+                          <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add Team
+                        </button>
+                      </span>
+                    </mat-expansion-panel-header>
+          
+                    <ul>
+                      <li *ngFor="let team of department.teams" class="team-item">
+                        {{ team.name }} ({{ team.resourceCount }})
+                      </li>
+                    </ul>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </mat-expansion-panel>
+            </mat-accordion>   
+      </div>
     </div>
   </div>
   

@@ -293,3 +293,18 @@ fuse-drawer .fuse-drawer-content {
     cursor: pointer;
 }
 
+.top-right-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 18px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%; 
+}
+
+.edit-hierarchy-btn {
+    margin-right: 20px; 
+}
+
+
