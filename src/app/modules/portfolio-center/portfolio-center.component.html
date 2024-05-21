@@ -7,6 +7,7 @@
                 PortfolioCenterService.itemtype == 'FXRateOpen'
             "></app-budget-spend>
 
+
     <fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.drawerOpened" (openedChanged)="
             PortfolioCenterService.drawerOpenedChangedSmall($event)
         " [mode]="'over'" [position]="'right'" [ngClass]="{
@@ -208,10 +209,10 @@
                         [dropDownArray]="primaryKPI" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
                     <div class="caps-project-container">
-                        <button class="guidance-link" (click)="caps()">
+                        <!-- <button class="guidance-link" (click)="caps()">
                             <mat-icon class="icon-small align-icon mat-icon" svgIcon="feather:external-link" matTooltip="CAPS Site Guidance Playbook for more information"></mat-icon>
                             
-                        </button>
+                        </button> -->
                         <spot-select class="w-full" formControlName="CAPSProject" name="CAPSProject"
                                      [label]="'CAPS Project'" [placeholder]="'CAPS Project'" [showNoneOption]="true"
                                      [dropDownArrayType]="'string'" [dropDownArray]="CAPSDropDrownValues" [showHint]="true"

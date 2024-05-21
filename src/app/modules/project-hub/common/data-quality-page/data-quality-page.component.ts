@@ -76,6 +76,7 @@ export class DataQualityPageComponent implements OnInit {
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get('id');
         this.apiService.getDataCompleteness(this.id).then((res: any) => {
+            console.log(res)
             res.rows.forEach((element) => {
                 if (element.hitMiss == true) element.hitMiss = 'Complete';
                 if (element.hitMiss == false) element.hitMiss = 'Incomplete';

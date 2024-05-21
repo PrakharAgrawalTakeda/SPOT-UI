@@ -364,10 +364,19 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
     this.localIncludedItems.controls.toggle.markAsPristine()
   }
 
-  islink(uid: string, projectid: string): boolean {
-    console.log(uid, projectid , this.projectViewDetails.links.some(x => x.linkItemId == uid))
+  islink(uid: string): boolean {
+    console.log("LINK",this.projectViewDetails.links.some(x => x.linkItemId == uid))
     return this.projectViewDetails.links.some(x => x.linkItemId == uid)
   }
+
+  isParentLink(uid: string, projectid: string) : boolean {
+    let link = this.projectViewDetails.links.find(x => x.linkItemId == uid);
+    console.log("HERE",projectid)
+    console.log(link.parentProjectId)
+    // Check if the current project ID matches the parentProjectId of the link
+   return projectid == link.parentProjectId;
+}
+
 
   getLinkType(projectId: string): string {
     return projectId == this.projectid ? 'mat_solid:link' : 'heroicons_outline:link'
