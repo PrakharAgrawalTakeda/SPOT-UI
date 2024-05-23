@@ -362,4 +362,10 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
       sprprojectGrouping: this.getLookUpName(response.projectData.sprprojectGrouping)
     })
   }
+
+  caps() {
+    window.open(
+        'https://mytakeda.sharepoint.com/:b:/r/sites/NEWEnergyProgram/CAPS%20Global%20Documents/CAPS%20Playbook/CAPS%20Site%20Guidance%20Playbook%20v.20240202.pdf?csf=1&web=1&e=oNDTfF'
+    );
+}
 }

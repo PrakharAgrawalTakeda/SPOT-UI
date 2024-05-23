@@ -348,10 +348,10 @@ export class CapsComponent implements OnInit, OnDestroy {
   openCAPS() {
     var message = "";
     if(this.callLocation == 'Business-Case'){
-      message = "The details can be edited only in the CAPS page. Do you want to leave the Business Case Recommended Options page and switch to the CAPS page?"
+      message = "The details can be edited only in the Environmental Impact (CAPS) page. Do you want to leave the Business Case Recommended Options page and switch to the Environmental Impact (CAPS) page?"
     }
     else if(this.callLocation == "Project-Charter"){
-      message = "The details can be edited only in the CAPS page. Do you want to leave the Project Charter page and switch to the CAPS page?"
+      message = "The details can be edited only in the Environmental Impact (CAPS) page. Do you want to leave the Project Charter page and switch to the Environmental Impact (CAPS) page?"
     }
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Are you sure?",
@@ -364,7 +364,7 @@ export class CapsComponent implements OnInit, OnDestroy {
       "actions": {
         "confirm": {
           "show": true,
-          "label": "Go to CAPS",
+          "label": "Go to Environmental Impact (CAPS)",
           // "color": "warn"
         },
         "cancel": {
@@ -388,4 +388,10 @@ export class CapsComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
+
+  caps() {
+    window.open(
+        'https://mytakeda.sharepoint.com/:b:/r/sites/NEWEnergyProgram/CAPS%20Global%20Documents/CAPS%20Playbook/CAPS%20Site%20Guidance%20Playbook%20v.20240202.pdf?csf=1&web=1&e=oNDTfF'
+    );
+}
 }

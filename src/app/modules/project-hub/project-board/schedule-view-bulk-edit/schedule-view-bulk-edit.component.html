@@ -105,14 +105,12 @@
                     [rows]="schedulengxdata" #scheduleTable columnMode="force" [headerHeight]="'auto'" [rowHeight]="'auto'"
                     [scrollbarV]="false" [scrollbarH]="true" [rowClass]="getRowClass">
                     <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false"
-                    [width]="50" *ngIf="mode== 'Normal'" [draggable]="false">
+                    [width]="60" *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
                                 class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}"
                                 *ngIf="row.scheduleUniqueId != 'new'">
                             </mat-icon>
-                            &nbsp;
-                            &nbsp;
                             <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
                                 svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
                         </ng-template>
@@ -286,7 +284,7 @@
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName" [resizeable]="false"
-                        [sortable]="false" [width]="200" *ngIf="mode== 'Normal'" [draggable]="false">
+                        [sortable]="false" [width]="225" *ngIf="mode== 'Normal'" [draggable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
                                 [ngClass]="{'closed': row.completionDate != null}">
@@ -511,7 +509,11 @@
                             <div class="flex items-center justify-start gap-6">
                                 <a href="javascript:void(0)" title="Delete"
                                     (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)"
-                                    *ngIf="(row.milestoneType?!row.milestoneType >=1:true && !islink(row.scheduleUniqueId)) || islink(row.scheduleUniqueId)">
+                                    *ngIf="(row.milestoneType && row.milestoneType >= 1 ? false : true && !islink(row.scheduleUniqueId)) || 
+                                    (row.milestoneType && row.milestoneType >= 1 ? false : true && islink(row.scheduleUniqueId) && projectid != row.projectId) ||
+                                    ((row.milestoneType == 1 || row.milestoneType == 2) && 
+            islink(row.scheduleUniqueId) && 
+            isParentLink(row.scheduleUniqueId, row.projectId))">
                                     <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                                 </a>
                             </div>
@@ -524,7 +526,7 @@
                             <div class="flex items-center justify-start gap-6">
                                 <a href="javascript:void(0)" title="Delete"
                                     (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)"
-                                    *ngIf="(row.milestoneType?!row.milestoneType >=1:true && !islink(row.scheduleUniqueId)) || islink(row.scheduleUniqueId)">
+                                    *ngIf="(row.milestoneType && row.milestoneType >= 1 ? false : true && !islink(row.scheduleUniqueId)) || (row.milestoneType && row.milestoneType >= 1 ? false : true && islink(row.scheduleUniqueId) && projectid != row.projectId)">
                                     <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                                 </a>
                             </div>
@@ -537,7 +539,7 @@
                         <div class="flex items-center justify-start gap-6">
                             <a href="javascript:void(0)" title="Delete"
                                 (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)"
-                                *ngIf="(row.milestoneType?!row.milestoneType >=1:true && !islink(row.scheduleUniqueId)) || islink(row.scheduleUniqueId)">
+                                *ngIf="(row.milestoneType && row.milestoneType >= 1 ? false : true && !islink(row.scheduleUniqueId)) || (row.milestoneType && row.milestoneType >= 1 ? false : true && islink(row.scheduleUniqueId) && projectid != row.projectId)">
                                 <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                             </a>
                         </div>

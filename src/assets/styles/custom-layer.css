@@ -143,48 +143,17 @@ ngx-datatable .datatable-row-center,
         text-decoration: underline;
     }
 
-    h1 {
-        font-size: 2em;
-    }
-
-    h2 {
-        font-size: 1.5em;
-    }
-
-    h3 {
-        font-size: 1.17em;
-    }
-
-    h4 {
-        font-size: 1em;
-    }
-
-    h5 {
-        font-size: 0.83em;
-    }
-
-    .ql-size-small {
-        font-size: 0.75em;
-    }
-
-    .ql-size-large {
-        font-size: 1.5em;
-    }
-
-    .ql-size-huge {
-        font-size: 2em;
-
-    }
 
     ul {
         all: unset !important;
         list-style-type: circle;
         padding: 0;
         margin: 0;
-        
+
         li {
             margin-left: 20px;
             list-style: circle;
         }
+
     }
 }

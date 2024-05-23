@@ -57,7 +57,7 @@
                 <div class="pb-3 pt-3">
                     <div>
                         <strong>Message Preview:</strong>
-                        <div class="py-3 global-message" [innerHTML]="row.globalMessageText"></div>
+                        <quill-view-html [content]="row.globalMessageText" format="text" theme="snow"></quill-view-html>
                     </div>
                 </div>
             </ng-template>

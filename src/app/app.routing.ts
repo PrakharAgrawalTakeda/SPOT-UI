@@ -33,6 +33,7 @@ export const appRoutes: Route[] = [
             { path: 'project-hub/:id', loadChildren: () => import('app/modules/project-hub/project-hub.module').then(m => m.ProjectHubModule) },
             { path: 'my-preference', loadChildren: () => import('app/modules/my-preference/my-preference.module').then(m => m.MyPreferenceModule) },
             { path: 'create-project', loadChildren: () => import('app/modules/create-new/create-new.module').then(m => m.CreateNewModule) },
+            { path: 'resource-administration', loadChildren: () => import('app/modules/resource-administration/resource-administration.module').then(m => m.ResourceAdministrationModule) }
         ]
     },
     {
@@ -48,6 +49,11 @@ export const appRoutes: Route[] = [
         redirectTo: '/my-preference/settings',
         pathMatch: 'full'
     },
+    // {
+    //     path: 'HTML/ResourceAdministration.html',
+    //     redirectTo: '/resource-administration',
+    //     pathMatch: 'full'
+    // },
     {
         path: 'HTML/SecurityGroupUsers.html',
         redirectTo: '/admin',

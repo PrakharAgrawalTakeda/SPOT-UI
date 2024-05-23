@@ -330,6 +330,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             this.baselineLogData = logs.projectBaselineLog.sort((a, b) => {
                                 return a.baselineCount - b.baselineCount;
                             })
+                            console.log(this.baselineLogData)
                             var count = 1
                             for (var i of this.baselineLogData) {
                                 i.logId = count
@@ -571,21 +572,21 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                     }
                                                 }
                                                 this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = this.baselineEditEnabled()
-                                                /*if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineproject) {
-                                                    if (["C9F323D4-EF97-4C2A-B748-11DB5B8589D0", "0E83F6BE-79BE-426A-A316-F523FFAECC4F"].includes(this.roleMaster.securityGroupId) && this.scheduleData.projectData.problemType == 'Standard Project / Program') {
-                                                        this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = true
-                                                    }
-                                                }
-                                                if (this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
-                                                    if (this.scheduleData.projectData.problemType == 'Standard Project / Program' && this.projecthubservice.roleControllerControl.roleId == '9E695295-DC5F-44A8-95F1-A329CD475203') {
-                                                        this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = false
-                                                    }
-                                                }
-                                                for (let control of this.milestoneForm.controls) {
-                                                    if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
-                                                        control['controls']['baselineFinish'].disable()
-                                                    }
-                                                }*/
+                                                // if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineproject) {
+                                                //     if (["C9F323D4-EF97-4C2A-B748-11DB5B8589D0", "0E83F6BE-79BE-426A-A316-F523FFAECC4F"].includes(this.roleMaster.securityGroupId) && this.scheduleData.projectData.problemType == 'Standard Project / Program') {
+                                                //         this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = true
+                                                //     }
+                                                // }
+                                                // if (this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
+                                                //     if (this.scheduleData.projectData.problemType == 'Standard Project / Program' && this.projecthubservice.roleControllerControl.roleId == '9E695295-DC5F-44A8-95F1-A329CD475203') {
+                                                //         this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = false
+                                                //     }
+                                                // }
+                                                // for (let control of this.milestoneForm.controls) {
+                                                //     if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
+                                                //         control['controls']['baselineFinish'].disable()
+                                                //     }
+                                                // }
                                                 this.viewContent = true
                                             }
                                             this.disabler()
@@ -1375,6 +1376,15 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     islink(uid: string): boolean {
         return this.scheduleData.links.some(x => x.linkItemId == uid)
     }
+    isParentLink(uid: string, projectid: string) : boolean {
+        let link = this.scheduleData.links.find(x => x.linkItemId == uid);
+        // console.log(link)
+        // console.log("HERE",projectid)
+        // console.log(link.parentProjectId)
+        // console.log(link.childProjectId)
+        // Check if the current project ID matches the parentProjectId of the link
+       return this.id == link.parentProjectId;
+    }
 
     getlinkname2(uid: string): string {
         let temp = this.scheduleData.links.find(x => x.linkItemId == uid)
@@ -1396,6 +1406,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     getlinkname(uid: string): string {
         //debugger
         var linkItemList = this.scheduleData.links.filter(x => x.linkItemId == uid)
+        console.log(linkItemList)
         var returnString = ''
         if (linkItemList.some(x => x.parentProjectId == this.id)) {
             var childProject = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == linkItemList.find(x => x.parentProjectId == this.id).childProjectId)
@@ -1414,6 +1425,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             if (returnString != '') {
                 returnString = returnString + '\n'
             }
+            console.log(projectName)
             returnString = returnString + "A link to this milestone has been created in project(s): " + projectName
         }
         return returnString
@@ -1676,6 +1688,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     // }
 
     justificationHandler() {
+        //debugger
         console.log(this.baselineForm.controls.baseLineReasonCode.value)
         if (this.baselineForm.controls.baseLineReasonCode.value != null) {
             if (Object.keys(this.baselineForm.controls.baseLineReasonCode.value).length > 0) {
@@ -2759,7 +2772,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         console.log("add new milestone baseline", baselinedates2)
         console.log("other add new milestone baseline", baselinedates3)
         console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
-
+//debugger
         //standard milestones and no new milestone
         if (!this.flag && !baselinedates2 && baselinedates?.length == baselinedates3?.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates3)) {
             this.flag = true
@@ -2777,6 +2790,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 this.flag = true
             }
             if(baselinedates?.length == baselinedates3?.length)
+            {
+                this.flag = true
+            }
+            if(baselinedates2.length > 0)
             {
                 this.flag = true
             }
@@ -3006,6 +3023,11 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             indicator: new FormControl(''),
             missedMsreasonCode: new FormControl(null)
         }))
+        for (let control of this.milestoneForm.controls) {
+            if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
+                control['controls']['baselineFinish'].disable()
+            }
+        }
         var j = [{
             scheduleUniqueId: "new",
             baselineFinish: null,

@@ -110,63 +110,134 @@ export class CreateProjectComponent implements OnInit {
     }
     const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
     this.activeaccount = this.msalService.instance.getActiveAccount();
-    this.newmainnav = [
-      {
-        id: 'portfolio-center',
-        title: 'Portfolio Center',
-        type: 'basic',
-        link: '/portfolio-center'
-      },
-      {
-        // id: 'create-project',
-        title: 'Create Project',
-        type: 'collapsable',
-        link: '/create-project',
-        children: [
-          {
-            title: 'Create a Standard/Simple Project/Program',
-            type: 'basic',
-            link: '/create-project/create-new-project'
-          },
-          {
-            title: 'Create a Strategic Initiative/Program',
-            type: 'basic',
-            link: '/create-project/create-strategic-initiative-project'
-          },
-          {
-            title: 'Copy an existing Project',
-            type: 'basic',
-            link: '/create-project/copy-project'
-          }
-        ],
-      },
-      {
-        id: 'spot-documents',
-        title: 'SPOT Supporting Documents',
-        type: 'basic',
-        externalLink: true,
-        link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
-        target: '_blank'
-      },
-      {
-        id: 'report-navigator',
-        title: 'Report Navigator',
-        type: 'basic',
-        link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
-        externalLink: true,
-        target: "_blank"
-
-      },
-      {
-        id: 'spot-support',
-        title: 'Need Help or Propose a Change',
-        type: 'basic',
-        link: 'mailto:DL.SPOTSupport@takeda.com?Subject=SPOT Support Request ' + this.activeaccount.name + ' (Logged on ' + moment().format('llll') + ')',
-        externalLink: true,
-        target: "_blank"
-
-      }
-    ]
+    if (this.role.roleMaster?.secondarySecurityGroupId?.some(x=>x?.toLowerCase() == '06CDEA21-EB7C-402B-9FB3-CBE507CEE364'.toLowerCase()))
+    {
+      this.newmainnav = [
+        {
+          id: 'portfolio-center',
+          title: 'Portfolio Center',
+          type: 'basic',
+          link: '/portfolio-center'
+        },
+        {
+          // id: 'create-project',
+          title: 'Create Project',
+          type: 'collapsable',
+          link: '/create-project',
+          children: [
+            {
+              title: 'Create a Standard/Simple Project/Program',
+              type: 'basic',
+              link: '/create-project/create-new-project'
+            },
+            {
+              title: 'Create a Strategic Initiative/Program',
+              type: 'basic',
+              link: '/create-project/create-strategic-initiative-project'
+            },
+            {
+              title: 'Copy an existing Project',
+              type: 'basic',
+              link: '/create-project/copy-project'
+            }
+          ],
+        },
+        {
+          id: 'resource-administration',
+          title: 'Resource Administration',
+          type: 'basic',
+          link: '/resource-administration',
+          externalLink: true,
+          target: '_blank',
+        },
+        {
+          id: 'spot-documents',
+          title: 'SPOT Supporting Documents',
+          type: 'basic',
+          externalLink: true,
+          link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+          target: '_blank'
+        },
+        {
+          id: 'report-navigator',
+          title: 'Report Navigator',
+          type: 'basic',
+          link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+          externalLink: true,
+          target: "_blank"
+  
+        },
+        {
+          id: 'spot-support',
+          title: 'Need Help or Propose a Change',
+          type: 'basic',
+          link: 'mailto:DL.SPOTSupport@takeda.com?Subject=SPOT Support Request ' + this.activeaccount.name + ' (Logged on ' + moment().format('llll') + ')',
+          externalLink: true,
+          target: "_blank"
+  
+        }
+      ]
+    }
+    else{
+      this.newmainnav = [
+        {
+          id: 'portfolio-center',
+          title: 'Portfolio Center',
+          type: 'basic',
+          link: '/portfolio-center'
+        },
+        {
+          // id: 'create-project',
+          title: 'Create Project',
+          type: 'collapsable',
+          link: '/create-project',
+          children: [
+            {
+              title: 'Create a Standard/Simple Project/Program',
+              type: 'basic',
+              link: '/create-project/create-new-project'
+            },
+            {
+              title: 'Create a Strategic Initiative/Program',
+              type: 'basic',
+              link: '/create-project/create-strategic-initiative-project'
+            },
+            {
+              title: 'Copy an existing Project',
+              type: 'basic',
+              link: '/create-project/copy-project'
+            }
+          ],
+        },
+        {
+          id: 'spot-documents',
+          title: 'SPOT Supporting Documents',
+          type: 'basic',
+          externalLink: true,
+          link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+          target: '_blank'
+        },
+        {
+          id: 'report-navigator',
+          title: 'Report Navigator',
+          type: 'basic',
+          link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+          externalLink: true,
+          target: "_blank"
+  
+        },
+        {
+          id: 'spot-support',
+          title: 'Need Help or Propose a Change',
+          type: 'basic',
+          link: 'mailto:DL.SPOTSupport@takeda.com?Subject=SPOT Support Request ' + this.activeaccount.name + ' (Logged on ' + moment().format('llll') + ')',
+          externalLink: true,
+          target: "_blank"
+  
+        }
+      ]
+    }
+    
     mainNavComponent.navigation = this.newmainnav
     mainNavComponent.refresh()
     this.projectHubService.projectidInjector("")
