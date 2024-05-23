@@ -259,5 +259,28 @@ fuse-drawer .fuse-drawer-content {
     }
 }
 
+.caps-project-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.guidance-link {
+    position: absolute; 
+    top: -5px;
+    left: 115px;
+    //padding: 5px 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgb(81, 174, 245);
+}
+
+.align-icon {
+    vertical-align: middle;
+    color: rgb(81, 174, 245);
+}
+
 
 

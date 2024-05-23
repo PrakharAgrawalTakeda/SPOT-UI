@@ -18,7 +18,9 @@ export class CloseOutValueCreationComponent implements OnInit {
   ValueCaptureForm = new FormGroup({
     valueCaptureStart: new FormControl(''),
     primaryValueDriver: new FormControl(''),
-    valueCommentary: new FormControl('')
+    COPcategory: new FormControl(''),
+    valueCommentary: new FormControl(''),
+
   })
   @Input() optionType: 'recommended-option'
   localCurrency: string = ""
@@ -87,8 +89,12 @@ export class CloseOutValueCreationComponent implements OnInit {
             valueCaptureStart: problemCapture.financialRealizationStartDate,
             primaryValueDriver: problemCapture.primaryKpi && this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi).lookUpName : 
             problemCapture.primaryKpi ? this.kpi.find(x => x.kpiid == problemCapture.primaryKpi).kpiname : '',
-            valueCommentary: problemCapture.valueCommentary
+            valueCommentary: problemCapture.valueCommentary,
+            COPcategory: this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory) ? this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory)?.lookUpName : null
           })
+          if (this.ValueCaptureForm.value.COPcategory == "" || this.ValueCaptureForm.value.COPcategory == null) {
+            this.ValueCaptureForm.controls.COPcategory.patchValue(this.lookupData.find(x => x.lookUpId == '2730422E-680A-4B2D-8DC2-F64CA885BB61').lookUpName)
+          }
           this.isStrategicInitiative = problemCapture.problemType == 'Strategic Initiative / Program' ? true : false
           var year = []
           var yearList=[]

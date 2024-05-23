@@ -82,6 +82,14 @@ export class CopyProjectComponent implements OnInit {
         ],
       },
       {
+        id: 'resource-administration',
+        title: 'Resource Administration',
+        type: 'basic',
+        link: '/resource-administration',
+        externalLink: true,
+        target: '_blank',
+      },
+      {
         id: 'spot-documents',
         title: 'SPOT Supporting Documents',
         type: 'basic',

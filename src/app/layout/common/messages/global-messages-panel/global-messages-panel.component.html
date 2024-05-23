@@ -1,12 +1,10 @@
 <div class="flex items-start justify-between bg-primary sidepanel-header">
     <div class="text-on-primary" style="padding-top: 6px">Messages</div>
     <div style="padding-top: 2px">
-        <a (click)="readLaterAndClose()" href="javascript:void(0) " *ngIf="origin == 'unread'"
-            title="Close">
+        <a (click)="readLaterAndClose()" href="javascript:void(0) " *ngIf="origin == 'unread'" title="Close">
             <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
         </a>
-        <a (click)="closePanel()" href="javascript:void(0) " *ngIf="origin == 'panel'"
-            title="Close">
+        <a (click)="closePanel()" href="javascript:void(0) " *ngIf="origin == 'panel'" title="Close">
             <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
         </a>
     </div>
@@ -21,17 +19,16 @@
                     <div>{{message.messageCreationDate| date:'dd-MMM-YYYY'}}</div>
                 </div>
                 <div>
-                    <div class="card global-message" [innerHTML]="message.globalMessageText"></div>
+                    <quill-view-html class="global-message" [content]="message.globalMessageText"></quill-view-html>
                 </div>
             </div>
         </div>
     </div>
-    
+
 </div>
 <div class="absolute bottom-2 w-full px-3" *ngIf="origin == 'unread'">
     <div class="pr-3 flex items-start justify-between mt-6">
-        <a class="min-w-26" mat-flat-button [color]="'primary'"
-            (click)="readLaterAndClose()">
+        <a class="min-w-26" mat-flat-button [color]="'primary'" (click)="readLaterAndClose()">
             Read Later
         </a>
         <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="readAndUnderstood()">
@@ -41,7 +38,7 @@
 </div>
 <div class="absolute bottom-2 w-full px-3" *ngIf="origin == 'panel'">
     <div class="pr-3 flex items-start justify-between mt-6">
-       <div></div>
+        <div></div>
         <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="closePanel()">
             Ok
         </button>

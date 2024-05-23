@@ -95,6 +95,7 @@ export class MetricRepositoryAddEditViewComponent {
             // })
             if (this.myPreferenceService.itemid != "new") {
                 this.metricRepository = this.myPreferenceService.all
+                console.log(this.metricRepository)
                 this.metricRepositoryForm.patchValue({
                     globalLocal: this.metricRepository.metricID == "e7a9e055-1319-4a4f-b929-cd7777599e39" ? 'Global' : 'Local',
                     managingPortfolio: this.getPortfolioOwnerByName(this.metricRepository.metricPortfolioID),

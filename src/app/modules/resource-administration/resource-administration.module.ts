@@ -15,12 +15,12 @@ import { TranslocoModule } from '@ngneat/transloco';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { SharedModule } from 'app/shared/shared.module';
 import { CommonModule } from '@angular/common';
-import { MatExpansionModule } from '@angular/material/expansion';
+import {MatExpansionModule} from '@angular/material/expansion';
 import { FuseDrawerModule } from '@fuse/components/drawer';
 import { FuseNavigationModule } from '@fuse/components/navigation';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatSelectModule } from '@angular/material/select';
+import {MatSelectModule} from '@angular/material/select';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -30,72 +30,65 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseAlertModule } from '@fuse/components/alert';
+import { ResourceAdministrationComponent } from './resource-administration.component';
 import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { ManageUsersEditComponent } from './manage-users-edit/manage-users-edit.component';
-import { AdminComponent } from './admin.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { GlobalMessagesGeneralMessageComponent } from './global-messages-general-message/global-messages-general-message.component';
-import { GeneralAdminToolsComponent } from './general-admin-tools/general-admin-tools.component';
-import { GlobalMessageEditComponent } from './global-messages-general-message/global-message-edit/global-message-edit.component';
-import { QuillModule } from 'ngx-quill';
-
+import { SpotGlobalMessageModule } from 'app/layout/common/spot-global-message/spot-global-message.module';
+import { MessagesModule } from 'app/layout/common/messages/messages.module';
+import { EditResourceHeirarchyComponent } from './edit-resource-heirarchy/edit-resource-heirarchy.component';
 export const projectRoutes: Routes = [
-  {
-    path: '',
-    component: AdminComponent,
-    children: [
-      { path: '', component: GeneralAdminToolsComponent },
-      { path: 'global-messages', component: GlobalMessagesGeneralMessageComponent }
-    ]
-  }
+    {
+      path: '',
+      component: ResourceAdministrationComponent
+}];
 
-];
 
 @NgModule({
-  declarations: [
-    ManageUsersEditComponent,
-    AdminComponent,
-    GlobalMessagesGeneralMessageComponent,
-    GeneralAdminToolsComponent,
-    GlobalMessageEditComponent
-  ],
-  imports: [
-    RouterModule.forChild(projectRoutes),
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatDividerModule,
-    MatIconModule,
-    MatMenuModule,
-    MatProgressBarModule,
-    MatRippleModule,
-    MatSidenavModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatExpansionModule,
-    NgApexchartsModule,
-    TranslocoModule,
-    SharedModule,
-    CommonModule,
-    FuseDrawerModule,
-    FuseNavigationModule,
-    NgScrollbarModule,
-    MatChipsModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    NgxDatatableModule,
-    MatSlideToggleModule,
-    MatDatepickerModule,
-    MatMomentDateModule,
-    MatAutocompleteModule,
-    MatTooltipModule,
-    FuseAlertModule,
-    SpotFormsModule,
-    DragDropModule,
-    MatSnackBarModule,
-    QuillModule
-  ]
+    declarations: [
+        ResourceAdministrationComponent,
+        EditResourceHeirarchyComponent
+    ],
+    exports: [
+        //MilestoneSetViewEditComponent
+    ],
+    imports: [
+        RouterModule.forChild(projectRoutes),
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatDividerModule,
+        MatIconModule,
+        MatMenuModule,
+        MatProgressBarModule,
+        MatRippleModule,
+        MatSidenavModule,
+        MatSortModule,
+        MatTableModule,
+        MatTabsModule,
+        MatExpansionModule,
+        NgApexchartsModule,
+        TranslocoModule,
+        SharedModule,
+        CommonModule,
+        FuseDrawerModule,
+        FuseNavigationModule,
+        NgScrollbarModule,
+        MatChipsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        NgxDatatableModule,
+        MatSlideToggleModule,
+        MatDatepickerModule,
+        MatMomentDateModule,
+        MatAutocompleteModule,
+        MatTooltipModule,
+        FuseAlertModule,
+        SpotFormsModule,
+        DragDropModule,
+        SpotGlobalMessageModule,
+        MatSnackBarModule,
+        MessagesModule
+    ]
 })
-export class AdminModule { }
+export class ResourceAdministrationModule { }

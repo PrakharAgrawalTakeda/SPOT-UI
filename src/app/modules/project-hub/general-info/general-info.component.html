@@ -90,19 +90,27 @@
             [label]="'Environmental Portfolio'" [showHint]="true" *ngIf="viewElementChecker('enviornmentalPortfolio')"
             [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
           </spot-input>
-          <div class="flex justify-start gap-3 items-center w-full pt-2" *ngIf="viewElementChecker('isCapsProject')">
-            <div class="flex justify-start gap-1 items-center font-medium">
-              CAPS Project <mat-icon class="pe icon-size-4"
-                matTooltip="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
-              CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
-                help</mat-icon>
+          <div class="flex flex-col justify-start items-start w-full pt-2" *ngIf="viewElementChecker('isCapsProject')">
+            <div class="flex justify-start gap-3 items-center w-full pt-2">
+              <button class="guidance-link" (click)="caps()">
+                <mat-icon class="icon-small align-icon mat-icon" svgIcon="feather:external-link" matTooltip="CAPS Site Guidance Playbook for more information"></mat-icon>
+                
+            </button>
+                <div class="flex justify-start gap-1 items-center font-medium">
+                    CAPS Project 
+                    <mat-icon class="pe icon-size-4"
+                              matTooltip="Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, energy usage, water withdrawal, or waste to landfill">
+                        help
+                    </mat-icon>
+                </div>
+                <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isCapsProject.value">
+                </mat-icon>
+                <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                          *ngIf="generalInfoForm.controls.isCapsProject.value">
+                </mat-icon>
             </div>
-            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isCapsProject.value">
-            </mat-icon>
-            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
-              *ngIf="generalInfoForm.controls.isCapsProject.value">
-            </mat-icon>
-          </div>
+        </div>
+        
           <spot-input class="w-full" *ngIf="viewElementChecker('projectManager')"
             [ngClass]="{'read-only': callLocation == 'CloseOut'}" formControlName="projectManager" name="projectManager"
             [label]="'Project Manager'">

@@ -1,6 +1,6 @@
-import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
-import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR} from "@angular/forms";
-import {BehaviorSubject} from "rxjs";
+import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
+import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { BehaviorSubject } from "rxjs";
 
 @Component({
     selector: 'spot-input-forecast',
@@ -86,6 +86,9 @@ export class SpotInputForecastComponent implements OnInit, ControlValueAccessor 
         if (!isFocused) {
             value = value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
         }
+        if (value === '0') {
+            value = '';
+        }
         event.target.value = value;
         this.targetValue.next(event.target);
         this.onChange(parseFloat(value));
@@ -96,7 +99,11 @@ export class SpotInputForecastComponent implements OnInit, ControlValueAccessor 
             this.targetValue.value.select();
         }
     }
-
+    focusEvent(event){
+        const position = event.target.value.length;
+        this.formatInput(event);
+        event.target.setSelectionRange(0, position);
+    }
     onBlur(event: any): void {
         this.onTouch();
         if (this.autoAddDecimal && this.decimalCount > 0 && event?.target?.value) {
@@ -111,6 +118,10 @@ export class SpotInputForecastComponent implements OnInit, ControlValueAccessor 
         if (event?.target?.value) {
             const value = event.target.value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
             event.target.value = value;
+        }
+        else {
+            event.target.value = '0';
+
         }
     }
     onInputChange(event: any): void {

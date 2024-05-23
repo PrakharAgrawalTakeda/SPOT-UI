@@ -10,6 +10,7 @@ import { MyPreferenceService } from 'app/modules/my-preference/my-preference.ser
 import { AdminService } from 'app/modules/admin/admin.service';
 import { PortfolioCenterService } from 'app/modules/portfolio-center/portfolio-center.service';
 import { GlobalVariables } from 'app/shared/global-variables';
+import { ResourceAdministrationService } from 'app/modules/resource-administration/resource-administration.service';
 
 @Component({
     selector     : 'modern-layout',
@@ -34,7 +35,8 @@ export class ModernLayoutComponent implements OnInit, OnDestroy
         public projecthubservice: ProjectHubService,
         public myPreferenceService: MyPreferenceService,
         public adminService: AdminService,
-        public portService: PortfolioCenterService
+        public portService: PortfolioCenterService,
+        public resourceadminservice: ResourceAdministrationService
     )
     {
     }
