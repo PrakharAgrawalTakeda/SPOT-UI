@@ -92,6 +92,9 @@ export class CloseOutValueCreationComponent implements OnInit {
             valueCommentary: problemCapture.valueCommentary,
             COPcategory: this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory) ? this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory)?.lookUpName : null
           })
+          if (this.ValueCaptureForm.value.COPcategory == "" || this.ValueCaptureForm.value.COPcategory == null) {
+            this.ValueCaptureForm.controls.COPcategory.patchValue(this.lookupData.find(x => x.lookUpId == '2730422E-680A-4B2D-8DC2-F64CA885BB61').lookUpName)
+          }
           this.isStrategicInitiative = problemCapture.problemType == 'Strategic Initiative / Program' ? true : false
           var year = []
           var yearList=[]

@@ -720,7 +720,7 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a (click)="fTableEditRow(rowIndex)" [ngClass]="'closed'">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p style="text-align:right">{{(year1Value ?  year1Value : 0 ) | number : fractionSize}}</p>
+                            <p style="text-align:right">{{(row.isopen ?  year1Value : 0 ) | number : fractionSize}}</p>
                         </a>
                     </ng-template>
                 </ngx-datatable-column>

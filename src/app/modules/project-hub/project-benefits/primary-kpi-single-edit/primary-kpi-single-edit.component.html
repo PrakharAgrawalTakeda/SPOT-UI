@@ -17,8 +17,10 @@
         [dropDownArray]="primaryKPI">
     </spot-singleselect-autocomplete>
     <spot-singleselect-autocomplete formControlName="COPcategory" class="w-full" name="COPcategory"
-        [label]="'COP Category'" [placeholder]="'COP Category'" [valuePointer]="'lookUpName'"
-        [dropDownArray]="copImpactCategory">
+        [label]="'COP Impact Category'" [placeholder]="'COP Impact Category'" [valuePointer]="'lookUpName'"
+        [dropDownArray]="copImpactCategory" [sortByType]="'custom'"
+        [showHint]="true"
+            [hint]="'COP Impact Category assigns a sub-category for any captured Core Operating Profit value on this project. If you are not capturing value in the COP metric, select ‘N/A’'">
     </spot-singleselect-autocomplete>
     <spot-textarea formControlName="valueCommentary"
                            [label]="'Value Commentary'"

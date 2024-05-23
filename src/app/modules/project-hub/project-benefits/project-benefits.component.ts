@@ -56,7 +56,7 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
     this.columnYear = [];
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     // Clear the arrays before populating
-  
+
 
     this.projectsMetricsData = [];
     this.projectApiService.getMetricProjectData(this.id).then((res: any) => {
@@ -103,16 +103,16 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                   element.metricData.parentName = element.projectsMetricsData.parentProjectId ? parentData.problemTitle : ''
                   if (element.projectsMetricsData.strategicTargetList) {
                     element.projectsMetricsData.strategicTargetList = element.projectsMetricsData.strategicTargetList.replace(/FY19:/g, 'Historical:');
-                }
-                if (element.projectsMetricsData.strategicBaselineList) {
+                  }
+                  if (element.projectsMetricsData.strategicBaselineList) {
                     element.projectsMetricsData.strategicBaselineList = element.projectsMetricsData.strategicBaselineList.replace(/FY19:/g, 'Historical:');
-                }
-                if (element.projectsMetricsData.strategicCurrentList) {
+                  }
+                  if (element.projectsMetricsData.strategicCurrentList) {
                     element.projectsMetricsData.strategicCurrentList = element.projectsMetricsData.strategicCurrentList.replace(/FY19:/g, 'Historical:');
-                }
-                if (element.projectsMetricsData.strategicActualList) {
+                  }
+                  if (element.projectsMetricsData.strategicActualList) {
                     element.projectsMetricsData.strategicActualList = element.projectsMetricsData.strategicActualList.replace(/FY19:/g, 'Historical:');
-                }
+                  }
                   // Initialize null values to "0"
                   element.projectsMetricsData.strategicTarget = element.projectsMetricsData.strategicTarget ?? "0";
                   element.projectsMetricsData.strategicBaseline = element.projectsMetricsData.strategicBaseline ?? "0";
@@ -128,6 +128,9 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                   valueCommentary: problemCapture.valueCommentary,
                   COPcategory: this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory) ? this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory)?.lookUpName : null
                 })
+                if (this.ValueCaptureForm.value.COPcategory == "" || this.ValueCaptureForm.value.COPcategory == null) {
+                  this.ValueCaptureForm.controls.COPcategory.patchValue(this.lookupData.find(x => x.lookUpId == '2730422E-680A-4B2D-8DC2-F64CA885BB61').lookUpName)
+                }
                 this.isStrategicInitiative = problemCapture.problemType == 'Strategic Initiative / Program' ? true : false
 
                 console.log(this.ValueCaptureForm.getRawValue())
@@ -216,7 +219,7 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                 this.compare(this.columnYear)
                 this.valuecreationngxdata = this.projectsMetricsData
                 console.log(this.columnYear)
-console.log(this.projectsMetricsData)
+                console.log(this.projectsMetricsData)
                 if (!res.projectsMetricsDataYearly || res.projectsMetricsDataYearly.length === 0) {
                   const fiscalYear = this.getFiscalYearFromDate(problemCapture.financialRealizationStartDate);
                   console.log(fiscalYear)
@@ -232,13 +235,13 @@ console.log(this.projectsMetricsData)
                   }
                 }
                 //this.columnYear.sort((a, b) => a.year.localeCompare(b.year));
-this.sortColumnYears()
+                this.sortColumnYears()
                 console.log(this.columnYear)
                 const isHistorical = this.isBeforeFY2020(problemCapture.financialRealizationStartDate);
                 if (isHistorical) {
                   // Check if "Historical" already exists in this.columnYear
                   const historicalExists = this.columnYear.find(entry => entry.year === "Historical");
-                  
+
                   // If "Historical" does not exist, add it as the first entry
                   if (!historicalExists) {
                     this.columnYear.unshift({ year: "Historical" });
@@ -263,10 +266,10 @@ this.sortColumnYears()
       return a.year.localeCompare(b.year);
     });
   }
-  
+
 
   private isBeforeFY2020(dateString: string): boolean {
-    if(dateString){
+    if (dateString) {
       const date = new Date(dateString);
       const fiscalYearStart = new Date(date.getFullYear(), 3, 1); // FY starts in April
       if (date < fiscalYearStart) {
