@@ -4,7 +4,7 @@ import { PortfolioCenterService } from '../portfolio-center.service';
 import { MatSidenav } from '@angular/material/sidenav';
 import { RoleService } from 'app/core/auth/role.service';
 import { RoleController } from 'app/shared/role-controller';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-budget-spend',
@@ -18,24 +18,27 @@ export class BudgetSpendComponent implements OnInit, OnDestroy {
   filter: any = []
   showForecast:boolean = false
   roleControllerControl: RoleController = new RoleController;
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(private router: Router, public PortfolioCenterService: PortfolioCenterService,public role: RoleService){
-    
+    this.PortfolioCenterService.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe((res) => {
+      if(this.viewContent){
+        console.log("SUBSCRIBED")
+       this.dataloader()
+      }
+     })
   }
   
  
 
   ngOnInit(): void {
     this.dataloader()
-    this.subscription.add(
-      this.PortfolioCenterService.refreshNeeded.subscribe(() => {
-        this.dataloader(); // Or call ngOnInit(), but calling specific method is cleaner
-      })
-    )
   }
 
   ngOnDestroy(): void {
-    // Cleanup subscription
-    this.subscription.unsubscribe();
+      // Unsubscribe from all subscriptions
+      console.log("Destroyed")
+      this._unsubscribeAll.next(null);
+      this._unsubscribeAll.complete();
   }
 
   dataloader(){
