@@ -163,12 +163,12 @@ export class BudgetGeneralEditComponent {
                         this.gmsBudgetowner.enable({emitEvent : false})
                     }
                 }
-                // else if(this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.projectHubService.roleControllerControl.projectManager)
-                // {
-                //     if(this.gmsBudgetowner.disabled){
-                //         this.gmsBudgetowner.enable({emitEvent : false})
-                //     }
-                // }
+                else if(this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.projectHubService.roleControllerControl.projectManager)
+                {
+                    if(this.gmsBudgetowner.disabled){
+                        this.gmsBudgetowner.enable({emitEvent : false})
+                    }
+                }
 
 
                 else{
@@ -213,10 +213,7 @@ export class BudgetGeneralEditComponent {
     }
     gmsBudgetOwnerBasicSetup() {
         this.gmsBudgetOwnerList = this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
-        console.log(this.gmsBudgetOwnerList)
-        if(this.isBudgetAdmin==true)
-        // || this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.projectHubService.roleControllerControl.projectManager
-    {
+        if(this.isBudgetAdmin==true || this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.projectHubService.roleControllerControl.projectManager){
             this.gmsBudgetOwnerList =  this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
             if(this.gmsBudgetowner.disabled){
                 this.gmsBudgetowner.enable({emitEvent : false})

@@ -1,7 +1,6 @@
 import {
     Component,
     HostListener,
-    OnDestroy,
     OnInit,
     Renderer2,
     ViewChild,
@@ -44,7 +43,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MyPreferenceApiService } from '../my-preference/my-preference-api.service';
 import { SaveBookmarkComponent } from './save-bookmark/save-bookmark.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Subject, takeUntil } from 'rxjs';
 
 export const MY_FORMATS = {
     parse: {
@@ -76,7 +74,7 @@ export const MY_FORMATS = {
         { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ],
 })
-export class PortfolioCenterComponent implements OnInit, OnDestroy {
+export class PortfolioCenterComponent implements OnInit {
     @ViewChild('recentTransactionsTable', { read: MatSort })
     recentTransactionsTableMatSort: MatSort;
     projects: MatTableDataSource<any> = new MatTableDataSource();
@@ -344,7 +342,6 @@ export class PortfolioCenterComponent implements OnInit, OnDestroy {
             order: 300,
         },
     ];
-    private _unsubscribeAll: Subject<any> = new Subject<any>();
     // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
     // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
     constructor(
@@ -364,7 +361,7 @@ export class PortfolioCenterComponent implements OnInit, OnDestroy {
         public PortfolioCenterService: PortfolioCenterService
     ) {
         this.renderer.listen('window', 'scroll', this.scrollHandler.bind(this));
-        this.PortfolioCenterService.successSave.pipe(takeUntil(this._unsubscribeAll)).subscribe((res) => {
+        this.PortfolioCenterService.successSave.subscribe((res) => {
             if (res == true) {
                 this.snack.open(
                     'The information has been saved successfully',
@@ -474,6 +471,7 @@ export class PortfolioCenterComponent implements OnInit, OnDestroy {
         } else {
             this.showForecast = false;
         }
+
         if (
             this.role.roleMaster.securityGroupId ==
             'F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F'
@@ -515,8 +513,7 @@ export class PortfolioCenterComponent implements OnInit, OnDestroy {
                     target: '_blank',
                 },
             ];
-        } 
-        else {
+        } else {
             this.newmainnav = [
                 {
                     id: 'portfolio-center',
@@ -582,11 +579,7 @@ export class PortfolioCenterComponent implements OnInit, OnDestroy {
 
         this.initializeBookmark(false);
     }
-    ngOnDestroy(): void {
-        this.PortfolioCenterService.successSave.next(false);
-        this._unsubscribeAll.next(null);
-        this._unsubscribeAll.complete();
-    }
+
     defaultFilterObject = {
         bookmarkId: 'DefaultFilter',
         bookmarkName: 'Default View',
@@ -5942,7 +5935,5 @@ export class PortfolioCenterComponent implements OnInit, OnDestroy {
 
         this.portfolioTilesValues = sortOrder;
         this.showContent = true;
- 
-   }
-
+    }
 }
