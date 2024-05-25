@@ -224,7 +224,7 @@ export class BudgetComponent implements OnInit, OnDestroy {
         this._unsubscribeAll.complete();
     }
     lbePeriodCalendar() {
-        const url = 'https://mytakeda.sharepoint.com/sites/CAPEXManagement/SitePages/Spot-Period-Calendar.aspx';
+        const url = 'https://app.powerbi.com/groups/me/apps/aa1c834f-34df-4d86-8e69-246dea19b28a/reports/3d0acf48-54a4-4520-92d4-4fbf3914eec5/ReportSectionbd22354a21346769a025';
         window.open(url, '_blank');
     }
 }

@@ -1,7 +1,6 @@
 import {
     Component,
     HostListener,
-    OnDestroy,
     OnInit,
     Renderer2,
     ViewChild,
@@ -44,7 +43,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MyPreferenceApiService } from '../my-preference/my-preference-api.service';
 import { SaveBookmarkComponent } from './save-bookmark/save-bookmark.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Subject, takeUntil } from 'rxjs';
 
 export const MY_FORMATS = {
     parse: {
@@ -76,7 +74,7 @@ export const MY_FORMATS = {
         { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ],
 })
-export class PortfolioCenterComponent implements OnInit, OnDestroy {
+export class PortfolioCenterComponent implements OnInit {
     @ViewChild('recentTransactionsTable', { read: MatSort })
     recentTransactionsTableMatSort: MatSort;
     projects: MatTableDataSource<any> = new MatTableDataSource();
@@ -344,7 +342,6 @@ export class PortfolioCenterComponent implements OnInit, OnDestroy {
             order: 300,
         },
     ];
-    private _unsubscribeAll: Subject<any> = new Subject<any>();
     // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
     // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
     constructor(
@@ -364,7 +361,7 @@ export class PortfolioCenterComponent implements OnInit, OnDestroy {
         public PortfolioCenterService: PortfolioCenterService
     ) {
         this.renderer.listen('window', 'scroll', this.scrollHandler.bind(this));
-        this.PortfolioCenterService.successSave.pipe(takeUntil(this._unsubscribeAll)).subscribe((res) => {
+        this.PortfolioCenterService.successSave.subscribe((res) => {
             if (res == true) {
                 this.snack.open(
                     'The information has been saved successfully',
@@ -474,6 +471,7 @@ export class PortfolioCenterComponent implements OnInit, OnDestroy {
         } else {
             this.showForecast = false;
         }
+
         if (
             this.role.roleMaster.securityGroupId ==
             'F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F'
@@ -515,8 +513,75 @@ export class PortfolioCenterComponent implements OnInit, OnDestroy {
                     target: '_blank',
                 },
             ];
-        } 
-        else {
+        }else if(this.role.roleMaster?.secondarySecurityGroupId?.some(x=>x?.toLowerCase() == '06CDEA21-EB7C-402B-9FB3-CBE507CEE364'.toLowerCase())) {
+            this.newmainnav = [
+                {
+                    id: 'portfolio-center',
+                    title: 'Portfolio Center',
+                    type: 'basic',
+                    link: '/portfolio-center',
+                },
+                {
+                    title: 'Create Project',
+                    type: 'collapsable',
+                    link: '/create-project',
+                    children: [
+                        {
+                            title: 'Create a Standard/Simple Project/Program',
+                            type: 'basic',
+                            link: '/create-project/create-new-project',
+                        },
+                        {
+                            title: 'Create a Strategic Initiative/Program',
+                            type: 'basic',
+                            link: '/create-project/create-strategic-initiative-project',
+                        },
+                        {
+                            title: 'Copy an existing Project',
+                            type: 'basic',
+                            link: '/create-project/copy-project',
+                        },
+                    ],
+                },
+                {
+                    id: 'resource-administration',
+                    title: 'Resource Administration',
+                    type: 'basic',
+                    link: '/resource-administration',
+                    externalLink: true,
+                    target: '_blank',
+                  },
+                {
+                    id: 'spot-documents',
+                    title: 'SPOT Supporting Documents',
+                    type: 'basic',
+                    externalLink: true,
+                    link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+                    target: '_blank',
+                },
+                {
+                    id: 'report-navigator',
+                    title: 'Report Navigator',
+                    type: 'basic',
+                    link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+                    externalLink: true,
+                    target: '_blank',
+                },
+                {
+                    id: 'spot-support',
+                    title: 'Need Help or Propose a Change',
+                    type: 'basic',
+                    link:
+                        'mailto:DL.SPOTSupport@takeda.com?Subject=SPOT Support Request ' +
+                        this.activeaccount.name +
+                        ' (Logged on ' +
+                        moment().format('llll') +
+                        ')',
+                    externalLink: true,
+                    target: '_blank',
+                },
+            ];
+        } else {
             this.newmainnav = [
                 {
                     id: 'portfolio-center',
@@ -582,11 +647,7 @@ export class PortfolioCenterComponent implements OnInit, OnDestroy {
 
         this.initializeBookmark(false);
     }
-    ngOnDestroy(): void {
-        this.PortfolioCenterService.successSave.next(false);
-        this._unsubscribeAll.next(null);
-        this._unsubscribeAll.complete();
-    }
+
     defaultFilterObject = {
         bookmarkId: 'DefaultFilter',
         bookmarkName: 'Default View',
