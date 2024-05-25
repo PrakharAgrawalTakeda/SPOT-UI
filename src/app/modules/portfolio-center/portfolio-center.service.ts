@@ -6,8 +6,8 @@ import {
 } from '@fuse/services/confirmation';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { PortfolioApiService } from './portfolio-api.service';
-import { BookmarkEditComponent } from './bookmarks/bookmark-edit/bookmark-edit.component';
-import { BookmarksComponent } from './bookmarks/bookmarks.component';
+//import { BookmarkEditComponent } from './bookmarks/bookmark-edit/bookmark-edit.component';
+//import { BookmarksComponent } from './bookmarks/bookmarks.component';
 
 @Injectable({
     providedIn: 'root',

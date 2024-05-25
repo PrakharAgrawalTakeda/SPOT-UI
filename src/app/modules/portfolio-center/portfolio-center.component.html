@@ -14,24 +14,28 @@
             'fuse-drawer-small': PortfolioCenterService.fuseDrawerSmall
         }">
 
-        <app-fx-rate *ngIf="PortfolioCenterService.itemtype == 'FXRateOpen'"></app-fx-rate>
+      <app-fx-rate *ngIf="PortfolioCenterService.itemtype == 'FXRateOpen'"></app-fx-rate>
     </fuse-drawer>
-    <app-global-messages-panel
-        *ngIf="PortfolioCenterService.itemtype == 'GlobalMessagesPanel'"></app-global-messages-panel>
+    <app-global-messages-panel *ngIf="PortfolioCenterService.itemtype == 'GlobalMessagesPanel'"></app-global-messages-panel>
 </fuse-drawer>
 
-<fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.forecastDrawerOpenedright"
-    (openedChanged)="PortfolioCenterService.forecastDrawerOpenedChanged($event)" [mode]="'over'" [position]="'right'"
+<fuse-drawer
+    [name]="'rightDrawer'"
+    [opened]="PortfolioCenterService.forecastDrawerOpened"
+    (openedChanged)="PortfolioCenterService.forecastDrawerOpenedChanged($event)"
+    [mode]="'over'"
+    [position]="'right'"
     [ngClass]="{
         'fuse-drawer-large': PortfolioCenterService.forecastDrawerLarge
-    }">
+    }"
+>
     <div>
-        <app-forecast-bulk-edit *ngIf="PortfolioCenterService.forecastItemType == 'ForecastBulkEdit'"
-            [type]="'capex'"></app-forecast-bulk-edit>
-        <app-forecast-bulk-edit *ngIf="PortfolioCenterService.forecastItemType == 'ForecastBulkEditO'"
-            [type]="'opex'"></app-forecast-bulk-edit>
+        <app-forecast-bulk-edit
+        *ngIf="PortfolioCenterService.forecastItemType == 'ForecastBulkEdit'" [type]="'capex'"></app-forecast-bulk-edit>
+        <app-forecast-bulk-edit
+        *ngIf="PortfolioCenterService.forecastItemType == 'ForecastBulkEditO'" [type]="'opex'"></app-forecast-bulk-edit>
     </div>
-</fuse-drawer>
+</fuse-drawer> 
 
 <fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.bookmarkDrawerOpened"
     (openedChanged)="PortfolioCenterService.bookmarkDrawerOpenedChanged($event)" [mode]="'over'" [position]="'right'"
@@ -547,8 +551,7 @@
             </form>
             <!-- GENERATE REPORT -->
             <div class="mt-3 pl-3 pr-3 w-full" #target id="scheduleTableDiv"
-                style="height: calc(calc(100vh / var(--custom-zoom)) - 100px)"
-                *ngIf="showContent && matPanelType == 'BulkReport'">
+                style="height: calc(calc(100vh / var(--custom-zoom)) - 100px)" *ngIf="showContent && matPanelType == 'BulkReport'">
                 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="true" [scrollbarH]="false"
                     columnMode="flex" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
                     [limit]="size" (page)="setPage('', $event)" (sort)="sort($event)" [virtualization]="false"
@@ -557,7 +560,7 @@
                     [rows]="projectOverview" #projectOverviewTable>
                     <!-- Define columns -->
                     <ngx-datatable-column name="Project ID" prop="problemId" [resizeable]="false" [sortable]="false"
-                        [flexGrow]="0.8">
+                        [flexGrow]="0.8"  >
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             {{ value }}
@@ -565,7 +568,7 @@
                     </ngx-datatable-column>
 
                     <ngx-datatable-column name="Budget ID" prop="budgetId" [resizeable]="false" [sortable]="false"
-                        [flexGrow]="0.8">
+                    [flexGrow]="0.8">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             {{ value }}
@@ -590,7 +593,7 @@
                     </ngx-datatable-column>
 
                     <ngx-datatable-column name="Sponsor" prop="sponsor" [resizeable]="false" [sortable]="false"
-                        [flexGrow]="1">
+                    [flexGrow]="1">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             {{ value }}
