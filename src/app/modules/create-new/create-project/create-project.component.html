@@ -345,7 +345,7 @@
                                         </div>
                                         <div class="test">
                                             <div class="parent">
-                                                <label>AGILE Project</label>
+                                                <label>eAGILE Project</label>
                                             </div>
                                             <div class="child" *ngIf="createProjectForm.value.isAgile">
                                                 <label class="reviewText">Yes</label>
@@ -357,7 +357,7 @@
                                         <div *ngIf="createProjectForm.controls['isAgile'].value">
                                             <div class="test">
                                                 <div class="parent">
-                                                    <label>AGILE Primary Workstream</label>
+                                                    <label>eAGILE Primary Workstream</label>
                                                 </div>
                                                 <div class="child">
                                                     <label class="reviewText">{{createProjectForm.value.agilePrimaryWorkstream?.lookUpName}}</label>
@@ -365,7 +365,7 @@
                                             </div>
                                             <div class="test">
                                                 <div class="parent">
-                                                    <label>AGILE Secondary Workstream</label>
+                                                    <label>eAGILE Secondary Workstream</label>
                                                 </div>
                                                 <div class="child">
                                                     <span *ngFor="let item of createProjectForm.value.agileSecondaryWorkstream; let i = index">
@@ -376,7 +376,7 @@
                                             </div>
                                             <div class="test">
                                                 <div class="parent">
-                                                    <label>AGILE Wave</label>
+                                                    <label>eAGILE Wave</label>
                                                 </div>
                                                 <div class="child">
                                                     <label class="reviewText">{{createProjectForm.value.agileWave?.lookUpName}}</label>

@@ -311,7 +311,7 @@
             </div>
             <div class="flex justify-between items-center gap-6 pb-3" *ngIf="viewElementChecker('isAgile')">
               <div class="flex justify-start items-center gap-3 font-medium">
-                AGILE Project
+                eAGILE Project
                 <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isAgile.value">
                 </mat-icon>
                 <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
@@ -322,14 +322,14 @@
             <div class="flex items-start justify-between gap-6"
               *ngIf="generalInfoForm.controls['isAgile'].value && viewElementChecker('isAgile')">
               <spot-input class="w-full read-only" formControlName="agilePrimaryWorkstream"
-                name="agilePrimaryWorkstream" [label]="'AGILE Primary Workstream'">
+                name="agilePrimaryWorkstream" [label]="'eAGILE Primary Workstream'">
               </spot-input>
               <spot-multiselect-autocomplete class="w-full read-only" formControlName="agileSecondaryWorkstream"
-                name="agileSecondaryWorkstream" [label]="'AGILE Secondary Workstream'" [valuePointer]="'lookUpName'"
+                name="agileSecondaryWorkstream" [label]="'eAGILE Secondary Workstream'" [valuePointer]="'lookUpName'"
                 [idPointer]="'lookUpId'" [customSortPointer]="'lookUpOrder'" [dropDownArray]="[]"
                 [sortByType]="'custom'">
               </spot-multiselect-autocomplete>
-              <spot-input class="w-full read-only" formControlName="agileWave" name="agileWave" [label]="'AGILE Wave'">
+              <spot-input class="w-full read-only" formControlName="agileWave" name="agileWave" [label]="'eAGILE Wave'">
               </spot-input>
             </div>
 
