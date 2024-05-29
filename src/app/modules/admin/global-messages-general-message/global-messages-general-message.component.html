@@ -6,7 +6,7 @@
     </div>
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
         class="material font-medium text-default text-sm whitespace-nowrap cursor-pointer" [rows]="globalMessages"
-        #GlobalMessageTable>
+        #GlobalMessageTable [sorts]="[{prop: 'messageId', dir: 'desc'}]">
         <ngx-datatable-column name='Message Id' prop="messageId" [flexGrow]="1" [resizeable]="false" [sortable]="false"
             [draggable]="false">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
