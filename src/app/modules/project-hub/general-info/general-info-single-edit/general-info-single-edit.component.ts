@@ -191,7 +191,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         var portfolio = []
         if (res != null) {
           portfolio.push(res)
-          if (this.callLocation == 'CreateNew' || this.callLocation == 'CopyProject') {
+          if (this.callLocation == 'CreateNew' || this.callLocation == 'CopyProject' || this.callLocation == 'CreateNewSIP') {
             if (res.portfolioGroup == "Center Function") {
               this.generalInfoForm.controls.localCurrency.enable()
             }
