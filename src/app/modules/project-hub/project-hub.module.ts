@@ -188,6 +188,7 @@ import { NewMetricsComponent } from './project-benefits/new-metrics/new-metrics.
 // import { SpotInputForecastComponent } from 'app/core/spot-forms/spot-input-forecast/spot-input-forecast.component';
 import { EditMetricsComponent } from './project-benefits/edit-metrics/edit-metrics.component';
 import { SpotGlobalMessageModule } from 'app/layout/common/spot-global-message/spot-global-message.module';
+import { BryntumGanttModule } from '@bryntum/gantt-angular';
 import {data} from "autoprefixer";
 
 export const projectRoutes: Route[] = [
@@ -658,6 +659,7 @@ export const projectRoutes: Route[] = [
     ShortcutsModule,
     MessagesModule,
     NotificationsModule,
+    BryntumGanttModule,
     UserModule,
     SpotGlobalMessageModule
     ],
