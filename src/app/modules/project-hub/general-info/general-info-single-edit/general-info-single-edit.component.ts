@@ -191,21 +191,21 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         var portfolio = []
         if (res != null) {
           portfolio.push(res)
-          if (this.callLocation == 'CreateNew' || this.callLocation == 'CopyProject') {
+          if (this.callLocation == 'CreateNew' || this.callLocation == 'CopyProject' || this.callLocation == 'CreateNewSIP') {
             if (res.portfolioGroup == "Center Function") {
               this.generalInfoForm.controls.localCurrency.enable()
             }
             else {
               this.generalInfoForm.controls.localCurrency.disable()
             }
+            var currency = this.localCurrencyList.filter(x => x.localCurrencyId == res.localCurrencyId)
+            this.generalInfoForm.patchValue({
+              excecutionScope: res.isExecutionScope ? portfolio : [],
+              enviornmentalPortfolio: res.isEmissionPortfolio ? res : '',
+              owningOrganization: res.defaultOwningOrganization,
+              localCurrency: currency[0]?.localCurrencyAbbreviation
+            })
           }
-          var currency = this.localCurrencyList.filter(x => x.localCurrencyId == res.localCurrencyId)
-          this.generalInfoForm.patchValue({
-            excecutionScope: res.isExecutionScope ? portfolio : [],
-            enviornmentalPortfolio: res.isEmissionPortfolio ? res : '',
-            owningOrganization: res.defaultOwningOrganization,
-            localCurrency: currency[0]?.localCurrencyAbbreviation
-          })
         }
         else {
           this.generalInfoForm.controls.localCurrency.enable()
@@ -308,7 +308,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           if (['Completed', 'Cancelled'].includes(state.current)) {
             this.archiveable = true;
           }
-          else{
+          else {
             this.archiveable = false;
           }
           console.log(this.generalInfo.projectData)
