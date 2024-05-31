@@ -223,6 +223,12 @@
               <spot-input class="w-full read-only" formControlName="agileWave" name="agileWave" [label]="'eAGILE Wave'">
               </spot-input>
             </div>
+            <div class="flex justify-between items-center gap-6 pb-3">
+              <spot-multiselect-autocomplete class="w-full read-only" formControlName="oeprojectType"
+              name="oeprojectType" [label]="'OE Project Type'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+              [customSortPointer]="'lookUpOrder'" [dropDownArray]="getoeprojectType()" [sortByType]="'custom'">
+            </spot-multiselect-autocomplete>
+            </div>
 
             <div *ngIf="viewElementChecker('isPobos')">
               <div class="flex justify-between items-center gap-6 pb-3">
@@ -321,7 +327,7 @@
           </div>
 
         </div>
-        <div class="flex justify-between items-start gap-6 pt-3" *ngIf="viewElementChecker('isOeproject') && showOE">
+        <!-- <div class="flex justify-between items-start gap-6 pt-3" *ngIf="viewElementChecker('isOeproject') && showOE">
           <div class="flex flex-col w-2/5 flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
             <div class="flex justify-between items-center">
               <div class="flex justify-start items-center gap-3 font-medium">
@@ -348,7 +354,7 @@
               </spot-multiselect-autocomplete>
             </div>
           </div>
-        </div>
+        </div> -->
 
 
 
