@@ -1,1 +1,13 @@
-<p>detailed-schedule works!</p>
+<div class="w-full flex-col flex bg-card rounded-2xl m-8 mt-0">
+    <div class="flex justify-between items-center  p-6 pb-0">
+        <h3 class="font-medium tracking-tight leading-6 truncate text-xl text-primary">Detailed Project Schedule (BETA)</h3>
+    </div>
+    <div class="flex w-full h-full p-6">
+        <bryntum-gantt-project-model #project [startDate]="startDate" [taskStore]="tasks" [dependencies]="dependencies">
+        </bryntum-gantt-project-model>
+
+        <bryntum-gantt #gantt [startDate]="ganttConfig.startDate!" [columns]="ganttConfig.columns!"
+            [endDate]="ganttConfig.endDate!" [project]="project" (onDataChange) = "onDataChange($event)">
+        </bryntum-gantt>
+    </div>
+</div>

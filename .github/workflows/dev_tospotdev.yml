@@ -23,6 +23,9 @@ jobs:
 
       - name: npm install, build, and test
         run: |
+          npm install -g npm-cli-login
+          npm config set "@bryntum:registry=https://npm.bryntum.com"
+          npm-cli-login -r https://npm.bryntum.com -u 'prakhar.agrawal..takeda.com' -p trial -e prakhar.agrawal@takeda.com
           npm install
           npm run build -- --configuration=dev
 
