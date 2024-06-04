@@ -19,27 +19,27 @@
         <div [ngClass]="{'flex-col flex-auto bg-card shadow rounded-2xl custom': viewType == 'Form'}">
             <div class="w-full mt-4 mb-6">
                 <spot-toggle class="w-full" *ngIf="viewElementChecker('isAgile')" formControlName="isAgile"
-                    [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'" [label]="'AGILE Project'">
+                    [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'" [label]="'eAGILE Project'">
                 </spot-toggle>
             </div>
             <spot-singleselect-autocomplete
                 *ngIf="strategicDriversForm.controls['isAgile'].value && viewElementChecker('agilePrimaryWorkstream')"
                 formControlName="agilePrimaryWorkstream" class="w-full" name="agilePrimaryWorkstream"
-                [label]="'AGILE Primary Workstream'" [placeholder]="'AGILE Primary Workstream'"
+                [label]="'eAGILE Primary Workstream'" [placeholder]="'eAGILE Primary Workstream'"
                 [valuePointer]="'lookUpName'" [dropDownArray]="getAgileWorkstream()" [sortByType]="'custom'"
                 [customSortPointer]="'lookUpOrder'">
             </spot-singleselect-autocomplete>
             <spot-multiselect-autocomplete class="w-full"
                 *ngIf="strategicDriversForm.controls['isAgile'].value && viewElementChecker('agileSecondaryWorkstream')"
                 formControlName="agileSecondaryWorkstream" name="agileSecondaryWorkstream"
-                [label]="'AGILE Secondary Workstream'" [placeholder]="'AGILE Secondary Workstream'"
+                [label]="'eAGILE Secondary Workstream'" [placeholder]="'eAGILE Secondary Workstream'"
                 [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" [customSortPointer]="'lookUpOrder'"
                 [dropDownArray]="getAgileWorkstream()" [sortByType]="'custom'">
             </spot-multiselect-autocomplete>
             <spot-singleselect-autocomplete
                 *ngIf="strategicDriversForm.controls['isAgile'].value && viewElementChecker('agileWave')"
-                formControlName="agileWave" class="w-full" name="agileWave" [label]="'AGILE Wave'"
-                [placeholder]="'AGILE Wave'" [valuePointer]="'lookUpName'" [dropDownArray]="getAgileWave()"
+                formControlName="agileWave" class="w-full" name="agileWave" [label]="'eAGILE Wave'"
+                [placeholder]="'eAGILE Wave'" [valuePointer]="'lookUpName'" [dropDownArray]="getAgileWave()"
                 [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
             </spot-singleselect-autocomplete>
         </div>

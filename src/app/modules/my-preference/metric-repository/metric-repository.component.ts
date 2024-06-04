@@ -116,9 +116,10 @@ export class MetricRepositoryComponent {
                 this.metricRepositoryData.forEach(element => {
                     const isUserAssociatedWithPortfolio = this.userManagedPortfolios.includes(element.portfolioOwner);
                     const isLocalMetric = element.metricTypeID != 'Global';
+                    const noMetricUsage = element.metricUsage == 0
 
                     element.showEdit = isUserAssociatedWithPortfolio && isLocalMetric;
-                    element.showDelete = isUserAssociatedWithPortfolio && isLocalMetric;
+                    element.showDelete = isUserAssociatedWithPortfolio && isLocalMetric && noMetricUsage;
                 })
 
             })

@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FuseConfigService } from '@fuse/services/config';
 import { environment } from 'environments/environment';
 import { AppConfig } from './core/config/app.config';
+import { MyMonitoringService } from './logging.service';
 
 @Component({
     selector: 'app-root',
@@ -16,7 +17,9 @@ export class AppComponent {
      * Constructor
      */
     config: AppConfig;
-    constructor(private authService: MsalService, private appService: AppService, private snack: MatSnackBar, private _fuseConfigService: FuseConfigService) {
+    constructor(private authService: MsalService, private appService: AppService, private snack: MatSnackBar, private _fuseConfigService: FuseConfigService,
+        private myMonitoringService: MyMonitoringService
+    ) {
         this._fuseConfigService.config$
             .subscribe((config: AppConfig) => {
                 if (config?.theme != this.config?.theme) {
