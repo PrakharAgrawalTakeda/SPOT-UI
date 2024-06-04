@@ -1,4 +1,5 @@
-import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { GanttConfig, Model, ProjectModelConfig, Store, TaskStore } from '@bryntum/gantt';
 import { BryntumGanttComponent, BryntumGanttProjectModelComponent } from '@bryntum/gantt-angular';
 @Component({
@@ -7,8 +8,9 @@ import { BryntumGanttComponent, BryntumGanttProjectModelComponent } from '@brynt
   styleUrls: ['./detailed-schedule.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class DetailedScheduleComponent {
+export class DetailedScheduleComponent implements OnInit{
   startDate = new Date(2022, 0, 1);
+  id: string = '';
   projectConfig: Partial<ProjectModelConfig> = {
     // Empty project config
   };
@@ -51,6 +53,9 @@ export class DetailedScheduleComponent {
   @ViewChild('gantt') ganttComponent!: BryntumGanttComponent;
   @ViewChild('project') projectComponent!: BryntumGanttProjectModelComponent;
 
-  constructor(){
+  constructor( private _Activatedroute: ActivatedRoute){
+  }
+  ngOnInit(): void {
+    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
   }
 }
