@@ -8,9 +8,18 @@ import { BryntumGanttComponent, BryntumGanttProjectModelComponent } from '@brynt
   styleUrls: ['./detailed-schedule.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class DetailedScheduleComponent implements OnInit{
+export class DetailedScheduleComponent implements OnInit {
   startDate = new Date(2022, 0, 1);
   id: string = '';
+  currentData = {
+    projectId: '',
+    AssignmentStore: '',
+    AssignmentManipulationStore: '',
+    CalendarManagerStore: '',
+    DependencyStore: '',
+    ResourceStore: '',
+    TaskStore: ''
+  }
   projectConfig: Partial<ProjectModelConfig> = {
     // Empty project config
   };
@@ -32,10 +41,7 @@ export class DetailedScheduleComponent implements OnInit{
           { id: 'hwy', name: 'Release docs', startDate: '2022-01-09', endDate: '2022-01-10' }
         ]
       }
-    ],
-    onChange(event) {
-     // console.log(event)
-    }
+    ]
   });
 
   dependencies = [
@@ -44,16 +50,16 @@ export class DetailedScheduleComponent implements OnInit{
 
   onDataChange(event) {
     //console log current value of gantt
+    console.log(Object.getPrototypeOf(event.store).$$name)
     console.log(event.store.formattedJSON)
-  }
-  syncData({ store, action, records }: { store: Store; action: String; records: Model[] }): void {
-    console.log(`${store.id} changed. The action was: ${action}. Changed records: `, records);
-    // Your sync data logic comes here
+    var storename = Object.getPrototypeOf(event.store).$$name
+    this.currentData[storename] = event.store.formattedJSON
+    console.log("FINAL DATA", this.currentData)
   }
   @ViewChild('gantt') ganttComponent!: BryntumGanttComponent;
   @ViewChild('project') projectComponent!: BryntumGanttProjectModelComponent;
 
-  constructor( private _Activatedroute: ActivatedRoute){
+  constructor(private _Activatedroute: ActivatedRoute) {
   }
   ngOnInit(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
