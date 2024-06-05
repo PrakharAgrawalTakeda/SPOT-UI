@@ -16,6 +16,6 @@ export class GlobalVariables {
     //process.env.NODE_ENV === 'development' ?
 
         
-    public static version: string  = 'v 2.0.21.2'
+    public static version: string  = 'v 2.0.21.3'
 
 }

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ExtraOptions, PreloadAllModules, RouterModule } from '@angular/router';
@@ -19,6 +19,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
 import { OldUrlRedirectResolver } from './core/auth/old-url-redirect.resolver';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ErrorHandlerService } from './error-handler.service';
+import { MyMonitoringService } from './logging.service';
 export function MsalInstanceFactory(): IPublicClientApplication {
     return new PublicClientApplication({
         auth: {
@@ -64,6 +66,8 @@ const routerConfig: ExtraOptions = {
         AppComponent
     ],
     providers: [
+        { provide: ErrorHandler, useClass: ErrorHandlerService },
+        MyMonitoringService,
         {
             provide: MSAL_INSTANCE,
             useFactory: MsalInstanceFactory

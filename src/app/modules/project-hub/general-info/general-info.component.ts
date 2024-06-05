@@ -103,6 +103,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   formFieldHelpers: any
   lookUpPVD: any;
   archiveable: boolean = false;
+  showOE: boolean = true;
   constructor(private apiService: ProjectApiService,
     private _Activatedroute: ActivatedRoute,
     private portApiService: PortfolioApiService,
@@ -282,7 +283,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
     }
 
     var oeprojectypelist = response.projectData.oeprojectType && response.projectData.oeprojectType != '' ? response.projectData.oeprojectType.split(',') : []
-    console.log(response)
+    console.log(oeprojectypelist)
     console.log(response.projectData.primaryKpi)
     this.generalInfoForm.patchValue({
       problemTitle: response.projectData.problemTitle,

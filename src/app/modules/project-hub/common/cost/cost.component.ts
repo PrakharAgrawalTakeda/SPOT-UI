@@ -25,12 +25,16 @@ export class CostComponent implements OnInit, OnDestroy {
   costFundingForm = new FormGroup({
     durationBaseCase: new FormControl(''),
     durationHighCase: new FormControl(''),
+    durationDescription: new FormControl(''),
     peopleFtemonthsRequiredBaseCase: new FormControl(''),
     peopleFtemonthsRequiredHighCase: new FormControl(''),
+    peopleDescription: new FormControl(''),
     totalCapExBaseCase: new FormControl(''),
     totalCapExHighCase: new FormControl(''),
+    totalCapExDescription: new FormControl(''),
     totalNonFteopExBaseCase: new FormControl(''),
     totalNonFteopExHighCase: new FormControl(''),
+    totalNonFtedescription: new FormControl(''),
     functionsRequiredId: new FormControl(null),
     currentYearPlannedSpend: new FormControl(''),
     projectSpendStart: new FormControl(''),
@@ -187,8 +191,11 @@ export class CostComponent implements OnInit, OnDestroy {
               projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
               apisdate: res.costData.apisdate ? res.costData.apisdate : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
-              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
-
+              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false,
+              durationDescription: res.costData.durationDescription ? res.costData.durationDescription : null,
+              peopleDescription: res.costData.peopleDescription ? res.costData.peopleDescription : null,
+              totalCapExDescription: res.costData.totalCapExDescription ? res.costData.totalCapExDescription : null,
+              totalNonFtedescription: res.costData.totalNonFtedescription ? res.costData.totalNonFtedescription : null
             })
           }
 
@@ -196,22 +203,26 @@ export class CostComponent implements OnInit, OnDestroy {
             this.costData = [{
               category: 'Duration (Months)',
               baseCase: 'durationBaseCase',
-              highCase: 'durationHighCase'
+              highCase: 'durationHighCase',
+              basis: 'durationDescription'
             },
             {
               category: 'People (FTE Months)',
               baseCase: 'peopleFtemonthsRequiredBaseCase',
-              highCase: 'peopleFtemonthsRequiredHighCase'
+              highCase: 'peopleFtemonthsRequiredHighCase',
+              basis: 'peopleDescription'
             },
             {
               category: 'Total CAPEX' + ' (' + this.localcurrency.localCurrencyAbbreviation + ')',
               baseCase: 'totalCapExBaseCase',
-              highCase: 'totalCapExHighCase'
+              highCase: 'totalCapExHighCase',
+              basis: 'totalCapExDescription'
             },
             {
               category: 'Total non-FTE OPEX' + ' (' + this.localcurrency.localCurrencyAbbreviation + ')',
               baseCase: 'totalNonFteopExBaseCase',
-              highCase: 'totalNonFteopExHighCase'
+              highCase: 'totalNonFteopExHighCase',
+              basis: 'totalNonFtedescription'
             },
             {
               category: '# Functions Required',

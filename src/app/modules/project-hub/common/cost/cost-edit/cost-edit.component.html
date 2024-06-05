@@ -20,7 +20,7 @@
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Base Case" prop="baseCase" [resizeable]="false" [sortable]="false"
-                                  [flexGrow]="1" *ngIf="mode=='Project-Charter'">
+                                  [flexGrow]="0.6" *ngIf="mode=='Project-Charter'">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                     <spot-singleselect-autocomplete formControlName="{{value}}" [showLabel]="false"
                                                     [valuePointer]="'lookUpName'"
@@ -43,7 +43,7 @@
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="High Case" prop="highCase" [resizeable]="false" [sortable]="false"
-                                  [flexGrow]="1" *ngIf="mode=='Project-Charter'">
+                                  [flexGrow]="0.6" *ngIf="mode=='Project-Charter'">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                     <!-- <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category != '# Functions Required'">
                     </spot-input> -->
@@ -56,6 +56,16 @@
                                 *ngIf="row.category.includes('Duration') || row.category.includes('People') && row.category != '# Functions Required'"
                                 [autoAddDecimal]="true" [inputType]="'Number'" [decimalCount]="1"
                                 [callLocation]="'cost'">
+                    </spot-input>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Basis of Estimate" prop="basis" [resizeable]="false" [sortable]="false"
+                [flexGrow]="1" *ngIf="mode=='Project-Charter'">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <!-- <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}" *ngIf="row.category != '# Functions Required'">
+                        </spot-input> -->
+                    <spot-input *ngIf="row.category != '# Functions Required'" class="w-full read-only" [showLabel]="false" formControlName="{{value}}"
+                         [callLocation]="'cost'">
                     </spot-input>
                 </ng-template>
             </ngx-datatable-column>

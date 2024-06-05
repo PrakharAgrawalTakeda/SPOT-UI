@@ -1,0 +1,25 @@
+<div class="w-full flex-col flex bg-card rounded-2xl m-8 mt-0" *ngIf="viewContent">
+    <div class="flex justify-between items-center  p-6 pb-0">
+        <h3 class="font-medium tracking-tight leading-6 truncate text-xl text-primary">Detailed Project Schedule (BETA)
+        </h3>
+        <button class="mx-4 text-primary bg-gray-200 " mat-flat-button [color]="'primary-200'"
+            (click)="addTask()">
+            <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New Task
+        </button>
+    </div>
+    <div class="flex w-full h-full p-6">
+        <bryntum-gantt-project-model #project [startDate]="startDate" [taskStore]="tasks" [id]="id"
+            [dependencyStore]="dependencies">
+        </bryntum-gantt-project-model>
+
+        <bryntum-gantt #gantt [startDate]="ganttConfig.startDate!" [columns]="ganttConfig.columns!"
+            [endDate]="ganttConfig.endDate!" [project]="project" (onDataChange)="onDataChange($event)">
+        </bryntum-gantt>
+    </div>
+    <div class="flex justify-end items-center p-6 pt-0">
+        <button class="min-w-26" mat-flat-button [color]="'primary'" *ngIf="viewSubmitButton" type="submit"
+            (click)="saveGanttData()">
+            Save
+        </button>
+    </div>
+</div>
