@@ -956,5 +956,17 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     const response = await lastValueFrom(abc$)
     return response
   }
+  async getDetailedScheduleData(projectid) {
+    var url = GlobalVariables.apiurl + "DetailedScheduleDemo/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
   }
+  async putDetailedScheduleData(body, projectId){
+    var link = GlobalVariables.apiurl+"DetailedScheduleDemo/"+projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+}
 
