@@ -12,7 +12,7 @@ export class DetailedScheduleComponent implements OnInit {
   startDate = new Date(2022, 0, 1);
   id: string = '';
   currentData = {
-    projectId: '',
+    projectUId: '',
     AssignmentStore: '',
     AssignmentManipulationStore: '',
     CalendarManagerStore: '',
@@ -50,11 +50,17 @@ export class DetailedScheduleComponent implements OnInit {
 
   onDataChange(event) {
     //console log current value of gantt
-    console.log(Object.getPrototypeOf(event.store).$$name)
-    console.log(event.store.formattedJSON)
     var storename = Object.getPrototypeOf(event.store).$$name
-    this.currentData[storename] = event.store.formattedJSON
-    console.log("FINAL DATA", this.currentData)
+    if (this.currentData[storename] != event.store.formattedJSON) {
+      console.log("DIFFERENT")
+      console.log(Object.getPrototypeOf(event.store).$$name)
+      console.log(event.store.formattedJSON)
+      this.currentData[storename] = event.store.formattedJSON
+      console.log("FINAL DATA", this.currentData)
+    }
+    else {
+      console.log("SAME")
+    }
   }
   @ViewChild('gantt') ganttComponent!: BryntumGanttComponent;
   @ViewChild('project') projectComponent!: BryntumGanttProjectModelComponent;
@@ -63,5 +69,7 @@ export class DetailedScheduleComponent implements OnInit {
   }
   ngOnInit(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    this.currentData.projectUId = this.id
+    
   }
 }
