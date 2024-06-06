@@ -34,9 +34,10 @@ export class MyMonitoringService {
   }
 
   logException(exception: Error, severityLevel?: number) {
+    console.log('Logging exception:', exception);
     this.appInsights.trackException({ exception: exception, severityLevel: severityLevel });
   }
-
+  
   logTrace(message: string, properties?: { [key: string]: any }) {
     this.appInsights.trackTrace({ message: message}, properties);
   }
