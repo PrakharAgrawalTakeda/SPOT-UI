@@ -392,6 +392,7 @@ export class CreateProjectComponent implements OnInit {
         isGmsgqltannualMustWin: event.isGmsgqltannualMustWin,
         strategicYear: event.strategicYear,
         annualMustWinID: event.annualMustWinID,
+        oeProjectType: event.oeprojectType
       })
     }
   }
@@ -570,7 +571,8 @@ export class CreateProjectComponent implements OnInit {
       if (mainObjCreate[0].IsAgile) {
         mainObjCreate[0].AgilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" && formValue.agilePrimaryWorkstream != undefined && formValue.agilePrimaryWorkstream != null ? formValue.agilePrimaryWorkstream.lookUpId : ''
         mainObjCreate[0].AgileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
-        mainObjCreate[0].agileWave = formValue.agileWave != "" && formValue.agileWave != undefined && formValue.agileWave != null ? formValue.agileWave.lookUpId : ''
+        mainObjCreate[0].agileWave = formValue.agileWave != "" && formValue.agileWave != undefined && formValue.agileWave != null ? formValue.agileWave.lookUpId : '',
+        mainObjCreate[0].OEProjectType = formValue.oeProjectType.length > 0 ? formValue.oeProjectType.map(x => x.lookUpId).join() : ''
       }
       mainObjCreate[0].IsCapsProject = formValue.isCapsProject == "" || formValue.isCapsProject == "No" ? false : true
       mainObjCreate[0].EmissionPortfolioID = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''

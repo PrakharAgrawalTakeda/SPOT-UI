@@ -27,7 +27,8 @@ export class StrategicDriversComponent implements OnInit {
     isGoodPractise: new FormControl(false),
     isSprproject: new FormControl(false),
     sprprojectCategory: new FormControl(null),
-    sprprojectGrouping: new FormControl(null)
+    sprprojectGrouping: new FormControl(null),
+    oeprojectType: new FormControl([])
   })
   generalInfo: any = {}
   filterCriteria = {}
@@ -44,10 +45,11 @@ export class StrategicDriversComponent implements OnInit {
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' | 'CreateNewSIP' = 'ProjectHub'
   @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' |'CloseOut' = 'ProjectHub'
-  @Input() viewElements: any = ["primaryKPI", "isAgile", "agilePrimaryWorkstream", "agileSecondaryWorkstream", "agileWave", "isPobos", "pobosCategory", "isGmsgqltannualMustWin", "strategicYear", "annualMustWinID", "isSiteAssessment", "siteAssessmentCategory", "isGoodPractise", "isSprproject", "sprprojectCategory", "sprprojectGrouping"]
+  @Input() viewElements: any = ["primaryKPI", "isAgile", "agilePrimaryWorkstream", "agileSecondaryWorkstream", "agileWave", "isPobos", "pobosCategory", "isGmsgqltannualMustWin", "strategicYear", "annualMustWinID", "isSiteAssessment", "siteAssessmentCategory", "isGoodPractise", "isSprproject", "sprprojectCategory", "sprprojectGrouping", "oeprojectType"]
   @Output() formValueStrategic = new EventEmitter();
   lookUpData: any;
   kpiData: any;
+  oeProjectType: any;
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
     public fuseAlert: FuseConfirmationService, public auth: AuthService) {
@@ -97,6 +99,7 @@ export class StrategicDriversComponent implements OnInit {
                 agilePrimaryWorkstream: {},
                 agileSecondaryWorkstream: [],
                 agileWave: {},
+                oeprojectType: [] 
               })
             }
             else {
@@ -273,6 +276,7 @@ export class StrategicDriversComponent implements OnInit {
         this.kpiMasters = this.lookUpData.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474")
         this.kpiData = this.projectHubService.kpiMasters
         this.lookUpMaster = this.projectHubService.lookUpMaster
+        var oeprojectypelist = res.projectData.oeprojectType && res.projectData.oeprojectType != '' ? res.projectData.oeprojectType.split(',') : []
         this.strategicDriversForm.patchValue({
           //primaryKPI: res.projectData.primaryKpi && this.kpiMasters.find(x => x.lookUpId == res.projectData.primaryKpi) ? this.kpiMasters.find(x => x.lookUpId == res.projectData.primaryKpi).lookUpName : {},
           primaryKPI: (() => {
@@ -306,7 +310,8 @@ export class StrategicDriversComponent implements OnInit {
           isGoodPractise: res.projectData.isGoodPractise,
           isSprproject: res.projectData.isSprproject,
           sprprojectCategory: res.projectData.sprprojectCategory && res.projectData.sprprojectCategory != '' ? this.lookUpData.find(x => x.lookUpId == res.projectData.sprprojectCategory) : {},
-          sprprojectGrouping: res.projectData.sprprojectGrouping && res.projectData.sprprojectGrouping != '' ? this.lookUpData.find(x => x.lookUpId == res.projectData.sprprojectGrouping) : {}
+          sprprojectGrouping: res.projectData.sprprojectGrouping && res.projectData.sprprojectGrouping != '' ? this.lookUpData.find(x => x.lookUpId == res.projectData.sprprojectGrouping) : {},
+          oeprojectType: oeprojectypelist.length > 0 ? this.projectHubService.lookUpMaster.filter(x => res.projectData.oeprojectType.includes(x.lookUpId)) : [],
         })
         this.viewContent = true
       })
@@ -319,6 +324,21 @@ export class StrategicDriversComponent implements OnInit {
           this.kpiMasters = this.lookupdata.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474");
           //this.lookUpMaster = 
           if (history.state.data != undefined) {
+            if (history.state.data.oeprojectType != null) {
+              this.oeProjectType = this.lookupdata.filter(x => x.lookUpParentId == '04D143E7-CAA7-4D8D-88C3-A6CB575890A3');
+              this.oeProjectType.sort((a, b) => {
+                return a.lookUpOrder - b.lookUpOrder;
+              })
+              const data = history.state.data.oeprojectType.split(',');
+              var oetype = {};
+              var finaldataoe = [];
+              for (var i = 0; i < data.length; i++) {
+                oetype = this.oeProjectType.filter(function (entry) {
+                  return entry.lookUpId == data[i]
+                })
+                finaldataoe.push(oetype[0]);
+              }
+            }
             if (history.state.data.primaryKpi != null) {
               history.state.data.primaryKpi = this.kpiMasters.filter(function (entry) {
                 return entry.lookUpId == history.state.data.primaryKpi
@@ -421,7 +441,8 @@ export class StrategicDriversComponent implements OnInit {
               isGoodPractise: false,
               isSprproject: false,
               sprprojectCategory: {},
-              sprprojectGrouping: {}
+              sprprojectGrouping: {},
+              oeprojectType: history.state.data.oeprojectType == null || history.state.data.oeprojectType == "" || history.state.data.oeprojectType == undefined ? [] : finaldataoe,
             })
             this.formValueStrategic.emit(this.strategicDriversForm.getRawValue())
             this.viewContent = true
@@ -436,6 +457,18 @@ export class StrategicDriversComponent implements OnInit {
   }
   viewElementChecker(element: string): boolean {
     return this.viewElements.some(x => x == element)
+  }
+  getoeprojectType(): any {
+    if(this.callLocation == 'CreateNew'){
+      this.oeProjectType = this.lookupdata.filter(x => x.lookUpParentId == '04D143E7-CAA7-4D8D-88C3-A6CB575890A3');
+      this.oeProjectType.sort((a, b) => {
+        return a.lookUpOrder - b.lookUpOrder;
+      })
+      return this.oeProjectType;
+    }
+    else {
+      return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == "04D143E7-CAA7-4D8D-88C3-A6CB575890A3")
+    }
   }
   getAgileWorkstream(): any {
     if (this.callLocation == 'CreateNew' || this.callLocation == 'CreateNewSIP') {
@@ -553,7 +586,9 @@ export class StrategicDriversComponent implements OnInit {
     mainObj.isGoodPractise = formValue.isGoodPractise
     mainObj.isSprproject = formValue.isSprproject
     mainObj.sprprojectCategory = Object.keys(formValue.sprprojectCategory).length > 0? formValue.sprprojectCategory.lookUpId : null
-    mainObj.sprprojectGrouping = Object.keys(formValue.sprprojectGrouping).length > 0? formValue.sprprojectGrouping.lookUpId : null
+    mainObj.sprprojectGrouping = Object.keys(formValue.sprprojectGrouping).length > 0? formValue.sprprojectGrouping.lookUpId : null,
+    mainObj.oeprojectType = formValue.oeprojectType.length > 0 ? formValue.oeprojectType.map(x => x.lookUpId).join() : ''
+
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       if (this.subCallLocation == 'ProjectProposal') {
         this.apiService.updateReportDates(this.projectHubService.projectid, "ProjectProposalModifiedDate").then(secondRes => {
