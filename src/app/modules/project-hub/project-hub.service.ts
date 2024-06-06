@@ -117,6 +117,12 @@ export class ProjectHubService {
           link: 'project-documents'
         },
         {
+          title: 'Detailed Project Schedule (BETA)',
+          type: 'basic',
+          icon: 'mat_outline:science',
+          link: 'detailed-schedule'
+        },
+        {
           type: 'spacer'
         },
         {

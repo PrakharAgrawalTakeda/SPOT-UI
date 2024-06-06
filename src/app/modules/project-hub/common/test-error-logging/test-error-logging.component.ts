@@ -3,8 +3,8 @@ import { MyMonitoringService } from 'app/logging.service';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
-import { ProjectHubService } from '../../project-hub.service';
-import { ProjectApiService } from '../project-api.service';
+import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 @Component({
   selector: 'app-test-error-logging',
   template: ``,
