@@ -1,10 +1,14 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DependencyStore, GanttConfig, Model, ProjectModelConfig, Store, TaskStore } from '@bryntum/gantt';
+import { DependencyStore, GanttConfig, Model, ProjectModelConfig, Store, StringHelper, TaskStore, ToolbarConfig } from '@bryntum/gantt';
 import { BryntumGanttComponent, BryntumGanttProjectModelComponent } from '@bryntum/gantt-angular';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 import { CostComponent } from '../common/cost/cost.component';
+import { Form, FormControl, FormGroup } from '@angular/forms';
+import moment from 'moment';
+import { D } from '@angular/cdk/keycodes';
+import { project } from 'app/mock-api/dashboards/project/data';
 @Component({
   selector: 'app-detailed-schedule',
   templateUrl: './detailed-schedule.component.html',
@@ -12,13 +16,17 @@ import { CostComponent } from '../common/cost/cost.component';
   encapsulation: ViewEncapsulation.None
 })
 export class DetailedScheduleComponent implements OnInit {
-  startDate = new Date();
+  startDate;
   id: string = '';
+  detailedScheduleForm: FormGroup = new FormGroup({
+    projectStartDate: new FormControl()
+  });
   viewContent: boolean = false;
   viewSubmitButton: boolean = false;
   viewAddButton: boolean = false;
   currentData = {
     projectUId: '',
+    projectStartDate: '',
     AssignmentStore: '',
     AssignmentManipulationStore: '',
     CalendarManagerStore: '',
@@ -34,8 +42,25 @@ export class DetailedScheduleComponent implements OnInit {
     columns: [
       { type: 'name', width: 160 }
     ],
-    startDate: new Date()
+    infiniteScroll: true,
+    appendTo: 'container',
+    features: {
+      scrollButtons: true,
+      projectLines: true,
+    }
   };
+  tbarConfig: Partial<ToolbarConfig> = {
+    items: [
+      {
+        type: 'button',
+        text: 'Add Task',
+        icon: 'b-fa b-fa-plus',
+        color: 'b-blue b-raised',
+        onAction: () => this.addTask()
+      }
+    ]
+  };
+
   tasks: TaskStore = new TaskStore();
   dependencies: DependencyStore = new DependencyStore();
   /*new TaskStore({
@@ -51,7 +76,7 @@ export class DetailedScheduleComponent implements OnInit {
       }
     ]
   });
-
+ 
   dependencies = [
     { fromTask: 'hey', toTask: 'hwy' }
   ];*/
@@ -75,6 +100,11 @@ export class DetailedScheduleComponent implements OnInit {
   @ViewChild('project') projectComponent!: BryntumGanttProjectModelComponent;
 
   constructor(private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, private projectHubService: ProjectHubService) {
+    this.detailedScheduleForm.controls.projectStartDate.valueChanges.subscribe((value) => {
+      this.startDate = value.toDate();
+      this.currentData.projectStartDate = value.toDate();
+      this.viewSubmitButton = true;
+    });
   }
   ngOnInit(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -83,6 +113,7 @@ export class DetailedScheduleComponent implements OnInit {
       console.log("DATA", data)
       this.currentData = {
         projectUId: this.id,
+        projectStartDate: data.projectStartDate ? data.projectStartDate : null,
         AssignmentStore: data.assignmentStore,
         AssignmentManipulationStore: data.assignmentManipulationStore,
         CalendarManagerStore: data.calendarManagerStore,
@@ -90,6 +121,8 @@ export class DetailedScheduleComponent implements OnInit {
         ResourceStore: data.resourceStore,
         TaskStore: data.taskStore
       }
+      this.startDate = moment(data.projectStartDate).toDate();
+      this.detailedScheduleForm.controls.projectStartDate.setValue(moment(data.projectStartDate));
       this.tasks.data = JSON.parse(data.taskStore ? data.taskStore : "[]")
       this.dependencies.data = JSON.parse(data.dependencyStore ? data.dependencyStore : "[]")
       console.log("CURRENT DATA", this.currentData)
@@ -102,6 +135,7 @@ export class DetailedScheduleComponent implements OnInit {
   santizeData() {
     this.submitData = {
       projectUId: this.id,
+      projectStartDate: this.currentData?.projectStartDate? moment(this.currentData?.projectStartDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
       AssignmentStore: this.currentData?.AssignmentStore?.replaceAll("_generatede_", ""),
       AssignmentManipulationStore: this.currentData?.AssignmentManipulationStore?.replaceAll("_generatede_", ""),
       CalendarManagerStore: this.currentData?.CalendarManagerStore?.replaceAll("_generatede_", ""),
@@ -110,7 +144,7 @@ export class DetailedScheduleComponent implements OnInit {
       TaskStore: this.currentData?.TaskStore?.replaceAll("_generatede_", "")
     }
   }
-  addTask(){
+  addTask() {
     this.tasks.add({
       name: 'New task'
     });
