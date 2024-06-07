@@ -124,7 +124,6 @@ import { BusinessCaseBenefitsComponent } from './business-case/business-case-ben
 import { BusinessCaseCapsComponent } from './business-case/business-case-caps/business-case-caps.component';
 import { BusinessCaseRiskIssuesComponent } from './business-case/business-case-risk-issues/business-case-risk-issues.component';
 import { OptionInfoComponent } from './common/option-info/option-info.component';
-import { TestErrorLoggingComponent } from './common/test-error-logging/test-error-logging.component';
 import { OptionInfoEditComponent } from './common/option-info/option-info-edit/option-info-edit.component';
 import { FeasibilityEditComponent } from './common/option-info/feasibility-edit/feasibility-edit.component';
 import { CloseOutOutcomesSingleEditComponent } from './close-out/close-out-outcomes/close-out-outcomes-single-edit/close-out-outcomes-single-edit.component';
