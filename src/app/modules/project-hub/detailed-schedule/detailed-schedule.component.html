@@ -1,4 +1,4 @@
-<div class="w-full flex-col flex bg-card rounded-2xl m-8 mt-0" *ngIf="viewContent">
+<div class="w-full flex-col flex bg-card rounded-2xl m-8 mt-0 max-w-[96%]" *ngIf="viewContent">
     <div class="flex justify-between items-center  p-6 pb-0">
         <h3 class="font-medium tracking-tight leading-6 truncate text-xl text-primary">Detailed Project Schedule (BETA)
         </h3>
@@ -11,13 +11,13 @@
             </button>
         </div>
     </div>
-    <div class="flex w-full h-full p-6 pr-10">
+    <div class="flex" [ngClass]="isFullScreen?'w-[100vw] h-[100vw] z-99999 fixed top-0 left-0 p-0':'w-full h-full p-6'">
         <bryntum-gantt-project-model #project [taskStore]="tasks" [id]="id" [dependencyStore]="dependencies" [startDate]="startDate">
         </bryntum-gantt-project-model>
 
         <bryntum-gantt #gantt [startDate]="ganttConfig.startDate!" [columns]="ganttConfig.columns!"
             [features]="ganttConfig.features!" [endDate]="ganttConfig.endDate!" [project]="project" 
-            (onDataChange)="onDataChange($event)" [infiniteScroll]="ganttConfig.infiniteScroll">
+            (onDataChange)="onDataChange($event)" [infiniteScroll]="ganttConfig.infiniteScroll" [tbar]="tbarConfig">
         </bryntum-gantt>
     </div>
     <div class="flex justify-end items-center p-6 pt-0 pr-10">

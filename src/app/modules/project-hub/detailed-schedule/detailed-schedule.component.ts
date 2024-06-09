@@ -9,6 +9,7 @@ import { Form, FormControl, FormGroup } from '@angular/forms';
 import moment from 'moment';
 import { D } from '@angular/cdk/keycodes';
 import { project } from 'app/mock-api/dashboards/project/data';
+import { items } from 'app/mock-api/apps/file-manager/data';
 @Component({
   selector: 'app-detailed-schedule',
   templateUrl: './detailed-schedule.component.html',
@@ -17,6 +18,7 @@ import { project } from 'app/mock-api/dashboards/project/data';
 })
 export class DetailedScheduleComponent implements OnInit {
   startDate;
+  isFullScreen: boolean = false;
   id: string = '';
   detailedScheduleForm: FormGroup = new FormGroup({
     projectStartDate: new FormControl()
@@ -54,9 +56,16 @@ export class DetailedScheduleComponent implements OnInit {
       {
         type: 'button',
         text: 'Add Task',
-        icon: 'b-fa b-fa-plus',
-        color: 'b-blue b-raised',
-        onAction: () => this.addTask()
+        icon: 'b-fa-regular b-fa-circle-plus',
+        color: 'text-primary bg-gray-200 mdc-button mdc-button--unelevated mat-mdc-unelevated-button mat-primary-200 mat-mdc-button-base items-center pt-[4px]',
+        onAction: () => this.addTask(),
+      },
+      {
+        type: 'button',
+        text: 'Full Screen',
+        icon: 'b-fa b-fa-expand',
+        color: 'text-primary bg-gray-200 mdc-button mdc-button--unelevated mat-mdc-unelevated-button mat-primary-200 mat-mdc-button-base items-center pt-[4px]',
+        onAction: () => this.toggleFullScreen()
       }
     ]
   };
@@ -80,7 +89,9 @@ export class DetailedScheduleComponent implements OnInit {
   dependencies = [
     { fromTask: 'hey', toTask: 'hwy' }
   ];*/
-
+  toggleFullScreen() {
+    this.isFullScreen = !this.isFullScreen;
+  }
   onDataChange(event) {
     //console log current value of gantt
     var storename = Object.getPrototypeOf(event.store).$$name
