@@ -42,6 +42,13 @@
                 [placeholder]="'eAGILE Wave'" [valuePointer]="'lookUpName'" [dropDownArray]="getAgileWave()"
                 [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
             </spot-singleselect-autocomplete>
+            <spot-multiselect-autocomplete *ngIf="strategicDriversForm.controls['isAgile'].value && viewElementChecker('oeprojectType')" formControlName="oeprojectType" name="oeprojectType"
+            [label]="'OE Project Type'" [placeholder]="'OE Project Type'"
+            [valuePointer]="'lookUpName'"
+            [idPointer]="'lookUpId'" [customSortPointer]="'lookUpOrder'"
+            [sortByType]="'custom'"
+            [dropDownArray]="getoeprojectType()">
+</spot-multiselect-autocomplete>
         </div>
         <!--AGILE END-->
         <!--POBOS START-->

@@ -191,6 +191,7 @@ import { SpotGlobalMessageModule } from 'app/layout/common/spot-global-message/s
 import { BryntumGanttModule } from '@bryntum/gantt-angular';
 import {data} from "autoprefixer";
 import { DetailedScheduleComponent } from './detailed-schedule/detailed-schedule.component';
+import { TestErrorLoggingComponent } from './common/test-error-logging/test-error-logging.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -563,6 +564,7 @@ export const projectRoutes: Route[] = [
     BusinessCaseCapsComponent,
     BusinessCaseRiskIssuesComponent,
     OptionInfoComponent,
+    TestErrorLoggingComponent,
     OptionInfoEditComponent,
     FeasibilityEditComponent,
     CloseOutOutcomesSingleEditComponent,
@@ -623,7 +625,8 @@ export const projectRoutes: Route[] = [
     NewMetricsComponent,
     // SpotInputForecastComponent,
     EditMetricsComponent,
-    DetailedScheduleComponent
+    DetailedScheduleComponent,
+    TestErrorLoggingComponent,
   ],
     imports: [
     HttpClientModule,
