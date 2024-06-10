@@ -45,9 +45,9 @@
                                     <app-strategic-drivers *ngIf="SIP" [callLocation]="'CreateNewSIP'" [viewType]="'Form'" (formValueStrategic)="captureValue(5,$event)"></app-strategic-drivers>
                                     <app-strategic-drivers *ngIf="!SIP" [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueStrategic)="captureValue(5,$event)"></app-strategic-drivers>
                                     <hr>
-                                    <div *ngIf="!SIP" style="margin-left: 2px;margin-right: 4px;padding-right: 5px;margin-bottom: 12px;"class="flex flex-col flex-auto bg-card shadow rounded-2xl">
+                                    <!-- <div *ngIf="!SIP" style="margin-left: 2px;margin-right: 4px;padding-right: 5px;margin-bottom: 12px;"class="flex flex-col flex-auto bg-card shadow rounded-2xl">
                                         <app-oe-project-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueOE)="captureValue(2,$event)"></app-oe-project-single-edit>
-                                    </div>
+                                    </div> -->
                                     <div *ngIf="!SIP" style="margin-left: 2px;margin-right: 4px;padding-right: 5px;margin-bottom: 12px;" class="flex flex-col flex-auto bg-card shadow rounded-2xl">
                                     <app-tech-transfer-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueTech)="captureValue(3,$event)"></app-tech-transfer-single-edit>
                                     </div>
@@ -234,7 +234,7 @@
                                                 <label class="reviewText">No</label>
                                             </div>
                                         </div>
-                                        <div *ngIf='!SIP' class="test">
+                                        <!-- <div *ngIf='!SIP' class="test">
                                             <div class="parent">
                                                 <label>OE Project</label>
                                             </div>
@@ -244,18 +244,7 @@
                                             <div class="child" *ngIf="!createProjectForm.value.isOeproject">
                                                 <label class="reviewText">No</label>
                                             </div>
-                                        </div>
-                                        <div class="test" *ngIf="createProjectForm.controls['isOeproject'].value && !SIP">
-                                            <div class="parent">
-                                                <label>OE Project Type</label>
-                                            </div>
-                                            <div class="child">
-                                                <span *ngFor="let item of createProjectForm.value.oeProjectType; let i = index">
-                                                    <label class="reviewText" *ngIf="i > 0 && i<createProjectForm.value.oeProjectType.length">,</label>
-                                                    <label class="reviewText">{{item.lookUpName}}</label>
-                                                </span>
-                                            </div>
-                                        </div>
+                                        </div> -->
                                         <div class="test" *ngIf='!SIP'>
                                             <div class="parent">
                                                 <label>Tech Transfer or Clinical Campaign</label>
@@ -380,6 +369,17 @@
                                                 </div>
                                                 <div class="child">
                                                     <label class="reviewText">{{createProjectForm.value.agileWave?.lookUpName}}</label>
+                                                </div>
+                                            </div>
+                                            <div class="test">
+                                                <div class="parent">
+                                                    <label>OE Project Type</label>
+                                                </div>
+                                                <div class="child">
+                                                    <span *ngFor="let item of createProjectForm.value.oeProjectType; let i = index">
+                                                        <label class="reviewText" *ngIf="i > 0 && i<createProjectForm.value.oeProjectType.length">,</label>
+                                                        <label class="reviewText">{{item.lookUpName}}</label>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
