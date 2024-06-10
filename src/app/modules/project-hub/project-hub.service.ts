@@ -119,7 +119,7 @@ export class ProjectHubService {
         {
           title: 'Detailed Project Schedule (BETA)',
           type: 'basic',
-          icon: 'mat_outline:science',
+          icon: 'gantt-icon',
           link: 'detailed-schedule'
         },
         {
