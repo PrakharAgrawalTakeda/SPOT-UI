@@ -112,9 +112,11 @@ export class DetailedScheduleComponent implements OnInit {
 
   constructor(private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, private projectHubService: ProjectHubService) {
     this.detailedScheduleForm.controls.projectStartDate.valueChanges.subscribe((value) => {
-      this.startDate = value?.toDate();
-      this.currentData.projectStartDate = value?.toDate();
-      this.viewSubmitButton = true;
+      if (this.viewContent) {
+        this.startDate = value?.toDate();
+        this.currentData.projectStartDate = value?.toDate();
+        this.viewSubmitButton = true;
+      }
     });
   }
   ngOnInit(): void {
@@ -132,8 +134,8 @@ export class DetailedScheduleComponent implements OnInit {
         ResourceStore: data.resourceStore,
         TaskStore: data.taskStore
       }
-      this.startDate = data.startDate? moment(data.projectStartDate).toDate(): new Date();
-      this.detailedScheduleForm.controls.projectStartDate.setValue( data.startDate? moment(data.projectStartDate).toDate(): new Date());
+      this.startDate = data.projectStartDate ? moment(data.projectStartDate).toDate() : new Date();
+      this.detailedScheduleForm.controls.projectStartDate.setValue(data.projectStartDate ? moment(data.projectStartDate).toDate() : new Date());
       this.tasks.data = JSON.parse(data.taskStore ? data.taskStore : "[]")
       this.dependencies.data = JSON.parse(data.dependencyStore ? data.dependencyStore : "[]")
       console.log("CURRENT DATA", this.currentData)
@@ -146,7 +148,7 @@ export class DetailedScheduleComponent implements OnInit {
   santizeData() {
     this.submitData = {
       projectUId: this.id,
-      projectStartDate: this.currentData?.projectStartDate? moment(this.currentData?.projectStartDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+      projectStartDate: this.currentData?.projectStartDate ? moment(this.currentData?.projectStartDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
       AssignmentStore: this.currentData?.AssignmentStore?.replaceAll("_generatede_", ""),
       AssignmentManipulationStore: this.currentData?.AssignmentManipulationStore?.replaceAll("_generatede_", ""),
       CalendarManagerStore: this.currentData?.CalendarManagerStore?.replaceAll("_generatede_", ""),
