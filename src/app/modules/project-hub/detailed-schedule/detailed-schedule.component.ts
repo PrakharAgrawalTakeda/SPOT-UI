@@ -17,7 +17,7 @@ import { items } from 'app/mock-api/apps/file-manager/data';
   encapsulation: ViewEncapsulation.None
 })
 export class DetailedScheduleComponent implements OnInit {
-  startDate;
+  startDate: Date = new Date();
   isFullScreen: boolean = false;
   id: string = '';
   detailedScheduleForm: FormGroup = new FormGroup({
@@ -112,8 +112,8 @@ export class DetailedScheduleComponent implements OnInit {
 
   constructor(private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, private projectHubService: ProjectHubService) {
     this.detailedScheduleForm.controls.projectStartDate.valueChanges.subscribe((value) => {
-      this.startDate = value.toDate();
-      this.currentData.projectStartDate = value.toDate();
+      this.startDate = value?.toDate();
+      this.currentData.projectStartDate = value?.toDate();
       this.viewSubmitButton = true;
     });
   }
@@ -132,8 +132,8 @@ export class DetailedScheduleComponent implements OnInit {
         ResourceStore: data.resourceStore,
         TaskStore: data.taskStore
       }
-      this.startDate = moment(data.projectStartDate).toDate();
-      this.detailedScheduleForm.controls.projectStartDate.setValue(moment(data.projectStartDate));
+      this.startDate = data.startDate? moment(data.projectStartDate).toDate(): new Date();
+      this.detailedScheduleForm.controls.projectStartDate.setValue( data.startDate? moment(data.projectStartDate).toDate(): new Date());
       this.tasks.data = JSON.parse(data.taskStore ? data.taskStore : "[]")
       this.dependencies.data = JSON.parse(data.dependencyStore ? data.dependencyStore : "[]")
       console.log("CURRENT DATA", this.currentData)
