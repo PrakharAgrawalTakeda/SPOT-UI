@@ -1,5 +1,5 @@
 .fullscreen{
- @apply z-99999 fixed top-0 left-0 p-0 m-0 overflow-scroll;
+ @apply z-999 fixed top-0 left-0 p-0 m-0 overflow-scroll;
  max-width: calc(100vw/ var(--custom-zoom));
  max-height: calc(100vh/ var(--custom-zoom));
  width: calc(100vw/ var(--custom-zoom));
