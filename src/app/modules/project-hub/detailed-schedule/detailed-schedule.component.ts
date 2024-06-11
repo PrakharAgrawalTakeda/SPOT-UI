@@ -42,7 +42,12 @@ export class DetailedScheduleComponent implements OnInit {
   };
   ganttConfig: Partial<GanttConfig> = {
     columns: [
-      { type: 'name', width: 160 }
+      { type: 'name', width: 160 },
+      { type: 'duration', width: 80 },
+      { type: 'percentdone', width: 80 },
+      { type: 'startdate', width: 150 },
+      { type: 'enddate', width: 150 },
+      { type: 'resourceassignment', width: 200}
     ],
     infiniteScroll: true,
     appendTo: 'container',
