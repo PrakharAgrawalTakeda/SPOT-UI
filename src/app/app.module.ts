@@ -21,6 +21,7 @@ import { OldUrlRedirectResolver } from './core/auth/old-url-redirect.resolver';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ErrorHandlerService } from './error-handler.service';
 import { MyMonitoringService } from './logging.service';
+import { MatIconModule } from '@angular/material/icon';
 export function MsalInstanceFactory(): IPublicClientApplication {
     return new PublicClientApplication({
         auth: {
@@ -59,6 +60,7 @@ const routerConfig: ExtraOptions = {
         // 3rd party modules that require global configuration via forRoot
         MarkdownModule.forRoot({}),
         MsalModule,
+        MatIconModule,
         MatSnackBarModule
 
     ],
