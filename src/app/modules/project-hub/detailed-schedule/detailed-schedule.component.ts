@@ -47,13 +47,14 @@ export class DetailedScheduleComponent implements OnInit {
       { type: 'percentdone', width: 80 },
       { type: 'startdate', width: 150 },
       { type: 'enddate', width: 150 },
-      { type: 'resourceassignment', width: 200}
+      { type: 'resourceassignment', width: 200 }
     ],
     infiniteScroll: true,
     appendTo: 'container',
     features: {
       scrollButtons: true,
       projectLines: true,
+      baselines: true,
     }
   };
   tbarConfig: Partial<ToolbarConfig> = {
@@ -166,6 +167,19 @@ export class DetailedScheduleComponent implements OnInit {
     this.tasks.add({
       name: 'New task'
     });
+  }
+  baselineTasks(){
+    this.tasks.setBaseline(this.getBaselineIndex())
+  }
+  getBaselineIndex(): number {
+    let index = 0;
+    var tasksList = this.currentData.TaskStore ? JSON.parse(this.currentData.TaskStore) : []
+    tasksList.forEach((task, i) => {
+      if (task.baselines.length > index) {
+        index = task.baselines.length
+      }
+    })
+    return index + 1
   }
   saveGanttData() {
     this.santizeData()
