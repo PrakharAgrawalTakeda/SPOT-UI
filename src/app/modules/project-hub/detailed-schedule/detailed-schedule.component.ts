@@ -48,16 +48,25 @@ export class DetailedScheduleComponent implements OnInit {
       { type: 'percentdone', width: 80 },
       { type: 'startdate', width: 150 },
       { type: 'enddate', width: 150 },
-      { type: 'resourceassignment', width: 200 }
+      { type: 'resourceassignment', width: 200 },
     ],
+    subGridConfigs: {
+      locked: {
+        flex: 1
+      },
+      normal: {
+        flex: 1
+      }
+    },
     infiniteScroll: true,
     appendTo: 'container',
     features: {
       scrollButtons: true,
       projectLines: true,
       baselines: {
-        disabled: true
+        disabled: false
       },
+
     }
   };
   tbarConfig: Partial<ToolbarConfig> = {
@@ -152,10 +161,23 @@ export class DetailedScheduleComponent implements OnInit {
       this.viewContent = true;
       this.viewSubmitButton = false;
       this.ganttComponent.changes.subscribe((comps) => {
-        if(this.ganttComponent.first){
+        if (this.ganttComponent.first) {
           console.log("GANTT Component", this.ganttComponent)
           this.gantt = this.ganttComponent.first.instance;
-          console.log("GANTT",  (this.gantt.columns as ColumnStore).allCount)
+          (this.gantt.columns as ColumnStore).add([{
+            text: 'Baseline 1',
+            collapsible: true,
+            collapsed: true,
+            children: [
+              { type: 'baselinestartdate', text: 'Start', field: 'baselines[0].startDate' },
+              { type: 'baselineenddate', text: 'Finish', field: 'baselines[0].endDate' },
+              { type: 'baselineduration', text: 'Duration', field: 'baselines[0].fullDuration' },
+              { type: 'baselinestartvariance', field: 'baselines[0].startVariance' },
+              { type: 'baselineendvariance', field: 'baselines[0].endVariance' },
+              { type: 'baselinedurationvariance', field: 'baselines[0].durationVariance' }
+            ]
+          }])
+          console.log("GANTT", this.gantt.columns)
         }
       });
     });
@@ -178,7 +200,7 @@ export class DetailedScheduleComponent implements OnInit {
       name: 'New task'
     });
   }
-  baselineTasks(){
+  baselineTasks() {
     this.tasks.setBaseline(this.getBaselineIndex())
   }
   getBaselineIndex(): number {
