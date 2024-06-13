@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DependencyStore, GanttConfig, Model, ProjectModelConfig, Store, StringHelper, TaskStore, ToolbarConfig } from '@bryntum/gantt';
+import { ColumnStore, DependencyStore, Gantt, GanttConfig, Model, ProjectModelConfig, Store, StringHelper, TaskStore, ToolbarConfig } from '@bryntum/gantt';
 import { BryntumGanttComponent, BryntumGanttProjectModelComponent } from '@bryntum/gantt-angular';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
@@ -40,6 +40,7 @@ export class DetailedScheduleComponent implements OnInit {
   projectConfig: Partial<ProjectModelConfig> = {
     // Empty project config
   };
+  gantt: Gantt;
   ganttConfig: Partial<GanttConfig> = {
     columns: [
       { type: 'name', width: 160 },
@@ -54,7 +55,9 @@ export class DetailedScheduleComponent implements OnInit {
     features: {
       scrollButtons: true,
       projectLines: true,
-      baselines: true,
+      baselines: {
+        disabled: true
+      },
     }
   };
   tbarConfig: Partial<ToolbarConfig> = {
@@ -113,7 +116,8 @@ export class DetailedScheduleComponent implements OnInit {
       console.log("SAME")
     }
   }
-  @ViewChild('gantt') ganttComponent!: BryntumGanttComponent;
+
+  @ViewChildren('gantt') ganttComponent: any;
   @ViewChild('project') projectComponent!: BryntumGanttProjectModelComponent;
 
   constructor(private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, private projectHubService: ProjectHubService) {
@@ -147,10 +151,16 @@ export class DetailedScheduleComponent implements OnInit {
       console.log("CURRENT DATA", this.currentData)
       this.viewContent = true;
       this.viewSubmitButton = false;
+      this.ganttComponent.changes.subscribe((comps) => {
+        if(this.ganttComponent.first){
+          console.log("GANTT Component", this.ganttComponent)
+          this.gantt = this.ganttComponent.first.instance;
+          console.log("GANTT",  (this.gantt.columns as ColumnStore).allCount)
+        }
+      });
     });
 
   }
-
   santizeData() {
     this.submitData = {
       projectUId: this.id,
