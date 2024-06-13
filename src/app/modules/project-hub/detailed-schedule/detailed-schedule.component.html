@@ -36,9 +36,9 @@
             [startDate]="startDate">
         </bryntum-gantt-project-model>
 
-        <bryntum-gantt #gantt [columns]="ganttConfig.columns!" [features]="ganttConfig.features!" [project]="project"
-            (onDataChange)="onDataChange($event)" [infiniteScroll]="ganttConfig.infiniteScroll"
-            [subGridConfigs]="ganttConfig.subGridConfigs">
+        <bryntum-gantt #gantt class="k-font-size-lg" [columns]="ganttConfig.columns!" [features]="ganttConfig.features!" [project]="project"
+            (onDataChange)="onDataChange($event)" [infiniteScroll]="ganttConfig.infiniteScroll" [columnLines]="ganttConfig.columnLines" [scrollTaskIntoViewOnCellClick]="ganttConfig.scrollTaskIntoViewOnCellClick"
+            [subGridConfigs]="ganttConfig.subGridConfigs" [selectionMode]="ganttConfig.selectionMode" [rowHeight]="ganttConfig.rowHeight">
         </bryntum-gantt>
     </div>
     <div class="flex justify-end items-center p-6 pt-0 pr-10">

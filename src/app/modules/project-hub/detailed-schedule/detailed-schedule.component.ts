@@ -49,22 +49,69 @@ export class DetailedScheduleComponent implements OnInit {
       { type: 'startdate', width: 150 },
       { type: 'enddate', width: 150 },
       { type: 'resourceassignment', width: 200 },
+      {
+        text: 'Baseline 1',
+        collapsible: true,
+        children: [
+          { type: 'baselinestartdate', text: 'Start', field: 'baselines[0].startDate' },
+          { type: 'baselineenddate', text: 'Finish', field: 'baselines[0].endDate' },
+          { type: 'baselineduration', text: 'Duration', field: 'baselines[0].fullDuration' },
+          { type: 'baselinestartvariance', field: 'baselines[0].startVariance' },
+          { type: 'baselineendvariance', field: 'baselines[0].endVariance' },
+          { type: 'baselinedurationvariance', field: 'baselines[0].durationVariance' }
+        ]
+      },
+      {
+        text: 'Baseline 2',
+        collapsible: true,
+        children: [
+          { type: 'baselinestartdate', text: 'Start', field: 'baselines[1].startDate' },
+          { type: 'baselineenddate', text: 'Finish', field: 'baselines[1].endDate' },
+          { type: 'baselineduration', text: 'Duration', field: 'baselines[1].fullDuration' },
+          { type: 'baselinestartvariance', field: 'baselines[1].startVariance' },
+          { type: 'baselineendvariance', field: 'baselines[1].endVariance' },
+          { type: 'baselinedurationvariance', field: 'baselines[1].durationVariance' }
+        ]
+      }
     ],
     subGridConfigs: {
       locked: {
-        flex: 1
+        flex: 3
       },
       normal: {
-        flex: 1
+        flex: 4
       }
     },
+    rowHeight : 60,
+    selectionMode: {
+      cell: true,
+      dragSelect: true,
+      rowNumber: true
+    },
+    scrollTaskIntoViewOnCellClick: true,
     infiniteScroll: true,
+    columnLines: false,
     appendTo: 'container',
     features: {
       scrollButtons: true,
       projectLines: true,
       baselines: {
         disabled: false
+      },
+      dependencies: {
+        showLagInTooltip: true,
+        // Soften up dependency line corners
+        radius: 5,
+        // Make dependencies easier to reach using the mouse
+        clickWidth: 5
+      },
+      labels: {
+        left: {
+          field: 'name',
+          editor: {
+            type: 'textfield'
+          }
+        }
       },
 
     }
@@ -164,20 +211,6 @@ export class DetailedScheduleComponent implements OnInit {
         if (this.ganttComponent.first) {
           console.log("GANTT Component", this.ganttComponent)
           this.gantt = this.ganttComponent.first.instance;
-          (this.gantt.columns as ColumnStore).add([{
-            text: 'Baseline 1',
-            collapsible: true,
-            collapsed: true,
-            children: [
-              { type: 'baselinestartdate', text: 'Start', field: 'baselines[0].startDate' },
-              { type: 'baselineenddate', text: 'Finish', field: 'baselines[0].endDate' },
-              { type: 'baselineduration', text: 'Duration', field: 'baselines[0].fullDuration' },
-              { type: 'baselinestartvariance', field: 'baselines[0].startVariance' },
-              { type: 'baselineendvariance', field: 'baselines[0].endVariance' },
-              { type: 'baselinedurationvariance', field: 'baselines[0].durationVariance' }
-            ]
-          }])
-          console.log("GANTT", this.gantt.columns)
         }
       });
     });
