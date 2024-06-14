@@ -477,6 +477,12 @@ export class ProjectHubService {
           link: 'project-documents'
         },
         {
+          title: 'Detailed Project Schedule (BETA)',
+          type: 'basic',
+          icon: 'gantt-icon',
+          link: 'detailed-schedule'
+        },
+        {
           type: 'spacer'
         },
         {

@@ -1,15 +1,11 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DependencyStore, GanttConfig, Model, ProjectModelConfig, Store, StringHelper, TaskStore, ToolbarConfig } from '@bryntum/gantt';
-import { BryntumGanttComponent, BryntumGanttProjectModelComponent } from '@bryntum/gantt-angular';
+import { DependencyStore, Gantt, GanttConfig, ProjectModelConfig, StateTrackingManager, TaskStore, ToolbarConfig } from '@bryntum/gantt';
+import { BryntumGanttProjectModelComponent } from '@bryntum/gantt-angular';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
-import { CostComponent } from '../common/cost/cost.component';
-import { Form, FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import moment from 'moment';
-import { D } from '@angular/cdk/keycodes';
-import { project } from 'app/mock-api/dashboards/project/data';
-import { items } from 'app/mock-api/apps/file-manager/data';
 @Component({
   selector: 'app-detailed-schedule',
   templateUrl: './detailed-schedule.component.html',
@@ -38,8 +34,14 @@ export class DetailedScheduleComponent implements OnInit {
   }
   submitData = {}
   projectConfig: Partial<ProjectModelConfig> = {
-    // Empty project config
+    // The State TrackingManager which the UndoRedo widget in the toolbar uses
+
   };
+  stm: StateTrackingManager = new StateTrackingManager({
+    autoRecord: true,
+    disabled: false
+  })
+  gantt: Gantt;
   ganttConfig: Partial<GanttConfig> = {
     columns: [
       { type: 'name', width: 160 },
@@ -47,33 +49,171 @@ export class DetailedScheduleComponent implements OnInit {
       { type: 'percentdone', width: 80 },
       { type: 'startdate', width: 150 },
       { type: 'enddate', width: 150 },
-      { type: 'resourceassignment', width: 200 }
+      { type: 'resourceassignment', width: 200 },
+      {
+        text: 'Baseline 1',
+        collapsible: true,
+        children: [
+          { type: 'baselinestartdate', text: 'Start', field: 'baselines[0].startDate' },
+          { type: 'baselineenddate', text: 'Finish', field: 'baselines[0].endDate' },
+          { type: 'baselineduration', text: 'Duration', field: 'baselines[0].fullDuration' },
+          { type: 'baselinestartvariance', field: 'baselines[0].startVariance' },
+          { type: 'baselineendvariance', field: 'baselines[0].endVariance' },
+          { type: 'baselinedurationvariance', field: 'baselines[0].durationVariance' }
+        ]
+      },
+      {
+        text: 'Baseline 2',
+        collapsible: true,
+        children: [
+          { type: 'baselinestartdate', text: 'Start', field: 'baselines[1].startDate' },
+          { type: 'baselineenddate', text: 'Finish', field: 'baselines[1].endDate' },
+          { type: 'baselineduration', text: 'Duration', field: 'baselines[1].fullDuration' },
+          { type: 'baselinestartvariance', field: 'baselines[1].startVariance' },
+          { type: 'baselineendvariance', field: 'baselines[1].endVariance' },
+          { type: 'baselinedurationvariance', field: 'baselines[1].durationVariance' }
+        ]
+      }
     ],
+    subGridConfigs: {
+      locked: {
+        flex: 3
+      },
+      normal: {
+        flex: 4
+      }
+    },
+    rowHeight: 60,
+    selectionMode: {
+      cell: true,
+      dragSelect: true,
+      rowNumber: true
+    },
+    scrollTaskIntoViewOnCellClick: true,
     infiniteScroll: true,
+    enableUndoRedoKeys: true,
+    columnLines: false,
     appendTo: 'container',
     features: {
       scrollButtons: true,
       projectLines: true,
-      baselines: true,
+      baselines: {
+        disabled: false
+      },
+      dependencies: {
+        showLagInTooltip: true,
+        // Soften up dependency line corners
+        radius: 5,
+        // Make dependencies easier to reach using the mouse
+        clickWidth: 5
+      },
+      labels: {
+        left: {
+          field: 'name',
+          editor: {
+            type: 'textfield'
+          }
+        }
+      },
+
     }
   };
   tbarConfig: Partial<ToolbarConfig> = {
-    items: [
-      {
-        type: 'button',
-        text: 'Add Task',
-        icon: 'b-fa-regular b-fa-circle-plus',
-        color: 'text-primary bg-gray-200 mdc-button mdc-button--unelevated mat-mdc-unelevated-button mat-primary-200 mat-mdc-button-base items-center pt-[4px]',
+    items: {
+      addTaskButton: {
+        color: 'b-green',
+        icon: 'b-fa b-fa-plus',
+        text: 'Create',
+        tooltip: 'Create new task',
         onAction: () => this.addTask(),
       },
-      {
+      undoRedo: {
+        type: 'undoredo',
+        items: {
+          transactionsCombo: null
+        }
+      },
+      zoomButtons: {
+        type: 'buttonGroup',
+        items: [
+          {
+            type: 'button',
+            icon: 'b-fa b-fa-search-plus',
+            tooltip: 'Zoom in',
+            onAction: () => this.onZoomInClick(),
+          },
+          {
+            type: 'button',
+            icon: 'b-fa b-fa-search-minus',
+            tooltip: 'Zoom out',
+            onAction: () => this.onZoomOutClick(),
+          },
+          {
+            type: 'button',
+            icon: 'b-fa b-fa-compress-arrows-alt',
+            tooltip: 'Zoom to fit',
+            onAction: () => this.onZoomToFitClick(),
+          },
+          {
+            type: 'button',
+            icon: 'b-fa b-fa-angle-left',
+            tooltip: 'Previous time span',
+            onAction: () => this.onShiftPreviousClick(),
+          },
+          {
+            type: 'button',
+            icon: 'b-fa b-fa-angle-right',
+            tooltip: 'Next time span',
+            onAction: () => this.onShiftNextClick(),
+          }
+        ]
+      },
+      setBaseLineButtons: {
         type: 'button',
-        text: 'Full Screen',
-        icon: 'b-fa b-fa-expand',
-        color: 'text-primary bg-gray-200 mdc-button mdc-button--unelevated mat-mdc-unelevated-button mat-primary-200 mat-mdc-button-base items-center pt-[4px]',
-        onAction: () => this.toggleFullScreen()
-      }
-    ]
+        text: 'Set baseline',
+        iconAlign: 'end',
+        menu: [{
+          text: 'Set baseline 1',
+          onItem: () => {
+            this.setBaseline(1);
+          },
+        },
+        {
+          text: 'Set baseline 2',
+          onItem: () => {
+            this.setBaseline(2);
+          },
+        }
+        ]
+      },
+      toggleBaseLines: {
+        type: 'button',
+        text: 'Show baseline',
+        iconAlign: 'end',
+        menu: [{
+          checked: true,
+          text: 'Baseline 1',
+          onToggle: ({checked}) => {
+            this.toggleBaselineVisible(1, checked);
+          }
+        }, {
+          checked: true,
+          text: 'Baseline 2',
+          onToggle: ({checked}) => {
+            this.toggleBaselineVisible(2, checked);
+          }
+        }
+        ]
+      },
+      baselinefeature: {
+        type       : 'checkbox',
+        text       : 'Show baselines',
+        checked    : true,
+        onAction: ({ checked })=> {
+            this.gantt.features.baselines.disabled = !checked;
+        }
+    },
+    }
   };
 
   tasks: TaskStore = new TaskStore();
@@ -113,7 +253,8 @@ export class DetailedScheduleComponent implements OnInit {
       console.log("SAME")
     }
   }
-  @ViewChild('gantt') ganttComponent!: BryntumGanttComponent;
+
+  @ViewChildren('gantt') ganttComponent: any;
   @ViewChild('project') projectComponent!: BryntumGanttProjectModelComponent;
 
   constructor(private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, private projectHubService: ProjectHubService) {
@@ -145,12 +286,23 @@ export class DetailedScheduleComponent implements OnInit {
       this.tasks.data = JSON.parse(data.taskStore ? data.taskStore : "[]")
       this.dependencies.data = JSON.parse(data.dependencyStore ? data.dependencyStore : "[]")
       console.log("CURRENT DATA", this.currentData)
+      this.stm.addStore(this.tasks)
+      this.stm.addStore(this.dependencies)
       this.viewContent = true;
       this.viewSubmitButton = false;
+      setTimeout(() => {
+        this.stm.resetQueue()
+      }, 3500);
+      this.ganttComponent.changes.subscribe((comps) => {
+        if (this.ganttComponent.first) {
+          console.log("GANTT Component", this.ganttComponent)
+          this.gantt = this.ganttComponent.first.instance;
+          //add wait for seconds
+        }
+      });
     });
 
   }
-
   santizeData() {
     this.submitData = {
       projectUId: this.id,
@@ -168,7 +320,7 @@ export class DetailedScheduleComponent implements OnInit {
       name: 'New task'
     });
   }
-  baselineTasks(){
+  baselineTasks() {
     this.tasks.setBaseline(this.getBaselineIndex())
   }
   getBaselineIndex(): number {
@@ -180,6 +332,44 @@ export class DetailedScheduleComponent implements OnInit {
       }
     })
     return index + 1
+  }
+  onExpandAllClick() {
+    this.gantt.expandAll();
+  }
+
+  onCollapseAllClick() {
+    this.gantt.collapseAll();
+  }
+
+  onZoomInClick() {
+    this.gantt.zoomIn();
+  }
+
+  onZoomOutClick() {
+    this.gantt.zoomOut();
+  }
+
+  onZoomToFitClick() {
+    this.gantt.zoomToFit({
+      leftMargin: 50,
+      rightMargin: 50
+    });
+  }
+
+  onShiftPreviousClick() {
+    this.gantt.shiftPrevious();
+  }
+
+  onShiftNextClick() {
+    this.gantt.shiftNext();
+  }
+
+  toggleBaselineVisible(index, visible) {
+    console.log("TOGGLE HIT", index, visible)
+    this.gantt.element.classList[visible ? 'remove' : 'add'](`b-hide-baseline-${index}`);
+  }
+  setBaseline(index) {
+    this.tasks.setBaseline(index);
   }
   saveGanttData() {
     this.santizeData()
