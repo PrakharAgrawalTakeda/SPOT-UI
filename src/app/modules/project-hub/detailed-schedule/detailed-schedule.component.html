@@ -33,12 +33,12 @@
     </div>
     <div class="flex w-full h-full p-6 pt-0">
         <bryntum-gantt-project-model #project [taskStore]="tasks" [id]="id" [dependencyStore]="dependencies"
-            [startDate]="startDate">
+            [startDate]="startDate" [stm]="stm">
         </bryntum-gantt-project-model>
 
         <bryntum-gantt #gantt class="k-font-size-lg" [columns]="ganttConfig.columns!" [features]="ganttConfig.features!" [project]="project"
             (onDataChange)="onDataChange($event)" [infiniteScroll]="ganttConfig.infiniteScroll" [columnLines]="ganttConfig.columnLines" [scrollTaskIntoViewOnCellClick]="ganttConfig.scrollTaskIntoViewOnCellClick"
-            [subGridConfigs]="ganttConfig.subGridConfigs" [selectionMode]="ganttConfig.selectionMode" [rowHeight]="ganttConfig.rowHeight">
+            [subGridConfigs]="ganttConfig.subGridConfigs" [selectionMode]="ganttConfig.selectionMode" [rowHeight]="ganttConfig.rowHeight" [tbar]="tbarConfig" [enableUndoRedoKeys]="ganttConfig.enableUndoRedoKeys">
         </bryntum-gantt>
     </div>
     <div class="flex justify-end items-center p-6 pt-0 pr-10">
