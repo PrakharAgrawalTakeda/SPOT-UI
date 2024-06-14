@@ -27,3 +27,22 @@
 .b-hide-baseline-2 .b-task-baseline[data-index="1"] {
     display: none !important;
 }
+
+
+.b-task-baseline[data-index="0"] {
+    background-color: #ddd;
+}
+
+.b-task-baseline[data-index="1"] {
+    background-color: lightgray;
+}
+
+.b-task-baseline.b-baseline-ahead {
+    background-color: green;
+}
+.b-task-baseline.b-baseline-behind {
+    background-color: red;
+}
+.b-task-baseline.b-baseline-on-time {
+    @apply bg-primary-300
+}

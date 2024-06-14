@@ -98,7 +98,8 @@ export class DetailedScheduleComponent implements OnInit {
       scrollButtons: true,
       projectLines: true,
       baselines: {
-        disabled: false
+        disabled: false,
+        renderer: ({baselineRecord, taskRecord, renderData}) => this.baselineRenderer({baselineRecord, taskRecord, renderData})
       },
       dependencies: {
         showLagInTooltip: true,
@@ -193,26 +194,26 @@ export class DetailedScheduleComponent implements OnInit {
         menu: [{
           checked: true,
           text: 'Baseline 1',
-          onToggle: ({checked}) => {
+          onToggle: ({ checked }) => {
             this.toggleBaselineVisible(1, checked);
           }
         }, {
           checked: true,
           text: 'Baseline 2',
-          onToggle: ({checked}) => {
+          onToggle: ({ checked }) => {
             this.toggleBaselineVisible(2, checked);
           }
         }
         ]
       },
       baselinefeature: {
-        type       : 'checkbox',
-        text       : 'Show baselines',
-        checked    : true,
-        onAction: ({ checked })=> {
-            this.gantt.features.baselines.disabled = !checked;
+        type: 'checkbox',
+        text: 'Show baselines',
+        checked: true,
+        onAction: ({ checked }) => {
+          this.gantt.features.baselines.disabled = !checked;
         }
-    },
+      },
     }
   };
 
@@ -370,6 +371,17 @@ export class DetailedScheduleComponent implements OnInit {
   }
   setBaseline(index) {
     this.tasks.setBaseline(index);
+  }
+  baselineRenderer({ baselineRecord, taskRecord, renderData }) {
+    if (baselineRecord.isScheduled && baselineRecord.endDate.getTime() + 24 * 3600 * 1000 < taskRecord.endDate.getTime()) {
+      renderData.className['b-baseline-behind'] = 1;
+    }
+    else if (taskRecord.endDate < baselineRecord.endDate) {
+      renderData.className['b-baseline-ahead'] = 1;
+    }
+    else {
+      renderData.className['b-baseline-on-time'] = 1;
+    }
   }
   saveGanttData() {
     this.santizeData()
