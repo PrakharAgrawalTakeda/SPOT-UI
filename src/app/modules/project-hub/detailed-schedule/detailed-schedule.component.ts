@@ -168,6 +168,51 @@ export class DetailedScheduleComponent implements OnInit {
           }
         ]
       },
+      setBaseLineButtons: {
+        type: 'button',
+        text: 'Set baseline',
+        iconAlign: 'end',
+        menu: [{
+          text: 'Set baseline 1',
+          onItem: () => {
+            this.setBaseline(1);
+          },
+        },
+        {
+          text: 'Set baseline 2',
+          onItem: () => {
+            this.setBaseline(2);
+          },
+        }
+        ]
+      },
+      toggleBaseLines: {
+        type: 'button',
+        text: 'Show baseline',
+        iconAlign: 'end',
+        menu: [{
+          checked: true,
+          text: 'Baseline 1',
+          onToggle: ({checked}) => {
+            this.toggleBaselineVisible(1, checked);
+          }
+        }, {
+          checked: true,
+          text: 'Baseline 2',
+          onToggle: ({checked}) => {
+            this.toggleBaselineVisible(2, checked);
+          }
+        }
+        ]
+      },
+      baselinefeature: {
+        type       : 'checkbox',
+        text       : 'Show baselines',
+        checked    : true,
+        onAction: ({ checked })=> {
+            this.gantt.features.baselines.disabled = !checked;
+        }
+    },
     }
   };
 
@@ -317,6 +362,14 @@ export class DetailedScheduleComponent implements OnInit {
 
   onShiftNextClick() {
     this.gantt.shiftNext();
+  }
+
+  toggleBaselineVisible(index, visible) {
+    console.log("TOGGLE HIT", index, visible)
+    this.gantt.element.classList[visible ? 'remove' : 'add'](`b-hide-baseline-${index}`);
+  }
+  setBaseline(index) {
+    this.tasks.setBaseline(index);
   }
   saveGanttData() {
     this.santizeData()

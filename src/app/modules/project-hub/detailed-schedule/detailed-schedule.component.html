@@ -3,32 +3,31 @@
     <div class="flex justify-between items-center  p-6 pt-3 pb-0">
         <h3 class="font-medium tracking-tight leading-6 truncate text-xl text-primary">Detailed Project Schedule (BETA)
         </h3>
-        <div class="flex justify-end items-center gap-3 w-1/2">
+        <div class="flex justify-end items-center gap-3 w-1/6">
             <form [formGroup]="detailedScheduleForm" class="w-full">
                 <spot-input-date formControlName="projectStartDate" [label]="'Project Start Date'"></spot-input-date>
             </form>
-            <div class="flex justify-between items-center gap-3 w-3/4">
-                <button class="text-primary bg-gray-200 w-full " mat-flat-button [color]="'primary-200'"
+            <!--<button class="text-primary bg-gray-200 w-full " mat-flat-button [color]="'primary-200'"
                     (click)="addTask()">
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New Task
                 </button>
                 <button class="text-primary bg-gray-200 w-full " mat-flat-button [color]="'primary-200'"
                     (click)="baselineTasks()">
                     <mat-icon svgIcon="mat_solid:edit_calendar"></mat-icon>&nbsp; Set Baseline
-                </button>
-                <button class="text-primary bg-gray-200 w-1/4 " *ngIf="!isFullScreen" mat-flat-button
-                    [color]="'primary-200'" (click)="toggleFullScreen()">
-                    <mat-icon svgIcon="mat_outline:fullscreen"></mat-icon>
-                </button>
-                <button class="text-primary bg-gray-200 w-1/4 " *ngIf="isFullScreen" mat-flat-button
-                    [color]="'primary-200'" (click)="toggleFullScreen()">
-                    <mat-icon svgIcon="mat_outline:fullscreen_exit"></mat-icon>
-                </button>
-                <button class="text-primary bg-gray-200 w-1/4 " mat-flat-button
+                </button>-->
+            <button class="text-primary bg-gray-200 w-1/4 " *ngIf="!isFullScreen" mat-flat-button
+                [color]="'primary-200'" (click)="toggleFullScreen()">
+                <mat-icon svgIcon="mat_outline:fullscreen"></mat-icon>
+            </button>
+            <button class="text-primary bg-gray-200 w-1/4 " *ngIf="isFullScreen" mat-flat-button [color]="'primary-200'"
+                (click)="toggleFullScreen()">
+                <mat-icon svgIcon="mat_outline:fullscreen_exit"></mat-icon>
+            </button>
+            <!--<button class="text-primary bg-gray-200 w-1/4 " mat-flat-button
                     [color]="'primary-200'" (click)="toggleFullScreen()">
                     <mat-icon svgIcon="mat_outline:settings"></mat-icon>
-                </button>
-            </div>
+                </button>-->
+
         </div>
     </div>
     <div class="flex w-full h-full p-6 pt-0">
@@ -36,9 +35,13 @@
             [startDate]="startDate" [stm]="stm">
         </bryntum-gantt-project-model>
 
-        <bryntum-gantt #gantt class="k-font-size-lg" [columns]="ganttConfig.columns!" [features]="ganttConfig.features!" [project]="project"
-            (onDataChange)="onDataChange($event)" [infiniteScroll]="ganttConfig.infiniteScroll" [columnLines]="ganttConfig.columnLines" [scrollTaskIntoViewOnCellClick]="ganttConfig.scrollTaskIntoViewOnCellClick"
-            [subGridConfigs]="ganttConfig.subGridConfigs" [selectionMode]="ganttConfig.selectionMode" [rowHeight]="ganttConfig.rowHeight" [tbar]="tbarConfig" [enableUndoRedoKeys]="ganttConfig.enableUndoRedoKeys">
+        <bryntum-gantt #gantt class="k-font-size-lg" [columns]="ganttConfig.columns!" [features]="ganttConfig.features!"
+            [project]="project" (onDataChange)="onDataChange($event)" [infiniteScroll]="ganttConfig.infiniteScroll"
+            [columnLines]="ganttConfig.columnLines"
+            [scrollTaskIntoViewOnCellClick]="ganttConfig.scrollTaskIntoViewOnCellClick"
+            [subGridConfigs]="ganttConfig.subGridConfigs" [selectionMode]="ganttConfig.selectionMode"
+            [rowHeight]="ganttConfig.rowHeight" [tbar]="tbarConfig"
+            [enableUndoRedoKeys]="ganttConfig.enableUndoRedoKeys">
         </bryntum-gantt>
     </div>
     <div class="flex justify-end items-center p-6 pt-0 pr-10">
