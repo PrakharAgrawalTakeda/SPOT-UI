@@ -192,6 +192,7 @@ import { BryntumGanttModule } from '@bryntum/gantt-angular';
 import {data} from "autoprefixer";
 import { DetailedScheduleComponent } from './detailed-schedule/detailed-schedule.component';
 import { TestErrorLoggingComponent } from './common/test-error-logging/test-error-logging.component';
+import { DetailedScheduleSettingsComponent } from './detailed-schedule/detailed-schedule-settings/detailed-schedule-settings.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -627,6 +628,7 @@ export const projectRoutes: Route[] = [
     EditMetricsComponent,
     DetailedScheduleComponent,
     TestErrorLoggingComponent,
+    DetailedScheduleSettingsComponent,
   ],
     imports: [
     HttpClientModule,
