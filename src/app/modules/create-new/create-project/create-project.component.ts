@@ -518,7 +518,6 @@ export class CreateProjectComponent implements OnInit {
       }];
     }
     var formValue = this.createProjectForm.getRawValue()
-    debugger
     if (this.SIP) {
       mainObjCreate[0].problemUniqueId = ""
       mainObjCreate[0].problemTitle = formValue.problemTitle
