@@ -466,7 +466,11 @@ export class CostEditComponent {
             projectSpendStart: formValue.projectSpendStart ? moment(formValue.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
             currentYearPlannedSpend: typeof formValue.currentYearPlannedSpend === 'string' ? Number(formValue.currentYearPlannedSpend) : formValue.currentYearPlannedSpend,
             assetInServiceNa: formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
-            isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false
+            isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false,
+            durationDescription: formValue.durationDescription ? formValue.durationDescription : null,
+              peopleDescription: formValue.peopleDescription ? formValue.peopleDescription : null,
+              totalCapExDescription: formValue.totalCapExDescription ? formValue.totalCapExDescription : null,
+              totalNonFtedescription: formValue.totalNonFtedescription ? formValue.totalNonFtedescription : null
           }
         } else if (formValue) {
           mainObj.durationBaseCase = formValue.durationBaseCase ? formValue.durationBaseCase : null,
@@ -482,7 +486,11 @@ export class CostEditComponent {
             mainObj.projectSpendStart = formValue.projectSpendStart ? moment(formValue.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
             mainObj.currentYearPlannedSpend = formValue.currentYearPlannedSpend ? formValue.currentYearPlannedSpend : null,
             mainObj.assetInServiceNa = formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
-            mainObj.isProjectSpentNa = formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false
+            mainObj.isProjectSpentNa = formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false,
+            mainObj.durationDescription= formValue.durationDescription ? formValue.durationDescription : null,
+            mainObj.peopleDescription= formValue.peopleDescription ? formValue.peopleDescription : null,
+            mainObj.totalCapExDescription= formValue.totalCapExDescription ? formValue.totalCapExDescription : null,
+            mainObj.totalNonFtedescription= formValue.totalNonFtedescription ? formValue.totalNonFtedescription : null
         }
 
         console.log("Main Cost Data", mainObj)

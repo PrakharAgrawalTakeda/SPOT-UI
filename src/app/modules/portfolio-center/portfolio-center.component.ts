@@ -94,6 +94,7 @@ export class PortfolioCenterComponent implements OnInit {
     CAPSDropDrownValues = ['Yes', 'No'];
 
     totalCAPEX = [];
+    oeprojectType = [];
     AgileWorkstream = [];
     AgileWave = [];
     overallStatus = [];
@@ -125,6 +126,7 @@ export class PortfolioCenterComponent implements OnInit {
         PrimaryValueDriver: [],
         SPRProjectCategory: [],
         projectNameKeyword: [],
+        oeprojectType: []
     };
     defaultfilter: any = {
         PortfolioOwner: [],
@@ -147,6 +149,7 @@ export class PortfolioCenterComponent implements OnInit {
         PrimaryValueDriver: [],
         SPRProjectCategory: [],
         projectNameKeyword: [],
+        oeprojectType: []
     };
 
     PortfolioFilterForm = new FormGroup({
@@ -170,6 +173,7 @@ export class PortfolioCenterComponent implements OnInit {
         PrimaryValueDriver: new FormControl(),
         SPRProjectCategory: new FormControl(),
         projectNameKeyword: new FormControl(),
+        oeprojectType: new FormControl()
     });
 
     BookmarksForm = new FormGroup({
@@ -215,6 +219,7 @@ export class PortfolioCenterComponent implements OnInit {
         Why: new FormControl(false),
         FundingApprovalNeedDate: new FormControl(false),
         OPEXRequired: new FormControl(false),
+        oeprojectType: new FormControl(false)
     });
 
     //Boookmarks
@@ -342,6 +347,7 @@ export class PortfolioCenterComponent implements OnInit {
             order: 300,
         },
     ];
+
     // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
     // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
     constructor(
@@ -661,7 +667,7 @@ export class PortfolioCenterComponent implements OnInit {
 
         await this.apiService.getfilterlist().then((data) => {
             this.filterlist = data;
-
+console.log(this.filterlist)
             this.owningOrg = [];
 
             this.filterlist.defaultOwningOrganizations.forEach((res) => {
@@ -685,6 +691,10 @@ export class PortfolioCenterComponent implements OnInit {
                         result.lookUpParentId ==
                         '10F36AC1-23CB-4326-8701-2416F8AE679E'
                 );
+                this.oeprojectType = this.lookup.filter(
+                    (result) =>
+                        result.lookUpParentId == "04D143E7-CAA7-4D8D-88C3-A6CB575890A3");
+                    
                 this.AgileWorkstream = this.lookup.filter(
                     (result) =>
                         result.lookUpParentId ==
@@ -807,6 +817,7 @@ export class PortfolioCenterComponent implements OnInit {
                                 this.filtersnew.SPRProjectCategory,
                             projectNameKeyword:
                                 this.filtersnew.projectNameKeyword,
+                                oeprojectType: this.filtersnew.oeprojectType  
                         };
 
                         this.PortfolioFilterForm.patchValue(defaultFilterObj);
@@ -923,6 +934,7 @@ export class PortfolioCenterComponent implements OnInit {
                         i++
                     ) {
                         var attribute = filterKeys[i];
+                        console.log("ATTRIBUTE",attribute)
                         var filterItems = [];
                         if (
                             this.filtersnew[attribute] != null &&
@@ -957,7 +969,8 @@ export class PortfolioCenterComponent implements OnInit {
                             ) {
                                 if (attribute == 'OwningOrganization') {
                                     var order = 3;
-                                } else {
+                                } 
+                                else {
                                     var order = 4;
                                 }
                                 var filterdata = {
@@ -968,7 +981,19 @@ export class PortfolioCenterComponent implements OnInit {
                                     count: this.filtersnew[attribute].length,
                                     order: order,
                                 };
-                            } else if (attribute == 'ProjectTeamMember') {
+                            } 
+                            else if (attribute == 'oeprojectType') 
+                                {
+                                    var filterdata = {
+                                        name: attribute
+                                            .replace(/([A-Z])/g, ' $1')
+                                            .trim(),
+                                        value: this.filtersnew[attribute][0].lookUpName,
+                                        count: this.filtersnew[attribute].length,
+                                        order: 18,
+                                    };
+                                }
+                                else if (attribute == 'ProjectTeamMember') {
                                 var filterdata = {
                                     name: attribute
                                         .replace(/([A-Z])/g, ' $1')
@@ -1141,7 +1166,18 @@ export class PortfolioCenterComponent implements OnInit {
                                                     .name,
                                             unionOperator: 2,
                                         };
-                                    } else if (
+                                    }
+                                    else if(attribute == 'oeprojectType')
+                                        {
+                                        var filterItems1 = {
+                                            filterAttribute: attribute,
+                                            filterOperator: '=',
+                                            filterValue:
+                                                this.filtersnew[attribute][j]
+                                                    .lookUpName,
+                                            unionOperator: 2,
+                                        };
+                                        }  else if (
                                         attribute == 'ProjectTeamMember'
                                     ) {
                                         var filterItems1 = {
@@ -1197,10 +1233,12 @@ export class PortfolioCenterComponent implements OnInit {
                             }
                             // }
                             this.filterList.push(filterdata);
+                            console.log(this.filterList)
                             filterGroups.push({
                                 filterItems,
                                 groupCondition: 1,
                             });
+                            console.log(filterGroups)
                         }
                     }
                     this.filterList.sort((a, b) => {
@@ -1315,7 +1353,7 @@ export class PortfolioCenterComponent implements OnInit {
                         }
                     }
 
-                    console.log('Filter Data : ' + this.groupData);
+
                     this.currentData = new Date().toISOString().split('T');
                     this.Date2 = new Date(Date.now() - 12096e5)
                         .toISOString()
@@ -1328,6 +1366,7 @@ export class PortfolioCenterComponent implements OnInit {
                         : (this.showdefault = false);
                     this.portfolio =
                         this.PortfolioFilterForm.value.PortfolioOwner;
+                        console.log('Filter Data : ' + this.groupData);
                     this.apiService
                         .FiltersByPage(this.groupData, 0, 100)
                         .then((res: any) => {
@@ -3403,6 +3442,7 @@ export class PortfolioCenterComponent implements OnInit {
                     this.IsFilterApplyingFromPortfolio = true;
 
                     const columnsObject = this.ProjectTableColumns.value;
+                    console.log(columnsObject)
                     this.filteredColumnValuesSelected = Object.keys(
                         columnsObject
                     ).filter((key) => columnsObject[key] === true);
@@ -3478,6 +3518,7 @@ export class PortfolioCenterComponent implements OnInit {
             PrimaryValueDriver: [],
             SPRProjectCategory: [],
             projectNameKeyword: [],
+            oeprojectType: []
         });
 
         const tableObj = this.patchAllSelectedColumns(
@@ -3514,6 +3555,11 @@ export class PortfolioCenterComponent implements OnInit {
             );
         }
     }
+
+    // getoeprojectType(): any {
+    //     return 
+    //     //this.lookUpData.filter(x => x.lookUpParentId == "04D143E7-CAA7-4D8D-88C3-A6CB575890A3")
+    //   }
 
     getGMSBudgetOwner(): any {
         if (Object.keys(this.filterlist).length != 0) {
@@ -4450,6 +4496,8 @@ export class PortfolioCenterComponent implements OnInit {
                     res.budgetDetails[i].apisdate : '';
                 this.projectOverview[i].problemType =
                     res.projectDetails[i].problemType;
+                    this.projectOverview[i].oeprojectType = 
+                    res.projectDetails[i].oeprojectType;
                 this.projectOverview[i].defaultOwningOrganizationId =
                     res.projectDetails[i].defaultOwningOrganizationId;
 
@@ -4909,6 +4957,7 @@ export class PortfolioCenterComponent implements OnInit {
                 ProjectType: this.filtersnew.ProjectType
                     ? this.filtersnew.ProjectType
                     : [],
+                    oeprojectType: this.filtersnew.oeprojectType ? this.filtersnew.oeprojectType : [],
                 Product: this.filtersnew.Product ? this.filtersnew.Product : [],
                 TotalCAPEX: this.filtersnew.TotalCAPEX
                     ? this.filtersnew.TotalCAPEX
@@ -5786,6 +5835,7 @@ export class PortfolioCenterComponent implements OnInit {
                     PrimaryValueDriver: [],
                     SPRProjectCategory: [],
                     projectNameKeyword: [],
+                    oeprojectType: []
                 };
 
                 this.filteredColumnValuesSelected =

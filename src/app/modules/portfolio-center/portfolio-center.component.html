@@ -146,6 +146,12 @@
                         [label]="'Project Type'" [placeholder]="'Project Type'" [valuePointer]="'name'"
                         [idPointer]="'name'" [dropDownArray]="projectType">
                     </spot-multiselect-autocomplete>
+
+                    <spot-multiselect-autocomplete class="w-full" formControlName="oeprojectType"
+                    name="oeprojectType" [label]="'OE Project Type'" [placeholder]="'OE Project Type'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                    [customSortPointer]="'lookUpOrder'" [dropDownArray]="oeprojectType" [sortByType]="'custom'">
+                  </spot-multiselect-autocomplete>
+
                     <spot-multiselect-autocomplete formControlName="ProjectState" class="w-full" name="ProjectState"
                         [label]="'Project State'" [placeholder]="'Project State'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="filterlist.state" [sortByType]="'custom'"
@@ -1531,6 +1537,13 @@
 
                         <ngx-datatable-column name="Project Type" prop="problemType" [resizeable]="false" [width]="180"
                             *ngIf="checkColumnVisible('ProjectType')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column name="OE Project Type" prop="oeprojectType" [resizeable]="false" [width]="180"
+                            *ngIf="checkColumnVisible('oeprojectType')">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>

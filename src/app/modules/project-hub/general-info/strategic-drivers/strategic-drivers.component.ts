@@ -49,7 +49,7 @@ export class StrategicDriversComponent implements OnInit {
   @Output() formValueStrategic = new EventEmitter();
   lookUpData: any;
   kpiData: any;
-  oeProjectType: any;
+  oeProjectType: any = [];
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
     public fuseAlert: FuseConfirmationService, public auth: AuthService) {
@@ -271,7 +271,7 @@ export class StrategicDriversComponent implements OnInit {
         this.auth.lookupMaster().then((lookup: any) => {
         this.generalInfo = res
         this.lookUpData = lookup
-        console.log(res.projectData.primaryKpi)
+        console.log(res)
         this.filterCriteria = this.projectHubService.all
         this.kpiMasters = this.lookUpData.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474")
         this.kpiData = this.projectHubService.kpiMasters
@@ -296,7 +296,7 @@ export class StrategicDriversComponent implements OnInit {
             }
             
         })(),
-          isAgile: (res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream) ? true : false,
+          isAgile: (res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream || res.projectData.oeprojectType) ? true : false,
           agilePrimaryWorkstream: res.agilePrimaryWorkstream ? res.agilePrimaryWorkstream : {},
           agileSecondaryWorkstream: res.agileSecondaryWorkstream ? res.agileSecondaryWorkstream : [],
           agileWave: res.agileWave ? res.agileWave : {},
@@ -313,6 +313,7 @@ export class StrategicDriversComponent implements OnInit {
           sprprojectGrouping: res.projectData.sprprojectGrouping && res.projectData.sprprojectGrouping != '' ? this.lookUpData.find(x => x.lookUpId == res.projectData.sprprojectGrouping) : {},
           oeprojectType: oeprojectypelist.length > 0 ? this.projectHubService.lookUpMaster.filter(x => res.projectData.oeprojectType.includes(x.lookUpId)) : [],
         })
+        console.log(this.strategicDriversForm.getRawValue())
         this.viewContent = true
       })
       })
@@ -324,21 +325,6 @@ export class StrategicDriversComponent implements OnInit {
           this.kpiMasters = this.lookupdata.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474");
           //this.lookUpMaster = 
           if (history.state.data != undefined) {
-            if (history.state.data.oeprojectType != null) {
-              this.oeProjectType = this.lookupdata.filter(x => x.lookUpParentId == '04D143E7-CAA7-4D8D-88C3-A6CB575890A3');
-              this.oeProjectType.sort((a, b) => {
-                return a.lookUpOrder - b.lookUpOrder;
-              })
-              const data = history.state.data.oeprojectType.split(',');
-              var oetype = {};
-              var finaldataoe = [];
-              for (var i = 0; i < data.length; i++) {
-                oetype = this.oeProjectType.filter(function (entry) {
-                  return entry.lookUpId == data[i]
-                })
-                finaldataoe.push(oetype[0]);
-              }
-            }
             if (history.state.data.primaryKpi != null) {
               history.state.data.primaryKpi = this.kpiMasters.filter(function (entry) {
                 return entry.lookUpId == history.state.data.primaryKpi
@@ -372,6 +358,21 @@ export class StrategicDriversComponent implements OnInit {
               history.state.data.agileWave = this.agileWave.filter(function (entry) {
                 return entry.lookUpId == history.state.data.agileWave
               })
+            }
+            if (history.state.data.oeprojectType != null) {
+              this.oeProjectType = this.lookupdata.filter(x => x.lookUpParentId == '04D143E7-CAA7-4D8D-88C3-A6CB575890A3');
+              this.oeProjectType.sort((a, b) => {
+                return a.lookUpOrder - b.lookUpOrder;
+              })
+              const data = history.state.data.oeprojectType.split(',');
+              var oetype = {};
+              var finaldataoe = [];
+              for (var i = 0; i < data.length; i++) {
+                oetype = this.oeProjectType.filter(function (entry) {
+                  return entry.lookUpId == data[i]
+                })
+                finaldataoe.push(oetype[0]);
+              }
             }
             this.Pobos = this.lookupdata.filter(x => x.lookUpParentId == 'A9AB0ADC-AA10-44C1-A99B-3BEB637D0A4E');
             this.Pobos.sort((a, b) => {
@@ -422,7 +423,9 @@ export class StrategicDriversComponent implements OnInit {
               }
             }
             var isAgile = false
-            if ((history.state.data.agilePrimaryWorkstream != null && history.state.data.agilePrimaryWorkstream.length != 0) || (history.state.data.agileSecondaryWorkstream != null && history.state.data.agileSecondaryWorkstream != "") || (history.state.data.agileWave != null && history.state.data.agileWave.length != 0)){
+            console.log(history.state.data.oeprojectType)
+            if ((history.state.data.agilePrimaryWorkstream != null && history.state.data.agilePrimaryWorkstream.length != 0) || (history.state.data.agileSecondaryWorkstream != null && history.state.data.agileSecondaryWorkstream != "") || (history.state.data.agileWave != null && history.state.data.agileWave.length != 0)
+              || (history.state.data.oeprojectType != null && history.state.data.oeprojectType.length != 0)){
               isAgile = true
             }
             this.strategicDriversForm.patchValue({
@@ -459,7 +462,7 @@ export class StrategicDriversComponent implements OnInit {
     return this.viewElements.some(x => x == element)
   }
   getoeprojectType(): any {
-    if(this.callLocation == 'CreateNew'){
+    if(this.callLocation == 'CreateNew' || this.callLocation == 'CreateNewSIP'){
       this.oeProjectType = this.lookupdata.filter(x => x.lookUpParentId == '04D143E7-CAA7-4D8D-88C3-A6CB575890A3');
       this.oeProjectType.sort((a, b) => {
         return a.lookUpOrder - b.lookUpOrder;
@@ -467,7 +470,7 @@ export class StrategicDriversComponent implements OnInit {
       return this.oeProjectType;
     }
     else {
-      return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == "04D143E7-CAA7-4D8D-88C3-A6CB575890A3")
+      return this.lookUpMaster.filter(x => x.lookUpParentId == "04D143E7-CAA7-4D8D-88C3-A6CB575890A3")
     }
   }
   getAgileWorkstream(): any {

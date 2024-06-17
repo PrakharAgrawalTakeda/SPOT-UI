@@ -181,6 +181,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
             this.apiService.getGeneralInfoData(this.id).then((res: any) => {
               this.apiService.getPhaseState(this.id).then((phase: any) => {
                 this.generalInfoData = res
+                console.log(res)
                 this.generalInfoPatchValue(res)
                 this.phaseStateData = phase
                 //sort datetime in phaseStateData.projectStatus in decenting order and get the first element
@@ -341,7 +342,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
         }
 
       })(),
-      isAgile: response.agilePrimaryWorkstream || response.agileWave || response.agileSecondaryWorkstream,
+      isAgile: response.agilePrimaryWorkstream || response.agileWave || response.agileSecondaryWorkstream || response.projectData.oeprojectType,
       agilePrimaryWorkstream: response.agilePrimaryWorkstream ? response.agilePrimaryWorkstream.lookUpName : '',
       agileSecondaryWorkstream: response.agileSecondaryWorkstream ? response.agileSecondaryWorkstream : [],
       agileWave: response.agileWave ? response.agileWave.lookUpName : '',

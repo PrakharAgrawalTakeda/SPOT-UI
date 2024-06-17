@@ -276,6 +276,7 @@ export class CreateProjectComponent implements OnInit {
   }
 
   captureValue(index: number, event: any) {
+    console.log(event)
     this.showMessage = false;
     this.capturedValues[index] = event
     if (index == 4) {
@@ -394,6 +395,7 @@ export class CreateProjectComponent implements OnInit {
         annualMustWinID: event.annualMustWinID,
         oeProjectType: event.oeprojectType
       })
+      console.log("CHECK", this.createProjectForm.getRawValue())
     }
   }
 
@@ -472,7 +474,8 @@ export class CreateProjectComponent implements OnInit {
         isCapsProject: false,
         primaryValueDriver: null,
         financialRealizationStartDate: null,
-        strategicInitiativeOwner: null
+        strategicInitiativeOwner: null,
+        OEProjectType: null
       }];
     }
     else {
@@ -515,6 +518,7 @@ export class CreateProjectComponent implements OnInit {
       }];
     }
     var formValue = this.createProjectForm.getRawValue()
+    debugger
     if (this.SIP) {
       mainObjCreate[0].problemUniqueId = ""
       mainObjCreate[0].problemTitle = formValue.problemTitle
@@ -530,10 +534,12 @@ export class CreateProjectComponent implements OnInit {
       mainObjCreate[0].defaultOwningOrganizationId = formValue.owningOrganization
       mainObjCreate[0].primaryValueDriver = formValue.primaryKPI != "" && formValue.primaryKPI != null && formValue.primaryKPI != undefined ? formValue.primaryKPI.lookUpId : ''
       mainObjCreate[0].isAgile = formValue.isAgile == "" ? false : formValue.isAgile
+      //mainObjCreate[0].IsOEProject = formValue.isOeproject == "" ? false : formValue.isOeproject
       if (mainObjCreate[0].isAgile) {
         mainObjCreate[0].agilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" && formValue.agilePrimaryWorkstream != undefined && formValue.agilePrimaryWorkstream != null ? formValue.agilePrimaryWorkstream.lookUpId : ''
         mainObjCreate[0].agileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
         mainObjCreate[0].agileWave = formValue.agileWave != "" && formValue.agileWave != undefined && formValue.agileWave != null ? formValue.agileWave.lookUpId : ''
+        //mainObjCreate[0].OEProjectType = formValue.oeProjectType.length > 0 ? formValue.oeProjectType.map(x => x.lookUpId).join() : ''
       }
       mainObjCreate[0].isCapsProject = false
       mainObjCreate[0].strategicInitiativeOwner = formValue.sponsor != "" ? formValue.sponsor.userAdid : ''
@@ -591,6 +597,7 @@ export class CreateProjectComponent implements OnInit {
         mainObjCreate[0].AnnualMustWinID = formValue.annualMustWinID != "" && formValue.annualMustWinID != undefined && formValue.annualMustWinID != null ? formValue.annualMustWinID.lookUpId : ''
       }
     }
+    console.log(mainObjCreate[0])
 
     if (!this.SIP) {
       var dataToSend = {}
@@ -669,6 +676,7 @@ export class CreateProjectComponent implements OnInit {
       })
     }
     else {
+      console.log(mainObjCreate[0])
       this.createApiService.createProjectStrategic(mainObjCreate[0]).then((res: any) => {
         this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
           this.projectid = res.problemUniqueId
