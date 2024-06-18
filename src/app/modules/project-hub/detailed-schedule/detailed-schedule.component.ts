@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DependencyStore, Gantt, GanttConfig, ProjectModelConfig, StateTrackingManager, TaskStore, TimeRangeStore, ToolbarConfig } from '@bryntum/gantt';
+import { AssignmentStore, DependencyStore, Gantt, GanttConfig, ProjectModelConfig, ResourceStore, StateTrackingManager, TaskStore, TimeRangeStore, ToolbarConfig } from '@bryntum/gantt';
 import { BryntumGanttProjectModelComponent } from '@bryntum/gantt-angular';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
@@ -52,6 +52,8 @@ export class DetailedScheduleComponent implements OnInit {
       "cls": "b-fa b-fa-diamond"
     }],
   })
+  resourceStore: ResourceStore = new ResourceStore();
+  assignmentStore: AssignmentStore = new AssignmentStore();
   ganttConfig: Partial<GanttConfig> = {
     columns: [
       { type: 'name', width: 160 },
@@ -283,35 +285,55 @@ export class DetailedScheduleComponent implements OnInit {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.currentData.projectUId = this.id
     this.apiService.getDetailedScheduleData(this.id).then((data: any) => {
-      console.log("DATA", data)
-      this.currentData = {
-        projectUId: this.id,
-        projectStartDate: data.projectStartDate ? data.projectStartDate : null,
-        AssignmentStore: data.assignmentStore,
-        AssignmentManipulationStore: data.assignmentManipulationStore,
-        CalendarManagerStore: data.calendarManagerStore,
-        DependencyStore: data.dependencyStore,
-        ResourceStore: data.resourceStore,
-        TaskStore: data.taskStore
-      }
-      this.startDate = data.projectStartDate ? moment(data.projectStartDate).toDate() : new Date();
-      this.detailedScheduleForm.controls.projectStartDate.setValue(data.projectStartDate ? moment(data.projectStartDate).toDate() : new Date());
-      this.tasks.data = JSON.parse(data.taskStore ? data.taskStore : "[]")
-      this.dependencies.data = JSON.parse(data.dependencyStore ? data.dependencyStore : "[]")
-      console.log("CURRENT DATA", this.currentData)
-      this.stm.addStore(this.tasks)
-      this.stm.addStore(this.dependencies)
-      this.viewContent = true;
-      this.viewSubmitButton = false;
-      setTimeout(() => {
-        this.stm.resetQueue()
-      }, 3500);
-      this.ganttComponent.changes.subscribe((comps) => {
-        if (this.ganttComponent.first) {
-          console.log("GANTT Component", this.ganttComponent)
-          this.gantt = this.ganttComponent.first.instance;
-          //add wait for seconds
+      this.apiService.getmembersbyproject(this.id).then((teams: any) => {
+        console.log("DATA", data)
+        console.log("TEAMS", teams)
+        if (teams.length > 0) {
+          var teamsSanitized = teams.map((team) => {
+            return {
+              id: team.userId,
+              name: team.userName
+            }
+          })
+          // i want to use teamsSanitized with unique id as resorucestore
+          const uniqueObjects = [];
+          for (const obj of teamsSanitized) {
+            if (!uniqueObjects.some(item => item.id === obj.id) && obj.id) {
+              uniqueObjects.push(obj);
+            }
+          }
+          this.resourceStore.data = uniqueObjects
         }
+        this.currentData = {
+          projectUId: this.id,
+          projectStartDate: data.projectStartDate ? data.projectStartDate : null,
+          AssignmentStore: data.assignmentStore,
+          AssignmentManipulationStore: data.assignmentManipulationStore,
+          CalendarManagerStore: data.calendarManagerStore,
+          DependencyStore: data.dependencyStore,
+          ResourceStore: data.resourceStore,
+          TaskStore: data.taskStore
+        }
+        this.startDate = data.projectStartDate ? moment(data.projectStartDate).toDate() : new Date();
+        this.detailedScheduleForm.controls.projectStartDate.setValue(data.projectStartDate ? moment(data.projectStartDate).toDate() : new Date());
+        this.tasks.data = JSON.parse(data.taskStore ? data.taskStore : "[]")
+        this.dependencies.data = JSON.parse(data.dependencyStore ? data.dependencyStore : "[]")
+        this.assignmentStore.data = JSON.parse(data.assignmentStore ? data.assignmentStore : "[]")
+        console.log("CURRENT DATA", this.currentData)
+        this.stm.addStore(this.tasks)
+        this.stm.addStore(this.dependencies)
+        this.viewContent = true;
+        this.viewSubmitButton = false;
+        setTimeout(() => {
+          this.stm.resetQueue()
+        }, 3500);
+        this.ganttComponent.changes.subscribe((comps) => {
+          if (this.ganttComponent.first) {
+            console.log("GANTT Component", this.ganttComponent)
+            this.gantt = this.ganttComponent.first.instance;
+            //add wait for seconds
+          }
+        });
       });
     });
 

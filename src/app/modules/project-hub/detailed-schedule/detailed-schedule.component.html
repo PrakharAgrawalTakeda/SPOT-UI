@@ -32,7 +32,7 @@
     </div>
     <div class="flex w-full h-full p-6 pt-0">
         <bryntum-gantt-project-model #project [taskStore]="tasks" [id]="id" [dependencyStore]="dependencies"
-            [startDate]="startDate" [stm]="stm" [timeRangeStore]="timeRanges">
+            [startDate]="startDate" [stm]="stm" [timeRangeStore]="timeRanges" [resourceStore]="resourceStore" [assignmentStore]="assignmentStore">
         </bryntum-gantt-project-model>
 
         <bryntum-gantt #gantt class="k-font-size-lg" [columns]="ganttConfig.columns!" [features]="ganttConfig.features!"
