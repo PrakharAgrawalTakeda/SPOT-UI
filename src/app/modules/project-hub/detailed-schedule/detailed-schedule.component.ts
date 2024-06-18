@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AssignmentStore, DependencyStore, Gantt, GanttConfig, ProjectModelConfig, ResourceStore, StateTrackingManager, TaskStore, TimeRangeStore, ToolbarConfig } from '@bryntum/gantt';
+import { AssignmentStore, DependencyStore, Gantt, GanttConfig, ProjectModelConfig, ResourceStore, StateTrackingManager, TaskModel, TaskStore, TimeRangeStore, ToolbarConfig } from '@bryntum/gantt';
 import { BryntumGanttProjectModelComponent } from '@bryntum/gantt-angular';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import moment from 'moment';
+import { ModifiedTaskModel } from 'app/shared/global-app-settings';
 @Component({
   selector: 'app-detailed-schedule',
   templateUrl: './detailed-schedule.component.html',
@@ -35,7 +36,6 @@ export class DetailedScheduleComponent implements OnInit {
   submitData = {}
   projectConfig: Partial<ProjectModelConfig> = {
     // The State TrackingManager which the UndoRedo widget in the toolbar uses
-
   };
   stm: StateTrackingManager = new StateTrackingManager({
     autoRecord: true,
@@ -107,6 +107,19 @@ export class DetailedScheduleComponent implements OnInit {
     columnLines: false,
     appendTo: 'container',
     features: {
+      taskEdit: {
+        items: {
+          generalTab: {
+            items: {
+              isImportantDate: {
+                name: 'isImportantDate',
+                type: 'checkbox',
+                text: 'Important Date?',
+              }
+            }
+          }
+        }
+      },
       scrollButtons: true,
       projectLines: true,
       baselines: {
@@ -231,7 +244,9 @@ export class DetailedScheduleComponent implements OnInit {
     }
   };
 
-  tasks: TaskStore = new TaskStore();
+  tasks: TaskStore = new TaskStore({
+    modelClass: ModifiedTaskModel
+  });
   dependencies: DependencyStore = new DependencyStore();
   /*new TaskStore({
     data: [
@@ -331,6 +346,7 @@ export class DetailedScheduleComponent implements OnInit {
           if (this.ganttComponent.first) {
             console.log("GANTT Component", this.ganttComponent)
             this.gantt = this.ganttComponent.first.instance;
+            console.log(this.gantt.project.json)
             //add wait for seconds
           }
         });
