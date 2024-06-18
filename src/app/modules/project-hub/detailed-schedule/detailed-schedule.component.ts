@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DependencyStore, Gantt, GanttConfig, ProjectModelConfig, StateTrackingManager, TaskStore, ToolbarConfig } from '@bryntum/gantt';
+import { DependencyStore, Gantt, GanttConfig, ProjectModelConfig, StateTrackingManager, TaskStore, TimeRangeStore, ToolbarConfig } from '@bryntum/gantt';
 import { BryntumGanttProjectModelComponent } from '@bryntum/gantt-angular';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
@@ -42,6 +42,16 @@ export class DetailedScheduleComponent implements OnInit {
     disabled: false
   })
   gantt: Gantt;
+  timeRanges: TimeRangeStore = new TimeRangeStore({
+    data: [{
+      "id": 1,
+      "name": "Important date",
+      "startDate": "2024-06-18",
+      "duration": 0,
+      "durationUnit": "d",
+      "cls": "b-fa b-fa-diamond"
+    }],
+  })
   ganttConfig: Partial<GanttConfig> = {
     columns: [
       { type: 'name', width: 160 },
@@ -99,7 +109,7 @@ export class DetailedScheduleComponent implements OnInit {
       projectLines: true,
       baselines: {
         disabled: false,
-        renderer: ({baselineRecord, taskRecord, renderData}) => this.baselineRenderer({baselineRecord, taskRecord, renderData})
+        renderer: ({ baselineRecord, taskRecord, renderData }) => this.baselineRenderer({ baselineRecord, taskRecord, renderData })
       },
       dependencies: {
         showLagInTooltip: true,
@@ -116,7 +126,9 @@ export class DetailedScheduleComponent implements OnInit {
           }
         }
       },
-
+      timeRanges: {
+        showCurrentTimeLine: true
+      },
     }
   };
   tbarConfig: Partial<ToolbarConfig> = {
@@ -232,7 +244,7 @@ export class DetailedScheduleComponent implements OnInit {
       }
     ]
   });
- 
+   
   dependencies = [
     { fromTask: 'hey', toTask: 'hwy' }
   ];*/
