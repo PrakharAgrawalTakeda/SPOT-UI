@@ -434,16 +434,18 @@ export class DetailedScheduleComponent implements OnInit {
   updateImportantDates() {
     var importDatesTask = (this.gantt.project.tasks as any).filter(task => task.isImportantDate)
     this.timeRanges.data = []
+    var tempTimeRanges = []
     this.gantt.project.timeRanges = []
     if (importDatesTask.length > 0) {
       importDatesTask.forEach((task) => {
-        this.timeRanges.data = [{
+        tempTimeRanges.push({
           "name": task.name,
           "startDate": task.startDate,
           "duration": 0,
           "durationUnit": "d",
           "cls": task.isMilestone ? "b-fa b-fa-diamond" : ""
-        }]
+        })
+        this.timeRanges.data = tempTimeRanges
       })
     }
   }
