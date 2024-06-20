@@ -43,14 +43,6 @@ export class DetailedScheduleComponent implements OnInit {
   })
   gantt: Gantt;
   timeRanges: TimeRangeStore = new TimeRangeStore({
-    data: [{
-      "id": 1,
-      "name": "Important date",
-      "startDate": "2024-06-18",
-      "duration": 0,
-      "durationUnit": "d",
-      "cls": "b-fa b-fa-diamond"
-    }],
   })
   resourceStore: ResourceStore = new ResourceStore();
   assignmentStore: AssignmentStore = new AssignmentStore();
@@ -142,7 +134,7 @@ export class DetailedScheduleComponent implements OnInit {
         }
       },
       timeRanges: {
-        showCurrentTimeLine: true
+        showCurrentTimeLine: false
       },
     }
   };
@@ -271,16 +263,20 @@ export class DetailedScheduleComponent implements OnInit {
   onDataChange(event) {
     //console log current value of gantt
     var storename = Object.getPrototypeOf(event.store).$$name
-    if (this.currentData[storename] != event.store.formattedJSON) {
-      console.log("DIFFERENT")
-      console.log(Object.getPrototypeOf(event.store).$$name)
-      console.log(event.store.formattedJSON)
-      this.currentData[storename] = event.store.formattedJSON
-      this.viewSubmitButton = true;
-      console.log("FINAL DATA", this.currentData)
-    }
-    else {
-      console.log("SAME")
+    if (storename != "TimeRangeStore") {
+      if (this.currentData[storename] != event.store.formattedJSON) {
+        console.log("DIFFERENT")
+        console.log(Object.getPrototypeOf(event.store).$$name)
+        console.log(event.store.formattedJSON)
+        this.currentData[storename] = event.store.formattedJSON
+        console.log(this.gantt.project.tasks)
+        this.updateImportantDates()
+        this.viewSubmitButton = true;
+        console.log("FINAL DATA", this.currentData)
+      }
+      else {
+        console.log("SAME")
+      }
     }
   }
 
@@ -339,13 +335,14 @@ export class DetailedScheduleComponent implements OnInit {
         this.stm.addStore(this.dependencies)
         this.viewContent = true;
         this.viewSubmitButton = false;
-        setTimeout(() => {
-          this.stm.resetQueue()
-        }, 3500);
         this.ganttComponent.changes.subscribe((comps) => {
           if (this.ganttComponent.first) {
+            setTimeout(() => {
+              this.stm.resetQueue()
+            }, 3500);
             console.log("GANTT Component", this.ganttComponent)
             this.gantt = this.ganttComponent.first.instance;
+            this.updateImportantDates()
             console.log(this.gantt.project.json)
             //add wait for seconds
           }
@@ -431,6 +428,23 @@ export class DetailedScheduleComponent implements OnInit {
     }
     else {
       renderData.className['b-baseline-on-time'] = 1;
+    }
+  }
+
+  updateImportantDates() {
+    var importDatesTask = (this.gantt.project.tasks as any).filter(task => task.isImportantDate)
+    this.timeRanges.data = []
+    this.gantt.project.timeRanges = []
+    if (importDatesTask.length > 0) {
+      importDatesTask.forEach((task) => {
+        this.timeRanges.data = [{
+          "name": task.name,
+          "startDate": task.startDate,
+          "duration": 0,
+          "durationUnit": "d",
+          "cls": task.isMilestone ? "b-fa b-fa-diamond" : ""
+        }]
+      })
     }
   }
   saveGanttData() {
