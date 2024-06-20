@@ -18,7 +18,8 @@ export class DetailedScheduleComponent implements OnInit {
   isFullScreen: boolean = false;
   id: string = '';
   detailedScheduleForm: FormGroup = new FormGroup({
-    projectStartDate: new FormControl()
+    projectStartDate: new FormControl(),
+    autoSave: new FormControl(true)
   });
   viewContent: boolean = false;
   viewSubmitButton: boolean = false;
@@ -271,7 +272,12 @@ export class DetailedScheduleComponent implements OnInit {
         this.currentData[storename] = event.store.formattedJSON
         console.log(this.gantt.project.tasks)
         this.updateImportantDates()
-        this.viewSubmitButton = true;
+        if (this.detailedScheduleForm.controls.autoSave.value) {
+          this.saveGanttData()
+        }
+        else {
+          this.viewSubmitButton = true;
+        }
         console.log("FINAL DATA", this.currentData)
       }
       else {
@@ -291,12 +297,26 @@ export class DetailedScheduleComponent implements OnInit {
         this.viewSubmitButton = true;
       }
     });
+    this.detailedScheduleForm.controls.autoSave.valueChanges.subscribe((res: any) => {
+      if (this.viewContent) {
+        this.viewSubmitButton = !res
+        localStorage.setItem("detailedScheduleAutoSave", res)
+        if (res) {
+          this.saveGanttData()
+        }
+        this.detailedScheduleForm.controls.autoSave.markAsPristine()
+      }
+    })
   }
   ngOnInit(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.currentData.projectUId = this.id
     this.apiService.getDetailedScheduleData(this.id).then((data: any) => {
       this.apiService.getmembersbyproject(this.id).then((teams: any) => {
+        var auto = localStorage.getItem("detailedScheduleAutoSave")
+        if (auto == 'false') {
+          this.detailedScheduleForm.controls.autoSave.setValue(false)
+        }
         console.log("DATA", data)
         console.log("TEAMS", teams)
         if (teams.length > 0) {
@@ -455,7 +475,9 @@ export class DetailedScheduleComponent implements OnInit {
     console.log("SUBMIT DATA", this.submitData)
     this.apiService.putDetailedScheduleData(this.submitData, this.id).then((data: any) => {
       this.viewSubmitButton = false;
-      this.projectHubService.successSave.next(true);
+      if (!this.detailedScheduleForm.controls.autoSave.value) {
+        this.projectHubService.successSave.next(true);
+      }
     });
   }
 }
