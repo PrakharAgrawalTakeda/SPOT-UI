@@ -51,7 +51,7 @@ export class DetailedScheduleComponent implements OnInit {
     columns: [
       { type: 'name', width: 160 },
       { type: 'duration', width: 80 },
-      { type: 'percentdone', width: 80 },
+      { type : 'percentdone', showCircle : true, width : 80 },
       { type: 'startdate', width: 150 },
       { type: 'enddate', width: 150 },
       { type: 'resourceassignment', width: 200 },
