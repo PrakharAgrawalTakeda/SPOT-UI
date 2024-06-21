@@ -110,6 +110,13 @@ export class DetailedScheduleComponent implements OnInit {
                 text: 'Important Date?',
               }
             }
+          },
+          resourcesTab :{
+            items:{
+              customInfoProjectTeam : {
+                html    : `<p>To include additional members in the Gantt chart, please ensure they are first added to the <a class="text-primary underline" href="./project-hub/${this.projectHubService.projectid}/project-team"> project team.</a></p>`,
+            },
+            }
           }
         }
       },
@@ -382,6 +389,9 @@ export class DetailedScheduleComponent implements OnInit {
       ResourceStore: this.currentData?.ResourceStore?.replaceAll("_generatede_", ""),
       TaskStore: this.currentData?.TaskStore?.replaceAll("_generatede_", "")
     }
+  }
+  getId(){
+    return this.id
   }
   addTask() {
     this.tasks.add({
