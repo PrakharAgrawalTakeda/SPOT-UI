@@ -22,6 +22,7 @@ export class SpotToggleComponent implements OnInit, ControlValueAccessor {
   @Input() hint: string = ''
   @Input() hintPostion: 'tooltip' | 'mat-hint' = 'tooltip'
   @Input() mode: 'toggle' | 'dropDown' = 'toggle'
+  @Input() justify: 'between' | 'end' | 'start' = 'between'
   dropDownArray = ["Yes", "No"]
   formFieldHelpers: any
   onTouch: any = () => { };

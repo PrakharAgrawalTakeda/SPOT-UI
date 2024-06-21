@@ -193,6 +193,7 @@ import {data} from "autoprefixer";
 import { DetailedScheduleComponent } from './detailed-schedule/detailed-schedule.component';
 import { TestErrorLoggingComponent } from './common/test-error-logging/test-error-logging.component';
 import { DetailedScheduleSettingsComponent } from './detailed-schedule/detailed-schedule-settings/detailed-schedule-settings.component';
+import { DetailedScheduleImportantDatesBulkEditComponent } from './detailed-schedule/detailed-schedule-important-dates-bulk-edit/detailed-schedule-important-dates-bulk-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -629,6 +630,7 @@ export const projectRoutes: Route[] = [
     DetailedScheduleComponent,
     TestErrorLoggingComponent,
     DetailedScheduleSettingsComponent,
+    DetailedScheduleImportantDatesBulkEditComponent,
   ],
     imports: [
     HttpClientModule,
