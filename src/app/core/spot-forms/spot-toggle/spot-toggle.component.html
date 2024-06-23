@@ -1,5 +1,5 @@
 <form [formGroup]="form" class="form w-full" [ngClass]="{'custom-label-with-hint': showHint && hintPostion == 'tooltip'}">
-    <div class="flex justify-between items-center w-full" *ngIf="mode=='toggle'">
+    <div class="flex items-center w-full" [ngClass]="{'justify-between': justify == 'between', 'justify-end gap-[0.75rem]': justify == 'end', 'justify-start gap-[0.76rem]': justify == 'start'}" *ngIf="mode=='toggle'">
         <div class="flex justify-start gap-1 items-center font-medium" *ngIf="showLabel">{{label}} <mat-icon *ngIf="showHint" class="pe icon-size-4"
                 matTooltip="{{hint}}">
                 help</mat-icon>

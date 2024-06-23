@@ -223,7 +223,8 @@
               <spot-input class="w-full read-only" formControlName="agileWave" name="agileWave" [label]="'eAGILE Wave'">
               </spot-input>
             </div>
-            <div class="flex justify-between items-center gap-6 pb-3">
+            <div class="flex justify-between items-center gap-6 pb-3"
+            *ngIf="generalInfoForm.controls['isAgile'].value && viewElementChecker('isAgile')">
               <spot-multiselect-autocomplete class="w-full read-only" formControlName="oeprojectType"
               name="oeprojectType" [label]="'OE Project Type'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
               [customSortPointer]="'lookUpOrder'" [dropDownArray]="getoeprojectType()" [sortByType]="'custom'">
