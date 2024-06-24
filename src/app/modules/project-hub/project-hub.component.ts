@@ -14,6 +14,7 @@ import { IAppSetting } from 'app/shared/global-app-settings';
 import { MsalService } from '@azure/msal-angular';
 import { RoleService } from 'app/core/auth/role.service';
 import moment from 'moment';
+import { GlobalDetailedScheduleBetaUsers } from 'app/shared/global-detailed-schedule-beta-users';
 @Component({
     selector: 'app-project-hub',
     templateUrl: './project-hub.component.html',
@@ -279,11 +280,21 @@ export class ProjectHubComponent implements OnInit {
                 })
             }
             if (this.projectDetails.problemType == "Strategic Initiative / Program") {
-                this.projectHubNavigation = this.projecthubservice.menuDataStrat
+                if(GlobalDetailedScheduleBetaUsers.users.includes(this.msal.instance.getActiveAccount()?.username)){
+                    this.projectHubNavigation = this.projecthubservice.menuDataStratBeta
+                }
+                else{
+                    this.projectHubNavigation = this.projecthubservice.menuDataStrat
+                }
                 this.projecthubservice.isStrategicIniative = true
             }
             else {
-                this.projectHubNavigation = this.projecthubservice.menuData
+                if(GlobalDetailedScheduleBetaUsers.users.includes(this.msal.instance.getActiveAccount()?.username)){
+                    this.projectHubNavigation = this.projecthubservice.menuDataBeta
+                }
+                else{
+                    this.projectHubNavigation = this.projecthubservice.menuData
+                }
                 this.projecthubservice.isStrategicIniative = false
             }
             this.projecthubservice.hasChildren = res.hasChildren
