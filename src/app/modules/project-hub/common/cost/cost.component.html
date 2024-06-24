@@ -7,7 +7,7 @@
                 <div class="mr-4 mt-2 text-xl font-medium tracking-tight leading-6 truncate text-primary">Cost</div>
                 <div>
                     <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                        (click)="projectHubService.toggleDrawerOpen(costEditType, '' , cost , id)"
+                        (click)="projectHubService.toggleDrawerOpen(costEditType, '' , cost , id, true)"
                         *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields && mode== 'Project-Charter'">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                     </button>
@@ -30,12 +30,12 @@
             </div>
         </form>
         <!--Form Elements Start here-->
-        <form [ngClass]="mode=='Project-Charter' ? 'w-3/4' : 'w-full'" [formGroup]="costFundingForm"
+        <form [ngClass]="w-full" [formGroup]="costFundingForm"
             *ngIf="mode=='Project-Charter' || (mode!='Project-Charter' && optionType == 'recommended-option')">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="costData" #costTable>
                 <ngx-datatable-column name="Category" prop="category" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="0.3">
+                    [flexGrow]="0.25">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <div style="display:flex; align-items:center;">
                             <span>{{value}}</span>
@@ -46,7 +46,7 @@
                         </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Base Case" prop="baseCase" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="0.4" *ngIf="mode=='Project-Charter'">
+                    [flexGrow]="0.25" *ngIf="mode=='Project-Charter'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}"
                             *ngIf="row.category == '# Functions Required'">
@@ -78,7 +78,7 @@
 
 
                 <ngx-datatable-column name="High Case" prop="highCase" [resizeable]="false" [sortable]="false"
-                    [flexGrow]="0.4" *ngIf="mode=='Project-Charter'">
+                    [flexGrow]="0.25" *ngIf="mode=='Project-Charter'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <!-- <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}" *ngIf="row.category != '# Functions Required'">
                             </spot-input> -->
@@ -119,7 +119,16 @@
                     </ng-template>
                 </ngx-datatable-column>
 
-
+                <ngx-datatable-column name="Basis of Estimate" prop="basis" [resizeable]="false" [sortable]="false"
+                [flexGrow]="0.4" *ngIf="mode=='Project-Charter'">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <!-- <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}" *ngIf="row.category != '# Functions Required'">
+                        </spot-input> -->
+                    <spot-input *ngIf="row.category != '# Functions Required'" class="w-full read-only" [showLabel]="false" formControlName="{{value}}"
+                         [callLocation]="'cost'">
+                    </spot-input>
+                </ng-template>
+            </ngx-datatable-column>
                 <ngx-datatable-column name="Current Year Planned Spend" prop="curryearSpend" [resizeable]="false"
                     [sortable]="false" [flexGrow]="0.4" *ngIf="mode!='Project-Charter'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>

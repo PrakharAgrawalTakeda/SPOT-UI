@@ -103,6 +103,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   formFieldHelpers: any
   lookUpPVD: any;
   archiveable: boolean = false;
+  showOE: boolean = true;
   constructor(private apiService: ProjectApiService,
     private _Activatedroute: ActivatedRoute,
     private portApiService: PortfolioApiService,
@@ -180,6 +181,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
             this.apiService.getGeneralInfoData(this.id).then((res: any) => {
               this.apiService.getPhaseState(this.id).then((phase: any) => {
                 this.generalInfoData = res
+                console.log(res)
                 this.generalInfoPatchValue(res)
                 this.phaseStateData = phase
                 //sort datetime in phaseStateData.projectStatus in decenting order and get the first element
@@ -282,7 +284,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
     }
 
     var oeprojectypelist = response.projectData.oeprojectType && response.projectData.oeprojectType != '' ? response.projectData.oeprojectType.split(',') : []
-    console.log(response)
+    console.log(oeprojectypelist)
     console.log(response.projectData.primaryKpi)
     this.generalInfoForm.patchValue({
       problemTitle: response.projectData.problemTitle,
@@ -340,7 +342,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
         }
 
       })(),
-      isAgile: response.agilePrimaryWorkstream || response.agileWave || response.agileSecondaryWorkstream,
+      isAgile: response.agilePrimaryWorkstream || response.agileWave || response.agileSecondaryWorkstream || response.projectData.oeprojectType,
       agilePrimaryWorkstream: response.agilePrimaryWorkstream ? response.agilePrimaryWorkstream.lookUpName : '',
       agileSecondaryWorkstream: response.agileSecondaryWorkstream ? response.agileSecondaryWorkstream : [],
       agileWave: response.agileWave ? response.agileWave.lookUpName : '',

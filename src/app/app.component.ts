@@ -5,6 +5,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FuseConfigService } from '@fuse/services/config';
 import { environment } from 'environments/environment';
 import { AppConfig } from './core/config/app.config';
+import { MyMonitoringService } from './logging.service';
+import { MatIconRegistry } from "@angular/material/icon";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
     selector: 'app-root',
@@ -16,14 +19,20 @@ export class AppComponent {
      * Constructor
      */
     config: AppConfig;
-    constructor(private authService: MsalService, private appService: AppService, private snack: MatSnackBar, private _fuseConfigService: FuseConfigService) {
+    constructor(private authService: MsalService, private appService: AppService, private snack: MatSnackBar, private _fuseConfigService: FuseConfigService,
+        private myMonitoringService: MyMonitoringService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer
+    ) {
+        this.matIconRegistry.addSvgIcon(
+            `gantt-icon`,
+            this.domSanitizer.bypassSecurityTrustResourceUrl(`../assets/images/chart-gantt.svg`)
+        );
         this._fuseConfigService.config$
             .subscribe((config: AppConfig) => {
                 if (config?.theme != this.config?.theme) {
                     if (environment.environment == 'Local' || environment.environment == 'DEV') {
                         var theme: any = config.themes.find(x => x.id == 'theme-teal')?.id
                         this.config = config;
-                        this._fuseConfigService.config = { theme } 
+                        this._fuseConfigService.config = { theme }
                     }
                     else if (environment.environment == 'QA') {
                         var theme: any = config.themes.find(x => x.id == 'theme-purple')?.id
@@ -41,7 +50,7 @@ export class AppComponent {
                         this._fuseConfigService.config = { theme }
                     }
                     // Store the config
-                   
+
                 }
             });
 

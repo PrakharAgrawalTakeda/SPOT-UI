@@ -8,7 +8,10 @@ export const environment = {
     SPOT_UI_URL: 'http://localhost:4200/',
     SPOT_API_URL:'https://tospotdev-api.azurewebsites.net/api/',
     //SPOT_API_URL:'https://localhost:7288/api/',
-    isDeploying: false
+    isDeploying: false,
+    appInsights: {
+        instrumentationKey: ''
+    }
 };
 
 /*

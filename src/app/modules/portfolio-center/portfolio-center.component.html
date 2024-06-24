@@ -146,6 +146,12 @@
                         [label]="'Project Type'" [placeholder]="'Project Type'" [valuePointer]="'name'"
                         [idPointer]="'name'" [dropDownArray]="projectType">
                     </spot-multiselect-autocomplete>
+<!-- MH ID #5664 -->
+                    <!-- <spot-multiselect-autocomplete class="w-full" formControlName="oeprojectType"
+                    name="oeprojectType" [label]="'OE Project Type'" [placeholder]="'OE Project Type'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                    [customSortPointer]="'lookUpOrder'" [dropDownArray]="oeprojectType" [sortByType]="'custom'">
+                  </spot-multiselect-autocomplete> -->
+
                     <spot-multiselect-autocomplete formControlName="ProjectState" class="w-full" name="ProjectState"
                         [label]="'Project State'" [placeholder]="'Project State'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="filterlist.state" [sortByType]="'custom'"
@@ -191,11 +197,11 @@
                         ">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="AGILEWorkstream" class="w-full"
-                        name="AGILEWorkstream" [label]="'AGILE Workstream'" [placeholder]="'AGILE Workstream'"
+                        name="AGILEWorkstream" [label]="'eAGILE Workstream'" [placeholder]="'eAGILE Workstream'"
                         [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" [dropDownArray]="AgileWorkstream">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="AGILEWave" class="w-full" name="AGILEWave"
-                        [label]="'AGILE Wave'" [placeholder]="'AGILE Wave'" [valuePointer]="'lookUpName'"
+                        [label]="'eAGILE Wave'" [placeholder]="'eAGILE Wave'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
                     </spot-multiselect-autocomplete>
                     <!-- <spot-select class="w-full" formControlName="SPRProjectCategory" name="SPRProjectCategory"
@@ -473,7 +479,7 @@
                             </div>
                             <div class="mb-4">
                                 <spot-toggle class="w-full mb-4" formControlName="AGILEPrimaryWorkstream"
-                                    [label]="'AGILE Primary Workstream'" [showHint]="false">
+                                    [label]="'eAGILE Primary Workstream'" [showHint]="false">
                                 </spot-toggle>
                             </div>
                             <div class="mb-4">
@@ -1535,6 +1541,13 @@
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
+<!-- MH ID #5664 -->
+                        <!-- <ngx-datatable-column name="OE Project Type" prop="oeprojectType" [resizeable]="false" [width]="180"
+                            *ngIf="checkColumnVisible('oeprojectType')">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                {{ value }}
+                            </ng-template>
+                        </ngx-datatable-column> -->
 
                         <ngx-datatable-column name="Owning Organization" prop="defaultOwningOrganizationId"
                             [resizeable]="false" [width]="180" *ngIf="checkColumnVisible('OwningOrganization')">

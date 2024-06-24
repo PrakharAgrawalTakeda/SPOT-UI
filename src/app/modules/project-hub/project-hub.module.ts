@@ -188,7 +188,12 @@ import { NewMetricsComponent } from './project-benefits/new-metrics/new-metrics.
 // import { SpotInputForecastComponent } from 'app/core/spot-forms/spot-input-forecast/spot-input-forecast.component';
 import { EditMetricsComponent } from './project-benefits/edit-metrics/edit-metrics.component';
 import { SpotGlobalMessageModule } from 'app/layout/common/spot-global-message/spot-global-message.module';
+import { BryntumGanttModule } from '@bryntum/gantt-angular';
 import {data} from "autoprefixer";
+import { DetailedScheduleComponent } from './detailed-schedule/detailed-schedule.component';
+import { TestErrorLoggingComponent } from './common/test-error-logging/test-error-logging.component';
+import { DetailedScheduleSettingsComponent } from './detailed-schedule/detailed-schedule-settings/detailed-schedule-settings.component';
+import { DetailedScheduleImportantDatesBulkEditComponent } from './detailed-schedule/detailed-schedule-important-dates-bulk-edit/detailed-schedule-important-dates-bulk-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -267,6 +272,11 @@ export const projectRoutes: Route[] = [
     {
       path: 'project-dashboards',
       component: ProjectDashboardComponent,
+      pathMatch: 'full'
+    },
+    {
+      path: 'detailed-schedule',
+      component: DetailedScheduleComponent,
       pathMatch: 'full'
     },
     {
@@ -556,6 +566,7 @@ export const projectRoutes: Route[] = [
     BusinessCaseCapsComponent,
     BusinessCaseRiskIssuesComponent,
     OptionInfoComponent,
+    TestErrorLoggingComponent,
     OptionInfoEditComponent,
     FeasibilityEditComponent,
     CloseOutOutcomesSingleEditComponent,
@@ -615,7 +626,11 @@ export const projectRoutes: Route[] = [
     BudgetPerformanceComponent,
     NewMetricsComponent,
     // SpotInputForecastComponent,
-    EditMetricsComponent
+    EditMetricsComponent,
+    DetailedScheduleComponent,
+    TestErrorLoggingComponent,
+    DetailedScheduleSettingsComponent,
+    DetailedScheduleImportantDatesBulkEditComponent,
   ],
     imports: [
     HttpClientModule,
@@ -658,6 +673,7 @@ export const projectRoutes: Route[] = [
     ShortcutsModule,
     MessagesModule,
     NotificationsModule,
+    BryntumGanttModule,
     UserModule,
     SpotGlobalMessageModule
     ],
