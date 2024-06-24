@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AssignmentStore, DependencyStore, Gantt, GanttConfig, ProjectModelConfig, ResourceStore, StateTrackingManager, TaskModel, TaskStore, TimeRangeStore, ToolbarConfig } from '@bryntum/gantt';
 import { BryntumGanttProjectModelComponent } from '@bryntum/gantt-angular';
 import { ProjectApiService } from '../common/project-api.service';
@@ -7,6 +7,8 @@ import { ProjectHubService } from '../project-hub.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import moment from 'moment';
 import { ModifiedTaskModel } from 'app/shared/global-app-settings';
+import { GlobalDetailedScheduleBetaUsers } from 'app/shared/global-detailed-schedule-beta-users';
+import { MsalService } from '@azure/msal-angular';
 @Component({
   selector: 'app-detailed-schedule',
   templateUrl: './detailed-schedule.component.html',
@@ -296,7 +298,7 @@ export class DetailedScheduleComponent implements OnInit {
   @ViewChildren('gantt') ganttComponent: any;
   @ViewChild('project') projectComponent!: BryntumGanttProjectModelComponent;
 
-  constructor(private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, private projectHubService: ProjectHubService) {
+  constructor(private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, private projectHubService: ProjectHubService, private msal: MsalService, private router: Router) {
     this.detailedScheduleForm.controls.projectStartDate.valueChanges.subscribe((value) => {
       if (this.viewContent) {
         this.startDate = value?.toDate();
@@ -317,6 +319,10 @@ export class DetailedScheduleComponent implements OnInit {
   }
   ngOnInit(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    if(!GlobalDetailedScheduleBetaUsers.users.includes(this.msal.instance.getActiveAccount()?.username)){
+      this.router.navigate([`/project-hub/${this.id}/project-board`]); 
+
+    }
     this.currentData.projectUId = this.id
     this.apiService.getDetailedScheduleData(this.id).then((data: any) => {
       this.apiService.getmembersbyproject(this.id).then((teams: any) => {
