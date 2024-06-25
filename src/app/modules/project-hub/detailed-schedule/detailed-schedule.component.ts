@@ -53,7 +53,7 @@ export class DetailedScheduleComponent implements OnInit {
     columns: [
       { type: 'name', width: 160 },
       { type: 'duration', width: 80 },
-      { type : 'percentdone', showCircle : true, width : 80 },
+      { type: 'percentdone', showCircle: true, width: 80 },
       { type: 'startdate', width: 150 },
       { type: 'enddate', width: 150 },
       { type: 'resourceassignment', width: 200 },
@@ -109,15 +109,22 @@ export class DetailedScheduleComponent implements OnInit {
               isImportantDate: {
                 name: 'isImportantDate',
                 type: 'checkbox',
+                flex: '1 0 50%',
                 text: 'Important Date?',
+              },
+              isImportantDateTaskEndDate: {
+                name: 'isImportantDateTaskEndDate',
+                type: 'checkbox',
+                flex: '1 0 47%',
+                text: "Is Important Date, Task's End Date?",
               }
-            }
-          },
-          resourcesTab :{
-            items:{
-              customInfoProjectTeam : {
-                html    : `<p>To include additional members in the Gantt chart, please ensure they are first added to the <a class="text-primary underline" href="./project-hub/${this.projectHubService.projectid}/project-team"> project team.</a></p>`,
             },
+          },
+          resourcesTab: {
+            items: {
+              customInfoProjectTeam: {
+                html: `<p>To include additional members in the Gantt chart, please ensure they are first added to the <a class="text-primary underline" href="./project-hub/${this.projectHubService.projectid}/project-team"> project team.</a></p>`,
+              },
             }
           }
         }
@@ -319,8 +326,8 @@ export class DetailedScheduleComponent implements OnInit {
   }
   ngOnInit(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    if(!GlobalDetailedScheduleBetaUsers.users.includes(this.msal.instance.getActiveAccount()?.username)){
-      this.router.navigate([`/project-hub/${this.id}/project-board`]); 
+    if (!GlobalDetailedScheduleBetaUsers.users.includes(this.msal.instance.getActiveAccount()?.username)) {
+      this.router.navigate([`/project-hub/${this.id}/project-board`]);
 
     }
     this.currentData.projectUId = this.id
@@ -396,7 +403,7 @@ export class DetailedScheduleComponent implements OnInit {
       TaskStore: this.currentData?.TaskStore?.replaceAll("_generatede_", "")
     }
   }
-  getId(){
+  getId() {
     return this.id
   }
   addTask() {
@@ -476,7 +483,7 @@ export class DetailedScheduleComponent implements OnInit {
       importDatesTask.forEach((task) => {
         tempTimeRanges.push({
           "name": task.name,
-          "startDate": task.startDate,
+          "startDate": task.isImportantDateTaskEndDate ? task.endDate : task.startDate,
           "duration": 0,
           "durationUnit": "d",
           "cls": task.isMilestone ? "b-fa b-fa-diamond" : ""
