@@ -106,7 +106,7 @@ export class DetailedScheduleComponent implements OnInit {
         items: {
           generalTab: {
             items: {
-              isImportantDate: {
+              /*isImportantDate: {
                 name: 'isImportantDate',
                 type: 'checkbox',
                 flex: '1 0 50%',
@@ -117,6 +117,30 @@ export class DetailedScheduleComponent implements OnInit {
                 type: 'checkbox',
                 flex: '1 0 47%',
                 text: "Is Important Date, Task's End Date?",
+              },*/
+              isImportantDate: {
+                type: 'radiogroup',
+                name: 'isImportantDate',
+                label: 'Important Date',
+                flex: '1 0 100%',
+                labelWidth: '6.5em',
+                items: [{
+                  text: 'None',
+                  name: 'isImportantDate',
+                  ref: 'isImportantDate_NONE',
+                  checked: true,
+                  checkedValue: 'NONE'
+                }, {
+                  text: 'Start Date',
+                  name: 'isImportantDate',
+                  ref: 'isImportantDate_START_DATE',
+                  checkedValue: 'START_DATE'
+                }, {
+                  text: 'End Date',
+                  name: 'isImportantDate',
+                  ref: 'isImportantDate_END_DATE',
+                  checkedValue: 'END_DATE'
+                }]
               }
             },
           },
@@ -475,7 +499,7 @@ export class DetailedScheduleComponent implements OnInit {
   }
 
   updateImportantDates() {
-    var importDatesTask = (this.gantt.project.tasks as any).filter(task => task.isImportantDate)
+    var importDatesTask = (this.gantt.project.tasks as any).filter(task => task.isImportantDate == "START_DATE" || task.isImportantDate == "END_DATE")
     this.timeRanges.data = []
     var tempTimeRanges = []
     this.gantt.project.timeRanges = []
@@ -483,7 +507,7 @@ export class DetailedScheduleComponent implements OnInit {
       importDatesTask.forEach((task) => {
         tempTimeRanges.push({
           "name": task.name,
-          "startDate": task.isImportantDateTaskEndDate ? task.endDate : task.startDate,
+          "startDate": task.isImportantDate == "END_DATE" ? task.endDate : task.startDate,
           "duration": 0,
           "durationUnit": "d",
           "cls": task.isMilestone ? "b-fa b-fa-diamond" : ""
