@@ -124,6 +124,7 @@ export class DetailedScheduleComponent implements OnInit {
                 label: 'Important Date',
                 flex: '1 0 100%',
                 labelWidth: '6.5em',
+                cls: 'pt-3',
                 items: [{
                   text: 'None',
                   name: 'isImportantDate',
