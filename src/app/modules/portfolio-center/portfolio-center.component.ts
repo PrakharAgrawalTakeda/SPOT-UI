@@ -94,7 +94,7 @@ export class PortfolioCenterComponent implements OnInit {
     CAPSDropDrownValues = ['Yes', 'No'];
 
     totalCAPEX = [];
-    oeprojectType = [];
+    //oeprojectType = [];
     AgileWorkstream = [];
     AgileWave = [];
     overallStatus = [];
@@ -125,8 +125,8 @@ export class PortfolioCenterComponent implements OnInit {
         OverallStatus: [],
         PrimaryValueDriver: [],
         SPRProjectCategory: [],
-        projectNameKeyword: [],
-        oeprojectType: []
+        projectNameKeyword: []
+        //,oeprojectType: []
     };
     defaultfilter: any = {
         PortfolioOwner: [],
@@ -148,8 +148,8 @@ export class PortfolioCenterComponent implements OnInit {
         OverallStatus: [],
         PrimaryValueDriver: [],
         SPRProjectCategory: [],
-        projectNameKeyword: [],
-        oeprojectType: []
+        projectNameKeyword: []
+        //,oeprojectType: []
     };
 
     PortfolioFilterForm = new FormGroup({
@@ -172,8 +172,8 @@ export class PortfolioCenterComponent implements OnInit {
         projectName: new FormControl(),
         PrimaryValueDriver: new FormControl(),
         SPRProjectCategory: new FormControl(),
-        projectNameKeyword: new FormControl(),
-        oeprojectType: new FormControl()
+        projectNameKeyword: new FormControl()
+        //,oeprojectType: new FormControl()
     });
 
     BookmarksForm = new FormGroup({
@@ -218,8 +218,8 @@ export class PortfolioCenterComponent implements OnInit {
         Where: new FormControl(false),
         Why: new FormControl(false),
         FundingApprovalNeedDate: new FormControl(false),
-        OPEXRequired: new FormControl(false),
-        oeprojectType: new FormControl(false)
+        OPEXRequired: new FormControl(false)
+        //,oeprojectType: new FormControl(false)
     });
 
     //Boookmarks
@@ -691,9 +691,9 @@ console.log(this.filterlist)
                         result.lookUpParentId ==
                         '10F36AC1-23CB-4326-8701-2416F8AE679E'
                 );
-                this.oeprojectType = this.lookup.filter(
-                    (result) =>
-                        result.lookUpParentId == "04D143E7-CAA7-4D8D-88C3-A6CB575890A3");
+                // this.oeprojectType = this.lookup.filter(
+                //     (result) =>
+                //         result.lookUpParentId == "04D143E7-CAA7-4D8D-88C3-A6CB575890A3");
                     
                 this.AgileWorkstream = this.lookup.filter(
                     (result) =>
@@ -816,8 +816,8 @@ console.log(this.filterlist)
                             SPRProjectCategory:
                                 this.filtersnew.SPRProjectCategory,
                             projectNameKeyword:
-                                this.filtersnew.projectNameKeyword,
-                                oeprojectType: this.filtersnew.oeprojectType  
+                                this.filtersnew.projectNameKeyword
+                                //,oeprojectType: this.filtersnew.oeprojectType  
                         };
 
                         this.PortfolioFilterForm.patchValue(defaultFilterObj);
@@ -982,17 +982,17 @@ console.log(this.filterlist)
                                     order: order,
                                 };
                             } 
-                            else if (attribute == 'oeprojectType') 
-                                {
-                                    var filterdata = {
-                                        name: attribute
-                                            .replace(/([A-Z])/g, ' $1')
-                                            .trim(),
-                                        value: this.filtersnew[attribute][0].lookUpName,
-                                        count: this.filtersnew[attribute].length,
-                                        order: 18,
-                                    };
-                                }
+                            // else if (attribute == 'oeprojectType') 
+                            //     {
+                            //         var filterdata = {
+                            //             name: attribute
+                            //                 .replace(/([A-Z])/g, ' $1')
+                            //                 .trim(),
+                            //             value: this.filtersnew[attribute][0].lookUpName,
+                            //             count: this.filtersnew[attribute].length,
+                            //             order: 18,
+                            //         };
+                            //     }
                                 else if (attribute == 'ProjectTeamMember') {
                                 var filterdata = {
                                     name: attribute
@@ -1167,17 +1167,19 @@ console.log(this.filterlist)
                                             unionOperator: 2,
                                         };
                                     }
-                                    else if(attribute == 'oeprojectType')
-                                        {
-                                        var filterItems1 = {
-                                            filterAttribute: attribute,
-                                            filterOperator: '=',
-                                            filterValue:
-                                                this.filtersnew[attribute][j]
-                                                    .lookUpName,
-                                            unionOperator: 2,
-                                        };
-                                        }  else if (
+                                    // else if(attribute == 'oeprojectType')
+                                    //     {
+                                    //     var filterItems1 = {
+                                    //         filterAttribute: attribute,
+                                    //         filterOperator: '=',
+                                    //         filterValue:
+                                    //             this.filtersnew[attribute][j]
+                                    //                 .lookUpName,
+                                    //         unionOperator: 2,
+                                    //     };
+                                    //     }  
+                                        
+                                    else if (
                                         attribute == 'ProjectTeamMember'
                                     ) {
                                         var filterItems1 = {
@@ -3517,8 +3519,8 @@ console.log(this.filterlist)
             projectName: [],
             PrimaryValueDriver: [],
             SPRProjectCategory: [],
-            projectNameKeyword: [],
-            oeprojectType: []
+            projectNameKeyword: []
+            //,oeprojectType: []
         });
 
         const tableObj = this.patchAllSelectedColumns(
@@ -4496,8 +4498,8 @@ console.log(this.filterlist)
                     res.budgetDetails[i].apisdate : '';
                 this.projectOverview[i].problemType =
                     res.projectDetails[i].problemType;
-                    this.projectOverview[i].oeprojectType = 
-                    res.projectDetails[i].oeprojectType;
+                    // this.projectOverview[i].oeprojectType = 
+                    // res.projectDetails[i].oeprojectType;
                 this.projectOverview[i].defaultOwningOrganizationId =
                     res.projectDetails[i].defaultOwningOrganizationId;
 
@@ -4957,7 +4959,7 @@ console.log(this.filterlist)
                 ProjectType: this.filtersnew.ProjectType
                     ? this.filtersnew.ProjectType
                     : [],
-                    oeprojectType: this.filtersnew.oeprojectType ? this.filtersnew.oeprojectType : [],
+                    //oeprojectType: this.filtersnew.oeprojectType ? this.filtersnew.oeprojectType : [],
                 Product: this.filtersnew.Product ? this.filtersnew.Product : [],
                 TotalCAPEX: this.filtersnew.TotalCAPEX
                     ? this.filtersnew.TotalCAPEX
@@ -5834,8 +5836,8 @@ console.log(this.filterlist)
                     OverallStatus: [],
                     PrimaryValueDriver: [],
                     SPRProjectCategory: [],
-                    projectNameKeyword: [],
-                    oeprojectType: []
+                    projectNameKeyword: []
+                    //,oeprojectType: []
                 };
 
                 this.filteredColumnValuesSelected =
