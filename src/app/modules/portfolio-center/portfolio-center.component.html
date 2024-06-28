@@ -522,11 +522,11 @@
                                 </spot-toggle>
                             </div>
 
-                            <div class="mb-4">
+                            <!-- <div class="mb-4">
                                 <spot-toggle class="w-full mb-4" formControlName="AssetPlaceInService"
-                                    [label]="'Asset Place In Service'" [showHint]="false">
+                                    [label]="'Asset Placed In Service'" [showHint]="false">
                                 </spot-toggle>
-                            </div>
+                            </div> -->
                             <div class="mb-4">
                                 <spot-toggle class="w-full mb-4" formControlName="EnvironmentalPortfolio"
                                     [label]="'Environmental Portfolio'" [showHint]="false">
@@ -1640,12 +1640,12 @@
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Asset Placed In Service (Estimate)" prop="APISDate"
+                        <!-- <ngx-datatable-column name="Asset Placed In Service (Estimate)" prop="APISDate"
                             [resizeable]="false" [width]="180" *ngIf="checkColumnVisible('AssetPlaceInService')">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value | date : "dd-MMM-yyyy" }}
                             </ng-template>
-                        </ngx-datatable-column>
+                        </ngx-datatable-column> -->
 
                         <ngx-datatable-column name="Environment Portfolio" prop="emissionPortfolioID"
                             [resizeable]="false" [width]="180" *ngIf="checkColumnVisible('PortfolioOwner')">

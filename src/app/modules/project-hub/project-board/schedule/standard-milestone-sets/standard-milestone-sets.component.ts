@@ -13,11 +13,15 @@ export class StandardMilestoneSetsComponent implements OnInit {
     @Output() standardMilestonesAdded = new EventEmitter<any[]>();
     @Input() loadContent: boolean = false;
     @Input() lookup: any
+    @Input() mode: 'CAPEX' | 'Normal' = 'Normal'
     standardMilestoneData: any = []
     standardMilestoneDBData: any = []
     standarMilestoneAdded: any = []
     viewContent: boolean = false
     id: string = ""
+    standardCAPEXMilestoneData: any;
+    result: Object;
+    standarCAPEXMilestoneAdded: any = []
     constructor(public projectHubService: ProjectHubService,  public apiService: ProjectApiService,
                 public fuseAlert: FuseConfirmationService,
                 private _Activatedroute: ActivatedRoute,
@@ -37,10 +41,22 @@ export class StandardMilestoneSetsComponent implements OnInit {
         this.standardMilestoneData = []
         this.standardMilestoneDBData = []
         this.standarMilestoneAdded = []
+        this.standardCAPEXMilestoneData = []
+        this.standarCAPEXMilestoneAdded = []
         this.apiService.getStandardMilestoneSets(this.id).then(res => {
+            console.log(res)
             this.standardMilestoneDBData = [...this.sortByLevel(res)]
             this.standardMilestoneData = this.sortByLevel(res)
+            
             let milestoneArray = []
+            if(this.mode == 'CAPEX')
+                {
+                    this.standardCAPEXMilestoneData = this.standardMilestoneData.filter(x => x.milestoneTemplateId == "7D7E9D69-3201-4063-8713-45C7FFEB1250");
+                    console.log(this.standardCAPEXMilestoneData)
+                    for (var i in this.standardCAPEXMilestoneData) {
+                        this.standarCAPEXMilestoneAdded.push([])
+                    }
+                }
             if (this.router.url.includes('business-case')) {
                 this.standardMilestoneData.forEach((set, setIndex) => {
                     milestoneArray = set.templateDetails;
@@ -53,6 +69,8 @@ export class StandardMilestoneSetsComponent implements OnInit {
             for (var i in this.standardMilestoneData) {
                 this.standarMilestoneAdded.push([])
             }
+
+
             this.projectHubService.isFormChanged = false
             this.viewContent = true
         })
@@ -119,7 +137,36 @@ export class StandardMilestoneSetsComponent implements OnInit {
                     "dismissible": true
                 }
                 this.fuseAlert.open(limitConfig)
-            }else {
+            }
+             else if(this.mode == 'CAPEX') {
+        //         var comfirmConfig: FuseConfirmationConfig = {
+        //         "title": "Note",
+        //         "message": "The selected standard milestones have been added to your project. Please visit the Schedule page and update the milestones accordingly!",
+        //     "icon": {
+        //         "show": true,
+        //         "name": "heroicons_outline:exclamation",
+        //         "color": "primary"
+        //     },
+        //     "actions": {
+        //         "confirm": {
+        //             "show": true,
+        //             "label": "OK",
+        //             "color": "primary"
+        //         },
+        //         "cancel": {
+        //             "show": false,
+        //         }
+        //     },
+        //     "dismissible": true
+        // }
+        //         const askNeedAlert = this.fuseAlert.open(comfirmConfig)
+        //         askNeedAlert.afterClosed().subscribe(res => {
+        //             if (res == 'confirmed') {
+                        this.standardMilestonesAdded.emit(returnedMilestones);
+        //             }
+        //         })
+            }
+            else {
                 var comfirmConfig: FuseConfirmationConfig = {
                     "message": "The selected milestones will be added to your project’s existing milestones. Do you want to proceed? ",
                     "icon": {

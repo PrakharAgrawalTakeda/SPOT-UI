@@ -152,6 +152,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
     if(this.mode == 'Normal')
     {
         this.schedulengxdata = this.projectViewDetails.scheduleData.filter(x => x.completionDate == null)
+        console.log(this.schedulengxdata)
     }else{
         if(this.mode == 'Project-Close-Out')
         {
@@ -365,7 +366,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   islink(uid: string): boolean {
-    console.log("LINK",this.projectViewDetails.links.some(x => x.linkItemId == uid))
+    //console.log("LINK",this.projectViewDetails.links.some(x => x.linkItemId == uid))
     return this.projectViewDetails.links.some(x => x.linkItemId == uid)
   }
 

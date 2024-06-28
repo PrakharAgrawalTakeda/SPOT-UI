@@ -19,7 +19,7 @@ export class SchedulesTableComponent implements OnInit {
   @Input() scheduleData: any = []
   @Input() projectId: string = ''
   @Input() parentProjectId: string = ''
-  @Input() callLocation: 'Normal' | 'Link' | 'StandardMilestones' = 'Normal'
+  @Input() callLocation: 'Normal' | 'Link' | 'StandardMilestones' | 'CAPEX' = 'Normal'
   @Input() viewElements: any = ['milestone','status','plannedFinish', 'baselineFinish','completionDate','variance']
   @Input() links: any = []
   @Input() linksProblemCapture: any = []
@@ -32,7 +32,7 @@ export class SchedulesTableComponent implements OnInit {
   wizzard: string = ''
   includeInText: 'Dashboard' | 'Charter' | 'Business Case' = 'Dashboard'
   getRowClass = (row) => {
-    console.log(row)
+    //console.log(row)
     return {
       'row-color1': row.completionDate != null,
     };
@@ -54,6 +54,17 @@ export class SchedulesTableComponent implements OnInit {
             this.includeInText = 'Business Case'
         }
     }
+    if (this.callLocation === 'CAPEX') {
+      this.initializeSelection();
+    }
+  }
+
+  initializeSelection(): void {
+    this.selected = [...this.tableData]; // Select all rows by default
+    this.toggleChange.emit({
+      tableIndex: this.tableIndex,
+      selected: this.selected
+    });
   }
 
   calculateVariance(array: any) :any {
@@ -153,13 +164,21 @@ export class SchedulesTableComponent implements OnInit {
   }
   onSelect({ selected }) {
     console.log('Select Event', selected, this.selected);
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
+
+    // For CAPEX mode, select all rows by default
+    if (this.callLocation === 'CAPEX') {
+      this.selected = [...this.tableData];
+    } else {
+      this.selected.splice(0, this.selected.length);
+      this.selected.push(...selected);
+    }
+
     this.toggleChange.emit({
       tableIndex: this.tableIndex,
       selected: this.selected
-    })
-    this.projectHubService.isFormChanged = true
+    });
+
+    this.projectHubService.isFormChanged = true;
   }
 
   onActivate(event) {

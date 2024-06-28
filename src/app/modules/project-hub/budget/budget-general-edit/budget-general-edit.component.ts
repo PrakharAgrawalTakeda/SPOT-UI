@@ -1,29 +1,31 @@
-import {Component} from '@angular/core';
-import {ProjectHubService} from "../../project-hub.service";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {AuthService} from "../../../../core/auth/auth.service";
-import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
-import {ActivatedRoute} from "@angular/router";
-import {ProjectApiService} from "../../common/project-api.service";
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
-import {MsalService} from "@azure/msal-angular";
+import { Component, Input } from '@angular/core';
+import { ProjectHubService } from "../../project-hub.service";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AuthService } from "../../../../core/auth/auth.service";
+import { PortfolioApiService } from "../../../portfolio-center/portfolio-api.service";
+import { ActivatedRoute } from "@angular/router";
+import { ProjectApiService } from "../../common/project-api.service";
+import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../../@fuse/services/confirmation";
+import { MsalService } from "@azure/msal-angular";
 import * as moment from "moment";
+import { SharedService } from 'app/shared.service';
 
 @Component({
-  selector: 'app-budget-general-edit',
-  templateUrl: './budget-general-edit.component.html',
-  styleUrls: ['./budget-general-edit.component.scss']
+    selector: 'app-budget-general-edit',
+    templateUrl: './budget-general-edit.component.html',
+    styleUrls: ['./budget-general-edit.component.scss']
 })
 export class BudgetGeneralEditComponent {
+    @Input() mode: 'CAPEX' | 'Normal' = 'Normal'
     viewContent: boolean = false;
     local: any = [];
     id: string = "";
-    localCurrency:any = [];
+    localCurrency: any = [];
     budgetInfo: any = {}
     filterCriteria: any = {}
     isBudgetAdmin: boolean = false;
     showBudgetIdButton: boolean = false;
-    required:boolean = false;
+    required: boolean = false;
     gmsBudgetOwnerList: any = [];
     budgetInfoForm = new FormGroup({
         capexRequired: new FormControl(false),
@@ -33,47 +35,63 @@ export class BudgetGeneralEditComponent {
         predefinedInvestmentId: new FormControl(null),
         where: new FormControl(''),
         why: new FormControl(''),
-        fundingApprovalNeedDate: new FormControl(''),
+        //fundingApprovalNeedDate: new FormControl(''),
         projectFundingStatus: new FormControl(''),
         totalApprovedCapex: new FormControl(''),
         totalApprovedOpex: new FormControl(''),
     })
-    constructor (public projectHubService: ProjectHubService,
-                 private portApiService: PortfolioApiService,
-                 public auth: AuthService,
-                 private msalService: MsalService,
-                 private _Activatedroute: ActivatedRoute,
-                 public fuseAlert: FuseConfirmationService,
-                 private apiService: ProjectApiService){
+    viewStandardMilestonesSets: boolean = false;
+    lookUpData: any = [];
+    standardMilestoneData: any = []
+    standardMilestoneDBData: any = []
+    standarMilestoneAdded: any = []
+    standardCAPEXMilestoneData: any;
+    standarCAPEXMilestoneAdded: any = []
+    formValue: {
+        capexRequired: boolean; assetPlaced: string; budgetId: string; gmsBudgetowner: any; predefinedInvestmentId: any; where: string; why: string;
+        //fundingApprovalNeedDate: string; 
+        projectFundingStatus: string; totalApprovedCapex: string; totalApprovedOpex: string;
+    };
+    mainObj: any;
+    constructor(public projectHubService: ProjectHubService,
+        private portApiService: PortfolioApiService,
+        public auth: AuthService,
+        private msalService: MsalService,
+        private _Activatedroute: ActivatedRoute,
+        public fuseAlert: FuseConfirmationService,
+        private apiService: ProjectApiService,
+        private sharedService: SharedService) {
 
         this.budgetInfoForm.controls.budgetId.valueChanges.subscribe(res => {
-            this.budgetId.updateValueAndValidity({emitEvent : false})
+            this.budgetId.updateValueAndValidity({ emitEvent: false })
         })
         this.budgetInfoForm.controls.predefinedInvestmentId.valueChanges.subscribe(res => {
-            this.predefinedInvestmentId.updateValueAndValidity({emitEvent : false})
+            this.predefinedInvestmentId.updateValueAndValidity({ emitEvent: false })
         })
         this.budgetInfoForm.controls.gmsBudgetowner.valueChanges.subscribe(res => {
-            this.gmsBudgetowner.updateValueAndValidity({emitEvent : false})
+            this.gmsBudgetowner.updateValueAndValidity({ emitEvent: false })
         })
         this.budgetInfoForm.controls.where.valueChanges.subscribe(res => {
-            this.where.updateValueAndValidity({emitEvent : false})
+            this.where.updateValueAndValidity({ emitEvent: false })
         })
         this.budgetInfoForm.controls.why.valueChanges.subscribe(res => {
-            this.why.updateValueAndValidity({emitEvent : false})
+            this.why.updateValueAndValidity({ emitEvent: false })
         })
         this.budgetInfoForm.valueChanges.subscribe(res => {
+            //debugger
             this.projectHubService.isFormChanged = true
-            this.predefinedInvestmentId.updateValueAndValidity({emitEvent : false})
-            this.why.updateValueAndValidity({emitEvent : false})
-            this.where.updateValueAndValidity({emitEvent : false})
-            this.gmsBudgetowner.updateValueAndValidity({emitEvent : false})
-            this.budgetId.updateValueAndValidity({emitEvent : false})
+            this.predefinedInvestmentId.updateValueAndValidity({ emitEvent: false })
+            this.why.updateValueAndValidity({ emitEvent: false })
+            this.where.updateValueAndValidity({ emitEvent: false })
+            this.gmsBudgetowner.updateValueAndValidity({ emitEvent: false })
+            this.budgetId.updateValueAndValidity({ emitEvent: false })
         })
         this.capexRequired.valueChanges.subscribe(res => {
             // Choosing Yes
-            if(this.budgetInfoForm.controls.capexRequired.value ==true){
-                if(!this.isBudgetAdmin){
-                    this.capexRequired.disable({emitEvent : false});
+            if (this.budgetInfoForm.controls.capexRequired.value == true) {
+                this.mode = 'CAPEX'
+                if (!this.isBudgetAdmin) {
+                    this.capexRequired.disable({ emitEvent: false });
                 }
                 this.required = true;
                 this.budgetId.setValidators(Validators.required)
@@ -82,27 +100,27 @@ export class BudgetGeneralEditComponent {
                 this.where.setValidators(Validators.required)
                 this.why.setValidators(Validators.required)
                 this.gmsBudgetOwnerBasicSetup()
-                if(this.isBudgetAdmin){
-                    if(this.budgetId.disabled){
-                        this.budgetId.enable({emitEvent : false})
+                if (this.isBudgetAdmin) {
+                    if (this.budgetId.disabled) {
+                        this.budgetId.enable({ emitEvent: false })
                     }
                     this.showBudgetIdButton = true;
-                }else{
-                    if(this.gmsBudgetowner.value && this.gmsBudgetowner.value?.portfolioOwnerId!="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
-                        if(this.budgetId.enabled){
-                            this.budgetId.disable({emitEvent : false})
+                } else {
+                    if (this.gmsBudgetowner.value && this.gmsBudgetowner.value?.portfolioOwnerId != "3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC") {
+                        if (this.budgetId.enabled) {
+                            this.budgetId.disable({ emitEvent: false })
                         }
                         this.showBudgetIdButton = true;
-                    }else{
+                    } else {
                         this.showBudgetIdButton = false;
-                        if(this.budgetId.disabled){
-                            this.budgetId.enable({emitEvent : false})
+                        if (this.budgetId.disabled) {
+                            this.budgetId.enable({ emitEvent: false })
                         }
                     }
                 }
 
 
-                if(!this.gmsBudgetowner.value || this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
+                if (!this.gmsBudgetowner.value || this.gmsBudgetowner.value?.portfolioOwnerId == "3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC") {
                     this.showBudgetIdButton = false;
                 }
                 // if(!this.gmsBudgetowner.value || this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
@@ -133,13 +151,13 @@ export class BudgetGeneralEditComponent {
                 //         this.showBudgetIdButton = true;
                 //     }
                 // }
-            }else{
+            } else {
                 this.budgetInfoForm.controls.budgetId.disable()
                 this.required = false;
                 this.showBudgetIdButton = false;
                 // this.budgetInfoForm.controls.budgetId.setValue('',{emitEvent : false})
-                if(this.budgetInfoForm.controls.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
-                    this.budgetInfoForm.controls.budgetId.disable({emitEvent : false})
+                if (this.budgetInfoForm.controls.gmsBudgetowner.value?.portfolioOwnerId == "3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC") {
+                    this.budgetInfoForm.controls.budgetId.disable({ emitEvent: false })
                 }
             }
         })
@@ -152,40 +170,40 @@ export class BudgetGeneralEditComponent {
         this.filterCriteria = this.projectHubService.all
         this.apiService.getBudgetPageInfo(this.projectHubService.projectid).then((res: any) => {
             this.budgetInfo = res
+            console.log("RES", this.budgetInfo)
             this.generalInfoPatchValue(res)
-            if(this.capexRequired.value == true) {
+            if (this.capexRequired.value == true) {
                 this.required = true;
-                if(this.isBudgetAdmin){
-                    if(this.budgetId.disabled){
-                        this.budgetId.enable({emitEvent : false})
+                if (this.isBudgetAdmin) {
+                    if (this.budgetId.disabled) {
+                        this.budgetId.enable({ emitEvent: false })
                     }
-                    if(this.gmsBudgetowner.disabled){
-                        this.gmsBudgetowner.enable({emitEvent : false})
+                    if (this.gmsBudgetowner.disabled) {
+                        this.gmsBudgetowner.enable({ emitEvent: false })
                     }
                 }
-                else if(this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.projectHubService.roleControllerControl.projectManager)
-                {
-                    if(this.gmsBudgetowner.disabled){
-                        this.gmsBudgetowner.enable({emitEvent : false})
+                else if (this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.projectHubService.roleControllerControl.projectManager) {
+                    if (this.gmsBudgetowner.disabled) {
+                        this.gmsBudgetowner.enable({ emitEvent: false })
                     }
                 }
 
 
-                else{
-                    if(this.budgetId.enabled){
-                        this.budgetId.disable({emitEvent : false})
+                else {
+                    if (this.budgetId.enabled) {
+                        this.budgetId.disable({ emitEvent: false })
                     }
-                    if(this.gmsBudgetowner.enabled){
-                        this.gmsBudgetowner.disable({emitEvent : false})
+                    if (this.gmsBudgetowner.enabled) {
+                        this.gmsBudgetowner.disable({ emitEvent: false })
                     }
                 }
-            }else{
+            } else {
                 this.required = false;
                 this.budgetId.disable()
                 this.gmsBudgetOwnerBasicSetup()
             }
-            if(this.capexRequired.value ==true && !this.isBudgetAdmin){
-                this.capexRequired.disable({emitEvent : false})
+            if (this.capexRequired.value == true && !this.isBudgetAdmin) {
+                this.capexRequired.disable({ emitEvent: false })
             }
             // if( !this.isBudgetAdmin && this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
             //     this.budgetId.disable()
@@ -207,26 +225,27 @@ export class BudgetGeneralEditComponent {
             // }
             this.projectHubService.isFormChanged = false
             this.gmsBudgetOwnerBasicSetup();
+
             this.viewContent = true
         })
         this.isBudgetAdmin = this.projectHubService.roleControllerControl.budgetAdmin;
     }
     gmsBudgetOwnerBasicSetup() {
         this.gmsBudgetOwnerList = this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
-        if(this.isBudgetAdmin==true || this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.projectHubService.roleControllerControl.projectManager){
-            this.gmsBudgetOwnerList =  this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
-            if(this.gmsBudgetowner.disabled){
-                this.gmsBudgetowner.enable({emitEvent : false})
+        if (this.isBudgetAdmin == true || this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.projectHubService.roleControllerControl.projectManager) {
+            this.gmsBudgetOwnerList = this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
+            if (this.gmsBudgetowner.disabled) {
+                this.gmsBudgetowner.enable({ emitEvent: false })
             }
-        }else{
-            if(this.gmsBudgetowner.value.gmsbudgetOwnerEditable){
-                if(this.gmsBudgetowner.disabled){
-                    this.gmsBudgetowner.enable({emitEvent : false})
+        } else {
+            if (this.gmsBudgetowner.value.gmsbudgetOwnerEditable) {
+                if (this.gmsBudgetowner.disabled) {
+                    this.gmsBudgetowner.enable({ emitEvent: false })
                 }
-                this.gmsBudgetOwnerList =  this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerDropDownValue == true)
-            }else{
-                if(this.gmsBudgetowner.enabled) {
-                    this.gmsBudgetowner.disable({emitEvent : false})
+                this.gmsBudgetOwnerList = this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerDropDownValue == true)
+            } else {
+                if (this.gmsBudgetowner.enabled) {
+                    this.gmsBudgetowner.disable({ emitEvent: false })
                 }
             }
         }
@@ -241,9 +260,37 @@ export class BudgetGeneralEditComponent {
     getWhyLookup(): any {
         return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '927293cb-d4ca-4f31-8af6-c33c9e4792d1')
     }
+    sortByLevel(array: any): any {
+        return array.length > 1 ? array.sort((a, b) => {
+            if (a.level === null) {
+                return -1;
+            }
+            if (b.level === null) {
+                return 1;
+            }
+            if (a.level === b.level) {
+                return 0;
+            }
+            return a.level < b.level ? -1 : 1;
+        }) : array
+    }
 
+    openStandardMilestonesSets(): void {
+        if (this.budgetInfoForm.controls.capexRequired.value == true && this.budgetInfo.budget.capExRequired == false) {
+            this.viewStandardMilestonesSets = true;
+            const formValue = this.budgetInfoForm.getRawValue();
+            const location = this.mode
+            this.sharedService.setBudgetFormData(formValue);
+            this.sharedService.setLocation(location);
+        }
+    }
+    toggleSchedule(event: any) {
+        this.standarCAPEXMilestoneAdded[event.tableIndex] = [...event.selected]
+    }
     async submitBudgetInfo() {
-        let isPrefixValid:boolean = true;
+        console.log(this.mode)
+        //debugger
+        let isPrefixValid: boolean = true;
         if (this.budgetId.value
             && this.budgetId.dirty
             && this.isBudgetAdmin == false) {
@@ -296,34 +343,34 @@ export class BudgetGeneralEditComponent {
                 "dismissible": true
             }
             const alert = this.fuseAlert.open(comfirmConfig)
-        }else{
+        } else {
             if (this.required) {
                 var fieldsMissing = 0;
                 var missingFields = [];
-                if(this.budgetId.value==null || this.budgetId.value==""){
-                    fieldsMissing ++;
+                if (this.budgetId.value == null || this.budgetId.value == "") {
+                    fieldsMissing++;
                     missingFields.push("Budget ID")
                 }
-                if(!this.predefinedInvestmentId.value || Object.keys(this.predefinedInvestmentId.value).length==0 ){
-                    fieldsMissing ++;
+                if (!this.predefinedInvestmentId.value || Object.keys(this.predefinedInvestmentId.value).length == 0) {
+                    fieldsMissing++;
                     missingFields.push("Global/Regional Predefined Investment")
                 }
-                if(this.gmsBudgetowner.invalid || Object.keys(this.gmsBudgetowner.value).length==0 ){
-                    fieldsMissing ++;
+                if (this.gmsBudgetowner.invalid || Object.keys(this.gmsBudgetowner.value).length == 0) {
+                    fieldsMissing++;
                     missingFields.push("GMS Budget Owner")
                 }
-                if(this.where.invalid || this.where.value == ""){
-                    fieldsMissing ++;
+                if (this.where.invalid || this.where.value == "") {
+                    fieldsMissing++;
                     missingFields.push("Where")
                 }
-                if(this.why.invalid || this.why.value == ""){
-                    fieldsMissing ++;
+                if (this.why.invalid || this.why.value == "") {
+                    fieldsMissing++;
                     missingFields.push("Why")
                 }
-                if(this.fundingApprovalNeedDate.invalid || this.fundingApprovalNeedDate.value == null ){
-                    fieldsMissing ++;
-                    missingFields.push("Funding Approval Need Date")
-                }
+                // if(this.fundingApprovalNeedDate.invalid || this.fundingApprovalNeedDate.value == null ){
+                //     fieldsMissing ++;
+                //     missingFields.push("Funding Approval Need Date")
+                // }
                 var comfirmConfig: FuseConfirmationConfig = {
                     "title": "The following fields are required",
                     "message": this.getMissingFieldsString(missingFields),
@@ -345,52 +392,101 @@ export class BudgetGeneralEditComponent {
                     },
                     "dismissible": true
                 }
-                if(fieldsMissing!=0){
+                if (fieldsMissing != 0) {
                     const riskIssueAlert = this.fuseAlert.open(comfirmConfig)
                     riskIssueAlert.afterClosed().subscribe(close => {
                         if (close == 'confirmed') {
                         }
                     })
-                }else{
+                } else {
+                    if (this.mode == 'CAPEX') {
+                        this.openStandardMilestonesSets()
+                    }
+                    else {
+                        this.submitInfo()
+                    }
+                }
+            }
+            else {
+                if (this.mode == 'CAPEX') {
+                    this.openStandardMilestonesSets()
+                }
+                else {
                     this.submitInfo()
                 }
             }
-            else{
-                this.submitInfo()
-            }
         }
     }
-    submitInfo(){
-        this.projectHubService.isFormChanged = false
-        const formValue = this.budgetInfoForm.getRawValue();
-        const mainObj =this.prepareDataforSubmit(formValue)
-        this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
-            this.projectHubService.isNavChanged.next(true)
-            this.projectHubService.submitbutton.next(true)
-            this.projectHubService.successSave.next(true)
-            this.projectHubService.toggleDrawerOpen('', '', [], '')
-        }).catch(err => {
-            if(err.status == 400){
-                var comfirmConfig: FuseConfirmationConfig = {
-                    "title": "This budget ID is used by another project. Please select another one",
-                    "message": "",
-                    "icon": {
-                        "show": true,
-                        "name": "heroicons_outline:exclamation",
-                        "color": "warning"
-                    },
-                    "actions": {
-                        "confirm": {
+    submitInfo() {
+        const formData = this.sharedService.getBudgetFormData();
+        const location = this.sharedService.getLocation();
+        if (location == 'CAPEX' && this.mode == 'CAPEX') {
+
+            this.projectHubService.isFormChanged = false
+            const formValue = formData;
+            const mainObj = this.prepareDataforSubmit(formValue)
+            this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
+                // this.projectHubService.isNavChanged.next(true)
+                // this.projectHubService.submitbutton.next(true)
+                // this.projectHubService.successSave.next(true)
+                // this.projectHubService.toggleDrawerOpen('', '', [], '')
+            }).catch(err => {
+                if (err.status == 400) {
+                    var comfirmConfig: FuseConfirmationConfig = {
+                        "title": "This budget ID is used by another project. Please select another one",
+                        "message": "",
+                        "icon": {
                             "show": true,
-                            "label": "Okay",
-                            "color": "primary"
+                            "name": "heroicons_outline:exclamation",
+                            "color": "warning"
                         },
-                    },
-                    "dismissible": true
+                        "actions": {
+                            "confirm": {
+                                "show": true,
+                                "label": "Okay",
+                                "color": "primary"
+                            },
+                        },
+                        "dismissible": true
+                    }
+                    const alert = this.fuseAlert.open(comfirmConfig)
                 }
-                const alert = this.fuseAlert.open(comfirmConfig)
-            }
-        })
+            })
+        }
+        else {
+            this.projectHubService.isFormChanged = false
+            const formValue = this.budgetInfoForm.getRawValue();
+            const mainObj = this.prepareDataforSubmit(formValue)
+            this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
+                this.projectHubService.isNavChanged.next(true)
+                this.projectHubService.submitbutton.next(true)
+                this.projectHubService.successSave.next(true)
+                this.projectHubService.toggleDrawerOpen('', '', [], '')
+            }).catch(err => {
+                if (err.status == 400) {
+                    var comfirmConfig: FuseConfirmationConfig = {
+                        "title": "This budget ID is used by another project. Please select another one",
+                        "message": "",
+                        "icon": {
+                            "show": true,
+                            "name": "heroicons_outline:exclamation",
+                            "color": "warning"
+                        },
+                        "actions": {
+                            "confirm": {
+                                "show": true,
+                                "label": "Okay",
+                                "color": "primary"
+                            },
+                        },
+                        "dismissible": true
+                    }
+                    const alert = this.fuseAlert.open(comfirmConfig)
+                }
+            })
+        }
+
+
     }
     prepareDataforSubmit(formValue): any {
         const mainObj = this.budgetInfo;
@@ -401,41 +497,42 @@ export class BudgetGeneralEditComponent {
         mainObj.budget.predefinedInvestmentId = formValue.predefinedInvestmentId?.lookUpId
         mainObj.budget.whereId = formValue.where
         mainObj.budget.whyId = formValue.why
-        mainObj.budget.fundingApprovalNeedDate = formValue.fundingApprovalNeedDate ? moment(formValue.fundingApprovalNeedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
+        //mainObj.budget.fundingApprovalNeedDate = formValue.fundingApprovalNeedDate ? moment(formValue.fundingApprovalNeedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
         mainObj.budget.capExRequired = formValue.capexRequired
         mainObj.budget.projectFundingStatus = formValue.projectFundingStatus
         mainObj.budget.totalApprovedCapEx = formValue.totalApprovedCapex
         mainObj.budget.totalApprovedOpEx = formValue.totalApprovedOpex
+        console.log(mainObj)
         return mainObj;
     }
-    getMissingFieldsString(fields) : string {
+    getMissingFieldsString(fields): string {
         return fields.join(', ')
     }
     disabler() {
 
     }
-    generalInfoPatchValue(response){
+    generalInfoPatchValue(response) {
         this.budgetInfoForm.patchValue({
             capexRequired: response.budget.capExRequired,
-            assetPlaced:  response.budget.definitiveCrapprovalDate,
-            budgetId:  response.budget.capitalBudgetId,
-            gmsBudgetowner:  this.getPortfolioOwnerNameById(response.budget.budgetOwner) || "",
-            predefinedInvestmentId:  this.getLookup(response.budget.predefinedInvestmentId),
-            where:  response.budget.whereId,
-            why:  response.budget.whyId,
-            fundingApprovalNeedDate:  response.budget.fundingApprovalNeedDate,
-            projectFundingStatus:  response.budget.fundingStatusId,
-            totalApprovedCapex:  response.budget.totalApprovedCapExFxconv,
-            totalApprovedOpex:  response.budget.totalApprovedOpExFxconv,
-        }, {emitEvent : false})
+            assetPlaced: response.budget.definitiveCrapprovalDate,
+            budgetId: response.budget.capitalBudgetId,
+            gmsBudgetowner: this.getPortfolioOwnerNameById(response.budget.budgetOwner) || "",
+            predefinedInvestmentId: this.getLookup(response.budget.predefinedInvestmentId),
+            where: response.budget.whereId,
+            why: response.budget.whyId,
+            //fundingApprovalNeedDate:  response.budget.fundingApprovalNeedDate,
+            projectFundingStatus: response.budget.fundingStatusId,
+            totalApprovedCapex: response.budget.totalApprovedCapExFxconv,
+            totalApprovedOpex: response.budget.totalApprovedOpExFxconv,
+        }, { emitEvent: false })
     }
     getPortfolioOwnerNameById(id: string): any {
-        return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId==id)[0];
+        return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId == id)[0];
     }
     requestBudgetId(): any {
         this.apiService.getNewBudgetId(this.projectHubService.projectid, this.gmsBudgetowner.value.portfolioOwnerId).then((res: any) => {
             this.budgetInfoForm.patchValue({
-                budgetId:  res.BudgetId,
+                budgetId: res.BudgetId,
             })
             this.showBudgetIdButton = false;
             this.budgetId.disable();
@@ -467,9 +564,9 @@ export class BudgetGeneralEditComponent {
     get capexRequired() {
         return this.budgetInfoForm.get('capexRequired');
     }
-    get fundingApprovalNeedDate() {
-        return this.budgetInfoForm.get('fundingApprovalNeedDate');
-    }
+    // get fundingApprovalNeedDate() {
+    //     return this.budgetInfoForm.get('fundingApprovalNeedDate');
+    // }
     getLookup(key) {
         return this.projectHubService.lookUpMaster.filter(x => x.lookUpId == key)[0]
     }

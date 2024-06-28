@@ -211,7 +211,7 @@ export class PortfolioCenterComponent implements OnInit {
         PrimaryProduct: new FormControl(false),
         PrimaryValueDriver: new FormControl(false),
         AGILEPrimaryWorkstream: new FormControl(false),
-        AssetPlaceInService: new FormControl(false),
+        //AssetPlaceInService: new FormControl(false),
         CapexRequired: new FormControl(false),
         GMSBudgetOwner: new FormControl(false),
         GlobalRegionalPredefinedInvestment: new FormControl(false),

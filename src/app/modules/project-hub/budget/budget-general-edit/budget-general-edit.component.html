@@ -1,4 +1,4 @@
-<div *ngIf="viewContent">
+<div *ngIf="viewContent" [hidden]="viewStandardMilestonesSets">
     <div class="flex items-start justify-between bg-primary sidepanel-header">
         <div class="text-on-primary" style="padding-top: 6px">Budget CAPEX Edit</div>
         <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
@@ -43,17 +43,26 @@
                           [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
                           [dropDownArray]="getWhyLookup()">
             </spot-select>
-            <spot-input-date class="w-full read-only" formControlName="fundingApprovalNeedDate" [Required]="required"
+            <!-- <spot-input-date class="w-full read-only" formControlName="fundingApprovalNeedDate" [Required]="required"
                              [label]="'Funding Approval Need Date'" [placeholder]="'Funding Approval Need Date'">
-            </spot-input-date>
+            </spot-input-date> -->
     </form>
     <div class="w-full px-3 pr-3 flex items-start justify-between">
         <a class="min-w-26" mat-flat-button [color]="'primary'"
            (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
             Cancel
         </a>
-        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitBudgetInfo()">
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" 
+        *ngIf="mode == 'CAPEX'" (click)="submitBudgetInfo()">
+            Submit
+        </button>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" 
+        *ngIf="mode == 'Normal'" (click)="submitBudgetInfo()">
             Submit
         </button>
     </div>
+</div>
+<div *ngIf="viewContent && mode == 'CAPEX'" [hidden]="!viewStandardMilestonesSets">
+    <app-schedule-view-bulk-edit [callLocation] = "'CAPEX'" [viewStandardMilestonesSets] = "viewStandardMilestonesSets" [hidden]="!viewStandardMilestonesSets"></app-schedule-view-bulk-edit>
+    
 </div>
