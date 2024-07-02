@@ -84,6 +84,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     viewBaseline: boolean = false
     viewBaselineLogs: boolean = false
     compareBaselineLogs: boolean = false
+    hide: boolean = false
     //viewStandardMilestonesSets: boolean = false
     roleMaster: any = {}
     baselineCount: any = {}
