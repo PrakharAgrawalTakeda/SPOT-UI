@@ -6,7 +6,7 @@ export interface IAppSetting {
 export class ModifiedTaskModel extends TaskModel {
     static get fields(): any {
         return [
-          { name : 'isImportantDate', type : 'boolean' }
+            { name: 'isImportantDate', type: 'string' },
         ];
     }
 }
