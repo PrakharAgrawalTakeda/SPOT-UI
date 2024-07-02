@@ -284,6 +284,35 @@ export class BudgetGeneralEditComponent {
             this.sharedService.setLocation(location);
         }
     }
+    cancelBudgetInfo() {
+        var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Are you sure?",
+            "message": "The changes applied to the CAPEX Required section and the Milestones will not be saved. Do you want to proceed?",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warn"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Okay",
+                "color": "warn"
+              },
+              "cancel": {
+                "show": true,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+          alert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+                this.projectHubService.toggleDrawerOpen('', '',[],'',true)
+            }
+          })
+    }
     toggleSchedule(event: any) {
         this.standarCAPEXMilestoneAdded[event.tableIndex] = [...event.selected]
     }
