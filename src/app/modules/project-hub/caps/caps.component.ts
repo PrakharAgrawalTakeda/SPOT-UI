@@ -225,6 +225,7 @@ export class CapsComponent implements OnInit, OnDestroy {
             carbonngx.push(carbonObject)
           })
           this.carbonngx = carbonngx
+          console.log(this.carbonngx)
         }
         this.Biogenicsngx = res.biogenicsData
         

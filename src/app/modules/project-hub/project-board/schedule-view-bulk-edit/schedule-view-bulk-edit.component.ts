@@ -155,7 +155,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         private authService: AuthService, private _elementRef: ElementRef, private indicator: SpotlightIndicatorsService,
         private router: Router, private _Activatedroute: ActivatedRoute, public fuseAlert: FuseConfirmationService, private changeDetectorRef: ChangeDetectorRef,
         private msalService: MsalService, private readonly viewportRuler: ViewportRuler,
-        private readonly ngZone: NgZone, private sharedService: SharedService) {
+        private readonly ngZone: NgZone, private sharedService: SharedService, private cdr: ChangeDetectorRef) {
         // this.scheduleData.scheduleData = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
         this.projecthubservice.includeClosedItems.schedule.subscribe(res => {
             if (this.viewContent == true) {
@@ -268,6 +268,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.dataloader()
     }
+
     insertArray(projectId: string): void {
         //debugger
         if (this.insertarray.length == 0) {
@@ -3018,15 +3019,17 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         if (this.callLocation == 'CAPEX') {
             const formData = this.sharedService.getBudgetFormData();
             const location = this.sharedService.getLocation();
-            if (formData) {
-              this.budgetGeneralEditComponent.budgetInfoForm.patchValue(formData);
-              this.budgetGeneralEditComponent.mode = location
-            }
-            this.saveScheduleBulkEdit();
-            this.budgetGeneralEditComponent.submitInfo();
-          } else {
-            this.viewStandardMilestonesSets = false;
-          }
+            console.log(formData)
+            console.log(this.budgetGeneralEditComponent)
+                    if (formData) {
+                        this.budgetGeneralEditComponent.budgetInfoForm.patchValue(formData);
+                        this.budgetGeneralEditComponent.mode = location
+                      }
+                      this.saveScheduleBulkEdit();
+                      this.budgetGeneralEditComponent.submitInfo();
+                    } else {
+                      this.viewStandardMilestonesSets = false;
+                    }           
 
     }
 

@@ -276,7 +276,7 @@ export class BudgetGeneralEditComponent {
     }
 
     openStandardMilestonesSets(): void {
-        if (this.budgetInfoForm.controls.capexRequired.value == true && this.budgetInfo.budget.capExRequired == false) {
+        if (this.budgetInfoForm.controls.capexRequired.value == true && (this.budgetInfo.budget.capExRequired == false || this.budgetInfo.budget.capExRequired == null)) {
             this.viewStandardMilestonesSets = true;
             const formValue = this.budgetInfoForm.getRawValue();
             const location = this.mode
@@ -318,7 +318,6 @@ export class BudgetGeneralEditComponent {
     }
     async submitBudgetInfo() {
         console.log(this.mode)
-        //debugger
         let isPrefixValid: boolean = true;
         if (this.budgetId.value
             && this.budgetId.dirty
