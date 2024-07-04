@@ -191,7 +191,7 @@ export class BudgetForecastBulkEditComponent {
                     "labelID": x.labelID,
                     "lastSubmitted": x.lastSubmitted,
                     "mtdpDeviationCodeID": x.mtdpDeviationCodeID,
-                    "periodName": x.periodName,
+                    "periodName": x?.periodName,
                     "projectID": x.projectID,
                     "submittedByID": x.submittedByID,
                     "userName": x.userName,
@@ -354,7 +354,7 @@ export class BudgetForecastBulkEditComponent {
                     "labelID": i.labelID,
                     "lastSubmitted": i.lastSubmitted,
                     "mtdpDeviationCodeID": i.mtdpDeviationCodeID,
-                    "periodName": i.periodName,
+                    "periodName": i?.periodName,
                     "projectID": i.projectID,
                     "submittedByID": i.submittedByID,
                     "userName": i.userName,
@@ -690,7 +690,7 @@ export class BudgetForecastBulkEditComponent {
         })
         this.budgetForecastForm.controls.totalApprovedCapex.disable()
         this.budgetService.setTextColors();
-        this.preliminaryLabel =  forecast.find(x => x.active == 'Preliminary') ? ("Preliminary " + forecast.find(x => x.active == 'Preliminary').periodName) : '';
+        this.preliminaryLabel =  forecast.find(x => x.active == 'Preliminary') ? ("Preliminary " + forecast.find(x => x.active == 'Preliminary')?.periodName) : '';
     }
 
     getLookUpName(id: string): string {
