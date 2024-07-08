@@ -164,7 +164,7 @@ export class BudgetComponent implements OnInit, OnDestroy {
             this.preliminaryExists = true;
             this.budgetForecastForm.patchValue({
                 referencePreliminary: preliminary.active,
-                periodPreliminary: preliminary.periodName,
+                periodPreliminary: preliminary?.periodName,
                 lastSubmittedPreliminary: this.formatDateTime(preliminary.lastSubmitted),
                 submittedByPreliminary: preliminary.userName,
             })
@@ -172,7 +172,7 @@ export class BudgetComponent implements OnInit, OnDestroy {
         const current = forecast.find(x => x.active == 'Current');
         this.budgetForecastForm.patchValue({
             referenceCurrent: current.active,
-            periodCurrent: current.periodName,
+            periodCurrent: current?.periodName,
             lastSubmittedCurrent: this.formatDateTime(current.lastSubmitted),
             submittedByCurrent: current.userName,
             afpCodeId: this.getLookUpName(current.afpDeviationCodeID),
@@ -180,9 +180,9 @@ export class BudgetComponent implements OnInit, OnDestroy {
             committedSpend: forecast.find(x => x.isopen && x.budgetData == "CapEx Forecast").committedSpend,
         })
         this.budgetService.headerLabel =
-            ( preliminary ? "Preliminary " + preliminary.periodName
-                          : "Current " + current.periodName
-            ) + " versus Plan " + forecast.find(x => x.active == 'Plan').periodName
+            ( preliminary ? "Preliminary " + preliminary?.periodName
+                          : "Current " + current?.periodName
+            ) + " versus Plan " + forecast.find(x => x.active == 'Plan')?.periodName
     }
 
     formatDateTime(dateTime: string): string {
