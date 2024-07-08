@@ -2914,100 +2914,103 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     addStandardMilestonesToList(standardMilestones: any[]) {
         standardMilestones.forEach(x => {
             switch (x.milestoneType) {
-                case 1: {
-                    let index = 0;
-                    let exists = false;
-                    for (let control of this.milestoneForm.controls) {
-                        if (control.value.milestoneType == x.milestoneType) {
-                            control.patchValue({ milestone: x.milestone })
-                            if (x.funtionalOwnerId && x.funtionalOwnerId != '') {
-                                control.patchValue({ functionGroupId: x.funtionalOwnerId })
-                                control.patchValue({ function: this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.funtionalOwnerId) })
-                            }
-                            if (!control.value.comments || control.value.comments == '') {
-                                control.patchValue({ comments: x.comment })
-                            }
-                            if (this.mode == 'Project-Charter') {
-                                if (control.value.includeInCharter == false || control.value.includeInCharter == null) {
-                                    control.patchValue({ includeInCharter: x.includeInReport })
-                                }
-                            }
-                            if (this.mode == 'Business-Case') {
-                                if (control.value.includeInBusinessCase == false || control.value.includeInBusinessCase == null) {
-                                    control.patchValue({ includeInBusinessCase: x.includeInReport })
-                                }
-                            }
-                            if (this.mode == 'Project-Close-Out') {
-                                if (control.value.includeInCloseout == false || control.value.includeInCloseout == null) {
-                                    control.patchValue({ includeInCloseout: x.includeInReport })
-                                }
-                            }
-                            if (this.mode == 'Normal') {
-                                if (control.value.includeInReport == false || control.value.includeInReport == null) {
-                                    control.patchValue({ includeInReport: x.includeInReport })
-                                }
-                            }
-                            control.patchValue({ templateMilestoneId: x.milestoneId })
-                            this.milestoneTableEditRow(index)
-                            exists = true;
-                        }
-                        index++;
-                    }
-                    if (!exists) {
-                        this.addStandardMilestoneToEditStack(x)
-                    }
-                    break;
-                }
+                case 1:
                 case 2: {
                     let index = 0;
                     let exists = false;
+       
+                    // Iterating over open milestones
                     for (let control of this.milestoneForm.controls) {
                         if (control.value.milestoneType == x.milestoneType) {
-                            control.patchValue({ milestone: x.milestone })
+                            control.patchValue({ milestone: x.milestone });
                             if (x.funtionalOwnerId && x.funtionalOwnerId != '') {
-                                control.patchValue({ functionGroupId: x.funtionalOwnerId })
-                                control.patchValue({ function: this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.funtionalOwnerId) })
+                                control.patchValue({ functionGroupId: x.funtionalOwnerId });
+                                control.patchValue({ function: this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.funtionalOwnerId) });
                             }
-                            if (control.value.comments == '') {
-                                control.patchValue({ comments: x.comment })
+                            if (!control.value.comments || control.value.comments == '') {
+                                control.patchValue({ comments: x.comment });
                             }
                             if (this.mode == 'Project-Charter') {
                                 if (control.value.includeInCharter == false || control.value.includeInCharter == null) {
-                                    control.patchValue({ includeInCharter: x.includeInReport })
+                                    control.patchValue({ includeInCharter: x.includeInReport });
                                 }
                             }
                             if (this.mode == 'Business-Case') {
                                 if (control.value.includeInBusinessCase == false || control.value.includeInBusinessCase == null) {
-                                    control.patchValue({ includeInBusinessCase: x.includeInReport })
+                                    control.patchValue({ includeInBusinessCase: x.includeInReport });
                                 }
                             }
                             if (this.mode == 'Project-Close-Out') {
                                 if (control.value.includeInCloseout == false || control.value.includeInCloseout == null) {
-                                    control.patchValue({ includeInCloseout: x.includeInReport })
+                                    control.patchValue({ includeInCloseout: x.includeInReport });
                                 }
                             }
                             if (this.mode == 'Normal') {
                                 if (control.value.includeInReport == false || control.value.includeInReport == null) {
-                                    control.patchValue({ includeInReport: x.includeInReport })
+                                    control.patchValue({ includeInReport: x.includeInReport });
                                 }
                             }
-                            control.patchValue({ templateMilestoneId: x.milestoneId })
-                            this.milestoneTableEditRow(index)
+                            control.patchValue({ templateMilestoneId: x.milestoneId });
+                            this.milestoneTableEditRow(index);
                             exists = true;
+                            break;
                         }
                         index++;
                     }
+       
+                    // If no matching open milestone is found, check for closed milestones
+                    if (!exists && !this.projecthubservice.includeClosedItems.schedule.value) {
+                        const closedMilestones = this.scheduleData.scheduleData.length > 0
+                            ? this.scheduleData.scheduleData.filter(y => y.completionDate != null && y.milestoneType == x.milestoneType)
+                            : [];
+       
+                        if (closedMilestones.length > 0) {
+                            let closedMilestone = closedMilestones[0];
+                            closedMilestone.milestone = x.milestone;
+                            if (x.funtionalOwnerId && x.funtionalOwnerId != '') {
+                                closedMilestone.functionGroupId = x.funtionalOwnerId;
+                                closedMilestone.function = this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.funtionalOwnerId);
+                            }
+                            if (!closedMilestone.comments || closedMilestone.comments == '') {
+                                closedMilestone.comments = x.comment;
+                            }
+                            if (this.mode == 'Project-Charter') {
+                                if (closedMilestone.includeInCharter == false || closedMilestone.includeInCharter == null) {
+                                    closedMilestone.includeInCharter = x.includeInReport;
+                                }
+                            }
+                            if (this.mode == 'Business-Case') {
+                                if (closedMilestone.includeInBusinessCase == false || closedMilestone.includeInBusinessCase == null) {
+                                    closedMilestone.includeInBusinessCase = x.includeInReport;
+                                }
+                            }
+                            if (this.mode == 'Project-Close-Out') {
+                                if (closedMilestone.includeInCloseout == false || closedMilestone.includeInCloseout == null) {
+                                    closedMilestone.includeInCloseout = x.includeInReport;
+                                }
+                            }
+                            if (this.mode == 'Normal') {
+                                if (closedMilestone.includeInReport == false || closedMilestone.includeInReport == null) {
+                                    closedMilestone.includeInReport = x.includeInReport;
+                                }
+                            }
+                            closedMilestone.templateMilestoneId = x.milestoneId;
+                            exists = true;
+                        }
+                    }
+       
+                    // If no matching milestone found in either open or closed milestones, only then add a new one
                     if (!exists) {
-                        this.addStandardMilestoneToEditStack(x)
+                        this.addStandardMilestoneToEditStack(x);
                     }
                     break;
                 }
                 default: {
-                    this.addStandardMilestoneToEditStack(x)
+                    this.addStandardMilestoneToEditStack(x);
                     break;
                 }
             }
-            var div = document.getElementsByClassName('datatable-scroll')[0]
+            var div = document.getElementsByClassName('datatable-scroll')[0];
             setTimeout(() => {
                 div?.scroll({
                     top: div.scrollHeight,
@@ -3015,7 +3018,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     behavior: 'smooth'
                 });
             }, 100);
-        })
+        });
         if (this.callLocation == 'CAPEX') {
             const formData = this.sharedService.getBudgetFormData();
             const location = this.sharedService.getLocation();
