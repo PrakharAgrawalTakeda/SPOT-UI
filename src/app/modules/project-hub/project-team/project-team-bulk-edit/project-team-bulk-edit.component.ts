@@ -67,7 +67,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
           for (var i of this.teamMembers) {
             this.projectTeamForm.push(new FormGroup({
               projectTeamUniqueId: new FormControl(i.projectTeamUniqueId),
-              user: i.userId || i.userId != "" ? new FormControl({
+              user: i?.userId ? new FormControl({
                 userAdid: i.userId,
                 userDisplayName: i.userName
               }) : new FormControl(null),
