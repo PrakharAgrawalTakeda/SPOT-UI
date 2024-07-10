@@ -149,6 +149,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     })
     optionInfoData: any = {}
     optionId: string = ''
+    milestoneNames: any;
 
     constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
         private portApiService: PortfolioApiService,
@@ -2912,17 +2913,19 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     //   event.target.innerWidth;
     // }
     addStandardMilestonesToList(standardMilestones: any[]) {
+        
         standardMilestones.forEach(x => {
             switch (x.milestoneType) {
+                
                 case 1:
                 case 2: {
                     let index = 0;
                     let exists = false;
-       
+                    this.milestoneNames = x.milestone
                     // Iterating over open milestones
                     for (let control of this.milestoneForm.controls) {
                         if (control.value.milestoneType == x.milestoneType) {
-                            control.patchValue({ milestone: x.milestone });
+                            control.patchValue({ milestone: x.milestoneType > 0 ? x.milestoneType == 1 ? this.milestoneNames.replace('Execution Start - ', '') : x.milestoneType == 2 ? this.milestoneNames.replace('Execution End - ', '') : x.milestone : x.milestone });
                             if (x.funtionalOwnerId && x.funtionalOwnerId != '') {
                                 control.patchValue({ functionGroupId: x.funtionalOwnerId });
                                 control.patchValue({ function: this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.funtionalOwnerId) });
@@ -3056,6 +3059,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 limitPassedBusinessCase = true;
             }
         }
+        
         this.milestoneForm.push(new FormGroup({
             scheduleUniqueId: new FormControl(''),
             projectId: new FormControl(this.id),
