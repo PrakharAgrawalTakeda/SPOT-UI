@@ -154,6 +154,7 @@ export class DetailedScheduleComponent implements OnInit {
           }
         }
       },
+      eventSegments: false,
       scrollButtons: true,
       projectLines: true,
       baselines: {
