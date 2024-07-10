@@ -9,6 +9,7 @@ import moment from 'moment';
 import { ModifiedTaskModel } from 'app/shared/global-app-settings';
 import { GlobalDetailedScheduleBetaUsers } from 'app/shared/global-detailed-schedule-beta-users';
 import { MsalService } from '@azure/msal-angular';
+import { maxHeightIcon } from '@progress/kendo-svg-icons';
 @Component({
   selector: 'app-detailed-schedule',
   templateUrl: './detailed-schedule.component.html',
@@ -105,6 +106,7 @@ export class DetailedScheduleComponent implements OnInit {
       taskEdit: {
         items: {
           generalTab: {
+            scrollable: true,
             items: {
               /*isImportantDate: {
                 name: 'isImportantDate',
@@ -122,7 +124,6 @@ export class DetailedScheduleComponent implements OnInit {
                 type: 'radiogroup',
                 name: 'isImportantDate',
                 label: 'Important Date',
-                flex: '1 0 100%',
                 labelWidth: '6.5em',
                 cls: 'pt-3',
                 items: [{
@@ -142,9 +143,17 @@ export class DetailedScheduleComponent implements OnInit {
                   ref: 'isImportantDate_END_DATE',
                   checkedValue: 'END_DATE'
                 }]
-              }
-            },
+              },
+              notes: {
+                type: 'textarea',
+                name: 'notes',
+                label: 'NOTES',
+                labelWidth: '6.5em',
+                cls: 'pt-3',
+              },
+            }
           },
+
           resourcesTab: {
             items: {
               customInfoProjectTeam: {
@@ -154,6 +163,7 @@ export class DetailedScheduleComponent implements OnInit {
           }
         }
       },
+      eventSegments: false,
       scrollButtons: true,
       projectLines: true,
       baselines: {
