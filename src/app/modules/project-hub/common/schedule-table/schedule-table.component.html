@@ -102,7 +102,7 @@
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
         class=" material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="schedulengxdata"
         #scheduleTable [rowClass]="getRowClass"
-        [sorts]="[{ prop: 'plannedFinish', dir: 'asc' },{ prop: 'baselineFinish', dir: 'asc' },{ prop: 'completionDate', dir: 'asc' }]">
+        [sorts]="[{ prop: 'plannedFinish', dir: 'asc' },{ prop: 'baselineFinish', dir: 'asc' },{ prop: 'completionDate', dir: 'asc' }, { prop: 'milestoneTemplateId', dir: 'asc' }, { prop: 'sortOrder', dir: 'asc' }]">
         <!-- [sorts]="[{ prop: 'variance', dir: 'asc' }]" -->
         <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.7"
             *ngIf="mode== 'Normal'">
