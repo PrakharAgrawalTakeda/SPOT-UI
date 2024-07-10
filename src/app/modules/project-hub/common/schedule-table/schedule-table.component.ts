@@ -122,8 +122,6 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
       this.scheduleData = this.projectViewDetails.scheduleData
       for (var i of this.scheduleData) {
         i.variance = this.calculateVariance(i)
-        i.milestoneTemplateId = i.templateMilestoneId ? this.projectViewDetails.milestoneTemplateData?.find(x => x.milestoneId == i.templateMilestoneId).milestoneTemplateId : ''
-        i.sortOrder = i.templateMilestoneId ? this.projectViewDetails.milestoneTemplateData?.find(x => x.milestoneId == i.templateMilestoneId).sortOrder : 0
       }
       if (this.isclosed == false && this.mode == 'Normal') {
         this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
