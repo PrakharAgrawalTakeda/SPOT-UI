@@ -7,6 +7,7 @@ export class ModifiedTaskModel extends TaskModel {
     static get fields(): any {
         return [
             { name: 'isImportantDate', type: 'string' },
+            { name: 'notes', type: 'string' }
         ];
     }
 }
