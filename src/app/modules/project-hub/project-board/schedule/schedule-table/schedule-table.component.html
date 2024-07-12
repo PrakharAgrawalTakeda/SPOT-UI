@@ -120,7 +120,7 @@
     <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
         let-onCheckboxChangeFn="onCheckboxChangeFn">
         <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="isToggleChecked(value)"
-            (change)="onCheckboxChangeFn($event)" [disabled]="isToggleDisabled(value)">
+            (change)="onToggleChange(value, $event)" [disabled]="isToggleDisabled(value)">
         </mat-slide-toggle>
     </ng-template>
 </ngx-datatable-column>

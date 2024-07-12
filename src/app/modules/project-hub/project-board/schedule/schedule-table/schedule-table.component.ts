@@ -44,80 +44,104 @@ export class SchedulesTableComponent implements OnInit {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   projectViewDetails: any = { scheduleData: [] };
   isProjectViewDetailsLoaded: boolean = false;
-  constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService,
-              public indicator: SpotlightIndicatorsService, private router: Router, public fuseAlert: FuseConfirmationService,
-              private _Activatedroute: ActivatedRoute) { }
-              ngOnInit(): void {
- 
-  this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-  this.apiService.getprojectviewdata(this.id).then((res: any) => {
-    this.projectViewDetails = res;
-    this.isProjectViewDetailsLoaded = true; 
-    if (this.callLocation == 'Link') {
-      this.dataloaderLink()
-    }
-    if (this.router.url.includes('project-charter')) {
-        this.wizzard= "project-charter"
-        this.includeInText = 'Charter'
-    }
-    if (this.router.url.includes('business-case')) {
-        this.wizzard= "business-case"
-        if (this.router.url.includes('option-2') ||this.router.url.includes('option-3')) {
-            this.includeInText = 'Business Case'
-        }
-    }
-    if (this.callLocation === 'CAPEX') {
-      this.initializeSelection();
-    }
-  });
+  constructor(
+    public projectHubService: ProjectHubService,
+    public apiService: ProjectApiService,
+    public indicator: SpotlightIndicatorsService,
+    private router: Router,
+    public fuseAlert: FuseConfirmationService,
+    private _Activatedroute: ActivatedRoute
+) { }
 
+ngOnInit(): void {
+    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    this.apiService.getprojectviewdata(this.id).then((res: any) => {
+        this.projectViewDetails = res;
+        this.isProjectViewDetailsLoaded = true; 
+        if (this.callLocation == 'Link') {
+            this.dataloaderLink();
+        }
+        if (this.router.url.includes('project-charter')) {
+            this.wizzard = "project-charter";
+            this.includeInText = 'Charter';
+        }
+        if (this.router.url.includes('business-case')) {
+            this.wizzard = "business-case";
+            if (this.router.url.includes('option-2') || this.router.url.includes('option-3')) {
+                this.includeInText = 'Business Case';
+            }
+        }
+        if (this.callLocation === 'CAPEX') {
+            this.initializeSelection();
+        }
+    });
 }
 
 isToggleDisabled(milestoneId: string): boolean {
-  if (this.isProjectViewDetailsLoaded)
-    {
-  const milestone = this.tableData.find(m => m.milestoneId == milestoneId);
-
-  return !milestone.allowDeletion || (!milestone.allowDuplication && this.projectViewDetails.scheduleData.some(m => m.templateMilestoneId == milestoneId));
-}
-return false;
+    if (this.isProjectViewDetailsLoaded) {
+        const milestone = this.tableData.find(m => m.milestoneId === milestoneId);
+        return !milestone.allowDeletion || (!milestone.allowDuplication && this.projectViewDetails.scheduleData.some(m => m.templateMilestoneId === milestoneId));
+    }
+    return false;
 }
 
 isToggleChecked(milestoneId: string): boolean {
-  if (this.isProjectViewDetailsLoaded)
-    {
-  const milestone = this.tableData.find(m => m.milestoneId == milestoneId);
-  return milestone.allowDuplication || !this.projectViewDetails.scheduleData.some(m => m.templateMilestoneId == milestoneId);
-}
-return false;
+    if (this.isProjectViewDetailsLoaded) {
+        const milestone = this.tableData.find(m => m.milestoneId === milestoneId);
+        return milestone.allowDuplication || !this.projectViewDetails.scheduleData.some(m => m.templateMilestoneId === milestoneId);
+    }
+    return false;
 }
 
 initializeSelection(): void {
-  console.log(this.projectViewDetails.scheduleData)
-  this.selected = this.tableData.filter(item => this.isToggleChecked(item.milestoneId));
-  this.toggleChange.emit({
-    tableIndex: this.tableIndex,
-    selected: this.selected
-  });
+    console.log(this.projectViewDetails.scheduleData);
+    this.selected = this.tableData.filter(item => this.isToggleChecked(item.milestoneId));
+    console.log('Initial selected:', this.selected);
+    this.toggleChange.emit({
+        tableIndex: this.tableIndex,
+        selected: this.selected
+    });
 }
 
-onSelect({ selected }) {
-  console.log('Select Event', selected, this.selected);
+onSelect({ selected }): void {
+    console.log('Select Event', selected, this.selected);
 
-  // For CAPEX mode, select all rows by default
-  if (this.callLocation === 'CAPEX') {
-    this.selected = [...this.tableData];
-  } else {
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
-  }
+    if (this.callLocation === 'CAPEX') {
+        this.selected = this.tableData.filter(item => this.isToggleChecked(item.milestoneId));
+    } else {
+        this.selected.splice(0, this.selected.length);
+        this.selected.push(...selected);
+    }
 
-  this.toggleChange.emit({
-    tableIndex: this.tableIndex,
-    selected: this.selected
-  });
+    this.toggleChange.emit({
+        tableIndex: this.tableIndex,
+        selected: this.selected
+    });
 
-  this.projectHubService.isFormChanged = true;
+    this.projectHubService.isFormChanged = true;
+}
+
+onToggleChange(milestoneId: string, event: any): void {
+    const checked = event.checked;
+    const index = this.selected.findIndex(item => item.milestoneId === milestoneId);
+    console.log('Toggle Change Event:', milestoneId, checked);
+
+    if (checked && index === -1) {
+        const milestone = this.tableData.find(item => item.milestoneId === milestoneId);
+        if (milestone) {
+            this.selected.push(milestone);
+        }
+    } else if (!checked && index !== -1) {
+        this.selected.splice(index, 1);
+    }
+    console.log('Updated selected:', this.selected);
+
+    this.toggleChange.emit({
+        tableIndex: this.tableIndex,
+        selected: this.selected
+    });
+
+    this.projectHubService.isFormChanged = true;
 }
 
   calculateVariance(array: any) :any {
