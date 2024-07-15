@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import {  FuseConfirmationService } from '@fuse/services/confirmation';
 import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
@@ -15,7 +15,7 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './schedule-table.component.html',
   styleUrls: ['./schedule-table.component.scss']
 })
-export class SchedulesTableComponent implements OnInit {
+export class SchedulesTableComponent implements OnInit, OnChanges {
   @Input() tableData: any = []
   @Input() scheduleData: any = []
   @Input() projectId: string = ''
@@ -44,6 +44,7 @@ export class SchedulesTableComponent implements OnInit {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   projectViewDetails: any = { scheduleData: [] };
   isProjectViewDetailsLoaded: boolean = false;
+
   constructor(
     public projectHubService: ProjectHubService,
     public apiService: ProjectApiService,
@@ -58,9 +59,6 @@ ngOnInit(): void {
     this.apiService.getprojectviewdata(this.id).then((res: any) => {
         this.projectViewDetails = res;
         this.isProjectViewDetailsLoaded = true; 
-        if (this.callLocation == 'Link') {
-            this.dataloaderLink();
-        }
         if (this.router.url.includes('project-charter')) {
             this.wizzard = "project-charter";
             this.includeInText = 'Charter';
@@ -75,6 +73,12 @@ ngOnInit(): void {
             this.initializeSelection();
         }
     });
+}
+
+ngOnChanges(changes: SimpleChanges): void {
+  if (changes.tableData.firstChange && this.callLocation == 'Link') {
+    this.dataloaderLink()
+  }
 }
 
 isToggleDisabled(milestoneId: string): boolean {
