@@ -17,13 +17,13 @@
                         <spot-multiselect-user-autocomplete formControlName="PM" [placeholder]="'Project Manager'"
                             [label]="'Project Manager'" name="PM" [showLabel]="true">
                         </spot-multiselect-user-autocomplete>
-                        <a class="customIcon" *ngIf="ForecastForm.controls.PM.value != null && !showEmail"
+                        <a class="customIcon" *ngIf="ForecastForm.controls.PM.value?.length > 0"
                             (click)="MailTo()"><mat-icon [svgIcon]="'heroicons_solid:mail'"></mat-icon></a>
                         <!-- <button *ngIf="ForecastForm.controls.PM.value != null && !showEmail" class="text-primary bg-gray-200 customButton" mat-flat-button [color]="'primary-200'" (click)="ApplyFilter()"> Apply Filters
                         </button> -->
                     </form>
                     <div class="flex items-center justify-center">
-                        <button *ngIf="ForecastForm.controls.PM.value != null && !showEmail" style="margin-right: 10px;"
+                        <button *ngIf="ForecastForm.controls.PM.value != null && showEmail" style="margin-right: 10px;"
                             class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                             (click)="ApplyFilter()"> Apply Filters
                         </button>
