@@ -39,6 +39,7 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
   localCurrency: string = ""
   valueCreation: any;
   projectsMetricsData = []
+  isYearSetInitialized = false;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(public projectApiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute,
     public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService) {
@@ -53,6 +54,7 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (this.isYearSetInitialized) return;
     this.columnYear = [];
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     // Clear the arrays before populating
@@ -134,25 +136,35 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                 this.isStrategicInitiative = problemCapture.problemType == 'Strategic Initiative / Program' ? true : false
 
                 console.log(this.ValueCaptureForm.getRawValue())
-                var year = []
-                var yearList = []
-                console.log(res)
+                var yearSet = new Set<string>();  // Initialize a Set to store unique year IDs
+                var yearList = [];  // Initialize an empty array for yearList
+                console.log(res);
 
                 if (res.length > 0) {
                   for (var z = 0; z < res.length; z++) {
                     if (res[z].projectsMetricsDataYearly.length > 0) {
-                      var listYear = [...new Set(res[z].projectsMetricsDataYearly.map(item => item.financialYearId))]
-                      if (listYear.length > year.length) {
-                        year = listYear
-                      }
+                      // Get unique financial year IDs from projectsMetricsDataYearly
+                      var listYear = [...new Set(res[z].projectsMetricsDataYearly.map(item => item.financialYearId as string))];
+                      // Add each unique year ID to the yearSet
+                      listYear.forEach((financialYearId: string) => {
+                        if (financialYearId) {
+                          yearSet.add(financialYearId);
+                        }
+                      });
                     }
-                    console.log(year)
                   }
+
+                  // Convert the set back to an array
+                  var year = Array.from(yearSet);
+
                   for (var i = 0; i < year.length; i++) {
-                    var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i])?.lookUpName : ''
-                    this.columnYear.push({ year: yearName })
-                    yearList.push(yearName)
+                    var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i])?.lookUpName : '';
+                    this.columnYear.push({ year: yearName });  // Populate the columnYear array
+                    yearList.push(yearName);  // Populate the yearList array
                   }
+
+                  console.log("COLUMN YEAR", this.columnYear);
+
                   yearList.sort()
                   for (var i = 0; i < this.projectsMetricsData.length; i++) {
                     for (var j = 0; j < yearList.length; j++) {
@@ -216,6 +228,7 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                     }
                   };
                 }
+                console.log("COLUMN YEAR", this.columnYear)
                 this.compare(this.columnYear)
                 this.valuecreationngxdata = this.projectsMetricsData
                 console.log(this.columnYear)
@@ -413,19 +426,29 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
     const baselinePlanAlert = this.fuseAlert.open(comfirmConfig)
     baselinePlanAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        this.valuecreationngxdata.forEach(metricData => {
-          this.projectApiService.baselineProjectMetricData(this.id)
-            .then(response => {
-              console.log('Update successful', response);
-              this.projecthubservice.submitbutton.next(true)
-
-            })
-        })
+        //this.valuecreationngxdata.forEach(metricData => {
+        this.projectApiService.baselineProjectMetricData(this.id)
+          .then(response => {
+            console.log('Update successful', response);
+            //this.projecthubservice.submitbutton.next(true)
+            this.refreshView()
+          })
+        //})
         console.log(this.valuecreationngxdata)
 
 
       }
     })
+  }
+
+  refreshView() {
+    this.clearData();
+    this.ngOnInit(); // Reinitialize the component to refresh the view
+  }
+
+  clearData() {
+    this.columnYear = [];
+    this.projectsMetricsData = [];
   }
 
 }
