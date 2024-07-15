@@ -172,6 +172,15 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         // Enable the animations
         this._enableAnimations();
 
+        /* 
+            this block serves as hotfix for issue: SPOT2-48
+            the issue is the first time when user hover on the sidenav, the scroll bar is hidden
+        */
+        {
+            const element = document.getElementById("side-nav");
+            if (element) element.scrollBy(0, 2);
+        }
+
         // Set the hovered
         this._hovered = true;
     }
