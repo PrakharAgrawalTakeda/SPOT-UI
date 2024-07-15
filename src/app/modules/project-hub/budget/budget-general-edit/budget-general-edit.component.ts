@@ -278,6 +278,7 @@ export class BudgetGeneralEditComponent {
     openStandardMilestonesSets(): void {
         if (this.budgetInfoForm.controls.capexRequired.value == true && (this.budgetInfo.budget.capExRequired == false || this.budgetInfo.budget.capExRequired == null)) {
             this.viewStandardMilestonesSets = true;
+            this.projectHubService.isBulkEdit = true
             const formValue = this.budgetInfoForm.getRawValue();
             const location = this.mode
             this.sharedService.setBudgetFormData(formValue);
