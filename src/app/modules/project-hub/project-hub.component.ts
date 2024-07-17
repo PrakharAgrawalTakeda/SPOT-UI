@@ -280,7 +280,7 @@ export class ProjectHubComponent implements OnInit {
                 })
             }
             if (this.projectDetails.problemType == "Strategic Initiative / Program") {
-                if(GlobalDetailedScheduleBetaUsers.users.includes(this.msal.instance.getActiveAccount()?.username)){
+                if(GlobalDetailedScheduleBetaUsers.users.includes(this.msal.instance.getActiveAccount()?.username.toLowerCase())){
                     this.projectHubNavigation = this.projecthubservice.menuDataStratBeta
                 }
                 else{
@@ -289,7 +289,7 @@ export class ProjectHubComponent implements OnInit {
                 this.projecthubservice.isStrategicIniative = true
             }
             else {
-                if(GlobalDetailedScheduleBetaUsers.users.includes(this.msal.instance.getActiveAccount()?.username)){
+                if(GlobalDetailedScheduleBetaUsers.users.includes(this.msal.instance.getActiveAccount()?.username.toLowerCase())){
                     this.projectHubNavigation = this.projecthubservice.menuDataBeta
                 }
                 else{
