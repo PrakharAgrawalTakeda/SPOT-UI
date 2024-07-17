@@ -361,9 +361,8 @@ export class DetailedScheduleComponent implements OnInit {
   }
   ngOnInit(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    if (!GlobalDetailedScheduleBetaUsers.users.includes(this.msal.instance.getActiveAccount()?.username)) {
+    if (!GlobalDetailedScheduleBetaUsers.users.includes(this.msal.instance.getActiveAccount()?.username.toLowerCase())) {
       this.router.navigate([`/project-hub/${this.id}/project-board`]);
-
     }
     this.currentData.projectUId = this.id
     this.apiService.getDetailedScheduleData(this.id).then((data: any) => {
