@@ -72,7 +72,7 @@
     </div>
     <div class="w-full px-3 pr-3 flex items-start justify-between mt-2 mb-3" *ngIf="mode == 'CAPEX'">
         <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
-           (click)="projectHubService.toggleDrawerOpen('', '',[],'',true)">
+           (click)="cancelSMS()">
             Cancel
         </a>
         <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitStandardMilestoneSets()" type="button">
