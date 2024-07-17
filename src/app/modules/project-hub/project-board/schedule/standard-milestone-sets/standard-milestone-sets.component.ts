@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ProjectHubService} from "../../../project-hub.service";
-import {ProjectApiService} from "../../../common/project-api.service";
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
-import {ActivatedRoute, Router} from "@angular/router";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ProjectHubService } from "../../../project-hub.service";
+import { ProjectApiService } from "../../../common/project-api.service";
+import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../../../@fuse/services/confirmation";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
     selector: 'app-standard-milestone-sets',
@@ -22,14 +22,15 @@ export class StandardMilestoneSetsComponent implements OnInit {
     standardCAPEXMilestoneData: any;
     result: Object;
     standarCAPEXMilestoneAdded: any = []
-    constructor(public projectHubService: ProjectHubService,  public apiService: ProjectApiService,
-                public fuseAlert: FuseConfirmationService,
-                private _Activatedroute: ActivatedRoute,
-                private router: Router) {
+    canSubmit: boolean = true
+    constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService,
+        public fuseAlert: FuseConfirmationService,
+        private _Activatedroute: ActivatedRoute,
+        private router: Router) {
     }
 
     ngOnChanges() {
-        if(this.loadContent){
+        if (this.loadContent) {
             this.dataloader()
         }
     }
@@ -47,16 +48,15 @@ export class StandardMilestoneSetsComponent implements OnInit {
             console.log(res)
             this.standardMilestoneDBData = [...this.sortByLevel(res)]
             this.standardMilestoneData = this.sortByLevel(res)
-            
+
             let milestoneArray = []
-            if(this.mode == 'CAPEX')
-                {
-                    this.standardCAPEXMilestoneData = this.standardMilestoneData.filter(x => x.milestoneTemplateId == "7D7E9D69-3201-4063-8713-45C7FFEB1250");
-                    console.log(this.standardCAPEXMilestoneData)
-                    for (var i in this.standardCAPEXMilestoneData) {
-                        this.standarCAPEXMilestoneAdded.push([])
-                    }
+            if (this.mode == 'CAPEX') {
+                this.standardCAPEXMilestoneData = this.standardMilestoneData.filter(x => x.milestoneTemplateId == "7D7E9D69-3201-4063-8713-45C7FFEB1250");
+                console.log(this.standardCAPEXMilestoneData)
+                for (var i in this.standardCAPEXMilestoneData) {
+                    this.standarCAPEXMilestoneAdded.push([])
                 }
+            }
             if (this.router.url.includes('business-case')) {
                 this.standardMilestoneData.forEach((set, setIndex) => {
                     milestoneArray = set.templateDetails;
@@ -77,48 +77,28 @@ export class StandardMilestoneSetsComponent implements OnInit {
 
     }
     submitStandardMilestoneSets() {
-        var returnedMilestones: any = []
-        this.standarMilestoneAdded.forEach(x => {
-            x.map(y=> {
-                returnedMilestones.push(y);
-            })
-        })
-        var startMilestonesCount =0;
-        var endMilestonesCount =0;
-        returnedMilestones.forEach(x=>{
-            if(x.milestoneType ==1){
-                startMilestonesCount++
-            }
-            if(x.milestoneType ==2){
-                endMilestonesCount++
-            }
-        })
-        if(startMilestonesCount>1){
-            var limitConfig: FuseConfirmationConfig = {
-                "message": "The Execution Start milestone has been selected multiple times from different Milestone Sets. Please limit your selection to include it only once",
-                "icon": {
-                    "show": true,
-                    "name": "heroicons_outline:exclamation",
-                    "color": "warn"
-                },
-                "actions": {
-                    "confirm": {
-                        "show": true,
-                        "label": "OK",
-                        "color": "warn"
-                    },
-                    "cancel": {
-                        "show": false,
-                    }
+        if (this.canSubmit) {
 
-                },
-                "dismissible": true
-            }
-            this.fuseAlert.open(limitConfig)
-        }else{
-            if(endMilestonesCount>1) {
+            this.canSubmit = false
+            var returnedMilestones: any = []
+            this.standarMilestoneAdded.forEach(x => {
+                x.map(y => {
+                    returnedMilestones.push(y);
+                })
+            })
+            var startMilestonesCount = 0;
+            var endMilestonesCount = 0;
+            returnedMilestones.forEach(x => {
+                if (x.milestoneType == 1) {
+                    startMilestonesCount++
+                }
+                if (x.milestoneType == 2) {
+                    endMilestonesCount++
+                }
+            })
+            if (startMilestonesCount > 1) {
                 var limitConfig: FuseConfirmationConfig = {
-                    "message": "The Execution End milestone has been selected multiple times from different Milestone Sets. Please limit your selection to include it only once.",
+                    "message": "The Execution Start milestone has been selected multiple times from different Milestone Sets. Please limit your selection to include it only once",
                     "icon": {
                         "show": true,
                         "name": "heroicons_outline:exclamation",
@@ -133,70 +113,95 @@ export class StandardMilestoneSetsComponent implements OnInit {
                         "cancel": {
                             "show": false,
                         }
+
                     },
                     "dismissible": true
                 }
                 this.fuseAlert.open(limitConfig)
-            }
-             else if(this.mode == 'CAPEX') {
-        //         var comfirmConfig: FuseConfirmationConfig = {
-        //         "title": "Note",
-        //         "message": "The selected standard milestones have been added to your project. Please visit the Schedule page and update the milestones accordingly!",
-        //     "icon": {
-        //         "show": true,
-        //         "name": "heroicons_outline:exclamation",
-        //         "color": "primary"
-        //     },
-        //     "actions": {
-        //         "confirm": {
-        //             "show": true,
-        //             "label": "OK",
-        //             "color": "primary"
-        //         },
-        //         "cancel": {
-        //             "show": false,
-        //         }
-        //     },
-        //     "dismissible": true
-        // }
-        //         const askNeedAlert = this.fuseAlert.open(comfirmConfig)
-        //         askNeedAlert.afterClosed().subscribe(res => {
-        //             if (res == 'confirmed') {
-                        this.standardMilestonesAdded.emit(returnedMilestones);
-        //             }
-        //         })
-            }
-            else {
-                var comfirmConfig: FuseConfirmationConfig = {
-                    "message": "The selected milestones will be added to your project’s existing milestones. Do you want to proceed? ",
-                    "icon": {
-                        "show": true,
-                        "name": "heroicons_outline:exclamation",
-                        "color": "warning"
-                    },
-                    "actions": {
-                        "confirm": {
+            } else {
+                if (endMilestonesCount > 1) {
+                    var limitConfig: FuseConfirmationConfig = {
+                        "message": "The Execution End milestone has been selected multiple times from different Milestone Sets. Please limit your selection to include it only once.",
+                        "icon": {
                             "show": true,
-                            "label": "Yes",
-                            "color": "primary"
+                            "name": "heroicons_outline:exclamation",
+                            "color": "warn"
                         },
-                        "cancel": {
-                            "show": true,
-                            "label": "Cancel"
-                        }
-                    },
-                    "dismissible": true
-                }
-                const askNeedAlert = this.fuseAlert.open(comfirmConfig)
-                askNeedAlert.afterClosed().subscribe(res => {
-                    if (res == 'confirmed') {
-                        this.standardMilestonesAdded.emit(returnedMilestones);
+                        "actions": {
+                            "confirm": {
+                                "show": true,
+                                "label": "OK",
+                                "color": "warn"
+                            },
+                            "cancel": {
+                                "show": false,
+                            }
+                        },
+                        "dismissible": true
                     }
-                })
+                    this.fuseAlert.open(limitConfig)
+                }
+                else if (this.mode == 'CAPEX') {
+                    //         var comfirmConfig: FuseConfirmationConfig = {
+                    //         "title": "Note",
+                    //         "message": "The selected standard milestones have been added to your project. Please visit the Schedule page and update the milestones accordingly!",
+                    //     "icon": {
+                    //         "show": true,
+                    //         "name": "heroicons_outline:exclamation",
+                    //         "color": "primary"
+                    //     },
+                    //     "actions": {
+                    //         "confirm": {
+                    //             "show": true,
+                    //             "label": "OK",
+                    //             "color": "primary"
+                    //         },
+                    //         "cancel": {
+                    //             "show": false,
+                    //         }
+                    //     },
+                    //     "dismissible": true
+                    // }
+                    //         const askNeedAlert = this.fuseAlert.open(comfirmConfig)
+                    //         askNeedAlert.afterClosed().subscribe(res => {
+                    //             if (res == 'confirmed') {
+                    this.standardMilestonesAdded.emit(returnedMilestones);
+                    this.canSubmit = true
+                    //             }
+                    //         })
+                }
+                else {
+                    var comfirmConfig: FuseConfirmationConfig = {
+                        "message": "The selected milestones will be added to your project’s existing milestones. Do you want to proceed? ",
+                        "icon": {
+                            "show": true,
+                            "name": "heroicons_outline:exclamation",
+                            "color": "warning"
+                        },
+                        "actions": {
+                            "confirm": {
+                                "show": true,
+                                "label": "Yes",
+                                "color": "primary"
+                            },
+                            "cancel": {
+                                "show": true,
+                                "label": "Cancel"
+                            }
+                        },
+                        "dismissible": true
+                    }
+                    const askNeedAlert = this.fuseAlert.open(comfirmConfig)
+                    askNeedAlert.afterClosed().subscribe(res => {
+                        if (res == 'confirmed') {
+                            this.standardMilestonesAdded.emit(returnedMilestones);
+                            this.canSubmit = true
+                        }
+                    })
+                }
             }
+
         }
-
-
     }
     toggleSchedule(event: any) {
         this.standarMilestoneAdded[event.tableIndex] = [...event.selected]
@@ -217,5 +222,35 @@ export class StandardMilestoneSetsComponent implements OnInit {
     }
     addStandardMilestonesToBulkEditList() {
 
+    }
+
+    cancelSMS() {
+        var confirmConfig: FuseConfirmationConfig = {
+            title: 'Are you sure you want to exit?',
+            message: 'All unsaved data will be lost.',
+            icon: {
+                show: true,
+                name: 'heroicons_outline:exclamation',
+                color: 'warn',
+            },
+            actions: {
+                confirm: {
+                    show: true,
+                    label: 'Okay',
+                    color: 'warn',
+                },
+                cancel: {
+                    show: true,
+                    label: 'Cancel',
+                },
+            },
+            dismissible: true,
+        };
+        const alert = this.fuseAlert.open(confirmConfig);
+        alert.afterClosed().subscribe((close) => {
+            if (close == 'confirmed') {
+                this.projectHubService.toggleDrawerOpen('', '',[],'',true)
+            }
+        });
     }
 }

@@ -1001,7 +1001,8 @@
         <app-standard-milestone-sets (standardMilestonesAdded)="addStandardMilestonesToList($event)"
             [loadContent]="viewStandardMilestonesSets" [lookup]="lookUpData" [mode] = "'Normal'"></app-standard-milestone-sets>
     </div>
+    <div *ngIf="!hide">
     <app-budget-general-edit [hidden]="hide == true"></app-budget-general-edit>
-
+</div>
 
     <!-- </div> -->

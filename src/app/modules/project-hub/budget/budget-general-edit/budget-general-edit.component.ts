@@ -53,6 +53,7 @@ export class BudgetGeneralEditComponent {
         projectFundingStatus: string; totalApprovedCapex: string; totalApprovedOpex: string;
     };
     mainObj: any;
+    portfolioOwnerID: string = "";
     constructor(public projectHubService: ProjectHubService,
         private portApiService: PortfolioApiService,
         public auth: AuthService,
@@ -169,6 +170,9 @@ export class BudgetGeneralEditComponent {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         this.filterCriteria = this.projectHubService.all
         this.apiService.getBudgetPageInfo(this.projectHubService.projectid).then((res: any) => {
+            
+            //console.log(response)
+
             this.budgetInfo = res
             console.log("RES", this.budgetInfo)
             this.generalInfoPatchValue(res)
@@ -428,21 +432,31 @@ export class BudgetGeneralEditComponent {
                         }
                     })
                 } else {
-                    if (this.mode == 'CAPEX') {
+                    this.portfolioOwnerID = this.gmsBudgetowner.value.portfolioOwnerId
+                    this.apiService.getGmsBudgetOwnerInfo(this.portfolioOwnerID).then((response: any) => {
+                        console.log("RESPONSE", response)
+                    if (response.milestoneTemplateId == '7D7E9D69-3201-4063-8713-45C7FFEB1250' && this.mode == 'CAPEX') {
                         this.openStandardMilestonesSets()
                     }
                     else {
                         this.submitInfo()
                     }
+                })
+
                 }
+            
             }
             else {
-                if (this.mode == 'CAPEX') {
+                this.portfolioOwnerID = this.gmsBudgetowner.value.portfolioOwnerId
+                this.apiService.getGmsBudgetOwnerInfo(this.portfolioOwnerID).then((response: any) => {
+                    console.log("RESPONSE", response)
+                if (response.milestoneTemplateId == '7D7E9D69-3201-4063-8713-45C7FFEB1250' && this.mode == 'CAPEX') {
                     this.openStandardMilestonesSets()
                 }
                 else {
                     this.submitInfo()
                 }
+            })
             }
         }
     }

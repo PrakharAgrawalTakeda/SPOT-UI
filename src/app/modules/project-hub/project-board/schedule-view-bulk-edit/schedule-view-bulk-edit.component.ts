@@ -47,6 +47,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     //   .subscribe(() => this.ngZone.run(() => this.setSize()));
     //@Input() scheduleData: any;
     @ViewChild(BudgetGeneralEditComponent) budgetGeneralEditComponent: BudgetGeneralEditComponent;
+    hide: boolean = true;
     @Input() schedulengxdata: any = [];
     @Input() baselineLogData: any;
     @Input() projectbaselinelogDetailsprev: any;
@@ -84,7 +85,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     viewBaseline: boolean = false
     viewBaselineLogs: boolean = false
     compareBaselineLogs: boolean = false
-    hide: boolean = false
     //viewStandardMilestonesSets: boolean = false
     roleMaster: any = {}
     baselineCount: any = {}
