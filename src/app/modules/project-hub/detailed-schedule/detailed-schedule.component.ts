@@ -104,6 +104,11 @@ export class DetailedScheduleComponent implements OnInit {
     appendTo: 'container',
     features: {
       taskEdit: {
+        editorConfig:{
+          floating: true,
+          anchor: true,
+          centered: true
+        },
         items: {
           generalTab: {
             scrollable: true,
