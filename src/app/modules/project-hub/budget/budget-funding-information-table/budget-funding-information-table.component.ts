@@ -38,7 +38,7 @@ export class BudgetFundingInformationTableComponent implements OnDestroy {
 
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-        this.fundingRequests = this.budgetInfo.budgetIOs
+        this.fundingRequests = this.budgetInfo?.budgetIOs
         if(this.budgetInfo.budgetIOs.length!=0){
             for(let ios of this.budgetInfo.budgetIOs){
                 if(ios.keep == true){
