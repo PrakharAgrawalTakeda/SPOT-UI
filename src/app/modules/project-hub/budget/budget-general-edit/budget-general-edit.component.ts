@@ -90,7 +90,7 @@ export class BudgetGeneralEditComponent {
         this.capexRequired.valueChanges.subscribe(res => {
             // Choosing Yes
             if (this.budgetInfoForm.controls.capexRequired.value == true) {
-                this.mode = 'CAPEX'
+                //this.mode = 'CAPEX'
                 if (!this.isBudgetAdmin) {
                     this.capexRequired.disable({ emitEvent: false });
                 }
