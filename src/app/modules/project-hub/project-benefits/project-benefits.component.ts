@@ -93,46 +93,74 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                 this.lookupData = resp
                 this.filterData = filterres
                 res.forEach((element) => {
-                  var format = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID)?.lookUpName : ''
-                  var order = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID)?.lookUpOrder : ''
-                  element.metricData.metricFormat = format
-                  element.metricData.PO = element.metricData.metricPortfolioID ? 0 : 1
-                  element.metricData.sortOrder = order
-                  element.metricData.FianncialType1 = "Target"
-                  element.metricData.FianncialType2 = "Baseline Plan"
-                  element.metricData.FianncialType3 = "Current Plan"
-                  element.metricData.FianncialType4 = "Actual"
-                  element.metricData.parentName = element.projectsMetricsData.parentProjectId ? parentData.problemTitle : ''
-                  if (element.projectsMetricsData.strategicTargetList) {
-                    element.projectsMetricsData.strategicTargetList = element.projectsMetricsData.strategicTargetList.replace(/FY19:/g, 'Historical:');
-                  }
-                  if (element.projectsMetricsData.strategicBaselineList) {
-                    element.projectsMetricsData.strategicBaselineList = element.projectsMetricsData.strategicBaselineList.replace(/FY19:/g, 'Historical:');
-                  }
-                  if (element.projectsMetricsData.strategicCurrentList) {
-                    element.projectsMetricsData.strategicCurrentList = element.projectsMetricsData.strategicCurrentList.replace(/FY19:/g, 'Historical:');
-                  }
-                  if (element.projectsMetricsData.strategicActualList) {
-                    element.projectsMetricsData.strategicActualList = element.projectsMetricsData.strategicActualList.replace(/FY19:/g, 'Historical:');
-                  }
-                  // Initialize null values to "0"
-                  element.projectsMetricsData.strategicTarget = element.projectsMetricsData.strategicTarget ?? "0";
-                  element.projectsMetricsData.strategicBaseline = element.projectsMetricsData.strategicBaseline ?? "0";
-                  element.projectsMetricsData.strategicCurrent = element.projectsMetricsData.strategicCurrent ?? "0";
-                  element.projectsMetricsData.strategicActual = element.projectsMetricsData.strategicActual ?? "0";
+                  if (element.metricData) {
+                    var format = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID)?.lookUpName : ''
+                    var order = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID)?.lookUpOrder : ''
+                    element.metricData.metricFormat = format
+                    element.metricData.PO = element.metricData.metricPortfolioID ? 0 : 1
+                    element.metricData.sortOrder = order
+                    element.metricData.FianncialType1 = "Target"
+                    element.metricData.FianncialType2 = "Baseline Plan"
+                    element.metricData.FianncialType3 = "Current Plan"
+                    element.metricData.FianncialType4 = "Actual"
+                    element.metricData.parentName = element.projectsMetricsData.parentProjectId ? parentData.problemTitle : ''
+                    if (element.projectsMetricsData.strategicTargetList) {
+                      element.projectsMetricsData.strategicTargetList = element.projectsMetricsData.strategicTargetList.replace(/FY19:/g, 'Historical:');
+                    }
+                    if (element.projectsMetricsData.strategicBaselineList) {
+                      element.projectsMetricsData.strategicBaselineList = element.projectsMetricsData.strategicBaselineList.replace(/FY19:/g, 'Historical:');
+                    }
+                    if (element.projectsMetricsData.strategicCurrentList) {
+                      element.projectsMetricsData.strategicCurrentList = element.projectsMetricsData.strategicCurrentList.replace(/FY19:/g, 'Historical:');
+                    }
+                    if (element.projectsMetricsData.strategicActualList) {
+                      element.projectsMetricsData.strategicActualList = element.projectsMetricsData.strategicActualList.replace(/FY19:/g, 'Historical:');
+                    }
+                    // Initialize null values to "0"
+                    element.projectsMetricsData.strategicTarget = element.projectsMetricsData.strategicTarget ?? "0";
+                    element.projectsMetricsData.strategicBaseline = element.projectsMetricsData.strategicBaseline ?? "0";
+                    element.projectsMetricsData.strategicCurrent = element.projectsMetricsData.strategicCurrent ?? "0";
+                    element.projectsMetricsData.strategicActual = element.projectsMetricsData.strategicActual ?? "0";
 
-                  this.projectsMetricsData.push({ ...element.metricData, ...element.projectsMetricsData });
+                    this.projectsMetricsData.push({ ...element.metricData, ...element.projectsMetricsData });
+                  }
+
                 })
                 console.log(problemCapture)
+                const primaryValueDriver = this.lookupData.find(x => x.lookUpId == problemCapture.primaryKpi)?.lookUpName || null;
+                const copCategory = this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory)?.lookUpName || null;
+                const defaultCopCategory = this.lookupData.find(x => x.lookUpId == '2730422E-680A-4B2D-8DC2-F64CA885BB61')?.lookUpName || null;
+
                 this.ValueCaptureForm.patchValue({
                   valueCaptureStart: problemCapture.financialRealizationStartDate,
-                  primaryValueDriver: this.lookupData.find(x => x.lookUpId == problemCapture.primaryKpi) ? this.lookupData.find(x => x.lookUpId == problemCapture.primaryKpi)?.lookUpName : null,
+                  primaryValueDriver: primaryValueDriver,
                   valueCommentary: problemCapture.valueCommentary,
-                  COPcategory: this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory) ? this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory)?.lookUpName : null
-                })
-                if (this.ValueCaptureForm.value.COPcategory == "" || this.ValueCaptureForm.value.COPcategory == null) {
-                  this.ValueCaptureForm.controls.COPcategory.patchValue(this.lookupData.find(x => x.lookUpId == '2730422E-680A-4B2D-8DC2-F64CA885BB61').lookUpName)
-                }
+                  COPcategory: copCategory || defaultCopCategory
+                });
+                // const primaryValueDriver = this.lookupData.find(x => x.lookUpId == problemCapture.primaryKpi)?.lookUpName || null;
+                // const copCategory = this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory)?.lookUpName || null;
+
+                // this.ValueCaptureForm.patchValue({
+                //   valueCaptureStart: problemCapture.financialRealizationStartDate,
+                //   primaryValueDriver: primaryValueDriver,
+                //   valueCommentary: problemCapture.valueCommentary,
+                //   COPcategory: copCategory
+                // });
+
+                // if (!this.ValueCaptureForm.value.COPcategory) {
+                //   const defaultCopCategory = this.lookupData.find(x => x.lookUpId == '2730422E-680A-4B2D-8DC2-F64CA885BB61')?.lookUpName || null;
+                //   this.ValueCaptureForm.controls.COPcategory.patchValue(defaultCopCategory);
+                // }
+                // this.ValueCaptureForm.patchValue({
+                //   valueCaptureStart: problemCapture.financialRealizationStartDate,
+                //   primaryValueDriver: this.lookupData.find(x => x.lookUpId == problemCapture.primaryKpi) ? this.lookupData.find(x => x.lookUpId == problemCapture.primaryKpi)?.lookUpName : null,
+                //   valueCommentary: problemCapture.valueCommentary,
+                //   COPcategory: this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory) ? this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory)?.lookUpName : null
+                // })
+
+                // if (this.ValueCaptureForm.value.COPcategory == "" || this.ValueCaptureForm.value.COPcategory == null) {
+                //   this.ValueCaptureForm.controls.COPcategory.patchValue(this.lookupData.find(x => x.lookUpId == '2730422E-680A-4B2D-8DC2-F64CA885BB61').lookUpName)
+                // }
                 this.isStrategicInitiative = problemCapture.problemType == 'Strategic Initiative / Program' ? true : false
 
                 console.log(this.ValueCaptureForm.getRawValue())
