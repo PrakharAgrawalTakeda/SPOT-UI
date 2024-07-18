@@ -123,8 +123,8 @@ console.log(selectedCOPCategoryObject)
       mainObj = this.pc
       mainObj.financialRealizationStartDate = date ? moment(date).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
       mainObj.valueCommentary = this.primaryKPIForm.get('valueCommentary').value;
-      mainObj.primaryKpi = selectedPrimaryKpiObject ? selectedPrimaryKpiObject.lookUpId : '';
-      mainObj.copImpactCategory = selectedCOPCategoryObject ? selectedCOPCategoryObject.lookUpId : '';
+      mainObj.primaryKpi = selectedPrimaryKpiObject ? selectedPrimaryKpiObject.lookUpId : null;
+      mainObj.copImpactCategory = selectedCOPCategoryObject ? selectedCOPCategoryObject.lookUpId : null;
 
 
       console.log(mainObj)
