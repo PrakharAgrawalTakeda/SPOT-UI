@@ -4,6 +4,7 @@ import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
   selector: 'app-new-metrics',
@@ -22,7 +23,9 @@ export class NewMetricsComponent {
   displayMetricName: any;
   lookup: any;
 
-  constructor(public projecthubservice: ProjectHubService, public apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService, private router: Router) {
+  constructor(public projecthubservice: ProjectHubService, public apiService: ProjectApiService, 
+    private _Activatedroute: ActivatedRoute, public auth: AuthService, private router: Router,
+    public fuseAlert: FuseConfirmationService) {
     // this.newMetricForm.controls.metricName.valueChanges.subscribe(res => {
     //   if (this.viewContent) {
     //     this.projecthubservice.isFormChanged = true
@@ -119,14 +122,39 @@ console.log(this.displayMetricName)
     // Find the corresponding metric object from the metricName arr
     //const selectedMetric = this.metricName.find(metric => metric.metricName == selectedMetricName);
     console.log(selectedMetricName.metricID)
+
     // Check if we found a metric and it has a metricUID
-    if (selectedMetricName) {
+    if (this.metricName.some((metric) => metric.displayMetricName ===  selectedMetricName.displayMetricName)) {
       this.apiService.addNewMetric(this.id, selectedMetricName.metricID).then(secondRes => {
         this.projecthubservice.isNavChanged.next(true)
         this.projecthubservice.submitbutton.next(true)
         this.projecthubservice.successSave.next(true)
         this.projecthubservice.toggleDrawerOpen('', '', [], '')
       })
+    }
+    else {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "The entered metric does not exist. Please review your selection!",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warn"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "warn"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": false
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
     }
   }
 
