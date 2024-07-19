@@ -99,7 +99,8 @@
     </ngx-datatable-column>
 
     <ngx-datatable-column [flexGrow]="0.5" *ngIf="viewElementChecker('addStandardMilestone') && callLocation == 'StandardMilestones'" [sortable]="false"
-    [canAutoResize]="false" [draggable]="false" [resizeable]="false" prop="milestoneId">
+    [canAutoResize]="false" [draggable]="false" [resizeable]="false">
+    <!-- prop="milestoneId" -->
     <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
         let-selectFn="selectFn">
         <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="allRowsSelected"
@@ -109,13 +110,14 @@
     <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
         let-onCheckboxChangeFn="onCheckboxChangeFn">
         <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="isSelected"
-            (change)="onCheckboxChangeFn($event)" [disabled]="isToggleDisabled(value)">
+            (change)="onCheckboxChangeFn($event)" >
+            <!-- [disabled]="isToggleDisabled(value)" -->
         </mat-slide-toggle>
     </ng-template>
 </ngx-datatable-column>
 
 
-    <ngx-datatable-column [flexGrow]="0.2" *ngIf="viewElementChecker('addStandardMilestone') && callLocation == 'CAPEX'" [sortable]="false"
+    <!-- <ngx-datatable-column [flexGrow]="0.2" *ngIf="viewElementChecker('addStandardMilestone') && callLocation == 'CAPEX'" [sortable]="false"
     [canAutoResize]="false" [draggable]="false" [resizeable]="false" name="Add" prop="milestoneId">
     <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
         let-onCheckboxChangeFn="onCheckboxChangeFn">
@@ -123,7 +125,7 @@
             (change)="onToggleChange(value, $event)" [disabled]="isToggleDisabled(value)">
         </mat-slide-toggle>
     </ng-template>
-</ngx-datatable-column>
+</ngx-datatable-column> -->
 
 
     <!--    <ngx-datatable-column *ngIf="callLocation == 'Normal'" [flexGrow]="1" [resizeable]="false" [sortable]="false" *ngIf="viewElementChecker('delete')"-->
