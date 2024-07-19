@@ -993,10 +993,10 @@
 
         </div>
     </div>
-    <!-- <div *ngIf="viewContent && callLocation == 'CAPEX'" [hidden]="!viewStandardMilestonesSets">
+    <div *ngIf="viewContent && callLocation == 'CAPEX'" [hidden]="!viewStandardMilestonesSets">
         <app-standard-milestone-sets (standardMilestonesAdded)="addStandardMilestonesToList($event)"
             [loadContent]="viewStandardMilestonesSets" [lookup]="lookUpData" [mode] = "'CAPEX'"></app-standard-milestone-sets>
-    </div> -->
+    </div>
     <div *ngIf="viewContent && callLocation != 'CAPEX'" [hidden]="!viewStandardMilestonesSets">
         <app-standard-milestone-sets (standardMilestonesAdded)="addStandardMilestonesToList($event)"
             [loadContent]="viewStandardMilestonesSets" [lookup]="lookUpData" [mode] = "'Normal'"></app-standard-milestone-sets>

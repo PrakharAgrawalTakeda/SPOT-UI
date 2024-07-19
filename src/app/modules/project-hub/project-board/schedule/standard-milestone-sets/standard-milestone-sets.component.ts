@@ -22,7 +22,7 @@ export class StandardMilestoneSetsComponent implements OnInit {
     standardCAPEXMilestoneData: any;
     result: Object;
     standarCAPEXMilestoneAdded: any = []
-    //canSubmit: boolean = true
+    canSubmit: boolean = true
     constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService,
         public fuseAlert: FuseConfirmationService,
         private _Activatedroute: ActivatedRoute,
@@ -50,13 +50,13 @@ export class StandardMilestoneSetsComponent implements OnInit {
             this.standardMilestoneData = this.sortByLevel(res)
 
             let milestoneArray = []
-            // if (this.mode == 'CAPEX') {
-            //     this.standardCAPEXMilestoneData = this.standardMilestoneData.filter(x => x.milestoneTemplateId == "7D7E9D69-3201-4063-8713-45C7FFEB1250");
-            //     console.log(this.standardCAPEXMilestoneData)
-            //     for (var i in this.standardCAPEXMilestoneData) {
-            //         this.standarCAPEXMilestoneAdded.push([])
-            //     }
-            // }
+            if (this.mode == 'CAPEX') {
+                this.standardCAPEXMilestoneData = this.standardMilestoneData.filter(x => x.milestoneTemplateId == "7D7E9D69-3201-4063-8713-45C7FFEB1250");
+                console.log(this.standardCAPEXMilestoneData)
+                for (var i in this.standardCAPEXMilestoneData) {
+                    this.standarCAPEXMilestoneAdded.push([])
+                }
+            }
             if (this.router.url.includes('business-case')) {
                 this.standardMilestoneData.forEach((set, setIndex) => {
                     milestoneArray = set.templateDetails;
@@ -77,9 +77,9 @@ export class StandardMilestoneSetsComponent implements OnInit {
 
     }
     submitStandardMilestoneSets() {
-        //if (this.canSubmit) {
+        if (this.canSubmit) {
 
-            //this.canSubmit = false
+            this.canSubmit = false
             var returnedMilestones: any = []
             this.standarMilestoneAdded.forEach(x => {
                 x.map(y => {
@@ -141,7 +141,7 @@ export class StandardMilestoneSetsComponent implements OnInit {
                     }
                     this.fuseAlert.open(limitConfig)
                 }
-                //else if (this.mode == 'CAPEX') {
+                else if (this.mode == 'CAPEX') {
                     //         var comfirmConfig: FuseConfirmationConfig = {
                     //         "title": "Note",
                     //         "message": "The selected standard milestones have been added to your project. Please visit the Schedule page and update the milestones accordingly!",
@@ -165,11 +165,11 @@ export class StandardMilestoneSetsComponent implements OnInit {
                     //         const askNeedAlert = this.fuseAlert.open(comfirmConfig)
                     //         askNeedAlert.afterClosed().subscribe(res => {
                     //             if (res == 'confirmed') {
-                    //this.standardMilestonesAdded.emit(returnedMilestones);
-                    //this.canSubmit = true
+                    this.standardMilestonesAdded.emit(returnedMilestones);
+                    this.canSubmit = true
                     //             }
                     //         })
-                //}
+                }
                 else {
                     var comfirmConfig: FuseConfirmationConfig = {
                         "message": "The selected milestones will be added to your project’s existing milestones. Do you want to proceed? ",
@@ -194,15 +194,14 @@ export class StandardMilestoneSetsComponent implements OnInit {
                     const askNeedAlert = this.fuseAlert.open(comfirmConfig)
                     askNeedAlert.afterClosed().subscribe(res => {
                         if (res == 'confirmed') {
-                            console.log("HERE")
                             this.standardMilestonesAdded.emit(returnedMilestones);
-                           // this.canSubmit = true
+                            this.canSubmit = true
                         }
                     })
                 }
             }
 
-        //}
+        }
     }
     toggleSchedule(event: any) {
         this.standarMilestoneAdded[event.tableIndex] = [...event.selected]
