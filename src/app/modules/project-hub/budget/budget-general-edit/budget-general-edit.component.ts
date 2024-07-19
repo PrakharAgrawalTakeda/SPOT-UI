@@ -432,31 +432,31 @@ export class BudgetGeneralEditComponent {
                         }
                     })
                 } else {
-                    this.portfolioOwnerID = this.gmsBudgetowner.value.portfolioOwnerId
-                    this.apiService.getGmsBudgetOwnerInfo(this.portfolioOwnerID).then((response: any) => {
-                        console.log("RESPONSE", response)
-                    if (response.milestoneTemplateId == '7D7E9D69-3201-4063-8713-45C7FFEB1250' && this.mode == 'CAPEX') {
-                        this.openStandardMilestonesSets()
-                    }
-                    else {
+                    // this.portfolioOwnerID = this.gmsBudgetowner.value.portfolioOwnerId
+                    // this.apiService.getGmsBudgetOwnerInfo(this.portfolioOwnerID).then((response: any) => {
+                    //     console.log("RESPONSE", response)
+                    // if (response.milestoneTemplateId == '7D7E9D69-3201-4063-8713-45C7FFEB1250' && this.mode == 'CAPEX') {
+                    //     this.openStandardMilestonesSets()
+                    // }
+                    // else {
                         this.submitInfo()
-                    }
-                })
+                    //}
+                //})
 
                 }
             
             }
             else {
-                this.portfolioOwnerID = this.gmsBudgetowner.value.portfolioOwnerId
-                this.apiService.getGmsBudgetOwnerInfo(this.portfolioOwnerID).then((response: any) => {
-                    console.log("RESPONSE", response)
-                if (response.milestoneTemplateId == '7D7E9D69-3201-4063-8713-45C7FFEB1250' && this.mode == 'CAPEX') {
-                    this.openStandardMilestonesSets()
-                }
-                else {
+                // this.portfolioOwnerID = this.gmsBudgetowner.value.portfolioOwnerId
+                // this.apiService.getGmsBudgetOwnerInfo(this.portfolioOwnerID).then((response: any) => {
+                //     console.log("RESPONSE", response)
+                // if (response.milestoneTemplateId == '7D7E9D69-3201-4063-8713-45C7FFEB1250' && this.mode == 'CAPEX') {
+                //     this.openStandardMilestonesSets()
+                // }
+                // else {
                     this.submitInfo()
-                }
-            })
+            //     }
+            // })
             }
         }
     }
