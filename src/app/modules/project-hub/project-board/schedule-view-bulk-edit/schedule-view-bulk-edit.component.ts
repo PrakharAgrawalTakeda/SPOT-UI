@@ -2912,7 +2912,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     //   event.target.innerWidth;
     // }
     addStandardMilestonesToList(standardMilestones: any[]) {
-        
+        console.log("NOW HERE")
         standardMilestones.forEach(x => {
             switch (x.milestoneType) {
                 
@@ -3034,12 +3034,13 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         //               this.budgetGeneralEditComponent.submitInfo();
         //             } 
         //             else {
-        //               this.viewStandardMilestonesSets = false;
+                       this.viewStandardMilestonesSets = false;
         //             }           
 
     }
 
     addStandardMilestoneToEditStack(sM: any) {
+        console.log("THEN HERE")
         var formValue = this.milestoneForm.getRawValue()
         var limitPassedNormal = false;
         var limitPassedCharter = false;
