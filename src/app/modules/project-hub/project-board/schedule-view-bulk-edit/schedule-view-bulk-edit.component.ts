@@ -25,6 +25,8 @@ import { ViewportRuler } from '@angular/cdk/scrolling';
 import { Constants } from "../../../../shared/constants";
 import { GlobalBusinessCaseOptions } from "../../../../shared/global-business-case-options";
 import { resolveAllValues } from '@progress/kendo-angular-dropdowns/common/util';
+import { BudgetGeneralEditComponent } from '../../budget/budget-general-edit/budget-general-edit.component';
+import { SharedService } from 'app/shared.service';
 
 @Component({
     selector: 'app-schedule-view-bulk-edit',
@@ -44,6 +46,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     //   .change(200)
     //   .subscribe(() => this.ngZone.run(() => this.setSize()));
     //@Input() scheduleData: any;
+    @ViewChild(BudgetGeneralEditComponent) budgetGeneralEditComponent: BudgetGeneralEditComponent;
+    hide: boolean = true;
     @Input() schedulengxdata: any = [];
     @Input() baselineLogData: any;
     @Input() projectbaselinelogDetailsprev: any;
@@ -57,6 +61,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     @ViewChild('target') private myScrollContainer: ElementRef;
     @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' | 'Business-Case' = 'Normal'
     @Input() optionType: 'recommended-option' | 'option-2' | 'option-3' = 'recommended-option'
+    @Input() callLocation: 'CAPEX' | 'Normal' = 'Normal'
+    @Input() viewStandardMilestonesSets: boolean = false;
     editing = {};
     scheduleData: any = []
     ColumnMode = ColumnMode;
@@ -79,7 +85,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     viewBaseline: boolean = false
     viewBaselineLogs: boolean = false
     compareBaselineLogs: boolean = false
-    viewStandardMilestonesSets: boolean = false
+    //viewStandardMilestonesSets: boolean = false
     roleMaster: any = {}
     baselineCount: any = {}
     baselinelogdetails: any = {}
@@ -143,13 +149,14 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     })
     optionInfoData: any = {}
     optionId: string = ''
+    milestoneNames: any;
 
     constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
         private portApiService: PortfolioApiService,
         private authService: AuthService, private _elementRef: ElementRef, private indicator: SpotlightIndicatorsService,
         private router: Router, private _Activatedroute: ActivatedRoute, public fuseAlert: FuseConfirmationService, private changeDetectorRef: ChangeDetectorRef,
         private msalService: MsalService, private readonly viewportRuler: ViewportRuler,
-        private readonly ngZone: NgZone) {
+        private readonly ngZone: NgZone, private sharedService: SharedService, private cdr: ChangeDetectorRef) {
         // this.scheduleData.scheduleData = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
         this.projecthubservice.includeClosedItems.schedule.subscribe(res => {
             if (this.viewContent == true) {
@@ -161,8 +168,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         })
         //this.setSize();
         this.milestoneForm.valueChanges.subscribe(res => {
-            console.log(res)
-            console.log(this.scheduleData.scheduleData)
+            //console.log(res)
+            //console.log(this.scheduleData.scheduleData)
             //debugger
             this.insertarray = []
             // if(res.length == this.scheduleData.scheduleData.length)
@@ -170,15 +177,15 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 for (let control of this.milestoneForm.controls) {
                     //debugger
                     let temp = this.scheduleData.links.find(x => x.linkItemId == control['value']['scheduleUniqueId'])
-                    console.log("TEMP", temp)
-                    console.log(res)
-                    console.log(this.scheduleData.scheduleData)
+                    //console.log("TEMP", temp)
+                    //console.log(res)
+                    //console.log(this.scheduleData.scheduleData)
                     if (temp) {
                        // debugger
                         let parentLink = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
                         if (parentLink) {
                             let parentID = temp.parentProjectId
-                            console.log("PARENT ID", parentID)
+                            //console.log("PARENT ID", parentID)
                             
                             if (res.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId'])) {
                                 // console.log( moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish.value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'))
@@ -198,7 +205,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             this.insertArray(control['controls']['projectId'].value)
                         }
                     }
-                    console.log("INSERT ARRAY", this.insertarray)
+                    //console.log("INSERT ARRAY", this.insertarray)
                 }
                 if (this.viewContent == true ) {
                     //this.saveScheduleBulkEdit()
@@ -262,6 +269,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.dataloader()
     }
+
     insertArray(projectId: string): void {
         //debugger
         if (this.insertarray.length == 0) {
@@ -270,7 +278,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         if (!this.insertarray.includes(projectId)) {
             this.insertarray.push(projectId)
         }
-        console.log(this.insertarray)
+        //console.log(this.insertarray)
     }
     isReasonRequiredPassedChecker(formValue: any): boolean {
         if (formValue.completionDate) {
@@ -1205,7 +1213,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             }]
 
             this.schedulengxdata = [...this.schedulengxdata, ...j]
-            console.log(this.schedulengxdata)
+            //console.log(this.schedulengxdata)
             this.scheduleData.scheduleData = res.scheduleData
             this.milestoneTableEditRow(this.schedulengxdata.length - 1)
             var div = document.getElementsByClassName('datatable-body')[0]
@@ -1826,11 +1834,11 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 var baselines2 = sortedbaselines2.map(x => {
                     return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
                 })
-                console.log(this.formValue)
-                console.log(this.scheduleData.scheduleData)
+                //console.log(this.formValue)
+                //console.log(this.scheduleData.scheduleData)
 
-                console.log(baselines)
-                console.log(baselines2)
+                //console.log(baselines)
+                //console.log(baselines2)
                 //debugger
                 let objectsMatchingCriteria = this.formValue.filter(obj => 
                     obj.scheduleUniqueId === "" && (obj.baselineFinish == "" || obj.baselineFinish == null)
@@ -1982,11 +1990,11 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 var baselines2 = sortedbaselines2.map(x => {
                     return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
                 })
-                console.log(this.formValue)
-                console.log(this.scheduleData.scheduleData)
+                //console.log(this.formValue)
+                //console.log(this.scheduleData.scheduleData)
 
-                console.log(baselines)
-                console.log(baselines2)
+                //console.log(baselines)
+                //console.log(baselines2)
                 //debugger
                 let objectsMatchingCriteria = this.formValue.filter(obj => 
                     obj.scheduleUniqueId === "" && (obj.baselineFinish == "" || obj.baselineFinish == null)
@@ -2072,7 +2080,37 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 // //     this.projecthubservice.submitbutton.next(true)
                 // //   })
             }
+            // if(this.callLocation == 'CAPEX')
+            //     {
+            //         var comfirmConfig: FuseConfirmationConfig = {
+            //                     "title": "Note",
+            //                     "message": "The selected standard milestones have been added to your project. Please visit the Schedule page and update the milestones accordingly!",
+            //                 "icon": {
+            //                     "show": true,
+            //                     "name": "heroicons_outline:exclamation",
+            //                     "color": "primary"
+            //                 },
+            //                 "actions": {
+            //                     "confirm": {
+            //                         "show": true,
+            //                         "label": "OK",
+            //                         "color": "primary"
+            //                     },
+            //                     "cancel": {
+            //                         "show": false,
+            //                     }
+            //                 },
+            //                 "dismissible": true
+            //             }
+            //                     const askNeedAlert = this.fuseAlert.open(comfirmConfig)
+            //                     askNeedAlert.afterClosed().subscribe(res => {
+            //                         if (res == 'confirmed') {
+                                        
+            //                         }
+            //                     })
+            //     }
         })
+        
     }
 
     getUserName(adid: string): string {
@@ -2697,7 +2735,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         }
     }
     submitschedule() {
-        // debugger
         var baselineFormValue = this.milestoneForm.getRawValue()
         console.log(this.flag)
         // if(this.mode == 'Project-Close-Out')
@@ -2875,102 +2912,107 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     //   event.target.innerWidth;
     // }
     addStandardMilestonesToList(standardMilestones: any[]) {
+        console.log("NOW HERE")
         standardMilestones.forEach(x => {
             switch (x.milestoneType) {
-                case 1: {
-                    let index = 0;
-                    let exists = false;
-                    for (let control of this.milestoneForm.controls) {
-                        if (control.value.milestoneType == x.milestoneType) {
-                            control.patchValue({ milestone: x.milestone })
-                            if (x.funtionalOwnerId && x.funtionalOwnerId != '') {
-                                control.patchValue({ functionGroupId: x.funtionalOwnerId })
-                                control.patchValue({ function: this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.funtionalOwnerId) })
-                            }
-                            if (!control.value.comments || control.value.comments == '') {
-                                control.patchValue({ comments: x.comment })
-                            }
-                            if (this.mode == 'Project-Charter') {
-                                if (control.value.includeInCharter == false || control.value.includeInCharter == null) {
-                                    control.patchValue({ includeInCharter: x.includeInReport })
-                                }
-                            }
-                            if (this.mode == 'Business-Case') {
-                                if (control.value.includeInBusinessCase == false || control.value.includeInBusinessCase == null) {
-                                    control.patchValue({ includeInBusinessCase: x.includeInReport })
-                                }
-                            }
-                            if (this.mode == 'Project-Close-Out') {
-                                if (control.value.includeInCloseout == false || control.value.includeInCloseout == null) {
-                                    control.patchValue({ includeInCloseout: x.includeInReport })
-                                }
-                            }
-                            if (this.mode == 'Normal') {
-                                if (control.value.includeInReport == false || control.value.includeInReport == null) {
-                                    control.patchValue({ includeInReport: x.includeInReport })
-                                }
-                            }
-                            control.patchValue({ templateMilestoneId: x.milestoneId })
-                            this.milestoneTableEditRow(index)
-                            exists = true;
-                        }
-                        index++;
-                    }
-                    if (!exists) {
-                        this.addStandardMilestoneToEditStack(x)
-                    }
-                    break;
-                }
+                
+                case 1:
                 case 2: {
                     let index = 0;
                     let exists = false;
+                    this.milestoneNames = x.milestone
+                    // Iterating over open milestones
                     for (let control of this.milestoneForm.controls) {
                         if (control.value.milestoneType == x.milestoneType) {
-                            control.patchValue({ milestone: x.milestone })
+                            control.patchValue({ milestone: x.milestoneType > 0 ? x.milestoneType == 1 ? this.milestoneNames.replace('Execution Start - ', '') : x.milestoneType == 2 ? this.milestoneNames.replace('Execution End - ', '') : x.milestone : x.milestone });
                             if (x.funtionalOwnerId && x.funtionalOwnerId != '') {
-                                control.patchValue({ functionGroupId: x.funtionalOwnerId })
-                                control.patchValue({ function: this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.funtionalOwnerId) })
+                                control.patchValue({ functionGroupId: x.funtionalOwnerId });
+                                control.patchValue({ function: this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.funtionalOwnerId) });
                             }
-                            if (control.value.comments == '') {
-                                control.patchValue({ comments: x.comment })
+                            if (!control.value.comments || control.value.comments == '') {
+                                control.patchValue({ comments: x.comment });
                             }
                             if (this.mode == 'Project-Charter') {
                                 if (control.value.includeInCharter == false || control.value.includeInCharter == null) {
-                                    control.patchValue({ includeInCharter: x.includeInReport })
+                                    control.patchValue({ includeInCharter: x.includeInReport });
                                 }
                             }
                             if (this.mode == 'Business-Case') {
                                 if (control.value.includeInBusinessCase == false || control.value.includeInBusinessCase == null) {
-                                    control.patchValue({ includeInBusinessCase: x.includeInReport })
+                                    control.patchValue({ includeInBusinessCase: x.includeInReport });
                                 }
                             }
                             if (this.mode == 'Project-Close-Out') {
                                 if (control.value.includeInCloseout == false || control.value.includeInCloseout == null) {
-                                    control.patchValue({ includeInCloseout: x.includeInReport })
+                                    control.patchValue({ includeInCloseout: x.includeInReport });
                                 }
                             }
                             if (this.mode == 'Normal') {
                                 if (control.value.includeInReport == false || control.value.includeInReport == null) {
-                                    control.patchValue({ includeInReport: x.includeInReport })
+                                    control.patchValue({ includeInReport: x.includeInReport });
                                 }
                             }
-                            control.patchValue({ templateMilestoneId: x.milestoneId })
-                            this.milestoneTableEditRow(index)
+                            control.patchValue({ templateMilestoneId: x.milestoneId });
+                            this.milestoneTableEditRow(index);
                             exists = true;
+                            break;
                         }
                         index++;
                     }
+       
+                    // If no matching open milestone is found, check for closed milestones
+                    if (!exists && !this.projecthubservice.includeClosedItems.schedule.value) {
+                        const closedMilestones = this.scheduleData.scheduleData.length > 0
+                            ? this.scheduleData.scheduleData.filter(y => y.completionDate != null && y.milestoneType == x.milestoneType)
+                            : [];
+       
+                        if (closedMilestones.length > 0) {
+                            let closedMilestone = closedMilestones[0];
+                            closedMilestone.milestone = x.milestone;
+                            if (x.funtionalOwnerId && x.funtionalOwnerId != '') {
+                                closedMilestone.functionGroupId = x.funtionalOwnerId;
+                                closedMilestone.function = this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.funtionalOwnerId);
+                            }
+                            if (!closedMilestone.comments || closedMilestone.comments == '') {
+                                closedMilestone.comments = x.comment;
+                            }
+                            if (this.mode == 'Project-Charter') {
+                                if (closedMilestone.includeInCharter == false || closedMilestone.includeInCharter == null) {
+                                    closedMilestone.includeInCharter = x.includeInReport;
+                                }
+                            }
+                            if (this.mode == 'Business-Case') {
+                                if (closedMilestone.includeInBusinessCase == false || closedMilestone.includeInBusinessCase == null) {
+                                    closedMilestone.includeInBusinessCase = x.includeInReport;
+                                }
+                            }
+                            if (this.mode == 'Project-Close-Out') {
+                                if (closedMilestone.includeInCloseout == false || closedMilestone.includeInCloseout == null) {
+                                    closedMilestone.includeInCloseout = x.includeInReport;
+                                }
+                            }
+                            if (this.mode == 'Normal') {
+                                if (closedMilestone.includeInReport == false || closedMilestone.includeInReport == null) {
+                                    closedMilestone.includeInReport = x.includeInReport;
+                                }
+                            }
+                            closedMilestone.templateMilestoneId = x.milestoneId;
+                            exists = true;
+                        }
+                    }
+       
+                    // If no matching milestone found in either open or closed milestones, only then add a new one
                     if (!exists) {
-                        this.addStandardMilestoneToEditStack(x)
+                        this.addStandardMilestoneToEditStack(x);
                     }
                     break;
                 }
                 default: {
-                    this.addStandardMilestoneToEditStack(x)
+                    this.addStandardMilestoneToEditStack(x);
                     break;
                 }
             }
-            var div = document.getElementsByClassName('datatable-scroll')[0]
+            var div = document.getElementsByClassName('datatable-scroll')[0];
             setTimeout(() => {
                 div?.scroll({
                     top: div.scrollHeight,
@@ -2978,11 +3020,27 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     behavior: 'smooth'
                 });
             }, 100);
-        })
-        this.viewStandardMilestonesSets = false
+        });
+        // if (this.callLocation == 'CAPEX') {
+        //     const formData = this.sharedService.getBudgetFormData();
+        //     const location = this.sharedService.getLocation();
+        //     console.log(formData)
+        //     console.log(this.budgetGeneralEditComponent)
+        //             if (formData) {
+        //                 this.budgetGeneralEditComponent.budgetInfoForm.patchValue(formData);
+        //                 this.budgetGeneralEditComponent.mode = location
+        //               }
+        //               this.saveScheduleBulkEdit();
+        //               this.budgetGeneralEditComponent.submitInfo();
+        //             } 
+        //             else {
+                       this.viewStandardMilestonesSets = false;
+        //             }           
+
     }
 
     addStandardMilestoneToEditStack(sM: any) {
+        console.log("THEN HERE")
         var formValue = this.milestoneForm.getRawValue()
         var limitPassedNormal = false;
         var limitPassedCharter = false;
@@ -3002,6 +3060,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 limitPassedBusinessCase = true;
             }
         }
+        
         this.milestoneForm.push(new FormGroup({
             scheduleUniqueId: new FormControl(''),
             projectId: new FormControl(this.id),

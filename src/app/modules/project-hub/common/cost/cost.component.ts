@@ -138,12 +138,6 @@ export class CostComponent implements OnInit, OnDestroy {
             highCase: 'isProjectSpentNa',
             curryearSpend: 'currentYearPlannedSpend'
           },
-          {
-            category: 'Asset in Service',
-            baseCase: 'apisdate',
-            highCase: 'assetInServiceNa',
-            curryearSpend: 'currentYearPlannedSpend'
-          },
 
           {
             category: 'Total non-FTE OPEX' + ' (' + this.localcurrency.localCurrencyAbbreviation + ')',
@@ -292,12 +286,6 @@ export class CostComponent implements OnInit, OnDestroy {
             baseCase: 'projectSpendStart',
             highCase: 'isProjectSpentNa',
             curryearSpend: 'currentYearPlannedSpend'
-          },
-          {
-            category: 'Asset in Service',
-            baseCase: 'apisdate',
-            highCase: 'assetInServiceNa',
-            curryearSpend: 'currentYearPlannedSpend'
           }]
 
           this.costData2 = [
@@ -368,12 +356,6 @@ export class CostComponent implements OnInit, OnDestroy {
             category: 'Project Spend Start',
             baseCase: 'projectSpendStart',
             highCase: 'isProjectSpentNa',
-            curryearSpend: 'currentYearPlannedSpend'
-          },
-          {
-            category: 'Asset in Service',
-            baseCase: 'apisdate',
-            highCase: 'assetInServiceNa',
             curryearSpend: 'currentYearPlannedSpend'
           }]
 

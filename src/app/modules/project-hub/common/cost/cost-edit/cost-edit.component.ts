@@ -64,12 +64,6 @@ export class CostEditComponent {
     highCase: 'isProjectSpentNa',
     curryearSpend: 'currentYearPlannedSpend'
   },
-  {
-    category: 'Asset in Service',
-    baseCase: 'apisdate',
-    highCase: 'assetInServiceNa',
-    curryearSpend: 'currentYearPlannedSpend'
-  },
 
   {
     category: 'Total non-FTE OPEX',
@@ -88,12 +82,6 @@ export class CostEditComponent {
     category: 'Project Spend Start',
     baseCase: 'projectSpendStart',
     highCase: 'isProjectSpentNa',
-    curryearSpend: 'currentYearPlannedSpend'
-  },
-  {
-    category: 'Asset in Service',
-    baseCase: 'apisdate',
-    highCase: 'assetInServiceNa',
     curryearSpend: 'currentYearPlannedSpend'
   }]
 

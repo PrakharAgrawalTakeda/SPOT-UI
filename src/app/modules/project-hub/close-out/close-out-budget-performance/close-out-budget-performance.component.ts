@@ -43,6 +43,7 @@ export class CloseOutBudgetPerformanceComponent implements OnInit, OnDestroy {
         this.finalRequirements = []
         this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
         this.apiService.getBudgetPerformanceById(this.id).then((res: any) => {
+            console.log(res)
             this.finalRequirements = []
             res.finalRequirementsValue.forEach((x, index) => {
                 this.finalRequirements.push(x);

@@ -113,6 +113,12 @@ export class ProjectApiService {
         const response = await lastValueFrom(abc$)
         return response
     }
+  //   async getGmsBudgetOwnerInfo(portfolioOwnerId) {
+  //     var url = GlobalVariables.apiurl + "PortfolioOwner/"+portfolioOwnerId+"/GmsBudgetOwnerDefaultMilestoneSet"
+  //     const abc$ = this.http.get(url)
+  //     const response = await lastValueFrom(abc$)
+  //     return response
+  // }
     async getNewBudgetId(projectId, gmsBudgetOwnerId) {
         var url = GlobalVariables.apiurl + "Budget/GenerateNewBudgetId/"+projectId+"/"+gmsBudgetOwnerId
         const abc$ = this.http.get(url)

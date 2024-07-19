@@ -1,63 +1,26 @@
-<ngx-datatable
-    [headerHeight]="'auto'"
-    [rowHeight]="'auto'"
-    [scrollbarV]="false"
-    columnMode="flex"
+<ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
     class="material font-medium text-default text-sm whitespace-nowrap cursor-pointer fast-load-table"
-    [rows]="tableData"
-    [sorts]="[
+    [rows]="tableData" [sorts]="[
         { prop: 'plannedFinish', dir: 'asc' },
         { prop: 'baselineFinish', dir: 'asc' },
         { prop: 'completionDate', dir: 'asc' }
-    ]"
-    #scheduleTable
-    [rowClass]="getRowClass"
-    [selected]="selected"
-    [selectionType]="SelectionType.checkbox"
-    [selectAllRowsOnPage]="false"
-    (activate)="onActivate($event)"
-    (select)="onSelect($event)"
->
-    <ngx-datatable-column
-        name="Status"
-        prop="indicator"
-        [flexGrow]="callLocation == 'Normal' ? 0.5 : 0.7"
-        [resizeable]="false"
-        *ngIf="viewElementChecker('status')"
-        [sortable]="false"
-        [draggable]="false"
-    >
-        <ng-template
-            let-row="row"
-            let-value="value"
-            ngx-datatable-cell-template
-        >
-            <mat-icon
-                svgIcon="{{
+    ]" #scheduleTable [rowClass]="getRowClass" [selected]="selected" [selectionType]="SelectionType.checkbox"
+    [selectAllRowsOnPage]="false" (activate)="onActivate($event)" (select)="onSelect($event)">
+    <ngx-datatable-column name="Status" prop="indicator" [flexGrow]="callLocation == 'Normal' ? 0.5 : 0.7"
+        [resizeable]="false" *ngIf="viewElementChecker('status')" [sortable]="false" [draggable]="false">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <mat-icon svgIcon="{{
                     indicator.getIndicators(value, 'circle').icontype
-                }}"
-                class="{{ indicator.getIndicators(value, 'circle').iconcolor }}"
-            >
+                }}" class="{{ indicator.getIndicators(value, 'circle').iconcolor }}">
             </mat-icon>
             &nbsp; &nbsp;
-            <mat-icon
-                [matTooltip]="getlinkname(row.scheduleUniqueId)"
+            <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)"
                 *ngIf="islink(row.scheduleUniqueId) && callLocation != 'Link'"
-                svgIcon="heroicons_outline:link"
-            ></mat-icon>
+                svgIcon="heroicons_outline:link"></mat-icon>
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column
-        name="Milestone"
-        prop="milestone"
-        [flexGrow]="4.5"
-        *ngIf="viewElementChecker('milestone')"
-    >
-        <ng-template
-            let-row="row"
-            let-value="value"
-            ngx-datatable-cell-template
-        >
+    <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="4.5" *ngIf="viewElementChecker('milestone')">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <p [ngClass]="{ closed: row.completionDate != null }">
                 {{ value }}
             </p>
@@ -65,195 +28,105 @@
           <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '" [ngClass]="{'closed': row.completionDate != null}">{{value}}</p> -->
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column
-        name="Functional Owner"
-        prop="funtionalOwnerId"
-        [flexGrow]="1.5"
-        *ngIf="viewElementChecker('functionalOwner')"
-    >
-        <ng-template
-            let-row="row"
-            let-value="value"
-            ngx-datatable-cell-template
-        >
+    <ngx-datatable-column name="Functional Owner" prop="funtionalOwnerId" [flexGrow]="1.5"
+        *ngIf="viewElementChecker('functionalOwner')">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <p>{{ getLookUpName(value) }}</p>
             <!-- <strong><p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName" [ngClass]="{'closed': row.completionDate != null}">{{value}} Insert Milestone Name</p></strong>
           <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '" [ngClass]="{'closed': row.completionDate != null}">{{value}}</p> -->
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column
-        name="Comment"
-        prop="comment"
-        [flexGrow]="1.5"
-        *ngIf="viewElementChecker('comment')"
-    >
-        <ng-template
-            let-row="row"
-            let-value="value"
-            ngx-datatable-cell-template
-        >
+    <ngx-datatable-column name="Comment" prop="comment" [flexGrow]="3.0" *ngIf="viewElementChecker('comment')">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <p class="comment">{{ value }}</p>
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column
-        name="Planned Finish"
-        prop="plannedFinish"
-        [flexGrow]="0.9"
-        *ngIf="viewElementChecker('plannedFinish')"
-    >
-        <ng-template
-            let-row="row"
-            let-value="value"
-            ngx-datatable-cell-template
-        >
+    <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [flexGrow]="0.9"
+        *ngIf="viewElementChecker('plannedFinish')">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <p [ngClass]="{ closed: row.completionDate != null }">
                 {{ value | date : "dd-MMM-yyyy" }}
             </p>
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column
-        name="Baseline Finish"
-        prop="baselineFinish"
-        [flexGrow]="0.9"
-        *ngIf="viewElementChecker('baselineFinish')"
-    >
-        <ng-template
-            let-row="row"
-            let-value="value"
-            ngx-datatable-cell-template
-        >
+    <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [flexGrow]="0.9"
+        *ngIf="viewElementChecker('baselineFinish')">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <p [ngClass]="{ closed: row.completionDate != null }">
                 {{ value | date : "dd-MMM-yyyy" }}
             </p>
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column
-        name="Completion Date"
-        prop="completionDate"
-        [flexGrow]="0.9"
-        *ngIf="viewElementChecker('completionDate')"
-    >
-        <ng-template
-            let-row="row"
-            let-value="value"
-            ngx-datatable-cell-template
-        >
+    <ngx-datatable-column name="Completion Date" prop="completionDate" [flexGrow]="0.9"
+        *ngIf="viewElementChecker('completionDate')">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <p [ngClass]="{ closed: row.completionDate != null }">
                 {{ value | date : "dd-MMM-yyyy" }}
             </p>
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column
-        name="Variance"
-        prop="variance"
-        [flexGrow]="0.9"
-        *ngIf="viewElementChecker('variance')"
-    >
-        <ng-template
-            let-row="row"
-            let-value="value"
-            ngx-datatable-cell-template
-        >
-            <p
-                class="variance"
-                [ngClass]="{ closed: row.completionDate != null }"
-            >
+    <ngx-datatable-column name="Variance" prop="variance" [flexGrow]="0.9" *ngIf="viewElementChecker('variance')">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p class="variance" [ngClass]="{ closed: row.completionDate != null }">
                 {{ value }}
             </p>
         </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column
-        name="Include in {{ includeInText }}"
-        prop="includeInReport"
-        [flexGrow]="1.5"
-        *ngIf="viewElementChecker('includeInReport')"
-    >
-        <ng-template
-            let-row="row"
-            let-rowIndex="rowIndex"
-            let-value="value"
-            ngx-datatable-cell-template
-        >
+    <ngx-datatable-column name="Include in {{ includeInText }}" prop="includeInReport" [flexGrow]="1.5"
+        *ngIf="viewElementChecker('includeInReport')">
+        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a>
-                <mat-icon
-                    class="text-green-500"
-                    svgIcon="heroicons_outline:check-circle"
-                    *ngIf="value == true"
-                ></mat-icon>
+                <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                    *ngIf="value == true"></mat-icon>
             </a>
         </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column
-        [flexGrow]="0.5"
-        *ngIf="viewElementChecker('link')"
-        [sortable]="false"
-        [canAutoResize]="false"
-        [draggable]="false"
-        [resizeable]="false"
-    >
-        <ng-template
-            ngx-datatable-header-template
-            let-value="value"
-            let-allRowsSelected="allRowsSelected"
-            let-selectFn="selectFn"
-        >
-            <mat-slide-toggle
-                class="h-full min-h-[2pc] overflow-hidden"
-                [checked]="allRowsSelected"
-                (change)="selectFn(!allRowsSelected)"
-            ></mat-slide-toggle>
+    <ngx-datatable-column [flexGrow]="0.5" *ngIf="viewElementChecker('link')" [sortable]="false" [canAutoResize]="false"
+        [draggable]="false" [resizeable]="false">
+        <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+            let-selectFn="selectFn">
+            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="allRowsSelected"
+                (change)="selectFn(!allRowsSelected)"></mat-slide-toggle>
             Link
         </ng-template>
-        <ng-template
-            ngx-datatable-cell-template
-            let-value="value"
-            let-isSelected="isSelected"
-            let-onCheckboxChangeFn="onCheckboxChangeFn"
-        >
-            <mat-slide-toggle
-                class="h-full min-h-[2pc] overflow-hidden"
-                [checked]="isSelected"
-                (change)="onCheckboxChangeFn($event)"
-            ></mat-slide-toggle>
+        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+            let-onCheckboxChangeFn="onCheckboxChangeFn">
+            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="isSelected"
+                (change)="onCheckboxChangeFn($event)"></mat-slide-toggle>
         </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column
-        [flexGrow]="0.5"
-        *ngIf="viewElementChecker('addStandardMilestone')"
-        [sortable]="false"
-        [canAutoResize]="false"
-        [draggable]="false"
-        [resizeable]="false"
-    >
-        <ng-template
-            ngx-datatable-header-template
-            let-value="value"
-            let-allRowsSelected="allRowsSelected"
-            let-selectFn="selectFn"
-        >
-            <mat-slide-toggle
-                class="h-full min-h-[2pc] overflow-hidden"
-                [checked]="allRowsSelected"
-                (change)="selectFn(!allRowsSelected)"
-            ></mat-slide-toggle>
-            Add
-        </ng-template>
-        <ng-template
-            ngx-datatable-cell-template
-            let-value="value"
-            let-isSelected="isSelected"
-            let-onCheckboxChangeFn="onCheckboxChangeFn"
-        >
-            <mat-slide-toggle
-                class="h-full min-h-[2pc] overflow-hidden"
-                [checked]="isSelected"
-                (change)="onCheckboxChangeFn($event)"
-            ></mat-slide-toggle>
-        </ng-template>
-    </ngx-datatable-column>
+    <ngx-datatable-column [flexGrow]="0.5" *ngIf="viewElementChecker('addStandardMilestone') && callLocation == 'StandardMilestones'" [sortable]="false"
+    [canAutoResize]="false" [draggable]="false" [resizeable]="false">
+    <!-- prop="milestoneId" -->
+    <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+        let-selectFn="selectFn">
+        <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="allRowsSelected"
+            (change)="selectFn(!allRowsSelected)"></mat-slide-toggle>
+        Add
+    </ng-template>
+    <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+        let-onCheckboxChangeFn="onCheckboxChangeFn">
+        <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="isSelected"
+            (change)="onCheckboxChangeFn($event)" >
+            <!-- [disabled]="isToggleDisabled(value)" -->
+        </mat-slide-toggle>
+    </ng-template>
+</ngx-datatable-column>
+
+
+    <!-- <ngx-datatable-column [flexGrow]="0.2" *ngIf="viewElementChecker('addStandardMilestone') && callLocation == 'CAPEX'" [sortable]="false"
+    [canAutoResize]="false" [draggable]="false" [resizeable]="false" name="Add" prop="milestoneId">
+    <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+        let-onCheckboxChangeFn="onCheckboxChangeFn">
+        <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="isToggleChecked(value)"
+            (change)="onToggleChange(value, $event)" [disabled]="isToggleDisabled(value)">
+        </mat-slide-toggle>
+    </ng-template>
+</ngx-datatable-column> -->
+
 
     <!--    <ngx-datatable-column *ngIf="callLocation == 'Normal'" [flexGrow]="1" [resizeable]="false" [sortable]="false" *ngIf="viewElementChecker('delete')"-->
     <!--        [draggable]="false">-->

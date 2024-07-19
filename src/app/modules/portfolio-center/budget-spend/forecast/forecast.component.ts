@@ -119,12 +119,7 @@ export class ForecastComponent {
     })
     this.ForecastForm.controls.PM.valueChanges.subscribe((res: any) => {
       if (this.showContent) {
-        if (res.length == 0) {
-          this.showEmail = true
-        }
-        else {
-          this.showEmail = false
-        }
+        this.showEmail = true
       }
     })
     this.ForecastForm.controls.Currency.valueChanges.subscribe((res: any) => {
@@ -311,6 +306,7 @@ export class ForecastComponent {
   else{
       this.ngOnInit()
   }
+  this.showEmail = false
   this.dataloader()
   }
   OpenProject(projectName) {

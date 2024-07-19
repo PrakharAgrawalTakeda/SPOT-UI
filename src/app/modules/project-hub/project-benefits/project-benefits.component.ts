@@ -39,6 +39,7 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
   localCurrency: string = ""
   valueCreation: any;
   projectsMetricsData = []
+  isYearSetInitialized = false;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(public projectApiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute,
     public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService) {
@@ -53,6 +54,7 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (this.isYearSetInitialized) return;
     this.columnYear = [];
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     // Clear the arrays before populating
@@ -91,68 +93,106 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                 this.lookupData = resp
                 this.filterData = filterres
                 res.forEach((element) => {
-                  var format = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID)?.lookUpName : ''
-                  var order = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID)?.lookUpOrder : ''
-                  element.metricData.metricFormat = format
-                  element.metricData.PO = element.metricData.metricPortfolioID ? 0 : 1
-                  element.metricData.sortOrder = order
-                  element.metricData.FianncialType1 = "Target"
-                  element.metricData.FianncialType2 = "Baseline Plan"
-                  element.metricData.FianncialType3 = "Current Plan"
-                  element.metricData.FianncialType4 = "Actual"
-                  element.metricData.parentName = element.projectsMetricsData.parentProjectId ? parentData.problemTitle : ''
-                  if (element.projectsMetricsData.strategicTargetList) {
-                    element.projectsMetricsData.strategicTargetList = element.projectsMetricsData.strategicTargetList.replace(/FY19:/g, 'Historical:');
-                  }
-                  if (element.projectsMetricsData.strategicBaselineList) {
-                    element.projectsMetricsData.strategicBaselineList = element.projectsMetricsData.strategicBaselineList.replace(/FY19:/g, 'Historical:');
-                  }
-                  if (element.projectsMetricsData.strategicCurrentList) {
-                    element.projectsMetricsData.strategicCurrentList = element.projectsMetricsData.strategicCurrentList.replace(/FY19:/g, 'Historical:');
-                  }
-                  if (element.projectsMetricsData.strategicActualList) {
-                    element.projectsMetricsData.strategicActualList = element.projectsMetricsData.strategicActualList.replace(/FY19:/g, 'Historical:');
-                  }
-                  // Initialize null values to "0"
-                  element.projectsMetricsData.strategicTarget = element.projectsMetricsData.strategicTarget ?? "0";
-                  element.projectsMetricsData.strategicBaseline = element.projectsMetricsData.strategicBaseline ?? "0";
-                  element.projectsMetricsData.strategicCurrent = element.projectsMetricsData.strategicCurrent ?? "0";
-                  element.projectsMetricsData.strategicActual = element.projectsMetricsData.strategicActual ?? "0";
+                  if (element.metricData) {
+                    var format = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID)?.lookUpName : ''
+                    var order = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID)?.lookUpOrder : ''
+                    element.metricData.metricFormat = format
+                    element.metricData.PO = element.metricData.metricPortfolioID ? 0 : 1
+                    element.metricData.sortOrder = order
+                    element.metricData.FianncialType1 = "Target"
+                    element.metricData.FianncialType2 = "Baseline Plan"
+                    element.metricData.FianncialType3 = "Current Plan"
+                    element.metricData.FianncialType4 = "Actual"
+                    element.metricData.parentName = element.projectsMetricsData.parentProjectId ? parentData.problemTitle : ''
+                    if (element.projectsMetricsData.strategicTargetList) {
+                      element.projectsMetricsData.strategicTargetList = element.projectsMetricsData.strategicTargetList.replace(/FY19:/g, 'Historical:');
+                    }
+                    if (element.projectsMetricsData.strategicBaselineList) {
+                      element.projectsMetricsData.strategicBaselineList = element.projectsMetricsData.strategicBaselineList.replace(/FY19:/g, 'Historical:');
+                    }
+                    if (element.projectsMetricsData.strategicCurrentList) {
+                      element.projectsMetricsData.strategicCurrentList = element.projectsMetricsData.strategicCurrentList.replace(/FY19:/g, 'Historical:');
+                    }
+                    if (element.projectsMetricsData.strategicActualList) {
+                      element.projectsMetricsData.strategicActualList = element.projectsMetricsData.strategicActualList.replace(/FY19:/g, 'Historical:');
+                    }
+                    // Initialize null values to "0"
+                    element.projectsMetricsData.strategicTarget = element.projectsMetricsData.strategicTarget ?? "0";
+                    element.projectsMetricsData.strategicBaseline = element.projectsMetricsData.strategicBaseline ?? "0";
+                    element.projectsMetricsData.strategicCurrent = element.projectsMetricsData.strategicCurrent ?? "0";
+                    element.projectsMetricsData.strategicActual = element.projectsMetricsData.strategicActual ?? "0";
 
-                  this.projectsMetricsData.push({ ...element.metricData, ...element.projectsMetricsData });
+                    this.projectsMetricsData.push({ ...element.metricData, ...element.projectsMetricsData });
+                  }
+
                 })
                 console.log(problemCapture)
+                const primaryValueDriver = this.lookupData.find(x => x.lookUpId == problemCapture.primaryKpi)?.lookUpName || null;
+                const copCategory = this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory)?.lookUpName || null;
+                const defaultCopCategory = this.lookupData.find(x => x.lookUpId == '2730422E-680A-4B2D-8DC2-F64CA885BB61')?.lookUpName || null;
+
                 this.ValueCaptureForm.patchValue({
                   valueCaptureStart: problemCapture.financialRealizationStartDate,
-                  primaryValueDriver: this.lookupData.find(x => x.lookUpId == problemCapture.primaryKpi) ? this.lookupData.find(x => x.lookUpId == problemCapture.primaryKpi)?.lookUpName : null,
+                  primaryValueDriver: primaryValueDriver,
                   valueCommentary: problemCapture.valueCommentary,
-                  COPcategory: this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory) ? this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory)?.lookUpName : null
-                })
-                if (this.ValueCaptureForm.value.COPcategory == "" || this.ValueCaptureForm.value.COPcategory == null) {
-                  this.ValueCaptureForm.controls.COPcategory.patchValue(this.lookupData.find(x => x.lookUpId == '2730422E-680A-4B2D-8DC2-F64CA885BB61').lookUpName)
-                }
+                  COPcategory: copCategory || defaultCopCategory
+                });
+                // const primaryValueDriver = this.lookupData.find(x => x.lookUpId == problemCapture.primaryKpi)?.lookUpName || null;
+                // const copCategory = this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory)?.lookUpName || null;
+
+                // this.ValueCaptureForm.patchValue({
+                //   valueCaptureStart: problemCapture.financialRealizationStartDate,
+                //   primaryValueDriver: primaryValueDriver,
+                //   valueCommentary: problemCapture.valueCommentary,
+                //   COPcategory: copCategory
+                // });
+
+                // if (!this.ValueCaptureForm.value.COPcategory) {
+                //   const defaultCopCategory = this.lookupData.find(x => x.lookUpId == '2730422E-680A-4B2D-8DC2-F64CA885BB61')?.lookUpName || null;
+                //   this.ValueCaptureForm.controls.COPcategory.patchValue(defaultCopCategory);
+                // }
+                // this.ValueCaptureForm.patchValue({
+                //   valueCaptureStart: problemCapture.financialRealizationStartDate,
+                //   primaryValueDriver: this.lookupData.find(x => x.lookUpId == problemCapture.primaryKpi) ? this.lookupData.find(x => x.lookUpId == problemCapture.primaryKpi)?.lookUpName : null,
+                //   valueCommentary: problemCapture.valueCommentary,
+                //   COPcategory: this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory) ? this.lookupData.find(x => x.lookUpId == problemCapture.copImpactCategory)?.lookUpName : null
+                // })
+
+                // if (this.ValueCaptureForm.value.COPcategory == "" || this.ValueCaptureForm.value.COPcategory == null) {
+                //   this.ValueCaptureForm.controls.COPcategory.patchValue(this.lookupData.find(x => x.lookUpId == '2730422E-680A-4B2D-8DC2-F64CA885BB61').lookUpName)
+                // }
                 this.isStrategicInitiative = problemCapture.problemType == 'Strategic Initiative / Program' ? true : false
 
                 console.log(this.ValueCaptureForm.getRawValue())
-                var year = []
-                var yearList = []
-                console.log(res)
+                var yearSet = new Set<string>();  // Initialize a Set to store unique year IDs
+                var yearList = [];  // Initialize an empty array for yearList
+                console.log(res);
 
                 if (res.length > 0) {
                   for (var z = 0; z < res.length; z++) {
                     if (res[z].projectsMetricsDataYearly.length > 0) {
-                      var listYear = [...new Set(res[z].projectsMetricsDataYearly.map(item => item.financialYearId))]
-                      if (listYear.length > year.length) {
-                        year = listYear
-                      }
+                      // Get unique financial year IDs from projectsMetricsDataYearly
+                      var listYear = [...new Set(res[z].projectsMetricsDataYearly.map(item => item.financialYearId as string))];
+                      // Add each unique year ID to the yearSet
+                      listYear.forEach((financialYearId: string) => {
+                        if (financialYearId) {
+                          yearSet.add(financialYearId);
+                        }
+                      });
                     }
-                    console.log(year)
                   }
+
+                  // Convert the set back to an array
+                  var year = Array.from(yearSet);
+
                   for (var i = 0; i < year.length; i++) {
-                    var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i])?.lookUpName : ''
-                    this.columnYear.push({ year: yearName })
-                    yearList.push(yearName)
+                    var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i])?.lookUpName : '';
+                    this.columnYear.push({ year: yearName });  // Populate the columnYear array
+                    yearList.push(yearName);  // Populate the yearList array
                   }
+
+                  console.log("COLUMN YEAR", this.columnYear);
+
                   yearList.sort()
                   for (var i = 0; i < this.projectsMetricsData.length; i++) {
                     for (var j = 0; j < yearList.length; j++) {
@@ -216,6 +256,7 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
                     }
                   };
                 }
+                console.log("COLUMN YEAR", this.columnYear)
                 this.compare(this.columnYear)
                 this.valuecreationngxdata = this.projectsMetricsData
                 console.log(this.columnYear)
@@ -413,19 +454,29 @@ export class ProjectBenefitsComponent implements OnInit, OnDestroy {
     const baselinePlanAlert = this.fuseAlert.open(comfirmConfig)
     baselinePlanAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        this.valuecreationngxdata.forEach(metricData => {
-          this.projectApiService.baselineProjectMetricData(this.id)
-            .then(response => {
-              console.log('Update successful', response);
-              this.projecthubservice.submitbutton.next(true)
-
-            })
-        })
+        //this.valuecreationngxdata.forEach(metricData => {
+        this.projectApiService.baselineProjectMetricData(this.id)
+          .then(response => {
+            console.log('Update successful', response);
+            //this.projecthubservice.submitbutton.next(true)
+            this.refreshView()
+          })
+        //})
         console.log(this.valuecreationngxdata)
 
 
       }
     })
+  }
+
+  refreshView() {
+    this.clearData();
+    this.ngOnInit(); // Reinitialize the component to refresh the view
+  }
+
+  clearData() {
+    this.columnYear = [];
+    this.projectsMetricsData = [];
   }
 
 }

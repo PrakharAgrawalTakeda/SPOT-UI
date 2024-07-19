@@ -78,7 +78,12 @@
                                             <p>{{value}}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Target"  prop="target" [flexGrow]="0.75">
+                                    <ngx-datatable-column name="Plan"  prop="target" [flexGrow]="0.75">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            <p >{{value | date:'dd-MMM-yyyy'}}</p>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <ngx-datatable-column name="Actual"  prop="actual" [flexGrow]="0.75">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p >{{value | date:'dd-MMM-yyyy'}}</p>
                                         </ng-template>

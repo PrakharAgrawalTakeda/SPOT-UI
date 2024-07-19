@@ -1,12 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import {  FuseConfirmationService } from '@fuse/services/confirmation';
-import { SelectionType } from '@swimlane/ngx-datatable';
+import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import moment from 'moment';
 import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-case-options";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import { Subject, takeUntil } from 'rxjs';
 
 
 @Component({
@@ -14,12 +15,12 @@ import {Router} from "@angular/router";
   templateUrl: './schedule-table.component.html',
   styleUrls: ['./schedule-table.component.scss']
 })
-export class SchedulesTableComponent implements OnInit {
+export class SchedulesTableComponent implements OnInit, OnChanges {
   @Input() tableData: any = []
   @Input() scheduleData: any = []
   @Input() projectId: string = ''
   @Input() parentProjectId: string = ''
-  @Input() callLocation: 'Normal' | 'Link' | 'StandardMilestones' = 'Normal'
+  @Input() callLocation: 'Normal' | 'Link' | 'StandardMilestones' | 'CAPEX' = 'Normal'
   @Input() viewElements: any = ['milestone','status','plannedFinish', 'baselineFinish','completionDate','variance']
   @Input() links: any = []
   @Input() linksProblemCapture: any = []
@@ -32,29 +33,120 @@ export class SchedulesTableComponent implements OnInit {
   wizzard: string = ''
   includeInText: 'Dashboard' | 'Charter' | 'Business Case' = 'Dashboard'
   getRowClass = (row) => {
-    console.log(row)
+    //console.log(row)
     return {
       'row-color1': row.completionDate != null,
     };
   };
   @ViewChild('scheduleTable') table: any;
-  constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService,
-              public indicator: SpotlightIndicatorsService, private router: Router, public fuseAlert: FuseConfirmationService) { }
-  ngOnInit(): void {
-    if (this.callLocation == 'Link') {
-      this.dataloaderLink()
-    }
-    if (this.router.url.includes('project-charter')) {
-        this.wizzard= "project-charter"
-        this.includeInText = 'Charter'
-    }
-    if (this.router.url.includes('business-case')) {
-        this.wizzard= "business-case"
-        if (this.router.url.includes('option-2') ||this.router.url.includes('option-3')) {
-            this.includeInText = 'Business Case'
+
+  id: string;
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  projectViewDetails: any = { scheduleData: [] };
+  isProjectViewDetailsLoaded: boolean = false;
+
+  constructor(
+    public projectHubService: ProjectHubService,
+    public apiService: ProjectApiService,
+    public indicator: SpotlightIndicatorsService,
+    private router: Router,
+    public fuseAlert: FuseConfirmationService,
+    private _Activatedroute: ActivatedRoute
+) { }
+
+ngOnInit(): void {
+    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    this.apiService.getprojectviewdata(this.id).then((res: any) => {
+        this.projectViewDetails = res;
+        this.isProjectViewDetailsLoaded = true; 
+        if (this.router.url.includes('project-charter')) {
+            this.wizzard = "project-charter";
+            this.includeInText = 'Charter';
         }
-    }
+        if (this.router.url.includes('business-case')) {
+            this.wizzard = "business-case";
+            if (this.router.url.includes('option-2') || this.router.url.includes('option-3')) {
+                this.includeInText = 'Business Case';
+            }
+        }
+        if (this.callLocation === 'CAPEX') {
+            this.initializeSelection();
+        }
+    });
+}
+
+ngOnChanges(changes: SimpleChanges): void {
+  if (changes.tableData.firstChange && this.callLocation == 'Link') {
+    this.dataloaderLink()
   }
+}
+
+isToggleDisabled(milestoneId: string): boolean {
+    if (this.isProjectViewDetailsLoaded) {
+        const milestone = this.tableData.find(m => m.milestoneId === milestoneId);
+        return !milestone.allowDeletion || (!milestone.allowDuplication && this.projectViewDetails.scheduleData.some(m => m.templateMilestoneId === milestoneId));
+    }
+    return false;
+}
+
+isToggleChecked(milestoneId: string): boolean {
+    if (this.isProjectViewDetailsLoaded) {
+        const milestone = this.tableData.find(m => m.milestoneId === milestoneId);
+        return milestone.allowDuplication || !this.projectViewDetails.scheduleData.some(m => m.templateMilestoneId === milestoneId);
+    }
+    return false;
+}
+
+initializeSelection(): void {
+    console.log(this.projectViewDetails.scheduleData);
+    this.selected = this.tableData.filter(item => this.isToggleChecked(item.milestoneId));
+    console.log('Initial selected:', this.selected);
+    this.toggleChange.emit({
+        tableIndex: this.tableIndex,
+        selected: this.selected
+    });
+}
+
+onSelect({ selected }): void {
+    console.log('Select Event', selected, this.selected);
+
+    if (this.callLocation === 'CAPEX') {
+        this.selected = this.tableData.filter(item => this.isToggleChecked(item.milestoneId));
+    } else {
+        this.selected.splice(0, this.selected.length);
+        this.selected.push(...selected);
+    }
+
+    this.toggleChange.emit({
+        tableIndex: this.tableIndex,
+        selected: this.selected
+    });
+
+    this.projectHubService.isFormChanged = true;
+}
+
+onToggleChange(milestoneId: string, event: any): void {
+    const checked = event.checked;
+    const index = this.selected.findIndex(item => item.milestoneId === milestoneId);
+    console.log('Toggle Change Event:', milestoneId, checked);
+
+    if (checked && index === -1) {
+        const milestone = this.tableData.find(item => item.milestoneId === milestoneId);
+        if (milestone) {
+            this.selected.push(milestone);
+        }
+    } else if (!checked && index !== -1) {
+        this.selected.splice(index, 1);
+    }
+    console.log('Updated selected:', this.selected);
+
+    this.toggleChange.emit({
+        tableIndex: this.tableIndex,
+        selected: this.selected
+    });
+
+    this.projectHubService.isFormChanged = true;
+}
 
   calculateVariance(array: any) :any {
     for(var item of array)
@@ -151,19 +243,8 @@ export class SchedulesTableComponent implements OnInit {
     }
     return returnString
   }
-  onSelect({ selected }) {
-    console.log('Select Event', selected, this.selected);
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
-    this.toggleChange.emit({
-      tableIndex: this.tableIndex,
-      selected: this.selected
-    })
-    this.projectHubService.isFormChanged = true
-  }
 
   onActivate(event) {
-    console.log('Activate Event', event);
   }
   toggleExpandRow(row) {
     this.table.rowDetail.toggleExpandRow(row);

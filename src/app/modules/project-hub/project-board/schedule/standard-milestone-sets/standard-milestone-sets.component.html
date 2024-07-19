@@ -1,4 +1,4 @@
-<div *ngIf="viewContent" class="h-screen bg-default">
+<div *ngIf="viewContent" class="h-full bg-default">
     <div class="flex items-start justify-between bg-primary sidepanel-header">
         <div class="text-on-primary" style="padding-top: 6px">Standard Milestone Sets</div>
         <div style="padding-top: 2px">
@@ -8,31 +8,75 @@
         </div>
     </div>
     <div class="overflow-x-hidden overflow-y-scroll ml-6" style="height: calc(calc(100vh/ var(--custom-zoom)) - 110px)">
-            <mat-accordion multi>
-                <div *ngFor="let milestone of standardMilestoneData;let i = index;">
+        <mat-accordion multi>
+            <!-- For Normal mode -->
+            <ng-container *ngIf="mode != 'CAPEX'">
+                <div *ngFor="let milestone of standardMilestoneData; let i = index;">
                     <mat-expansion-panel class="my-6" [expanded]="false">
                         <mat-expansion-panel-header class="pt-10 pb-10">
                             <mat-panel-title class="font-bold">
                                 {{milestone.milestoneSet}}
                             </mat-panel-title>
                         </mat-expansion-panel-header>
-
-                        <schedule-table [tableIndex]="i" [scheduleData]="milestone.templateDetails" [viewElements]="['milestone','functionalOwner','comment', 'includeInReport', 'includeInBusinessCase','addStandardMilestone']"
-                                        [tableData]="milestone.templateDetails" [lookup]="lookup"
-                                        [callLocation]="'StandardMilestones'" [projectId]="milestone.milestoneTemplateId"
-                                        [parentProjectId]="projectHubService.projectid" (toggleChange)="toggleSchedule($event)">
+    
+                        <schedule-table 
+                            [tableIndex]="i" 
+                            [scheduleData]="milestone.templateDetails" 
+                            [viewElements]="['milestone','functionalOwner','comment', 'includeInReport', 'includeInBusinessCase','addStandardMilestone']"
+                            [tableData]="milestone.templateDetails" 
+                            [lookup]="lookup"
+                            [callLocation]="'StandardMilestones'" 
+                            [projectId]="milestone.milestoneTemplateId"
+                            [parentProjectId]="projectHubService.projectid" 
+                            (toggleChange)="toggleSchedule($event)">
                         </schedule-table>
                     </mat-expansion-panel>
                 </div>
-            </mat-accordion>
+            </ng-container>
+    
+            <!-- For CAPEX mode -->
+            <ng-container *ngIf="mode == 'CAPEX'">
+                <div *ngFor="let milestone of standardCAPEXMilestoneData; let i = index;">
+                    <mat-expansion-panel class="my-6" [expanded]="true">
+                        <mat-expansion-panel-header class="pt-10 pb-10">
+                            <mat-panel-title class="font-bold">
+                                {{milestone.milestoneSet}}
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+    
+                        <schedule-table 
+                            [tableIndex]="i" 
+                            [scheduleData]="milestone.templateDetails" 
+                            [viewElements]="['milestone','functionalOwner','comment', 'includeInReport', 'includeInBusinessCase','addStandardMilestone']"
+                            [tableData]="milestone.templateDetails" 
+                            [lookup]="lookup"
+                            [callLocation]="'CAPEX'" 
+                            [projectId]="milestone.milestoneTemplateId"
+                            [parentProjectId]="projectHubService.projectid" 
+                            (toggleChange)="toggleSchedule($event)">
+                        </schedule-table>
+                    </mat-expansion-panel>
+                </div>
+            </ng-container>
+        </mat-accordion>
     </div>
-    <div class="w-full px-3 pr-3 flex items-start justify-between mt-2">
+    
+    <div class="w-full px-3 pr-3 flex items-start justify-between mt-2" *ngIf="mode != 'CAPEX'">
         <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
            (click)="projectHubService.toggleDrawerOpen('', '',[],'',true)">
             Cancel
         </a>
         <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitStandardMilestoneSets()" type="button">
             Add
+        </button>
+    </div>
+    <div class="w-full px-3 pr-3 flex items-start justify-between mt-2 mb-3" *ngIf="mode == 'CAPEX'">
+        <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+           (click)="cancelSMS()">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitStandardMilestoneSets()" type="button">
+            Submit
         </button>
     </div>
 </div>

@@ -47,12 +47,12 @@ export class BudgetAdditionalEditComponent {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         this.budgetInfo = this.projectHubService.all;
         switch (this.mode) {
-            case 'Asset-In-Service':
-                this.budgetInfoForm.patchValue({
-                    apisdate: this.budgetInfo.budget.apisdate,
-                })
-                this.viewContent = true;
-                break;
+            // case 'Asset-In-Service':
+            //     this.budgetInfoForm.patchValue({
+            //         apisdate: this.budgetInfo.budget.apisdate,
+            //     })
+            //     this.viewContent = true;
+            //     break;
             case 'OPEX':
                 this.budgetInfoForm.patchValue({
                     opexRequired: this.budgetInfo.budget.opExRequired,
@@ -80,9 +80,9 @@ export class BudgetAdditionalEditComponent {
     prepareDataforSubmit(formValue): any {
         const mainObj = this.budgetInfo;
         switch (this.mode) {
-            case 'Asset-In-Service':
-                mainObj.budget.apisdate = formValue.apisdate ? moment(formValue.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
-                break;
+            // case 'Asset-In-Service':
+            //     mainObj.budget.apisdate = formValue.apisdate ? moment(formValue.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
+            //     break;
             case 'OPEX':
                 mainObj.budget.opexRequired = formValue.opexRequired;
                 break;
