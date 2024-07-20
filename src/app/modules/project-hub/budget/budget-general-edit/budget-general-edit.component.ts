@@ -17,6 +17,7 @@ import { SharedService } from 'app/shared.service';
 })
 export class BudgetGeneralEditComponent {
     @Input() mode: 'CAPEX' | 'Normal' = 'Normal'
+    @Input() callLocation: 'CAPEX' | 'Normal' = 'Normal'
     viewContent: boolean = false;
     local: any = [];
     id: string = "";
@@ -281,13 +282,16 @@ export class BudgetGeneralEditComponent {
 
     openStandardMilestonesSets(): void {
         if (this.budgetInfoForm.controls.capexRequired.value == true && (this.budgetInfo.budget.capExRequired == false || this.budgetInfo.budget.capExRequired == null)) {
-            this.viewStandardMilestonesSets = true;
-            this.projectHubService.isBulkEdit = true
             const formValue = this.budgetInfoForm.getRawValue();
             const location = this.mode
+            console.log(formValue)
             this.sharedService.setBudgetFormData(formValue);
             this.sharedService.setLocation(location);
+        
+            this.viewStandardMilestonesSets = true;
+            this.projectHubService.isBulkEdit = true
         }
+
     }
     cancelBudgetInfo() {
         var comfirmConfig: FuseConfirmationConfig = {
@@ -462,17 +466,19 @@ export class BudgetGeneralEditComponent {
     }
     submitInfo() {
         const formData = this.sharedService.getBudgetFormData();
+        console.log(formData)
         const location = this.sharedService.getLocation();
-        if (location == 'CAPEX' && this.mode == 'CAPEX') {
+        console.log(location)
+        if (location == 'CAPEX') {
 
             this.projectHubService.isFormChanged = false
             const formValue = formData;
             const mainObj = this.prepareDataforSubmit(formValue)
             this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
-                // this.projectHubService.isNavChanged.next(true)
-                // this.projectHubService.submitbutton.next(true)
-                // this.projectHubService.successSave.next(true)
-                // this.projectHubService.toggleDrawerOpen('', '', [], '')
+                //  this.projectHubService.isNavChanged.next(true)
+                //  this.projectHubService.submitbutton.next(true)
+                //  this.projectHubService.successSave.next(true)
+                //  this.projectHubService.toggleDrawerOpen('', '', [], '')
             }).catch(err => {
                 if (err.status == 400) {
                     var comfirmConfig: FuseConfirmationConfig = {

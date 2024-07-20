@@ -150,6 +150,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     optionInfoData: any = {}
     optionId: string = ''
     milestoneNames: any;
+    saveBudget: BudgetGeneralEditComponent;
 
     constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
         private portApiService: PortfolioApiService,
@@ -268,6 +269,21 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     // }
     ngOnInit(): void {
         this.dataloader()
+    }
+
+    ngAfterViewInit() {
+        if (this.callLocation == 'CAPEX') {
+            const formData = this.sharedService.getBudgetFormData();
+            const location = this.sharedService.getLocation();
+            console.log(formData)
+            console.log(this.budgetGeneralEditComponent)
+                    if (formData) {
+                        this.budgetGeneralEditComponent.budgetInfoForm.patchValue(formData);
+                        this.budgetGeneralEditComponent.mode = location
+                        console.log(this.budgetGeneralEditComponent)
+                      }
+                      //this.saveBudget = this.budgetGeneralEditComponent
+                    }
     }
 
     insertArray(projectId: string): void {
@@ -2105,7 +2121,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                 const askNeedAlert = this.fuseAlert.open(comfirmConfig)
                                 askNeedAlert.afterClosed().subscribe(res => {
                                     if (res == 'confirmed') {
-                                        
+                                        //this.projecthubservice.toggleDrawerOpen('', '', [], '')
                                     }
                                 })
                 }
@@ -3023,16 +3039,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             }, 100);
         });
         if (this.callLocation == 'CAPEX') {
-            const formData = this.sharedService.getBudgetFormData();
-            const location = this.sharedService.getLocation();
-            console.log(formData)
-            console.log(this.budgetGeneralEditComponent)
-                    if (formData) {
-                        this.budgetGeneralEditComponent.budgetInfoForm.patchValue(formData);
-                        this.budgetGeneralEditComponent.mode = location
-                      }
+            this.budgetGeneralEditComponent.submitInfo()
                       this.saveScheduleBulkEdit();
-                      this.budgetGeneralEditComponent.submitInfo();
                     } else {
                       this.viewStandardMilestonesSets = false;
                     }           

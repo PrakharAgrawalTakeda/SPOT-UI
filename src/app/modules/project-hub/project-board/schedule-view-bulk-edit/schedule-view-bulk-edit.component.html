@@ -993,6 +993,9 @@
 
         </div>
     </div>
+    <!-- <div *ngIf="!hide"> -->
+        <app-budget-general-edit [hidden]="hide == true" [callLocation]="'CAPEX'"></app-budget-general-edit>
+    <!-- </div> -->
     <div *ngIf="viewContent && callLocation == 'CAPEX'" [hidden]="!viewStandardMilestonesSets">
         <app-standard-milestone-sets (standardMilestonesAdded)="addStandardMilestonesToList($event)"
             [loadContent]="viewStandardMilestonesSets" [lookup]="lookUpData" [mode] = "'CAPEX'"></app-standard-milestone-sets>
@@ -1001,8 +1004,6 @@
         <app-standard-milestone-sets (standardMilestonesAdded)="addStandardMilestonesToList($event)"
             [loadContent]="viewStandardMilestonesSets" [lookup]="lookUpData" [mode] = "'Normal'"></app-standard-milestone-sets>
     </div>
-    <div *ngIf="!hide">
-    <app-budget-general-edit [hidden]="hide == true"></app-budget-general-edit>
-</div>
+
 
     <!-- </div> -->

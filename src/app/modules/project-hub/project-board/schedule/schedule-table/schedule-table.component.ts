@@ -84,7 +84,15 @@ ngOnChanges(changes: SimpleChanges): void {
 isToggleDisabled(milestoneId: string): boolean {
     if (this.isProjectViewDetailsLoaded) {
         const milestone = this.tableData.find(m => m.milestoneId === milestoneId);
-        return !milestone.allowDeletion || (!milestone.allowDuplication && this.projectViewDetails.scheduleData.some(m => m.templateMilestoneId === milestoneId));
+        return (!milestone.allowDuplication && this.projectViewDetails.scheduleData.some(m => m.templateMilestoneId === milestoneId));
+    }
+    return false;
+}
+
+isToggleDisabled2(milestoneId: string): boolean {
+    if (this.isProjectViewDetailsLoaded) {
+        const milestone = this.tableData.find(m => m.milestoneId === milestoneId);
+        return (!milestone.allowDuplication && this.projectViewDetails.scheduleData.some(m => m.templateMilestoneId === milestoneId));
     }
     return false;
 }
