@@ -36,7 +36,7 @@
           <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '" [ngClass]="{'closed': row.completionDate != null}">{{value}}</p> -->
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column name="Comment" prop="comment" [flexGrow]="3.0" *ngIf="viewElementChecker('comment')">
+    <ngx-datatable-column name="Comment" prop="comment" [flexGrow]="1.5" *ngIf="viewElementChecker('comment')">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <p class="comment">{{ value }}</p>
         </ng-template>
@@ -115,7 +115,7 @@
 </ngx-datatable-column>
 
 
-    <ngx-datatable-column [flexGrow]="0.2" *ngIf="viewElementChecker('addStandardMilestone') && callLocation == 'CAPEX'" [sortable]="false"
+    <ngx-datatable-column [flexGrow]="0.5" *ngIf="viewElementChecker('addStandardMilestone') && callLocation == 'CAPEX'" [sortable]="false"
     [canAutoResize]="false" [draggable]="false" [resizeable]="false" name="Add" prop="milestoneId">
     <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
         let-onCheckboxChangeFn="onCheckboxChangeFn">
