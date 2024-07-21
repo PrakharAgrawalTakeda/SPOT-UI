@@ -150,6 +150,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     optionInfoData: any = {}
     optionId: string = ''
     milestoneNames: any;
+    saveBudget: BudgetGeneralEditComponent;
 
     constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
         private portApiService: PortfolioApiService,
@@ -268,6 +269,21 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     // }
     ngOnInit(): void {
         this.dataloader()
+    }
+
+    ngAfterViewInit() {
+        if (this.callLocation == 'CAPEX') {
+            const formData = this.sharedService.getBudgetFormData();
+            const location = this.sharedService.getLocation();
+            console.log(formData)
+            console.log(this.budgetGeneralEditComponent)
+                    if (formData) {
+                        this.budgetGeneralEditComponent.budgetInfoForm.patchValue(formData);
+                        this.budgetGeneralEditComponent.mode = location
+                        console.log(this.budgetGeneralEditComponent)
+                      }
+                      //this.saveBudget = this.budgetGeneralEditComponent
+                    }
     }
 
     insertArray(projectId: string): void {
@@ -2080,35 +2096,35 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 // //     this.projecthubservice.submitbutton.next(true)
                 // //   })
             }
-            // if(this.callLocation == 'CAPEX')
-            //     {
-            //         var comfirmConfig: FuseConfirmationConfig = {
-            //                     "title": "Note",
-            //                     "message": "The selected standard milestones have been added to your project. Please visit the Schedule page and update the milestones accordingly!",
-            //                 "icon": {
-            //                     "show": true,
-            //                     "name": "heroicons_outline:exclamation",
-            //                     "color": "primary"
-            //                 },
-            //                 "actions": {
-            //                     "confirm": {
-            //                         "show": true,
-            //                         "label": "OK",
-            //                         "color": "primary"
-            //                     },
-            //                     "cancel": {
-            //                         "show": false,
-            //                     }
-            //                 },
-            //                 "dismissible": true
-            //             }
-            //                     const askNeedAlert = this.fuseAlert.open(comfirmConfig)
-            //                     askNeedAlert.afterClosed().subscribe(res => {
-            //                         if (res == 'confirmed') {
-                                        
-            //                         }
-            //                     })
-            //     }
+            if(this.callLocation == 'CAPEX')
+                {
+                    var comfirmConfig: FuseConfirmationConfig = {
+                                "title": "Note",
+                                "message": "The selected standard milestones have been added to your project. Please visit the Schedule page and update the milestones accordingly!",
+                            "icon": {
+                                "show": true,
+                                "name": "heroicons_outline:exclamation",
+                                "color": "primary"
+                            },
+                            "actions": {
+                                "confirm": {
+                                    "show": true,
+                                    "label": "OK",
+                                    "color": "primary"
+                                },
+                                "cancel": {
+                                    "show": false,
+                                }
+                            },
+                            "dismissible": true
+                        }
+                                const askNeedAlert = this.fuseAlert.open(comfirmConfig)
+                                askNeedAlert.afterClosed().subscribe(res => {
+                                    if (res == 'confirmed') {
+                                        //this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                                    }
+                                })
+                }
         })
         
     }
@@ -2735,6 +2751,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         }
     }
     submitschedule() {
+        // debugger
         var baselineFormValue = this.milestoneForm.getRawValue()
         console.log(this.flag)
         // if(this.mode == 'Project-Close-Out')
@@ -3021,21 +3038,12 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 });
             }, 100);
         });
-        // if (this.callLocation == 'CAPEX') {
-        //     const formData = this.sharedService.getBudgetFormData();
-        //     const location = this.sharedService.getLocation();
-        //     console.log(formData)
-        //     console.log(this.budgetGeneralEditComponent)
-        //             if (formData) {
-        //                 this.budgetGeneralEditComponent.budgetInfoForm.patchValue(formData);
-        //                 this.budgetGeneralEditComponent.mode = location
-        //               }
-        //               this.saveScheduleBulkEdit();
-        //               this.budgetGeneralEditComponent.submitInfo();
-        //             } 
-        //             else {
-        //               this.viewStandardMilestonesSets = false;
-        //             }           
+        if (this.callLocation == 'CAPEX') {
+            this.budgetGeneralEditComponent.submitInfo()
+                      this.saveScheduleBulkEdit();
+                    } else {
+                      this.viewStandardMilestonesSets = false;
+                    }           
 
     }
 
